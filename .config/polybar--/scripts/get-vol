@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+while true; do
+    ID="墳 $(pamixer --get-volume)"
+    echo "$ID" ; sleep 0.3
+done

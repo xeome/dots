@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# See https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -o errexit -o errtrace -o nounset -o pipefail
+
+readonly HELP_HEADING='Select a workspace to focus on'
+readonly HELP_CONTENT='You can focus on a new (non existing) workspace by using the format "group:number", for example "work:2"'
+readonly HELP_FORMAT='<span alpha="50%%" size="smaller"><b>%s</b>
+<i>%s</i></span>'
+# shellcheck disable=SC2059
+readonly HELP_TEXT="$(printf "${HELP_FORMAT}" "${HELP_HEADING}" "${HELP_CONTENT}")"
+
+ROFI_ARGS=(rofi -dmenu -width 30)
+
+command_exists() {
+  type "$1" &> /dev/null
+}
+
+get_tool() {
+  filename="$1"
+  local dir tool
+  dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+  tool="${dir}/${filename}"
+  command_exists "${tool}" || tool="${filename}"
+  printf '%s\n' "${tool}"
+}
+
+main() {
+  local tool
+  tool="$(get_tool i3-workspace-groups)"
+  mapfile -t workspaces < <("${tool}" list-workspaces --fields 'global_name')
+  mapfile -t displayed_workspaces < <("${tool}" list-workspaces \
+    --fields 'group,local_number,window_icons,static_name')
+  if ! selected="$(printf '%s\n' "${displayed_workspaces[@]}" |
+    "${ROFI_ARGS[@]}" -p 'Workspace' -mesg "${HELP_TEXT}")"; then
+    exit 1
+  fi
+  for i in "${!displayed_workspaces[@]}"; do
+    line="${displayed_workspaces[${i}]}"
+    if [[ "${line}" == "${selected}" ]]; then
+      i3-msg 'workspace  "'"${workspaces[${i}]}"'"'
+      exit
+    fi
+  done
+  # No existing workspace was selected, assume it's a new workspace with a
+  # format of "group:local_number".
+  group="${selected%%:*}"
+  local_number="${selected##*:}"
+  "${tool}" workspace-number --group-name "${group}" "${local_number}"
+}
+
+main "$@"

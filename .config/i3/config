@@ -1,0 +1,172 @@
+#################################
+#             Binds             #
+#################################
+
+set $mod Mod4
+set $alt Mod1
+
+set $exec_i3_groups exec --no-startup-id i3-workspace-groups
+
+font pango:Source Code Pro Semi-Bold 8
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec "alacritty msg create-window"
+
+#screenshot
+bindsym Print exec "flameshot gui"
+
+#pcmanfm
+bindsym $mod+e exec pcmanfm-qt
+
+#workspace go back thing
+bindsym $mod+Escape workspace back_and_forth
+
+# kill focused window
+bindsym $mod+Shift+c kill
+
+# browser
+bindsym $mod+q exec chromium
+
+# audio
+bindsym $alt+Up exec "pamixer -i 5"
+bindsym $alt+Down exec "pamixer -d 5"
+
+
+# start rofi (a program launcher)
+#bindsym $mod+r exec --no-startup-id "sh ~/.config/i3/menu &"
+bindsym $mod+r exec "rofi -show drun"
+#switch workspaces with arrow keys
+bindsym $mod+Right workspace next
+bindsym $mod+Left workspace prev
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split v
+
+# split in vertical orientation
+bindsym $mod+v split h
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# emoji picker
+bindsym $mod+b exec "sh ~/.config/emoji/emoji.sh &"
+
+# play clipboard url with mpv
+bindsym $mod+Shift+d exec "mpv $(xclip -o)"
+
+# toggle tiling / floating
+bindsym $mod+Control+space floating toggle
+
+# scratchpad
+bindsym $mod+Down move scratchpad
+bindsym $mod+Up scratchpad show, floating disable
+
+# neovim editor
+bindsym $mod+d exec "neovide --multigrid"
+
+# toggle bar
+bindsym $mod+n exec "polybar-msg cmd toggle"
+
+# show status
+bindsym $mod+a exec "bash ~/.local/bin/status"
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# zoom to area
+bindsym $mod+s exec boomer
+
+#################################
+#            Options            #
+#################################
+
+#border_radius 12
+#smart_borders on
+#smart_gaps on
+set $inner_gaps 10
+set $outer_gaps 0
+gaps inner $inner_gaps
+gaps outer $outer_gaps
+for_window [title="xzoom"] floating enable
+
+client.focused #c6c6c6 #1f1f1f #c6c6c6 #242529 #242529 
+client.focused_inactive #c6c6c6 #1f1f1f #c6c6c6 #53e2ae #242529
+client.unfocused #c6c6c6 #1f1f1f #c6c6c6 #242529  #242529
+client.urgent #c6c6c6 #1f1f1f #c6c6c6 #242529  #242529
+client.placeholder #c6c6c6 #1f1f1f #c6c6c6 #242529 #242529
+client.background #1f1f1f
+
+for_window [class="^.*"] border pixel 1
+new_window 1pixel
+
+#################################
+#            Startup            #
+#################################
+
+#exec --no-startup-id tint2
+#exec_always "~/.local/bin/compix -c ~/.compix.conf"
+
+#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh --panels
+
+exec dunst &
+exec nitrogen --restore
+exec lxsession &
+exec pcmanfm-qt -d
+exec alacritty
+
+
+exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"
+#exec pcmanfm -d
+#exec "nemo -n"
+exec_always picom --experimental-backends -b
+
+#exec_always "~/.local/bin/compix -c ~/.config/compix.conf"
+

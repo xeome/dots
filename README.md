@@ -7,7 +7,7 @@ This is my personal repo for my Arch linux configurations.
 
 | Type                  | Package(s)                |
 |-----------------------|---------------------------|
-| WM                    | `i3-gaps-rounded-git` [1]
+| WM                    | `i3-gaps` 
 | Bar                   | `polybar`                                              
 | Launcher              | `rofi`                                                 
 | Compositor            | `picom-git`                                            
@@ -20,12 +20,11 @@ This is my personal repo for my Arch linux configurations.
 | File manager          | `pcmanfm-qt`                                          
 | Screenshot tool       | `flameshot`                                           
 | Polkit manager        | `lxsession`                                           
-| Fonts                 | `ttf-iosevka-nerd` [2]                                
+| Fonts                 | `ttf-iosevka-nerd` [1]                                
 | Wallpaper manager     | `nitrogen`                                            
 | Editor                | `neovim`<br> `neovide` (neovim client)                  
 
-[1] It's also possible to use plain `i3-gaps` if former is not available, at the expense of no rounded corners :C.<br>
-[2] For icons on `polybar`.  
+[1] For icons on `polybar`.  
 
 
 # Some shortcuts

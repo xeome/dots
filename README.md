@@ -23,7 +23,8 @@ This is my personal repo for my Arch linux configurations.
 | Fonts                 | `ttf-iosevka-nerd ttf-jetbrains-mono` [1]
 | Wallpaper manager     | `nitrogen`                               
 | Editor                | `neovim`<br> `neovide` (neovim client)   
-[1] For icons on `polybar` and `alacritty`.
+
+[1] For icons on `polybar` and `alacritty`.  
 Raw dependency list `i3-gaps polybar rofi picom-git dunst alacritty flameshot pcmanfm-qt nitrogen neovim lxsession`
 
 # Some shortcuts

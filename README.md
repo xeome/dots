@@ -7,37 +7,36 @@ This is my personal repo for my Arch linux configurations.
 
 | Type                  | Package(s)                |
 |-----------------------|---------------------------|
-| WM                    | `i3-gaps` 
-| Bar                   | `polybar`                                              
-| Launcher              | `rofi`                                                 
-| Compositor            | `picom-git`                                            
-| Notifications         | `dunst`                                                
-| Terminal              | `kitty`                                                
-| GTK                   | `Fluent Dark`                                              
-| QT                    | `Fluent Round Dark`                                    
-| Icons                 | `papirus-dark`                                         
-| Cursor                | `adwaita`                                              
-| File manager          | `pcmanfm-qt`                                          
-| Screenshot tool       | `flameshot`                                           
-| Polkit manager        | `lxsession`                                           
-| Fonts                 | `ttf-iosevka-nerd` [1]                                
-| Wallpaper manager     | `nitrogen`                                            
-| Editor                | `neovim`<br> `neovide` (neovim client)                  
-
-[1] For icons on `polybar`.  
-
+| WM                    | `i3-gaps`                                
+| Bar                   | `polybar`                                
+| Launcher              | `rofi`                                   
+| Compositor            | `picom-git`                              
+| Notifications         | `dunst`                                  
+| Terminal              | `alacritty`                              
+| GTK                   | `Fluent Dark`                            
+| QT                    | `Fluent Round Dark`                      
+| Icons                 | `papirus-dark`                           
+| Cursor                | `adwaita`                                
+| File manager          | `pcmanfm-qt`                             
+| Screenshot tool       | `flameshot`                              
+| Polkit manager        | `lxsession`                              
+| Fonts                 | `ttf-iosevka-nerd ttf-jetbrains-mono` [1]
+| Wallpaper manager     | `nitrogen`                               
+| Editor                | `neovim`<br> `neovide` (neovim client)   
+[1] For icons on `polybar` and `alacritty`.
+Raw dependency list `i3-gaps polybar rofi picom-git dunst alacritty flameshot pcmanfm-qt nitrogen neovim lxsession`
 
 # Some shortcuts
 | Shortcut               | Action                        |
 |------------------------|-------------------------------|
-| Super + Return (enter) | Launch terminal (`kitty`)     
-| Super + E              | Launch file manager (`pcmanfm`)
-| Super + Q              | Launch web browser (`chromium`)
-| Super + Shift + C      | Close focused application     
-| Super + Shift + R      | Restart window manager        
-| Super + Shift + Q      | Quit window manager           
-| Super + R              | Start program launcher (`rofi`)
-| Super + 1-9            | Switch workspaces from 1 to 9
+| Super + Return (enter) | Launch terminal (`kitty`)         
+| Super + E              | Launch file manager (`pcmanfm-qt`)
+| Super + Q              | Launch web browser (`chromium`)   
+| Super + Shift + C      | Close focused application         
+| Super + Shift + R      | Restart window manager            
+| Super + Shift + Q      | Quit window manager               
+| Super + R              | Start program launcher (`rofi`)   
+| Super + 1-9            | Switch workspaces from 1 to 9     
 
 ## Screenshots
 

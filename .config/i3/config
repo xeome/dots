@@ -34,6 +34,7 @@ bindsym $mod+q exec chromium
 bindsym $alt+Up exec "pamixer -i 5"
 bindsym $alt+Down exec "pamixer -d 5"
 
+bindsym $mod+Tab focus right
 
 # start rofi (a program launcher)
 #bindsym $mod+r exec --no-startup-id "sh ~/.config/i3/menu &"
@@ -127,11 +128,11 @@ bindsym $mod+s exec boomer
 #            Options            #
 #################################
 
-#border_radius 12
+#border_radius 15
 #smart_borders on
 #smart_gaps on
 set $inner_gaps 10
-set $outer_gaps 0
+set $outer_gaps 5
 gaps inner $inner_gaps
 gaps outer $outer_gaps
 for_window [title="xzoom"] floating enable
@@ -167,6 +168,6 @@ exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"
 #exec pcmanfm -d
 #exec "nemo -n"
 exec_always picom --experimental-backends -b
-
+exec --no-startup-id flashfocus
 #exec_always "~/.local/bin/compix -c ~/.config/compix.conf"
 

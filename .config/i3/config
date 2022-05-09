@@ -165,9 +165,9 @@ exec alacritty
 
 
 exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"
-#exec pcmanfm -d
-#exec "nemo -n"
-exec_always picom --experimental-backends -b
-exec --no-startup-id flashfocus
-#exec_always "~/.local/bin/compix -c ~/.config/compix.conf"
+# exec pcmanfm -d
+# exec "nemo -n"
+# exec_always picom --experimental-backends -b
+# exec --no-startup-id flashfocus
+# exec_always "~/.local/bin/compix -c ~/.config/compix.conf"
 

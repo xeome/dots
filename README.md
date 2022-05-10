@@ -25,7 +25,21 @@ This is my personal repo for my Arch linux configurations.
 | Editor                | `neovim`<br> `neovide` (neovim client)   
 
 [1] For icons on `polybar` and `alacritty`.  
-Raw dependency list `i3-gaps polybar rofi picom-git dunst alacritty flameshot pcmanfm-qt nitrogen neovim lxsession`
+Raw dependency list `i3-gaps polybar rofi picom-git dunst alacritty flameshot pcmanfm-qt nitrogen neovim lxsession ttf-iosevka-nerd`
+
+# Installation  
+After you get the dependencies instructions should apply to any distro (these commands will overwrite your configs).  
+```
+cd ~/Downloads
+git clone https://github.com/xeome/laptopdots.git
+git clone https://github.com/sahibjotsaggu/San-Francisco-Pro-Fonts.git
+cd ./San-Francisco-Pro-Fonts
+mkdir ~/.fonts
+cp -r * ~/.fonts
+cd ..
+cd ./laptopdots
+cp -r .config ~/ && cp -r .local ~/
+```
 
 # Some shortcuts
 | Shortcut               | Action                        |

@@ -28,7 +28,7 @@ bindsym $mod+Escape workspace back_and_forth
 bindsym $mod+Shift+c kill
 
 # browser
-bindsym $mod+q exec chromium
+bindsym $mod+q exec ~/.config/i3/chromium.sh
 
 # audio
 bindsym $alt+Up exec "pamixer -i 5"
@@ -128,7 +128,7 @@ bindsym $mod+s exec boomer
 #            Options            #
 #################################
 
-#border_radius 15
+border_radius 12
 #smart_borders on
 #smart_gaps on
 set $inner_gaps 10
@@ -157,17 +157,15 @@ new_window 1pixel
 #exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh --panels
 
+exec pcmanfm-qt -d
 exec dunst &
 exec nitrogen --restore
 exec lxsession &
-exec pcmanfm-qt -d
 exec alacritty
 
-
 exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"
-# exec pcmanfm -d
-# exec "nemo -n"
+
 # exec_always picom --experimental-backends -b
 # exec --no-startup-id flashfocus
 # exec_always "~/.local/bin/compix -c ~/.config/compix.conf"
-
+#exec thunar --daemon

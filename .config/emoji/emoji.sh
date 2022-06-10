@@ -16,7 +16,7 @@ EXT=$(echo $CHOICE | cut -d'.' -f2)
 TYPE=$(echo $WAYLAND_DISPLAY)
 if [ -z ${TYPE} ];
 then
-    convert -resize 150x150 $LOC/$CHOICE - | xclip -selection clipboard -t image/$EXT
+    cat $LOC/$CHOICE - | xclip -selection clipboard -t image/$EXT
 else
-    convert -resize 50x50 $LOC/$CHOICE - | wl-copy --type image/$EXT
+    cat $LOC/$CHOICE - | wl-copy --type image/$EXT
 fi

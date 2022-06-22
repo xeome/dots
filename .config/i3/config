@@ -28,7 +28,7 @@ bindsym $mod+Escape workspace back_and_forth
 bindsym $mod+Shift+c kill
 
 # browser
-bindsym $mod+q exec ~/.config/i3/chromium.sh
+bindsym $mod+q exec "~/.local/bin/Thorium_Browser.AppImage --force-dark-mode --enable-features=WebUIDarkMode"
 
 # audio
 bindsym $alt+Up exec "pamixer -i 5"
@@ -37,7 +37,6 @@ bindsym $alt+Down exec "pamixer -d 5"
 bindsym $mod+Tab focus right
 
 # start rofi (a program launcher)
-#bindsym $mod+r exec --no-startup-id "sh ~/.config/i3/menu &"
 bindsym $mod+r exec "rofi -show drun"
 #switch workspaces with arrow keys
 bindsym $mod+Right workspace next
@@ -60,9 +59,6 @@ bindsym $mod+f fullscreen toggle
 
 # emoji picker
 bindsym $mod+b exec "sh ~/.config/emoji/emoji.sh &"
-
-# play clipboard url with mpv
-bindsym $mod+Shift+d exec "mpv $(xclip -o)"
 
 # toggle tiling / floating
 bindsym $mod+Control+space floating toggle
@@ -129,8 +125,6 @@ bindsym $mod+s exec boomer
 #################################
 
 border_radius 12
-#smart_borders on
-#smart_gaps on
 set $inner_gaps 10
 set $outer_gaps 5
 gaps inner $inner_gaps
@@ -151,10 +145,6 @@ new_window 1pixel
 #            Startup            #
 #################################
 
-#exec --no-startup-id tint2
-#exec_always "~/.local/bin/compix -c ~/.compix.conf"
-
-#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh --panels
 
 exec pcmanfm-qt -d
@@ -165,7 +155,3 @@ exec alacritty
 
 exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"
 
-# exec_always picom --experimental-backends -b
-# exec --no-startup-id flashfocus
-# exec_always "~/.local/bin/compix -c ~/.config/compix.conf"
-#exec thunar --daemon

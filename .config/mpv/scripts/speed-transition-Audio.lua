@@ -9,7 +9,7 @@ function f(msg)
 		--print("end")
 	elseif string.find(msg.text, "silence_start") and detect==false then
 		speed = mp.get_property("speed")
-		mp.set_property("speed",2.5)
+		mp.set_property("speed",3.8)
 		startmsg=msg.text
 		detect = true
 		--print("start")

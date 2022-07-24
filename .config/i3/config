@@ -28,7 +28,7 @@ bindsym $mod+Escape workspace back_and_forth
 bindsym $mod+Shift+c kill
 
 # browser
-bindsym $mod+q exec "~/.local/bin/Thorium_Browser.AppImage --force-dark-mode --enable-features=WebUIDarkMode"
+bindsym $mod+q exec "~/.local/bin/Thorium_Browser.AppImage --force-dark-mode --enable-features=WebUIDarkMode --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder"
 
 # audio
 bindsym $alt+Up exec "pamixer -i 5"

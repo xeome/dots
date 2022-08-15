@@ -2,7 +2,7 @@
 colors:
   # Default colors
   primary:
-    background: '0x101012'
+    background: '0x1e1e1e'
     foreground: '0xeff0eb'
 
   # Normal colors
@@ -29,10 +29,10 @@ colors:
 
 
 window:
+  opacity: 0.9
   padding:
     x: 15
     y: 15
-      #opacity: 0.87
 
 font:
   normal:

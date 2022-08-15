@@ -28,7 +28,7 @@ bindsym $mod+Escape workspace back_and_forth
 bindsym $mod+Shift+c kill
 
 # browser
-bindsym $mod+q exec "~/.local/bin/Thorium_Browser.AppImage --force-dark-mode --enable-features=WebUIDarkMode --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder"
+bindsym $mod+q exec "~/.local/bin/Thorium_Browser.AppImage --force-dark-mode --enable-features=WebUIDarkMode --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization"
 
 # audio
 bindsym $alt+Up exec "pamixer -i 5"
@@ -124,7 +124,7 @@ bindsym $mod+s exec boomer
 #            Options            #
 #################################
 
-border_radius 12
+border_radius 10
 set $inner_gaps 10
 set $outer_gaps 5
 gaps inner $inner_gaps
@@ -149,9 +149,9 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh --panels
 
 exec pcmanfm-qt -d
 exec dunst &
-exec nitrogen --restore
+exec_always nitrogen --restore
 exec lxsession &
 exec alacritty
-
+exec_always picom --experimental-backends
 exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"
 

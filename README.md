@@ -29,6 +29,7 @@ Raw dependency list `i3-gaps polybar rofi picom-git dunst alacritty flameshot pc
 
 # Installation  
 After you get the dependencies instructions should apply to any distro (these commands will overwrite your configs).  
+(do not use `install.sh` its for personal purposes only)  
 ```
 cd ~/Downloads
 git clone https://github.com/xeome/laptopdots.git

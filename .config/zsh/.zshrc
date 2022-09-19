@@ -19,6 +19,12 @@ export XDG_STATE_HOME=$HOME/.local/state
 export XDG_CACHE_HOME=$HOME/.cache
 
 
+HISTSIZE=500000
+SAVEHIST=500000
+setopt appendhistory
+setopt INC_APPEND_HISTORY  
+setopt SHARE_HISTORY
+
 export PARALLEL_HOME="$XDG_CONFIG_HOME"/parallel
 export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
 export GHCUP_USE_XDG_DIRS=true
@@ -26,7 +32,8 @@ export HISTFILE="$XDG_STATE_HOME"/zsh/history
 export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
-
+export $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
+dbus-update-activation-environment --systemd --all
 
 plugins=(git zsh-autosuggestions)
 
@@ -39,8 +46,8 @@ alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 alias fixmouse="su -c 'echo 'on' > '/sys/bus/usb/devices/1-2/power/control''"
 alias mp3="yt-dlp -x --audio-format mp3"
 alias v="neovide --multigrid"
-alias ironweil="mesa_glthread=true gamemoderun mangohud --dlsym ironwail -basedir ~/.vkquake"
-alias gamerun="mesa_glthread=true gamemoderun mangohud --dlsym"
+alias ironweil="mesa_glthread=true gamemoderun ironwail -basedir ~/.vkquake"
+alias gamerun="mesa_glthread=true gamemoderun"
 alias xdpreload="sudo xdp-loader unload -a wlan0; sudo xdp-loader load -m skb -s prog wlan0 obj/icmp_block.o"
 
 0short() { curl -F"shorten=$1" https://envs.sh ; }

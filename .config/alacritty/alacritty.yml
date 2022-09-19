@@ -2,7 +2,7 @@
 colors:
   # Default colors
   primary:
-    background: '0x1e1e1e'
+    background: '0x1a1a1a'
     foreground: '0xeff0eb'
 
   # Normal colors
@@ -51,7 +51,7 @@ font:
     family: JetBrains Mono
     style: Bold Italic
 
-  size: 14
+  size: 12
 
 
 

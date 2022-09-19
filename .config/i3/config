@@ -28,7 +28,7 @@ bindsym $mod+Escape workspace back_and_forth
 bindsym $mod+Shift+c kill
 
 # browser
-bindsym $mod+q exec "~/.local/bin/Thorium_Browser.AppImage --force-dark-mode --enable-features=WebUIDarkMode --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization"
+bindsym $mod+q exec "thorium-browser --force-dark-mode --enable-features=WebUIDarkMode --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization"
 
 # audio
 bindsym $alt+Up exec "pamixer -i 5"
@@ -123,23 +123,21 @@ bindsym $mod+s exec boomer
 #################################
 #            Options            #
 #################################
+# class                 border  bground text    indicator child_border
+client.focused          #666666 #666666 #DEDEDE #666666   #666666
+client.focused_inactive #444444 #444444 #555555 #2C1A44   #444444
+client.unfocused        #333333 #333333 #AAAAAA #333333   #333333
+client.urgent           #B03454 #B03454 #EDEDED #B03454   #B03454
+client.placeholder      #2C1A44 #2C1A44 #DEDEDE #2C1A44   #2C1A44
 
-border_radius 10
-set $inner_gaps 10
-set $outer_gaps 5
-gaps inner $inner_gaps
-gaps outer $outer_gaps
-for_window [title="xzoom"] floating enable
+client.background       #1F132A
 
-client.focused #c6c6c6 #1f1f1f #c6c6c6 #242529 #242529 
-client.focused_inactive #c6c6c6 #1f1f1f #c6c6c6 #53e2ae #242529
-client.unfocused #c6c6c6 #1f1f1f #c6c6c6 #242529  #242529
-client.urgent #c6c6c6 #1f1f1f #c6c6c6 #242529  #242529
-client.placeholder #c6c6c6 #1f1f1f #c6c6c6 #242529 #242529
-client.background #1f1f1f
 
 for_window [class="^.*"] border pixel 1
-new_window 1pixel
+new_window pixel
+hide_edge_borders smart_no_gaps
+
+for_window [title="^daemonmodealacritty$"] move container to scratchpad
 
 #################################
 #            Startup            #
@@ -151,7 +149,6 @@ exec pcmanfm-qt -d
 exec dunst &
 exec_always nitrogen --restore
 exec lxsession &
-exec alacritty
-exec_always picom --experimental-backends
+exec alacritty -t daemonmodealacritty
+#exec_always picom --experimental-backends
 exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"
-

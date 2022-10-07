@@ -28,7 +28,7 @@ bindsym $mod+Escape workspace back_and_forth
 bindsym $mod+Shift+c kill
 
 # browser
-bindsym $mod+q exec "thorium-browser --force-dark-mode --enable-features=WebUIDarkMode --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization"
+bindsym $mod+q exec "thorium-browser --force-dark-mode --enable-features=WebUIDarkMode --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode"
 
 # audio
 bindsym $alt+Up exec "pamixer -i 5"
@@ -143,6 +143,7 @@ for_window [title="^daemonmodealacritty$"] move container to scratchpad
 #            Startup            #
 #################################
 
+exec ~/.local/bin/eww daemon &
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh --panels
 
 exec pcmanfm-qt -d
@@ -151,4 +152,4 @@ exec_always nitrogen --restore
 exec lxsession &
 exec alacritty -t daemonmodealacritty
 #exec_always picom --experimental-backends
-exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"
+#exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"

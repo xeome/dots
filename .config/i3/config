@@ -15,13 +15,16 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec "alacritty msg create-window"
 
-#screenshot
+# screenshot
 bindsym Print exec "flameshot gui"
 
-#pcmanfm
+# pcmanfm
 bindsym $mod+e exec pcmanfm-qt
 
-#workspace go back thing
+# turn off screen
+bindsym $mod+o exec "xset dpms force off"
+
+# workspace go back thing
 bindsym $mod+Escape workspace back_and_forth
 
 # kill focused window
@@ -33,6 +36,8 @@ bindsym $mod+q exec "thorium-browser --force-dark-mode --enable-features=WebUIDa
 # audio
 bindsym $alt+Up exec "pamixer -i 5"
 bindsym $alt+Down exec "pamixer -d 5"
+
+bindsym $mod+l exec "sh ~/.config/i3/lock.sh; sleep 1 && xset dpms force off"
 
 bindsym $mod+Tab focus right
 
@@ -75,6 +80,10 @@ bindsym $mod+n exec "polybar-msg cmd toggle"
 
 # show status
 bindsym $mod+a exec "bash ~/.local/bin/status"
+
+bindsym XF86MonBrightnessUp exec "brightnessctl s 5%+;notify-send 'brightness increased'"
+bindsym XF86MonBrightnessDown exec "brightnessctl s 5%-;notify-send 'brightness decreased'"
+
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -135,7 +144,9 @@ client.background       #1F132A
 
 for_window [class="^.*"] border pixel 1
 new_window pixel
-hide_edge_borders smart_no_gaps
+smart_borders on
+
+gaps top 44
 
 for_window [title="^daemonmodealacritty$"] move container to scratchpad
 
@@ -143,7 +154,6 @@ for_window [title="^daemonmodealacritty$"] move container to scratchpad
 #            Startup            #
 #################################
 
-exec ~/.local/bin/eww daemon &
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh --panels
 
 exec pcmanfm-qt -d
@@ -151,5 +161,6 @@ exec dunst &
 exec_always nitrogen --restore
 exec lxsession &
 exec alacritty -t daemonmodealacritty
+exec mate-power-manager &
 #exec_always picom --experimental-backends
 #exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"

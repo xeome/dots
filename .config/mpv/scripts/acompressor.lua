@@ -1,3 +1,9 @@
+-- This script adds control to the dynamic range compression ffmpeg
+-- filter including key bindings for adjusting parameters.
+--
+-- See https://ffmpeg.org/ffmpeg-filters.html#acompressor for explanation
+-- of the parameters.
+
 local mp = require 'mp'
 local options = require 'mp.options'
 
@@ -10,8 +16,8 @@ local o = {
 	key_toggle = 'n',
 	key_increase_threshold = 'F1',
 	key_decrease_threshold = 'Shift+F1',
-	key_increase_ratio = 'F7',
-	key_decrease_ratio = 'Shift+F7',
+	--key_increase_ratio = 'F2',
+	--key_decrease_ratio = 'Shift+F2',
 	key_increase_knee = 'F3',
 	key_decrease_knee = 'Shift+F3',
 	key_increase_makeup = 'F4',

@@ -1,35 +1,13 @@
-# Colors (Snazzy)
-colors:
-  # Default colors
-  primary:
-    background: '0x1a1a1a'
-    foreground: '0xeff0eb'
 
-  # Normal colors
-  normal:
-    black:   '0x484a66'
-    red:     '0xff5c57'
-    green:   '0x5af78e'
-    yellow:  '0xf3f99d'
-    blue:    '0x57c7ff'
-    magenta: '0xff6ac1'
-    cyan:    '0x9aedfe'
-    white:   '0xf1f1f0'
-
-  # Bright colors
-  bright:
-    black:   '0x686868'
-    red:     '0xff5c57'
-    green:   '0x5af78e'
-    yellow:  '0xf3f99d'
-    blue:    '0x57c7ff'
-    magenta: '0xff6ac1'
-    cyan:    '0x9aedfe'
-    white:   '0xf1f1f0'
-
+import:
+  # uncomment the flavour you want below:
+  - ~/.config/alacritty/catppuccin/catppuccin-mocha.yml
+#  - ~/.config/alacritty/catppuccin/catppuccin-macchiato.yml
+#  - ~/.config/alacritty/catppuccin/catppuccin-frappe.yml
+#  - ~/.config/alacritty/catppuccin/catppuccin-latte.yml
 
 window:
-  opacity: 0.9
+  opacity: 0.95
   padding:
     x: 15
     y: 15
@@ -51,7 +29,7 @@ font:
     family: JetBrains Mono
     style: Bold Italic
 
-  size: 12
+  size: 9
 
 
 

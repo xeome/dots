@@ -7,9 +7,9 @@
 * {
     font:   "SF Pro rounded 12";
 
-    bg0:    #141414E6;
+    bg0:    #14171cf6;
     bg1:    #7E7E7E80;
-    bg2:    #0860f2E6;
+    bg2:    #0860f2D6;
 
     fg0:    #DEDEDE;
     fg1:    #FFFFFF;
@@ -28,7 +28,7 @@ window {
 
     location:       center;
     width:          640;
-    y-offset:       -200;
+    y-offset:       00;
     border-radius:  12;
 }
 

@@ -1,0 +1,241 @@
+@document.meta
+	title: doom manual
+	description: Doom Nvim User Manual
+	author: NTBBloodbath
+	categories: doom neovim manual
+	created: 2021-08-15
+	version: 0.1
+@end
+
+= TOC Table of Contents
+
+* Table of Contents
+  -> {# Introduction}
+  -> {# Configuring doom-nvim}
+  --> {# Modules}
+  ---> {# Enabling / disabling modules}
+  ---> {# Custom plugins}
+  ---> {# Customising the behaviour of modules}
+  --> {# Config}
+  ---> {# Adding Plugins}
+  ---> {# Adding keybinds}
+  ---> {# Adding commands}
+  ---> {# Configuring modules}
+  ---> {# Overriding modules or adding custom modules}
+  -> {# Contributing}
+  -> {# License}
+
+* Introduction
+Doom Nvim is a Neovim interpretation of the {https://github.com/hlissner/doom-emacs}[doom-emacs] framework, adapted to Vim philosophy.
+
+Our goal is to provide a configurable, extensible, performant and stable basis for any neovim configuration.
+Some of the defining features that make this project unique are:
+
+- \*Fast\* Rapid startup time without defer_fn, packages are lazy loaded and languages are only configured when opening its relevent file type.
+- \*Stable\* Plugins are pinned to commit shas to avoid breaking between updates.
+- \*Scalable\* Because of modular architecture you can disable any features you don't use.  Your config is as simple or complex as you want it to be.
+- \*Configurable\* All modules are 100% overridable and configurable, use a logical structure and have LSP completions.
+- \*Extensible\* With a simple api you can easily add, and or contribute, your own modules.
+- \*Integrated\* Desgined to handle and setup integrations between plugins for you.  For example, whichkey will only show keybinds for
+  modules you have enabled (and will automatically handle your custom bindings).
+* Configuring doom-nvim
+** Modules
+   A module is a collection of packages, autocommands, keybinds and functions
+   that add new capabilities or functionality to Doom Nvim. We organise modules
+   into 2 categories:
+   - `features` extend the abilities of Doom Nvim by adding new functionality.
+   - `langs` add support for new languages.
+
+*** Enabling / disabling modules
+    You can enable or disable a module by going to `modules.lua` (`<leader>Dm`)
+    and commenting or uncommenting the entry.
+
+    @code lua
+    -- modules.lua
+    return {
+      features = {
+        'lsp'
+        -- 'telescope'
+      },
+      langs = {
+        'lua',
+        -- 'rust',
+      }
+    }
+    @end
+
+    *NOTE*: after doing changes to your modules you will only need to restart Neovim
+    and Doom Nvim will automatically handle your changes on here.
+
+*** Custom plugins
+    See the documentatition in {| Adding plugins}
+
+*** Customising the behaviour of modules
+    Sometimes you'll want to edit the default behaviour of the modules, please
+    see {| Configuring modules}.
+
+** Config
+  Doom-nvim provides a number of config options, including easier to use versions of vim's own options.  See all available config options in the {| Config API Reference }.
+
+  @code lua
+
+   -- config.lua
+
+   doom.freeze_dependencies = false  -- Don't use pinned packer dependencies
+   doom.logging = 'trace'            -- Debug doom internal issues
+   doom.indent = 2                   -- Sets vim.opt.shiftwith, vim.opt.softtabstop, vim.opt.tabstop to 2
+
+   vim.opt.colorcolumn = 120         -- Regular vim options can also be set
+
+  @end
+
+  > **NOTE:** If you have the `lua` language and `lsp` module enabled all of these options will be autocompleted.
+
+*** Adding Plugins
+    Additional packages can be imported with the `doom.use_package()` function.
+    This is a wrapper around `packer.use()` and provides the same API. {https://github.com/wbthomason/packer.nvim#quickstart}[DOCS]
+    @code lua
+    -- config.lua
+
+    -- Simple config
+    doom.use_package('sainnhe/sonokai', 'EdenEast/nightfox.nvim')
+
+    -- Advanced config
+    doom.use_package({
+      'rafcamlet/nvim-luapad',
+      opt = true,
+      cmd = 'Luapad'
+    })
+    @end
+
+*** Adding keybinds
+    Additional keybinds can be defined with the `doom.use_keybind()` function.
+    This is a wrapper around a custom `nest.nvim` implementation and provides
+    the same API. {https://github.com/connorgmeehan/nest.nvim/tree/integrations-api#quickstart-guide}[DOCS]
+
+    @code lua
+    -- config.lua
+
+    doom.use_keybind({
+      { '<leader>u', name = '+user', { -- Names this group in whichkey "+user"
+        { 's', '<cmd>Telescope git_status<CR>', name = 'Git status' } -- Adds `<leader>us` keybind to trigger `Telescope git_status`
+      }},
+    })
+    @end
+    > **NOTE:** By providing the `name` field your custom keybinds will show up in `whichkey` and `mapper` if you have those modules enabled.
+
+
+*** Adding commands
+    Additional commands can be define with the `doom.use_cmd()` function.
+
+    @code lua
+    -- config.lua
+
+    -- Bind single
+    doom.use_cmd( { 'Test', function() print('test') end } )
+
+    -- Bind multiple
+    doom.use_cmd({
+      { 'Test1', function() print('test1') end },
+      { 'Test2', function() print('test2') end },
+    })
+    @end
+
+
+*** Configuring modules
+    The settings and config for all modules are also exposed inside of the `doom` global object.
+    Here you can override the plugin git sources, pre-defined settings, keybinds or autocmds.
+
+    Make sure that the module that you want to configure/override is enabled in `modules.lua`
+    @code lua
+    -- modules.lua
+    return {
+      features = {
+        'whichkey' -- Whichkey module is enabled
+      }
+    }
+   @end
+
+    The same module with be avaliable in your `config.lua` in the `doom.features.module_name` field.
+    The settings should have autocomplete from sumneko lua lsp.
+    @code lua
+    -- config.lua
+    local whichkey = doom.features.whichkey -- Get the whichkey module
+    -- You can also access it as `doom.modules.features.whichkey`
+
+    -- Some common settings are exposed in the `<module>.settings` table.
+    whichkey.settings.window.height.max = 5
+
+    -- Inspect the existing config
+    print(vim.inspect(whichkey))
+
+    -- Add an additional keybind
+    table.insert(whichkey.binds, { '<leader>u', name = '+user', {
+        { "wr", function() require("which-key").reset(), name = "Reset whichkey"}
+      }
+    })
+    -- Replace all keybinds
+    whichkey.binds = {
+      { '<leader>u', name = '+user', {
+        { "wr", function() require("which-key").reset(), name = "Reset whichkey"}
+      }}
+    }
+
+    -- Add an additional autocommand
+    table.insert(whichkey.autocmds, { "event", "aupat", "cmd"})
+    -- Replace all autocommands
+    whichkey.autocmds = {
+      { "event", "aupat", "cmd"}
+    }
+
+    -- Modify the plugin source repo, plugins are indexed via the repository name.
+    whichkey.packages["which-key.nvim"] = {
+        "myfork/which-key.nvim"
+    }
+    -- Provide a different config function, the key has to match the entry in `whichkey.packages`
+    whichkey.configs["which-key.nvim"] = function ()
+      local wk = require("which-key")
+    end
+
+    -- Another example with a language module
+    local lua = doom.langs.lua
+
+    -- Disable lua-dev loading library definitions
+    lua.settings.dev.library.plugins = false
+    @end
+
+
+*** Overriding modules or adding custom modules
+
+    It's possible to add your own doom modules or completely replace builtin doom
+    modules without editing the original files.  Doom will first check the `lua/user/modules`
+    directory if a module exists before loading the default from `lua/doom/modules`.
+
+    As an example, if we wanted to replace the `lua` module in the `langs` section we
+    would create a new file at `lua/user/modules/langs/lua/init.lua`.
+
+    Alternatively if we wanted to add support for a new language (lets use julia as
+    an example) we would create a new file at `lua/user/modules/langs/julia/init.lua`.
+    You would then enable the module in `modules.lua`
+
+    @code lua
+    --- modules.lua
+    return {
+      langs = {
+        'julia',
+      }
+    }
+    @end
+
+    > For more info, read the {:./doom_nvim_modules:# Building your own module} docs.
+
+* Contributing
+  I really love pull requests and bug reports, please see the {https://github.com/doom-neovim/doom-nvim/blob/main/docs/contributing.md}[Contributing Guidelines] on GitHub
+  before contributing.
+
+  Don't hesitate to tell me my Lua coding style sucks, but please tell me why.
+
+* License
+  Doom Nvim is distributed under GPLv2 license.
+
+vim:sw=2:ts=2:cole=3:cocu=n:tw=100:norl:

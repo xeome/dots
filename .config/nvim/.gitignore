@@ -1,0 +1,20 @@
+# My temp files
+time_cost.txt
+tags
+# Backup files
+.doom_releases
+.doom_backup_hash
+# editor artifacts
+*~
+*.swp
+# OS files
+.DS_Store
+# Doom Nvim Contrib files
+tools/doom-nvim-contrib
+tools/local-share-nvim
+tools/workspace
+
+# User modules
+user/modules/*
+# Editor files
+.luarc.json

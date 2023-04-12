@@ -40,6 +40,9 @@ cp -r * ~/.fonts
 cd ..
 cd ./laptopdots
 cp -r .config ~/ && cp -r .local ~/
+
+
+curl -sS https://raw.githubusercontent.com/xeome/laptopdots/master/tmux-install.sh | bash
 ```
 
 # Some shortcuts

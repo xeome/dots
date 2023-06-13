@@ -1,0 +1,171 @@
+#################################
+#             Binds             #
+#################################
+
+set $mod Mod4
+set $alt Mod1
+
+set $exec_i3_groups exec --no-startup-id i3-workspace-groups
+
+font pango:Source Code Pro Semi-Bold 8
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec "alacritty msg create-window"
+
+# screenshot
+bindsym Print exec "flameshot gui"
+
+# pcmanfm
+bindsym $mod+e exec pcmanfm-qt
+
+# turn off screen
+bindsym $mod+o exec "xset dpms force off"
+
+# workspace go back thing
+bindsym $mod+Escape workspace back_and_forth
+
+# kill focused window
+bindsym $mod+Shift+c kill
+
+# browser
+bindsym $mod+q exec "thorium-browser --force-dark-mode --enable-features=WebUIDarkMode --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode"
+
+
+# audio
+bindsym $alt+Up exec "pamixer -i 5"
+bindsym $alt+Down exec "pamixer -d 5"
+
+bindsym $mod+l exec "sh ~/.config/i3/lock.sh; sleep 1 && xset dpms force off"
+
+bindsym $mod+Tab focus right
+
+# start rofi (a program launcher)
+bindsym $mod+r exec "rofi -show drun"
+#switch workspaces with arrow keys
+bindsym $mod+Right workspace next
+bindsym $mod+Left workspace prev
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Pop last notifications
+bindsym $mod+k exec "dunstctl history-pop"
+# split in horizontal orientation
+bindsym $mod+h split v
+
+# split in vertical orientation
+bindsym $mod+v split h
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# emoji picker
+bindsym $mod+b exec "sh ~/.config/emoji/emoji.sh &"
+
+# toggle tiling / floating
+bindsym $mod+Control+space floating toggle
+
+# scratchpad
+bindsym $mod+Down move scratchpad
+bindsym $mod+Up scratchpad show, floating disable
+
+# neovim editor
+bindsym $mod+d exec "discord-canary --force-dark-mode --enable-features=WebUIDarkMode --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode"
+
+# toggle bar
+bindsym $mod+n exec "polybar-msg cmd toggle"
+
+# show status
+bindsym $mod+a exec "bash ~/.local/bin/status"
+
+bindsym XF86MonBrightnessUp exec "brightnessctl s 5%+;notify-send 'brightness increased'"
+bindsym XF86MonBrightnessDown exec "brightnessctl s 5%-;notify-send 'brightness decreased'"
+
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# zoom to area
+bindsym $mod+s exec boomer
+
+#################################
+#            Options            #
+#################################
+# class                 border  bground text    indicator child_border
+client.focused          #666666 #666666 #DEDEDE #666666   #666666
+client.focused_inactive #444444 #444444 #555555 #2C1A44   #444444
+client.unfocused        #333333 #333333 #AAAAAA #333333   #333333
+client.urgent           #B03454 #B03454 #EDEDED #B03454   #B03454
+client.placeholder      #2C1A44 #2C1A44 #DEDEDE #2C1A44   #2C1A44
+
+client.background       #1F132A
+
+
+for_window [class="^.*"] border pixel 0
+new_window pixel
+smart_borders on
+smart_gaps off
+gaps outer 5
+gaps inner 10
+gaps top 40
+
+for_window [title="^daemonmodealacritty$"] move container to scratchpad
+
+#################################
+#            Startup            #
+#################################
+
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh --panels
+
+exec pcmanfm-qt -d
+exec dunst &
+exec_always nitrogen --restore
+exec lxsession &
+exec alacritty -t daemonmodealacritty
+exec mate-power-manager &
+#exec picom &
+#exec --no-startup-id xautolock -time 15 -locker "sh ~/.config/i3/lock.sh"

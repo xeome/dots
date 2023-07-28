@@ -33,21 +33,22 @@ window:
 font:
   normal:
     family: Iosevka Nerd font mono
-    style: Semibold
+    family: BlexMono Nerd Font
+    style: SemiBold
 
   bold:
     family: Iosevka Nerd font mono
-    family: Jetbrains mono
+    family: BlexMono Nerd Font
     style: Bold
 
   italic:
     family: Iosevka Nerd font mono
-    family: Jetbrains mono
+    family: BlexMono Nerd Font
     style: Italic
 
   bold_italic:
     family: Iosevka Nerd font mono
-    family: Jetbrains mono
+    family: BlexMono Nerd Font
     style: Bold Italic
 
   size: 10.5

@@ -1,6 +1,6 @@
 colors:
   primary:
-    background: '#161616'
+    background: '#000000'
     foreground: '#FFFFFF'
 
   # Normal Colours
@@ -25,14 +25,13 @@ colors:
     cyan:    '#58d1eb'
     white:   '#f6f6ef'
 window:
-  opacity: 0.95
+  opacity: 0.85
   padding:
     x: 15
     y: 15
 
 font:
   normal:
-    #family: JetBrains Mono
     family: Iosevka Nerd font mono
     style: Semibold
 

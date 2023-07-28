@@ -39,20 +39,10 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
+export PATH=$PATH:/usr/local/go/bin
 
 export $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
 dbus-update-activation-environment --systemd --all
-
-
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey "^[[A" up-line-or-beginning-search # Up
-bindkey "^[[B" down-line-or-beginning-search # Down
-
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;5D" backward-word
 
 export HISTFILE=~/.zsh_history
 

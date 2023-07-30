@@ -22,7 +22,7 @@ function subscribe() {
     local old new
     fetch
     old="$level"
-    while sleep 0.1; do
+    while sleep 0.7; do
         fetch
         new="$level"
         if [ "$new" -gt "$old" ]; then

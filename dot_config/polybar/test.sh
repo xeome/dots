@@ -1,0 +1,1 @@
+dunstctl count waiting

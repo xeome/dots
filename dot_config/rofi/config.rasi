@@ -1,4 +1,4 @@
 //@theme "/home/xeome/.local/share/rofi/themes/rounded-blue-dark.rasi"
-//@theme "/home/xeome/.local/share/rofi/themes/spotlight-dark.rasi"
-@theme "/home/xeome/.config/rofi/runner.rasi"
+@theme "/home/xeome/.local/share/rofi/themes/spotlight-dark.rasi"
+//@theme "/home/xeome/.config/rofi/runner.rasi"
 //@theme "/home/xeome/.config/rofi/powermenu.rasi"

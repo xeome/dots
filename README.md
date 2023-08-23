@@ -48,4 +48,4 @@ chezmoi apply -v
 
 ## Screenshots
 
-![Screenshot 1](https://cdn.discordapp.com/attachments/739162076886597715/1135309077535264768/Untitled.png)
+![Untitled](https://github.com/xeome/laptopdots/assets/44901648/887457fa-cbee-4e7a-80a4-4d383f1f14f2)

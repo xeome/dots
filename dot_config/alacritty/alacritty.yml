@@ -1,22 +1,23 @@
 colors:
   primary:
-    background: '#000000'
-    foreground: '#FFFFFF'
+    background: '#1a1b26'
+    dim_foreground: '#28344a'
+    foreground: '#a9b1d6'
 
   # Normal Colours
   normal:
-    black:   '#1a1a1a'
-    red:     '#f4005f'
-    green:   '#98e024'
-    yellow:  '#fa8419'
-    blue:    '#9d65ff'
-    magenta: '#f4005f'
-    cyan:    '#58d1eb'
-    white:   '#c4c5b5'
+    black:   '#414868'
+    red:     '#f7768e'
+    green:   '#73daca'
+    yellow:  '#e0af68'
+    blue:    '#7aa2f7'
+    magenta: '#bb9af7'
+    cyan:    '#7dcfff'
+    white:   '#c0caf5'
 
   # Bright Colours
   bright:
-    black:   '#625e4c'
+    black:   '#414868'
     red:     '#f4005f'
     green:   '#98e024'
     yellow:  '#e0d561'
@@ -24,8 +25,11 @@ colors:
     magenta: '#f4005f'
     cyan:    '#58d1eb'
     white:   '#f6f6ef'
+
+
+
 window:
-  opacity: 0.85
+  opacity: 0.95
   padding:
     x: 15
     y: 15
@@ -51,10 +55,13 @@ font:
     family: BlexMono Nerd Font
     style: Bold Italic
 
-  size: 10.5
+  size: 9
+  
+env:
+  TERM: xterm-256color
 
-
+key_bindings:
+  - { key: Plus,      mods: Control|Shift, action: IncreaseFontSize }
 
 ipc_socket: true
-
 

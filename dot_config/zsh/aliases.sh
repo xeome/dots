@@ -12,4 +12,4 @@ alias download="yt-dlp --format 'bestvideo[height<=1080]+bestaudio'"
 alias vim="nvim"
 alias gia="git add ."
 alias gica="git commit -a"
-
+alias yt="yt-dlp --format 'bestvideo[height<=1080]+bestaudio'"

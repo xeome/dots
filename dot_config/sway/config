@@ -1,0 +1,21 @@
+Include conf.d/*.conf
+
+Include /etc/sway/config.d/*
+
+#~~~ keyboard
+input "type:keyboard" {
+	xkb_layout  tr
+	xkb_numlock enabled
+	xkb_options "grp:win_space_toggle"
+	#xkb_file    ~/.config/sway/keyboard.xkb
+}
+
+#~~~ touchpad configuration (for Laptops)
+input "type:touchpad" {
+	dwt enabled
+	tap enabled
+	natural_scroll disabled
+	middle_emulation enabled
+}
+
+output * bg ~/.config/wallpapers/extra-21.jpg fill

@@ -4,7 +4,7 @@ zstyle ':omz:update' mode auto      # update automatically without asking
 zstyle ':omz:update' frequency 13
 HIST_STAMPS="mm/dd/yyyy"
 
-plugins=(git zsh-autosuggestions fast-syntax-highlighting)
+plugins=(git zsh-autosuggestions fast-syntax-highlighting zsh-fzf-history-search)
 
 source $ZSH/oh-my-zsh.sh
 

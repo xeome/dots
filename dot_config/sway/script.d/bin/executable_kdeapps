@@ -1,0 +1,6 @@
+#!/bin/bash
+PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin"
+export PATH
+
+program=$(echo $0 | awk -F '/' '{print $NF}')
+QT_QPA_PLATFORMTHEME=qt5ct XDG_CURRENT_DESKTOP=kde $(command -v $program) ${1:+$@}

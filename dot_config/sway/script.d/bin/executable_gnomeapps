@@ -1,0 +1,4 @@
+#!/bin/bash
+PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin"
+export PATH
+XDG_CURRENT_DESKTOP=GNOME $(command -v $0) ${1:+$@}

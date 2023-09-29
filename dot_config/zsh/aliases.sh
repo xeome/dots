@@ -1,4 +1,4 @@
-0short() { curl -F"shorten=$1" https://envs.sh ; }
+0short() { curl -F"shorten=$1" https://envs.sh; }
 
 alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 alias fixmouse="su -c 'echo 'on' > '/sys/bus/usb/devices/1-2/power/control''"
@@ -13,3 +13,10 @@ alias vim="nvim"
 alias gia="git add ."
 alias gica="git commit -a"
 alias yt="yt-dlp --format 'bestvideo[height<=1080]+bestaudio'"
+
+zst() {
+    tar cf - "$1" | pv -s $(du -sb "$1" | awk '{print $1}') | zstd --adapt=min=6,max=19 -T0 >"$1".tar.zst
+}
+
+alias rsync="rsync -avz --progress --partial --human-readable"
+

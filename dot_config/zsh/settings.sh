@@ -28,9 +28,9 @@ export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
 export GHCUP_USE_XDG_DIRS=true
 #export HISTFILE="$XDG_STATE_HOME"/zsh/history
 export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
-export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export PATH=$PATH:/usr/local/go/bin
+export PATH="$HOME/.local/bin/zig/:$PATH"
 export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
 [ -f "/home/xeome/.ghcup/env" ] && source "/home/xeome/.ghcup/env" # ghcup-env
 

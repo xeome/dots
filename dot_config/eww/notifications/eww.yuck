@@ -279,5 +279,5 @@
   :windowtype "dock"
   :monitor 0
   :wm-ignore true
-  :geometry (geometry :x -20 :y 0 :width "26%" :height "90%" :anchor "right center")
+  :geometry (geometry :x 20 :y 0 :width "26%" :height "90%" :anchor "right center")
   (notifications_layout))

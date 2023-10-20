@@ -129,5 +129,5 @@
 (defwindow system-menu :stacking "fg"
   :windowtype "dock"
   :wm-ignore true
-  :geometry (geometry :x -20 :y -80 :width "25%" :height "30%" :anchor "right bottom")
+  :geometry (geometry :x 20 :y 20 :width "25%" :height "30%" :anchor "right bottom")
   (system-menu))

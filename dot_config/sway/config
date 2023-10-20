@@ -2,6 +2,10 @@ Include conf.d/*.conf
 
 Include /etc/sway/config.d/*
 
+#blur enable
+#blur_xray enable
+#shadows disable 
+
 #~~~ keyboard
 input "type:keyboard" {
 	xkb_layout  tr

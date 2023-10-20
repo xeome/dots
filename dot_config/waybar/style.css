@@ -13,7 +13,7 @@ window#waybar {
     /*    border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
     color: #ffffff;
     transition-property: background-color;
-    transition-duration: 0.5s;
+    transition-duration: 0.1s;
 }
 
 window#waybar.hidden {
@@ -54,8 +54,8 @@ button:hover {
 #workspaces button.focused {
     /*    box-shadow: inset 0 -2px #c9545d; */
     background-color: rgba(0, 0, 0, 0.3);
-    color: #c9545d;
-    border-top: 2px solid #c9545d;
+    color: @deep-purple;
+    border-top: 2px solid @deep-purple;
 }
 
 #workspaces button.urgent {
@@ -72,7 +72,15 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.3);
     color: @timet;
     font-weight: bold;
-    border-bottom: 2px solid #eda57b;
+    border-bottom: 2px solid @timet;
+}
+
+#clock.date {
+    margin: 2px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: @datet;
+    font-weight: bold;
+    border-bottom: 2px solid @datet;
 }
 
 #pulseaudio {

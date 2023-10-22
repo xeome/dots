@@ -19,4 +19,3 @@ zst() {
 }
 
 alias rsync="rsync -avz --progress --partial --human-readable"
-

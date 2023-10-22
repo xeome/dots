@@ -22,4 +22,4 @@ input "type:touchpad" {
 	middle_emulation enabled
 }
 
-output * bg ~/.config/wallpapers/extra-21.jpg fill
+output * bg ~/.config/wallpapers/orange.jpg fill

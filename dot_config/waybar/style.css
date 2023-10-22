@@ -9,7 +9,7 @@
 
 window#waybar {
     background: transparent;
-    /*    background-color: rgba(43, 48, 59, 0.5); */
+    background-color: rgba(0, 0, 0 , 0.8);
     /*    border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
     color: #ffffff;
     transition-property: background-color;
@@ -27,7 +27,7 @@ window#waybar.hidden {
     margin: 2;
     padding-left: 8;
     padding-right: 8;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 1);
     font-size: 16px;
     font-weight: bold;
 }

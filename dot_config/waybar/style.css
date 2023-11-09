@@ -75,6 +75,16 @@ button:hover {
     border-bottom: 2px solid @timet;
 }
 
+#network {
+    margin: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: @orange;
+    border-bottom: 2px solid @orange;
+    font-weight: 500;
+}
+
 #clock.date {
     margin: 2px;
     background-color: rgba(0, 0, 0, 0.3);
@@ -108,7 +118,6 @@ button:hover {
 #disk,
 #temperature,
 #backlight,
-#network,
 #wireplumber,
 #tray,
 #mode,
@@ -186,4 +195,18 @@ label:focus {
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
     background-color: #eb4d4b;
+}
+
+#custom-weather,
+#custom-weather.severe,
+#custom-weather.sunnyDay,
+#custom-weather.clearNight,
+#custom-weather.cloudyFoggyDay,
+#custom-weather.cloudyFoggyNight,
+#custom-weather.rainyDay,
+#custom-weather.rainyNight,
+#custom-weather.showyIcyDay,
+#custom-weather.snowyIcyNight,
+#custom-weather.default {
+    font-weight: 600;
 }

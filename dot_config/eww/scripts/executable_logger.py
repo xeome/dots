@@ -1,4 +1,5 @@
-#!/usr/bin/env --split-string=python -u
+#!/home/xeome/.config/eww/scripts/bin/python
+
 """Script for logging desktop notifications in the form of YUCK literal.
 
 General idea is to have a file log the notifications in the form of YUCK

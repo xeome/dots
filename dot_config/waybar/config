@@ -1,20 +1,38 @@
 {
-    "height": 32, 
-    "spacing": 10, 
-    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "custom/media"],
-    "modules-center": ["sway/window"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "clock", "clock#date", "battery", "tray"],
+    "height": 32,
+    "spacing": 10,
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/scratchpad",
+        "custom/media"
+    ],
+    "modules-center": [
+        "sway/window"
+    ],
+    "modules-right": [
+        "idle_inhibitor",
+        "custom/weather",
+        "network",
+        "pulseaudio",
+        "clock",
+        "clock#date",
+        "battery",
+        "tray"
+    ],
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
     "sway/scratchpad": {
         "format": "{icon} {count}",
         "show-empty": false,
-        "format-icons": ["", ""],
+        "format-icons": [
+            "",
+            ""
+        ],
         "tooltip": true,
         "tooltip-format": "{app}: {title}"
     },
-    
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
@@ -35,7 +53,17 @@
     },
     "backlight": {
         "format": "{icon} {percent}%",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
     },
     "battery": {
         "states": {
@@ -46,18 +74,16 @@
         "format-charging": " {capacity}%",
         "format-plugged": " {capacity}%",
         "format-alt": "{icon} {time}",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
     },
     "battery#bat2": {
         "bat": "BAT2"
-    },
-    "network": {
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": " {ifname}",
-        "tooltip-format": " {ifname} via {gwaddr}",
-        "format-linked": " {ifname} (No IP)",
-        "format-disconnected": "Disconnected ⚠ {ifname}",
-        "format-alt": " {ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
         "format": "{icon} {volume}% {format_source}",
@@ -67,9 +93,34 @@
         "format-source": " {volume}%",
         "format-source-muted": "",
         "format-icons": {
-            "default": ["", "", ""]
+            "default": [
+                "",
+                "",
+                ""
+            ]
         },
         "on-click": "pavucontrol"
+    },
+    "custom/weather": {
+        "format": "{}",
+        "format-alt": "{alt}: {}",
+        "format-alt-click": "click-right",
+        "interval": 3600,
+        "exec": "curl -s 'https://wttr.in/Istanbul?format=1'",
+        "exec-if": "ping wttr.in -c1"
+    },
+    "network": {
+        "format-wifi": " {essid} ({signalStrength}%)",
+        "format-ethernet": "⬇{bandwidthDownBytes} ⬆{bandwidthUpBytes}",
+        "interval": 1,
+        "format-linked": "{ifname} (No IP) ",
+        "format": "",
+        "format-disconnected": "",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "on-click": "wl-copy $(ip address show up scope global | grep inet | head -n1 | cut -d/ -f 1 | tr -d [:space:] | cut -c5-)",
+        "tooltip-format": " {bandwidthUpBits}  {bandwidthDownBits}\n{ifname}\n{ipaddr}/{cidr}\n",
+        "tooltip-format-wifi": " {essid} {frequency}MHz\nStrength: {signaldBm}dBm ({signalStrength}%)\nIP: {ipaddr}/{cidr}\n {bandwidthUpBits}  {bandwidthDownBits}",
+        "min-length": 17,
+        "max-length": 17
     }
 }
-

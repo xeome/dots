@@ -39,13 +39,12 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
-export $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
-dbus-update-activation-environment --systemd --all
+export GPG_TTY=$(tty)
 
 export HISTFILE=~/.zsh_history
 
-export GNOME_KEYRING_CONTROL="/run/user/1000/keyring"
-export SSH_AUTH_SOCK="/run/user/1000/keyring/ssh"
+#export GNOME_KEYRING_CONTROL="/run/user/1000/keyring"
+#export SSH_AUTH_SOCK="/run/user/1000/keyring/ssh"
 
 export VISUAL=nvim
 

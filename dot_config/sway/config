@@ -1,6 +1,6 @@
+Include /etc/sway/config.d/*
 Include conf.d/*.conf
 
-Include /etc/sway/config.d/*
 
 #blur enable
 #blur_xray enable

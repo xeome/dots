@@ -1,4 +1,4 @@
-;; Variables
+;; Variable~/.config/eww/s
 (defpoll notifications_stats :interval "5s" "scripts/logger.py stats")
 (deflisten notifications_sub "scripts/logger.py subscribe")
 (defpoll notifications_dnd_state :interval "1s" "dunstctl is-paused")

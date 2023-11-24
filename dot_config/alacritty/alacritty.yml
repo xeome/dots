@@ -33,23 +33,19 @@ window:
 
 font:
   normal:
-    family: Iosevka Nerd font mono
-    family: BlexMono Nerd Font
+    family: Monaspace Neon
     style: SemiBold
 
   bold:
-    family: Iosevka Nerd font mono
-    family: BlexMono Nerd Font
+    family: Monaspace Neon
     style: Bold
 
   italic:
-    family: Iosevka Nerd font mono
-    family: BlexMono Nerd Font
+    family: Monaspace Neon
     style: Italic
 
   bold_italic:
-    family: Iosevka Nerd font mono
-    family: BlexMono Nerd Font
+    family: Monaspace Neon
     style: Bold Italic
 
   size: 9.5

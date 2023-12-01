@@ -1,40 +1,40 @@
-
 ![jomo_dotfiles](https://cdn.discordapp.com/attachments/739162076886597715/954111167926767636/unknown.png)
 
 This is my personal repo for my Arch linux configurations.
 
 # Dependencies
 
-| Type              | Package(s)                                |
-| ----------------- | ----------------------------------------- |
-| WM                | `i3-wm`                                   |
-| Bar               | `polybar`                                 |
-| Launcher          | `rofi`                                    |
-| Compositor        | `picom-git`                               |
-| Notifications     | `dunst`                                   |
-| Terminal          | `alacritty`                               |
-| GTK               | `Fluent Dark`                             |
-| QT                | `Fluent Round Dark`                       |
-| Icons             | `papirus-dark`                            |
-| Cursor            | `adwaita`                                 |
-| File manager      | `pcmanfm-qt`                              |
-| Screenshot tool   | `flameshot`                               |
-| Polkit manager    | `lxsession`                               |
-| Fonts             | `ttf-iosevka-nerd ttf-jetbrains-mono` [1] |
-| Wallpaper manager | `nitrogen`                                |
-| Editor            | `neovim`<br> `neovide` (neovim client)    |
+| Type            | Package(s)                                           |
+| --------------- | ---------------------------------------------------- |
+| WM              | `sway`                                               |
+| Bar             | `waybar`                                             |
+| Launcher        | `rofi`                                               |
+| Notifications   | `dunst`                                              |
+| Terminal        | `alacritty`                                          |
+| GTK             | `Fluent Dark`                                        |
+| QT              | `Fluent Round Dark`                                  |
+| Icons           | `papirus-dark`                                       |
+| Cursor          | `bibata`                                             |
+| File manager    | `pcmanfm-qt`                                         |
+| Screenshot tool | `flameshot`                                          |
+| Polkit manager  | `lxsession`                                          |
+| Fonts           | `ttf-iosevka-nerd ttf-jetbrains-mono monaspace Neon` |
+| Editor          | `neovim`                                             |
 
-[1] For icons on `polybar` and `alacritty`.  
-Raw dependency list `i3-wm polybar rofi picom-git dunst alacritty flameshot pcmanfm-qt nitrogen neovim lxsession ttf-iosevka-nerd betterlockscreen`
+Raw dependency list `alacritty sway waybar swaylock swayidle swaybg btop dunst evince fd feh fzf neovim pcmanfm-qt rofi-lbonn-wayland neofetch chezmoi htop lxsession xorg-xwayland wl-clipboard`
 
 # Installation
-    
+
 ```bash
 chezmoi init https://github.com/xeome/laptopdots
 chezmoi apply -v
+# Optional if you want to get san francisco pro font
+mkdir -p ~/.fonts
+wget xeome.dev/sf-pro.zip && unzip sf-pro.zip -d ~/.fonts
 ```
 
 # Some shortcuts
+
 | Shortcut               | Action                             |
 | ---------------------- | ---------------------------------- |
 | Super + Return (enter) | Launch terminal (`alacritty`)      |

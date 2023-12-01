@@ -11,8 +11,13 @@ if grep -E "zswap.enabled=1|zswap.max_pool_percent=6|zswap.compressor=zstd|trans
 	echo "Kernel parameters already set, skipping"
 else
 	echo "Kernel parameters not set, setting them now"
-	echo -n " zswap.enabled=1 zswap.max_pool_percent=6 zswap.compressor=zstd transparent_hugepage=always amd-pstate=guided mitigations=off skew_tick=1 amd_prefcore=enable" >>/etc/kernel/cmdline
-	echo "Reboot required to apply kernel parameters, you can reboot now or later."
+	if [[ -f /etc/kernel/cmdline ]]; then
+		cp /etc/kernel/cmdline /etc/kernel/cmdline.bak
+		echo -n " zswap.enabled=1 zswap.max_pool_percent=6 zswap.compressor=zstd transparent_hugepage=always amd-pstate=guided mitigations=off skew_tick=1 amd_prefcore=enable" >>/etc/kernel/cmdline
+		echo "Reboot required to apply kernel parameters, you can reboot now or later."
+	else
+		echo "No /etc/kernel/cmdline file found"
+	fi
 fi
 
 # Create a script to run at boot

@@ -24,6 +24,7 @@ fi
 cat <<EOF >/usr/local/bin/system_config.sh
 #!/bin/bash
 echo -n "advise" | tee /sys/kernel/mm/transparent_hugepage/shmem_enabled
+echo -n 200 | tee /sys/kernel/mm/ksm/sleep_millisecs
 EOF
 
 # Make it executable

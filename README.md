@@ -21,7 +21,7 @@ This is my personal repo for my Arch linux configurations.
 | Fonts           | `ttf-iosevka-nerd ttf-jetbrains-mono monaspace Neon` |
 | Editor          | `neovim`                                             |
 
-Raw dependency list `alacritty sway waybar swaylock swayidle swaybg btop dunst evince fd feh fzf neovim pcmanfm-qt rofi-lbonn-wayland neofetch chezmoi htop lxsession xorg-xwayland wl-clipboard`
+You can also use `yay -S --needed - < pkgs` to install all dependencies.
 
 # Installation
 
@@ -31,6 +31,9 @@ chezmoi apply -v
 # Optional if you want to get san francisco pro font
 mkdir -p ~/.fonts
 wget xeome.dev/sf-pro.zip && unzip sf-pro.zip -d ~/.fonts
+wget https://github.com/githubnext/monaspace/releases/download/v1.000/monaspace-v1.000.zip && unzip monaspace-v1.000.zip -d ~/.fonts
+fc-cache -frv
+rm -rf "sf-pro.zip" "monaspace-v1.000.zip"
 ```
 
 # Some shortcuts

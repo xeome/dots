@@ -7,13 +7,13 @@ if [[ ${EUID} -ne 0 ]]; then
 fi
 
 # Kernel parameters
-if grep -E "zswap.enabled=1|zswap.max_pool_percent=6|zswap.compressor=zstd|transparent_hugepage=always|amd-pstate=guided|mitigations=off|skew_tick=1|amd_prefcore=enable" /etc/kernel/cmdline; then
+if grep -E "zswap.enabled=1|zswap.max_pool_percent=6|zswap.compressor=zstd|transparent_hugepage=always|amd-pstate=active|mitigations=off|skew_tick=1|amd_prefcore=enable" /etc/kernel/cmdline; then
 	echo "Kernel parameters already set, skipping"
 else
 	echo "Kernel parameters not set, setting them now"
 	if [[ -f /etc/kernel/cmdline ]]; then
 		cp /etc/kernel/cmdline /etc/kernel/cmdline.bak
-		echo -n " zswap.enabled=1 zswap.max_pool_percent=6 zswap.compressor=zstd transparent_hugepage=always amd-pstate=guided mitigations=off skew_tick=1 amd_prefcore=enable" >>/etc/kernel/cmdline
+		echo -n " zswap.enabled=1 zswap.max_pool_percent=6 zswap.compressor=zstd transparent_hugepage=always amd-pstate=active mitigations=off skew_tick=1 amd_prefcore=enable" >>/etc/kernel/cmdline
 		echo "Reboot required to apply kernel parameters, you can reboot now or later."
 	else
 		echo "No /etc/kernel/cmdline file found"
@@ -25,6 +25,7 @@ cat <<EOF >/usr/local/bin/system_config.sh
 #!/bin/bash
 echo -n "advise" | tee /sys/kernel/mm/transparent_hugepage/shmem_enabled
 echo -n 200 | tee /sys/kernel/mm/ksm/sleep_millisecs
+echo -n 80 | tee /sys/class/power_supply/BAT0/charge_control_end_threshold
 EOF
 
 # Make it executable

@@ -110,7 +110,7 @@
     "network": {
         "format-wifi": " {essid} ({signalStrength}%)",
         "format-ethernet": "⬇{bandwidthDownBytes} ⬆{bandwidthUpBytes}",
-        "interval": 1,
+        "interval": 3,
         "format-linked": "{ifname} (No IP) ",
         "format": "",
         "format-disconnected": "",

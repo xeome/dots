@@ -26,7 +26,7 @@ colors:
     white:   '#f6f6ef'
 
 window:
-  opacity: 0.85
+  opacity: 0.60
   padding:
     x: 15
     y: 15

@@ -3,8 +3,6 @@
     "spacing": 10,
     "modules-left": [
         "sway/workspaces",
-        "sway/mode",
-        "sway/scratchpad",
         "custom/media"
     ],
     "modules-center": [
@@ -32,6 +30,10 @@
         ],
         "tooltip": true,
         "tooltip-format": "{app}: {title}"
+    },
+    "sway/window": {
+        "on-click": "ags -t dashboard",
+        "tooltip": false
     },
     "idle_inhibitor": {
         "format": "{icon}",
@@ -80,10 +82,8 @@
             "",
             "",
             ""
-        ]
-    },
-    "battery#bat2": {
-        "bat": "BAT2"
+        ],
+        "on-click": "ags -t quicksettings"
     },
     "pulseaudio": {
         "format": "{icon} {volume}% {format_source}",

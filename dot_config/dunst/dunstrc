@@ -32,7 +32,7 @@ title = Dunst
 class = Dunst
 corner_radius = 10
 origin = top-right
-offset = 8x40
+offset = 4x40
 
 [shortcuts]
 close = ctrl+shift+space

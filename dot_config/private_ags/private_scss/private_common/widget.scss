@@ -1,0 +1,8 @@
+@mixin widget{
+    transition: $transition;
+    border-radius: $radii;
+    color: $fg-color;
+    background-color: $widget-bg;
+    border: $border;
+    font-family: 'Ubuntu Nerd Font';
+}

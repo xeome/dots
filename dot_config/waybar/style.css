@@ -1,57 +1,42 @@
 @import "colors.css";
 
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
     font-family: "Iosevka Nerd Font";
     font-size: 16px;
     min-height: 0;
+    font-weight: bold;
 }
 
 window#waybar {
     background: transparent;
     background-color: rgba(0, 0, 0 , 0.8);
-    /*    border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
-    color: #ffffff;
+    color: @foreground; 
     transition-property: background-color;
     transition-duration: 0.1s;
 }
 
-window#waybar.hidden {
-    opacity: 0.2;
-}
-
-#waybar.empty #window {
-    background-color: transparent;
-}
 #window {
     margin: 2;
     padding-left: 8;
     padding-right: 8;
-    font-size: 16px;
-    font-weight: bold;
 }
 
 button {
-    /* Use box-shadow instead of border so the text isn't offset */
     box-shadow: inset 0 -3px transparent;
-    /* Avoid rounded borders under each button name */
     border: none;
     border-radius: 0;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
     background: inherit;
-    border-top: 2px solid #c9545d;
+    border-top: 2px solid @nix-color;
 }
 
 #workspaces button {
     padding: 0 4px;
-    /*    background-color: rgba(0,0,0,0.3); */
 }
 
 #workspaces button.focused {
-    /*    box-shadow: inset 0 -2px #c9545d; */
     background-color: rgba(0, 0, 0, 0.3);
     color: @deep-purple;
     border-top: 2px solid @deep-purple;
@@ -61,56 +46,8 @@ button:hover {
     background-color: #eb4d4b;
 }
 
-#mode {
-    background-color: #64727d;
-    border-bottom: 3px solid #ffffff;
-}
-
-#clock {
-    margin: 2px;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: @timet;
-    font-weight: bold;
-    border-bottom: 2px solid @timet;
-}
-
-#network {
-    margin: 2px;
-    padding-left: 4px;
-    padding-right: 4px;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: @orange;
-    border-bottom: 2px solid @orange;
-    font-weight: 500;
-}
-
-#clock.date {
-    margin: 2px;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: @datet;
-    font-weight: bold;
-    border-bottom: 2px solid @datet;
-}
-
-#pulseaudio {
-    margin: 2px;
-    padding-left: 4px;
-    padding-right: 4px;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: @light-blue;
-    border-bottom: 2px solid @light-blue;
-    font-weight: 500;
-}
-
-#idle_inhibitor {
-    margin-right: 12px;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: #7cb342;
-}
-#idle_inhibitor.activated {
-    color: @red;
-    margin-right: 12px;
-}
+#pulseaudio,
+#clock,
 #battery,
 #cpu,
 #memory,
@@ -124,8 +61,41 @@ button:hover {
     margin: 2px;
     padding-left: 4px;
     padding-right: 4px;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: #ffffff;
+    background-color: @lighter;
+}
+
+#clock {
+    color: @timet;
+    border-bottom: 2px solid @timet;
+}
+
+#clock.date {
+    color: @datet;
+    border-bottom: 2px solid @datet;
+}
+
+#pulseaudio {
+    color: @light-blue;
+    border-bottom: 2px solid @light-blue;
+}
+
+#network {
+    color: @orange;
+    border-bottom: 2px solid @orange;
+}
+
+#idle_inhibitor {
+    margin-right: 12px;
+    color: #7cb342;
+}
+#idle_inhibitor.activated {
+    color: @red;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: @charging;
+    border-bottom: 2px solid @charging;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
@@ -138,74 +108,3 @@ button:hover {
     margin-right: 0;
 }
 
-#battery icon {
-    color: red;
-}
-
-#battery.charging,
-#battery.plugged {
-    color: #ffffff;
-    background-color: #26a65b;
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: #000000;
-    }
-}
-
-#battery.warning:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-#battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-label:focus {
-    background-color: #000000;
-}
-
-#network.disconnected {
-    background-color: #f53c3c;
-}
-
-#temperature.critical {
-    background-color: #eb4d4b;
-}
-
-#tray > .passive {
-    -gtk-icon-effect: dim;
-}
-
-#tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-    background-color: #eb4d4b;
-}
-
-#custom-weather,
-#custom-weather.severe,
-#custom-weather.sunnyDay,
-#custom-weather.clearNight,
-#custom-weather.cloudyFoggyDay,
-#custom-weather.cloudyFoggyNight,
-#custom-weather.rainyDay,
-#custom-weather.rainyNight,
-#custom-weather.showyIcyDay,
-#custom-weather.snowyIcyNight,
-#custom-weather.default {
-    font-weight: 600;
-}

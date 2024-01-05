@@ -23,4 +23,4 @@ input "type:touchpad" {
 	middle_emulation enabled
 }
 
-output * bg ~/.config/wallpapers/blackhole.jpg fill
+output * bg ~/.config/wallpapers/kizu.jpg fill

@@ -2,10 +2,10 @@ Include /etc/sway/config.d/*
 Include conf.d/*.conf
 
 
-blur enable
-blur_xray enable
-shadows disable
-corner_radius 12
+# blur enable
+# blur_xray enable
+# shadows disable
+# corner_radius 12
 
 #~~~ keyboard
 input "type:keyboard" {

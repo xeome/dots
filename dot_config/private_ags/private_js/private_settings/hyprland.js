@@ -1,5 +1,5 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
+// import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import options from '../options.js';
 import { readFile, writeFile } from 'resource:///com/github/Aylur/ags/utils.js';
 
@@ -30,9 +30,9 @@ export function hyprlandInit() {
     if (readFile('/tmp/ags/hyprland-init'))
         return;
 
-    sendBatch(Array.from(App.windows).flatMap(([name]) => [
+    sendBatch(App.windows.flatMap(({ name }) => [
         `layerrule blur, ${name}`,
-        noIgnorealpha.some(skip => name.includes(skip))
+        noIgnorealpha.some(skip => name?.includes(skip))
             ? '' : `layerrule ignorealpha 0.6, ${name}`,
     ]));
 

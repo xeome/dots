@@ -23,7 +23,7 @@ window#quicksettings .window-content {
         }
 
         .battery {
-             @include spacing($multiplier: 0.5);
+            @include spacing($multiplier: 0.5);
         }
 
     }
@@ -146,6 +146,7 @@ window#quicksettings .window-content {
 
     .media {
         @include spacing;
+
 
         .player {
             @include media;

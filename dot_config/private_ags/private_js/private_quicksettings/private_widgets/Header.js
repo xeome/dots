@@ -10,22 +10,22 @@ import { uptime } from '../../variables.js';
 export default () => Widget.Box({
     class_name: 'header horizontal',
     children: [
-        // Avatar(),
+        Avatar(),
         Widget.Box({
-            hpack: 'start',
+            hpack: 'end',
             vpack: 'center',
             hexpand: true,
             children: [
                 Widget.Box({
                     class_name: 'battery horizontal',
                     children: [
-                        Widget.Icon({ binds: [['icon', Battery, 'icon-name']] }),
-                        Widget.Label({ binds: [['label', Battery, 'percent', p => `${p}%`]] }),
+                        Widget.Icon({ icon: Battery.bind('icon_name') }),
+                        Widget.Label({ label: Battery.bind('percent').transform(p => `${p}%`) }),
                     ],
                 }),
                 Widget.Label({
                     class_name: 'uptime',
-                    binds: [['label', uptime, 'value', v => `up: ${v}`]],
+                    label: uptime.bind().transform(v => `up: ${v}`),
                 }),
                 Widget.Button({
                     on_clicked: openSettings,

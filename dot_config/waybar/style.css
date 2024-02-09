@@ -1,4 +1,4 @@
-@import "colors.css";
+@import "oxocarbon.css";
 
 * {
     font-family: "Iosevka Nerd Font";
@@ -9,8 +9,8 @@
 
 window#waybar {
     background: transparent;
-    background-color: rgba(0, 0, 0 , 0.8);
-    color: @foreground; 
+    background-color: rgba(0, 0, 0, 0.8);
+    color: @foreground;
     transition-property: background-color;
     transition-duration: 0.1s;
 }
@@ -29,7 +29,7 @@ button {
 
 button:hover {
     background: inherit;
-    border-top: 2px solid @nix-color;
+    border-top: 2px solid @cyan;
 }
 
 #workspaces button {
@@ -38,8 +38,8 @@ button:hover {
 
 #workspaces button.focused {
     background-color: rgba(0, 0, 0, 0.3);
-    color: @deep-purple;
-    border-top: 2px solid @deep-purple;
+    color: @magenta;
+    border-top: 2px solid @magenta;
 }
 
 #workspaces button.urgent {
@@ -61,50 +61,49 @@ button:hover {
     margin: 2px;
     padding-left: 4px;
     padding-right: 4px;
-    background-color: @lighter;
 }
 
 #clock {
-    color: @timet;
-    border-bottom: 2px solid @timet;
+    color: @orange;
+    border-bottom: 2px solid @orange;
 }
 
 #clock.date {
-    color: @datet;
-    border-bottom: 2px solid @datet;
+    color: @purple;
+    border-bottom: 2px solid @purple;
 }
 
 #pulseaudio {
-    color: @light-blue;
-    border-bottom: 2px solid @light-blue;
+    color: @blue;
+    border-bottom: 2px solid @blue;
 }
 
 #network {
-    color: @orange;
-    border-bottom: 2px solid @orange;
+    color: @yellow;
+    border-bottom: 2px solid @yellow;
 }
 
 #idle_inhibitor {
     margin-right: 12px;
     color: #7cb342;
 }
+
 #idle_inhibitor.activated {
     color: @red;
 }
 
 #battery.charging,
 #battery.plugged {
-    color: @charging;
-    border-bottom: 2px solid @charging;
+    color: @green;
+    border-bottom: 2px solid @green;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
+.modules-left>widget:first-child>#workspaces {
     margin-left: 0;
 }
 
 /* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
+.modules-right>widget:last-child>#workspaces {
     margin-right: 0;
 }
-

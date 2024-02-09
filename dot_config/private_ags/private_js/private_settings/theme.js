@@ -2,8 +2,8 @@ import App from 'resource:///com/github/Aylur/ags/app.js';
 import options from '../options.js';
 import themes from '../themes.js';
 import { reloadScss } from './scss.js';
-// import { setupHyprland } from './hyprland.js';
-// import { wallpaper } from './wallpaper.js';
+import { setupHyprland } from './hyprland.js';
+import { wallpaper } from './wallpaper.js';
 
 /** @param {string} name */
 export function setTheme(name) {
@@ -14,8 +14,8 @@ export function setTheme(name) {
 
     options.apply(theme.options);
     reloadScss();
-    // setupHyprland();
-    // wallpaper();
+    setupHyprland();
+    wallpaper();
 }
 
 export const WP = App.configDir + '/assets/';

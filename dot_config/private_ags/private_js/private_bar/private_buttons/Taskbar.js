@@ -1,4 +1,4 @@
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
+// import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import PanelButton from '../PanelButton.js';
@@ -24,9 +24,6 @@ const setChildren = box => box.children = Hyprland.clients.map(client => {
     }
 });
 
-export default () => Widget.Box({
-    connections: [
-        [Hyprland, setChildren, 'notify::clients'],
-        [Hyprland, setChildren, 'notify::active'],
-    ],
-});
+export default () => Widget.Box()
+    .hook(Hyprland, setChildren, 'notify::clients')
+    .hook(Hyprland, setChildren, 'notify::active');

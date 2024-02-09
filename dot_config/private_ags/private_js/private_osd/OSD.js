@@ -9,34 +9,34 @@ export const OnScreenIndicator = ({ height = 300, width = 48 } = {}) => Widget.B
     css: 'padding: 1px;',
     child: Widget.Revealer({
         transition: 'slide_left',
-        connections: [[Indicator, (revealer, value) => {
-            revealer.reveal_child = value > -1;
-        }]],
+        setup: self => self.hook(Indicator, (_, value) => {
+            self.reveal_child = value > -1;
+        }),
         child: Progress({
             width,
             height,
             vertical: true,
-            connections: [[Indicator, (progress, value) => progress.setValue(value)]],
+            setup: self => self.hook(Indicator, (_, value) => self.attribute(value)),
             child: Widget.Stack({
                 vpack: 'start',
                 hpack: 'center',
                 hexpand: false,
-                items: [
-                    ['true', Widget.Icon({
+                children: {
+                    true: Widget.Icon({
                         hpack: 'center',
                         size: width,
-                        connections: [[Indicator, (icon, _v, name) => icon.icon = name || '']],
-                    })],
-                    ['false', FontIcon({
+                        setup: w => w.hook(Indicator, (_, _v, name) => w.icon = name || ''),
+                    }),
+                    false: FontIcon({
                         hpack: 'center',
                         hexpand: true,
                         css: `font-size: ${width}px;`,
-                        connections: [[Indicator, (icon, _v, name) => icon.icon = name || '']],
-                    })],
-                ],
-                connections: [[Indicator, (stack, _v, name) => {
-                    stack.shown = `${!!Utils.lookUpIcon(name)}`;
-                }]],
+                        setup: w => w.hook(Indicator, (_, _v, name) => w.label = name || ''),
+                    }),
+                },
+                setup: self => self.hook(Indicator, (_, _v, name) => {
+                    self.shown = `${!!Utils.lookUpIcon(name)}`;
+                }),
             }),
         }),
     }),

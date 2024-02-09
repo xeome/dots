@@ -28,7 +28,13 @@ foreground = "#FFFFFF"
 TERM = "xterm-256color"
 
 [font]
-size = 9.5
+size = 10 
+
+
+
+[font.normal]
+family = "Monaspace Neon"
+style = "SemiBold"
 
 [font.bold]
 family = "Monaspace Neon"
@@ -42,17 +48,13 @@ style = "Bold Italic"
 family = "Monaspace Neon"
 style = "Italic"
 
-[font.normal]
-family = "Monaspace Neon"
-style = "SemiBold"
-
 [[keyboard.bindings]]
 action = "IncreaseFontSize"
 key = "Plus"
 mods = "Control|Shift"
 
 [window]
-opacity = 0.75
+opacity = 0.65
 
 [window.padding]
 x = 15

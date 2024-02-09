@@ -157,6 +157,7 @@ export default {
     applauncher: {
         width: Option(500),
         height: Option(500),
+        anchor: Option(['top']),
         icon_size: Option(52),
     },
 
@@ -183,6 +184,7 @@ export default {
             'category': 'exclude',
         }),
         bar: {
+            show_icon: Option(true, { 'category': 'Bar' }),
             width: Option(70, { 'category': 'Bar' }),
             height: Option(14, { 'category': 'Bar' }),
             full: Option(false, { 'category': 'Bar' }),
@@ -234,7 +236,7 @@ export default {
 
     notifications: {
         black_list: Option(['Spotify'], { 'note': 'app-name | entry' }),
-        position: Option(['top'], { 'note': 'anchor' }),
+        position: Option(['top', 'right'], { 'note': 'anchor' }),
         width: Option(450),
     },
 

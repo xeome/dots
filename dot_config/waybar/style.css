@@ -1,4 +1,5 @@
-@import "oxocarbon.css";
+/* @import "oxocarbon.css"; */
+@import "mocha.css";
 
 * {
     font-family: "Iosevka Nerd Font";
@@ -9,7 +10,7 @@
 
 window#waybar {
     background: transparent;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: @background;
     color: @foreground;
     transition-property: background-color;
     transition-duration: 0.1s;
@@ -29,7 +30,7 @@ button {
 
 button:hover {
     background: inherit;
-    border-top: 2px solid @cyan;
+    border-top: 2px solid @hover;
 }
 
 #workspaces button {
@@ -38,8 +39,8 @@ button:hover {
 
 #workspaces button.focused {
     background-color: rgba(0, 0, 0, 0.3);
-    color: @magenta;
-    border-top: 2px solid @magenta;
+    color: @blue;
+    border-top: 2px solid @blue;
 }
 
 #workspaces button.urgent {
@@ -64,13 +65,13 @@ button:hover {
 }
 
 #clock {
-    color: @orange;
-    border-bottom: 2px solid @orange;
+    color: @maroon;
+    border-bottom: 2px solid @maroon;
 }
 
 #clock.date {
-    color: @purple;
-    border-bottom: 2px solid @purple;
+    color: @mauve;
+    border-bottom: 2px solid @mauve;
 }
 
 #pulseaudio {

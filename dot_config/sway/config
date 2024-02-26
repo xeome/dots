@@ -25,4 +25,7 @@ input "type:touchpad" {
 	middle_emulation enabled
 }
 
-output * bg ~/.config/wallpapers/kizu.jpg fill
+exec waypaper --restore
+
+workspace 2
+exec brave --enable-features=VaapiVideoDecodeLinuxGL

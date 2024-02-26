@@ -1,4 +1,4 @@
-@define-color background #161616;
+@define-color background #1e1e2e;
 @define-color foreground #ffffff;
 @define-color lighter #262626;
 
@@ -7,9 +7,12 @@
 @define-color magenta #ff7eb6;
 @define-color green #42be65;
 @define-color yellow #ffe97b;
-@define-color blue #33b1ff;
+@define-color blue #89b4fa;
 @define-color red #ee5396;
 @define-color cyan #3ddbd9;
 @define-color white #dde1e6;
 @define-color orange #ff9e64;
 @define-color purple #c792ea;
+
+/* misc */
+@define-color hover #cdd6f4;

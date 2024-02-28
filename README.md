@@ -1,4 +1,4 @@
-![jomo_dotfiles](https://cdn.discordapp.com/attachments/739162076886597715/954111167926767636/unknown.png)
+![jomo_dotfiles](https://xeome.dev/unknown.png)
 
 This is my personal repo for my Arch linux configurations.
 
@@ -9,10 +9,10 @@ This is my personal repo for my Arch linux configurations.
 | WM              | `sway`                                               |
 | Bar             | `waybar`                                             |
 | Launcher        | `rofi`                                               |
-| Notifications   | `dunst`                                              |
+| Notifications   | `ags`                                                |
 | Terminal        | `alacritty`                                          |
-| GTK             | `Fluent Dark`                                        |
-| QT              | `Fluent Round Dark`                                  |
+| GTK             | `Catppuccin Mocha`                                   |
+| QT              | `Catppuccin Mocha`                                   |
 | Icons           | `papirus-dark`                                       |
 | Cursor          | `bibata`                                             |
 | File manager    | `pcmanfm-qt`                                         |
@@ -24,6 +24,8 @@ This is my personal repo for my Arch linux configurations.
 You can also use `yay -S --needed - < pkgs` to install all dependencies.
 
 # Installation
+
+Incomplete but should get you most things.
 
 ```bash
 chezmoi init https://github.com/xeome/laptopdots
@@ -51,4 +53,4 @@ rm -rf "sf-pro.zip" "monaspace-v1.000.zip"
 
 ## Screenshots
 
-![Untitled](https://github.com/xeome/laptopdots/assets/44901648/887457fa-cbee-4e7a-80a4-4d383f1f14f2)
+![sway](https://github.com/xeome/laptopdots/assets/44901648/90cc9330-3e1d-4e03-8c83-993f0da35360)

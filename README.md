@@ -6,7 +6,7 @@ This is my personal repo for my Arch linux configurations.
 
 | Type            | Package(s)                                           |
 | --------------- | ---------------------------------------------------- |
-| WM              | `sway`                                               |
+| WM              | `swayfx`                                             |
 | Bar             | `waybar`                                             |
 | Launcher        | `rofi`                                               |
 | Notifications   | `ags`                                                |
@@ -28,7 +28,7 @@ You can also use `yay -S --needed - < pkgs` to install all dependencies.
 Incomplete but should get you most things.
 
 ```bash
-chezmoi init https://github.com/xeome/laptopdots
+chezmoi init https://github.com/xeome/dots
 chezmoi apply -v
 # Optional if you want to get san francisco pro font
 mkdir -p ~/.fonts
@@ -44,7 +44,7 @@ rm -rf "sf-pro.zip" "monaspace-v1.000.zip"
 | ---------------------- | ---------------------------------- |
 | Super + Return (enter) | Launch terminal (`alacritty`)      |
 | Super + E              | Launch file manager (`pcmanfm-qt`) |
-| Super + Q              | Launch web browser (`thorium`)     |
+| Super + Q              | Launch web browser (`brave`)       |
 | Super + Shift + C      | Close focused application          |
 | Super + Shift + R      | Restart window manager             |
 | Super + Shift + Q      | Quit window manager                |

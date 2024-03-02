@@ -11,6 +11,7 @@
     "modules-right": [
         "idle_inhibitor",
         "custom/weather",
+        "custom/vpn",
         "network",
         "pulseaudio",
         "clock",
@@ -32,7 +33,7 @@
         "tooltip-format": "{app}: {title}"
     },
     "sway/window": {
-        "on-click": "ags -t dashboard",
+        "on-click": "ags -t datemenu",
         "tooltip": false
     },
     "idle_inhibitor": {
@@ -105,6 +106,14 @@
         "interval": 3600,
         "exec": "curl -s 'https://wttr.in/~41.03508,28.98331?format=1'",
         "exec-if": "ping wttr.in -c1"
+    },
+    "custom/vpn": {
+        "tooltip": false,
+        "format": "VPN {} ",
+        "exec": "mullvad status | grep -q 'Connected' && echo '' || echo ''",
+        "interval": 1,
+        "on-click": "mullvad connect",
+        "on-click-right": "mullvad disconnect"
     },
     "network": {
         "format-wifi": " {essid} ({signalStrength}%)",

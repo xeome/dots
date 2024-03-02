@@ -108,3 +108,10 @@ button:hover {
 .modules-right>widget:last-child>#workspaces {
     margin-right: 0;
 }
+
+#custom-vpn {
+    color: @lavender;
+    border-radius: 15px;
+    padding-left: 6px;
+    padding-right: 6px;
+}

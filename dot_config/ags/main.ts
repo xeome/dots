@@ -4,7 +4,7 @@ import options from "options"
 // import Bar from "widget/bar/Bar"
 import Applauncher from "widget/applauncher/Applauncher"
 // import Overview from "widget/overview/Overview"
-// import PowerMenu from "widget/powermenu/PowerMenu"
+import PowerMenu from "widget/powermenu/PowerMenu"
 // import Verification from "widget/powermenu/Verification"
 import NotificationPopups from "widget/notifications/NotificationPopups"
 // import ScreenCorners from "widget/bar/ScreenCorners"
@@ -34,7 +34,7 @@ export default config({
         // ...forMonitors(OSD),
         Applauncher(),
         // Overview(),
-        // PowerMenu(),
+        PowerMenu(),
         // Verification(),
         SettingsDialog(),
     ],

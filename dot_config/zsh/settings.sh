@@ -10,6 +10,7 @@ setopt BANG_HIST EXTENDED_HISTORY INC_APPEND_HISTORY SHARE_HISTORY HIST_EXPIRE_D
 # Pager and PATH
 export PAGER="most"
 export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/.local/bin/
 export PATH="$HOME/.local/bin/zig/:$PATH"
 
 if command -v go &> /dev/null; then
@@ -28,6 +29,7 @@ export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
 export GHCUP_USE_XDG_DIRS=true
 export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export CMAKE_CXX_COMPILER_LAUNCHER=ccache
 
 # Source ghcup if available
 [ -f "/home/xeome/.ghcup/env" ] && source "/home/xeome/.ghcup/env"

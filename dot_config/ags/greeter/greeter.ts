@@ -1,7 +1,6 @@
 import "./session"
+import "style/style"
 import GLib from "gi://GLib?version=2.0"
-import style from "style/style"
-import gtk from "lib/gtk"
 import RegularWindow from "widget/RegularWindow"
 import statusbar from "./statusbar"
 import auth from "./auth"
@@ -31,12 +30,8 @@ const win = RegularWindow({
     }),
 })
 
-export default {
-    onConfigParsed() {
-        style()
-        gtk()
-    },
+App.config({
     icons: "./assets",
     windows: [win],
-    cursorTheme: GLib.getenv("XCURSOR_THEME"),
-}
+    cursorTheme: GLib.getenv("XCURSOR_THEME")!,
+})

@@ -1,6 +1,4 @@
 import { Variable } from "resource:///com/github/Aylur/ags/variable.js"
-import { wait } from "./utils"
-import options from "options"
 
 type OptProps = {
     persistent?: boolean
@@ -20,6 +18,10 @@ export class Opt<T = unknown> extends Variable<T> {
     persistent: boolean
     toString() { return `${this.value}` }
     toJSON() { return `opt:${this.value}` }
+
+    getValue = (): T => {
+        return super.getValue()
+    }
 
     init(cacheFile: string) {
         const cacheV = JSON.parse(Utils.readFile(cacheFile) || "{}")[this.id]
@@ -67,6 +69,8 @@ export function mkOptions<T extends object>(cacheFile: string, object: T) {
     for (const opt of getOptions(object))
         opt.init(cacheFile)
 
+    Utils.ensureDirectory(cacheFile.split("/").slice(0, -1).join("/"))
+
     const configFile = `${TMP}/config.json`
     const values = getOptions(object).reduce((obj, { id, value }) => ({ [id]: value, ...obj }), {})
     Utils.writeFileSync(JSON.stringify(values, null, 2), configFile)
@@ -78,16 +82,20 @@ export function mkOptions<T extends object>(cacheFile: string, object: T) {
         }
     })
 
+    function sleep(ms = 0) {
+        return new Promise(r => setTimeout(r, ms))
+    }
+
     async function reset(
         [opt, ...list] = getOptions(object),
         id = opt?.reset(),
     ): Promise<Array<string>> {
         if (!opt)
-            return wait(0, () => [])
+            return sleep().then(() => [])
 
         return id
-            ? [id, ...(await wait(50, () => reset(list)))]
-            : await wait(0, () => reset(list))
+            ? [id, ...(await sleep(50).then(() => reset(list)))]
+            : await sleep().then(() => reset(list))
     }
 
     return Object.assign(object, {
@@ -97,7 +105,7 @@ export function mkOptions<T extends object>(cacheFile: string, object: T) {
             return (await reset()).join("\n")
         },
         handler(deps: string[], callback: () => void) {
-            for (const opt of getOptions(options)) {
+            for (const opt of getOptions(object)) {
                 if (deps.some(i => opt.id.startsWith(i)))
                     opt.connect("changed", callback)
             }

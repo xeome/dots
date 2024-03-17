@@ -55,7 +55,7 @@ const Settings = () => Widget.Box({
             [NetworkToggle, BluetoothToggle],
             [WifiSelection, BluetoothDevices],
         ),
-        
+       
         Row([MicMute, DND]),
         Widget.Box({
             visible: media.as(l => l.length > 0),

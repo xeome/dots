@@ -17,7 +17,7 @@ const Avatar = () => Widget.Box({
     css: Utils.merge([image.bind(), size.bind()], (img, size) => `
         min-width: ${size}px;
         min-height: ${size}px;
-        background-image: url('/home/xeome/Pictures/jomo.png');
+        background-image: url('${img}');
         background-size: cover;
     `),
 })

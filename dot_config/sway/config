@@ -3,6 +3,7 @@ Include conf.d/*.conf
 
 
 blur enable
+blur_radius 8
 blur_xray enable
 shadows disable
 corner_radius 12

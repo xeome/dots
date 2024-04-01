@@ -88,3 +88,12 @@ EOF
 
 # Make it executable
 chmod +x /usr/local/bin/sw
+
+# Add wayland session to /usr/share/wayland-sessions/sw.desktop
+cat <<EOF >/usr/share/wayland-sessions/sw.desktop
+[Desktop Entry]
+Name=sw
+Comment=Sway with Environment Variables for Wayland
+Exec=/usr/local/bin/sw
+Type=Application
+EOF

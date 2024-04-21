@@ -26,6 +26,15 @@ input "type:touchpad" {
 	middle_emulation enabled
 }
 
+input "4152:6190:SteelSeries_SteelSeries_Prime" {
+  natural_scroll disabled
+  dwt enabled
+  accel_profile "flat" 
+  pointer_accel -0.88 
+}
+
+for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
+
 exec waypaper --restore
 
 workspace 2

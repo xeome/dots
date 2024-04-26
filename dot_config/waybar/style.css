@@ -1,5 +1,6 @@
 /* @import "oxocarbon.css"; */
-@import "mocha.css";
+/* @import "mocha.css"; */
+@import "gruvbox.css";
 
 * {
     font-family: "Iosevka Nerd Font";

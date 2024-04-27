@@ -1,0 +1,49 @@
+set selection-clipboard clipboard
+
+# color config
+
+set default-bg "#1d2021"
+set statusbar-fg "#B0B0B0" #04
+set statusbar-bg "#202020" #01
+
+set inputbar-bg "#151515" #00 currently not used
+set inputbar-fg "#FFFFFF" #02
+
+set notification-error-bg "#AC4142" #08
+set notification-error-fg "#151515" #00
+
+set notification-warning-bg "#AC4142" #08
+set notification-warning-fg "#151515" #00
+
+set completion-highlight-fg "#151515" #02
+set completion-highlight-bg "#90A959" #0C
+
+set completion-bg "#303030" #02
+set completion-fg "#E0E0E0" #0C
+
+set notification-bg "#90A959" #0B
+set notification-fg "#151515" #00
+
+
+set recolor true
+set recolor-keephue true
+set recolor-reverse-video "true"
+set recolor-lightcolor "#1d2021"
+set recolor-darkcolor "#d4be98"
+
+
+
+# scrolling
+
+set scroll-page-aware "true"
+set smooth-scroll "true"
+set scroll-full-overlap 0.01
+set scroll-step 100
+
+# Font
+set font "SF Pro Display 15"
+
+# Bind
+unmap f
+map f toggle_fullscreen
+map [fullscreen] f toggle_fullscreen

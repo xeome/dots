@@ -111,7 +111,7 @@
         "tooltip": false,
         "format": "VPN {} ",
         "exec": "mullvad status | grep -q 'Connected' && echo '' || echo ''",
-        "interval": 1,
+        "interval": 5,
         "on-click": "mullvad connect",
         "on-click-right": "mullvad disconnect"
     },

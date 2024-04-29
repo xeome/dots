@@ -20,38 +20,18 @@ else
 	fi
 fi
 
-# Create a script to run at boot
-cat <<EOF >/usr/local/bin/system_config.sh
-#!/bin/bash
-echo -n "advise" | tee /sys/kernel/mm/transparent_hugepage/shmem_enabled
-echo -n 200 | tee /sys/kernel/mm/ksm/sleep_millisecs
-echo -n 80 | tee /sys/class/power_supply/BAT0/charge_control_end_threshold
+# Create tmpfiles.d file
+cat <<EOF >/etc/tmpfiles.d/system_config.conf
+w! /sys/kernel/mm/transparent_hugepage/shmem_enabled - - - - advise
+w! /sys/kernel/mm/ksm/sleep_millisecs - - - - 200
+w! /sys/class/power_supply/BAT0/charge_control_end_threshold - - - - 80
 EOF
-
-# Make it executable
-chmod +x /usr/local/bin/system_config.sh
-
-# Create a systemd service to run some commands at boot
-cat <<EOF >/etc/systemd/system/system_config.service
-[Unit]
-Description=System Config
-After=network.target
-
-[Service]
-Type=oneshot
-ExecStart=/bin/bash /usr/local/bin/system_config.sh
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# Enable
-systemctl enable --now system_config.service
 
 # Create sysctl.d file
 cat <<EOF >/etc/sysctl.d/99-sysctl-custom.conf
 ### Memory tweaks
 vm.swappiness = 10
+# Reduce vfs_cache_pressure for more fs cache
 vm.vfs_cache_pressure = 110
 vm.page-cluster = 0
 vm.dirty_ratio = 10
@@ -75,6 +55,18 @@ EOF
 
 # Reload sysctl
 sysctl --system
+
+# Udev rule for auto io scheduler setting
+cat <<EOF >/etc/udev/rules.d/60-ioschedulers.rules
+# HDD
+ACTION=="add|change", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
+
+# SSD
+ACTION=="add|change", KERNEL=="sd[a-z]*|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+
+# NVMe SSD
+ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="none"
+EOF
 
 # Sway script
 cat <<EOF >/usr/local/bin/sw

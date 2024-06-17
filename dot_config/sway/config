@@ -4,7 +4,6 @@ Include conf.d/*.conf
 
 blur enable
 blur_radius 8
-blur_xray enable
 shadows disable
 corner_radius 12
 layer_effects "rofi" blur enable
@@ -38,4 +37,6 @@ for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disa
 exec waypaper --restore
 
 workspace 2
-exec brave --enable-features=VaapiVideoDecodeLinuxGL
+exec brave --enable-features=VaapiVideoDecodeLinuxGL,UseOzonePlatform --ozone-platform=wayland
+workspace 1
+exec vesktop --ozone-platform=wayland --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode

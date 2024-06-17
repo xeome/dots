@@ -13,12 +13,12 @@ TERM = "xterm-256color"
 size = 10 
 
 [font.normal]
-family = "Monaspace Neon"
-style = "SemiBold"
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
 
 [font.bold]
 family = "Monaspace Neon"
-style = "Bold"
+style = "ExtraBold"
 
 [font.bold_italic]
 family = "Monaspace Neon"

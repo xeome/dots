@@ -1,4 +1,5 @@
 0short() { curl -F"shorten=$1" https://envs.sh; }
+0file() { curl -F"file=@$1" https://envs.sh ; }
 
 alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 alias fixmouse="su -c 'echo 'on' > '/sys/bus/usb/devices/1-2/power/control''"

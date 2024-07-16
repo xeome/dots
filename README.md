@@ -53,4 +53,4 @@ rm -rf "sf-pro.zip" "monaspace-v1.000.zip"
 
 ## Screenshots
 
-![sway](https://github.com/xeome/laptopdots/assets/44901648/90cc9330-3e1d-4e03-8c83-993f0da35360)
+![sway](assets/gruvbox_stacked.png)

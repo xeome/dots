@@ -2,12 +2,12 @@ Include /etc/sway/config.d/*
 Include conf.d/*.conf
 
 
-blur enable
-blur_radius 8
-shadows disable
-corner_radius 12
-layer_effects "rofi" blur enable
-layer_effects "waybar" blur enable
+# blur enable
+# blur_radius 8
+# shadows disable
+# corner_radius 12
+# layer_effects "rofi" blur enable
+# layer_effects "waybar" blur enable
 
 #~~~ keyboard
 input "type:keyboard" {

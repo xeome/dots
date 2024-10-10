@@ -1,4 +1,4 @@
-![jomo_dotfiles](https://xeome.dev/unknown.png)
+![jomo_dotfiles](assets/unknown.png)
 
 This is my personal repo for my Arch linux configurations.
 

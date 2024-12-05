@@ -11,9 +11,9 @@ This is my personal repo for my Arch linux configurations.
 | Launcher        | `rofi`                                               |
 | Notifications   | `ags`                                                |
 | Terminal        | `alacritty`                                          |
-| GTK             | `Catppuccin Mocha`                                   |
-| QT              | `Catppuccin Mocha`                                   |
-| Icons           | `papirus-dark`                                       |
+| GTK             | `Colloid-Orange-Dark-Compact-Gruvbox`                |
+| QT              | `Gruvbox-Dark-Brown`                                 |
+| Icons           | `Flat-Remix-Orange-Dark`                             |
 | Cursor          | `bibata`                                             |
 | File manager    | `pcmanfm-qt`                                         |
 | Screenshot tool | `flameshot`                                          |
@@ -44,7 +44,7 @@ rm -rf "sf-pro.zip" "monaspace-v1.000.zip"
 | ---------------------- | ---------------------------------- |
 | Super + Return (enter) | Launch terminal (`alacritty`)      |
 | Super + E              | Launch file manager (`pcmanfm-qt`) |
-| Super + Q              | Launch web browser (`brave`)       |
+| Super + Q              | Launch web browser (`zen-browser`) |
 | Super + Shift + C      | Close focused application          |
 | Super + Shift + R      | Restart window manager             |
 | Super + Shift + Q      | Quit window manager                |

@@ -41,6 +41,7 @@ for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disa
 exec waypaper --restore
 
 workspace 2
-exec brave --enable-features=VaapiVideoDecodeLinuxGL,UseOzonePlatform --ozone-platform=wayland
+#exec brave --enable-features=VaapiVideoDecodeLinuxGL,UseOzonePlatform --ozone-platform=wayland
+exec zen-browser
 workspace 1
 exec vesktop --ozone-platform=wayland --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode

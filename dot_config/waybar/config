@@ -10,7 +10,6 @@
     ],
     "modules-right": [
         "idle_inhibitor",
-        "custom/weather",
         "custom/vpn",
         "network",
         "pulseaudio",

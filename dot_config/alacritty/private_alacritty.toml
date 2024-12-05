@@ -1,11 +1,3 @@
-ipc_socket = true
-
-import = [
-   #"~/.config/alacritty/catppuccin-mocha.toml"
-   "~/.config/alacritty/gruvbox_material_hard_dark.toml"
-]
-
-
 [env]
 TERM = "xterm-256color"
 
@@ -34,9 +26,18 @@ key = "Plus"
 mods = "Control|Shift"
 
 [window]
-opacity = 0.55
+opacity = 0.65
 #opacity = 1
 
 [window.padding]
 x = 15
 y = 15
+
+[general]
+ipc_socket = true
+
+import = [
+   #"~/.config/alacritty/catppuccin-mocha.toml"
+   #"~/.config/alacritty/gruvbox_material_hard_dark.toml"
+   "~/.config/alacritty/monokai.toml"
+]

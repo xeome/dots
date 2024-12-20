@@ -1,118 +1,183 @@
-/* @import "oxocarbon.css"; */
-/* @import "mocha.css"; */
 @import "gruvbox.css";
 
 * {
-    font-family: "Iosevka Nerd Font";
+    font-family: "Roboto", sans-serif;
     font-size: 16px;
-    min-height: 0;
     font-weight: bold;
+    min-height: 0;
+    transition: all 200ms ease;
 }
 
 window#waybar {
     background: transparent;
-    background-color: @background;
     color: @foreground;
-    transition-property: background-color;
-    transition-duration: 0.1s;
 }
 
 #window {
-    margin: 2;
-    padding-left: 8;
-    padding-right: 8;
-}
-
-button {
-    box-shadow: inset 0 -3px transparent;
-    border: none;
-    border-radius: 0;
-}
-
-button:hover {
-    background: inherit;
-    border-top: 2px solid @hover;
-}
-
-#workspaces button {
-    padding: 0 4px;
-}
-
-#workspaces button.focused {
-    background-color: rgba(0, 0, 0, 0.3);
-    color: @blue;
-    border-top: 2px solid @blue;
-}
-
-#workspaces button.urgent {
-    background-color: #eb4d4b;
+    margin: 2px;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background-color: alpha(@background, 0.90);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 #pulseaudio,
 #clock,
 #battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
-#wireplumber,
+#network,
 #tray,
-#mode,
-#scratchpad {
-    margin: 2px;
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
-#clock {
-    color: @maroon;
-    border-bottom: 2px solid @maroon;
-}
-
-#clock.date {
-    color: @mauve;
-    border-bottom: 2px solid @mauve;
+#idle_inhibitor,
+#custom-vpn {
+    margin: 4px;
+    padding: 2px 16px;
+    border-radius: 8px;
+    background-color: alpha(@background, 0.90);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    border-width: 2px;
+    border-style: solid;
 }
 
 #pulseaudio {
     color: @blue;
-    border-bottom: 2px solid @blue;
+    border-color: alpha(@blue, 1);
+}
+
+#clock {
+    color: @cyan;
+    border-color: alpha(@cyan, 1);
+}
+
+#clock.date {
+    color: @purple;
+    border-color: alpha(@purple, 1);
 }
 
 #network {
     color: @yellow;
-    border-bottom: 2px solid @yellow;
+    border-color: alpha(@yellow, 1);
+}
+
+#tray {
+    border-color: alpha(@foreground, 1);
 }
 
 #idle_inhibitor {
-    margin-right: 12px;
-    color: #7cb342;
+    color: @green;
+    border-color: alpha(@green, 1);
 }
 
 #idle_inhibitor.activated {
     color: @red;
+    border-color: alpha(@red, 1);
+    animation: glow 2s infinite;
+}
+
+#battery {
+    border-color: alpha(@foreground, 1);
 }
 
 #battery.charging,
 #battery.plugged {
     color: @green;
-    border-bottom: 2px solid @green;
+    border-color: alpha(@green, 1);
 }
 
-/* If workspaces is the leftmost module, omit left margin */
+#battery.warning {
+    color: @yellow;
+    border-color: alpha(@yellow, 1);
+}
+
+#battery.critical {
+    color: @red;
+    border-color: alpha(@red, 1);
+    animation: blink 1s infinite;
+}
+
+#custom-vpn {
+    color: @magenta;
+    border-color: alpha(@magenta, 1);
+}
+
+#workspaces button {
+    padding: 0 12px;
+    margin: 4px 0;
+    border-radius: 0;
+    background-color: alpha(@background, 0.90);
+    border: 1px solid alpha(@foreground, 0.2);
+}
+
+#workspaces button:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    margin-left: 4px;
+}
+
+#workspaces button:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#workspaces button.focused {
+    background-color: @blue;
+    color: @background;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#workspaces button.urgent {
+    background-color: @red;
+    animation: pulse 1s infinite;
+}
+
+/* Animations */
+@keyframes pulse {
+
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes glow {
+
+    0% {
+        box-shadow: 0 0 5px @green;
+    }
+
+    100% {
+        box-shadow: 0 0 5px @red;
+    }
+
+    50% {
+        box-shadow: 0 0 15px @red;
+    }
+}
+
+@keyframes blink {
+
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
 .modules-left>widget:first-child>#workspaces {
     margin-left: 0;
 }
 
-/* If workspaces is the rightmost module, omit right margin */
 .modules-right>widget:last-child>#workspaces {
     margin-right: 0;
-}
-
-#custom-vpn {
-    color: @lavender;
-    border-radius: 15px;
-    padding-left: 6px;
-    padding-right: 6px;
 }

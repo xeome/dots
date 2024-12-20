@@ -1,6 +1,6 @@
 {
     "height": 32,
-    "spacing": 10,
+    "spacing": 0,
     "modules-left": [
         "sway/workspaces",
         "custom/media"
@@ -32,6 +32,8 @@
         "tooltip-format": "{app}: {title}"
     },
     "sway/window": {
+        "format": "{title}",
+        "empty-format": "No active window",
         "on-click": "ags -t datemenu",
         "tooltip": false
     },
@@ -108,7 +110,7 @@
     },
     "custom/vpn": {
         "tooltip": false,
-        "format": "VPN {} ",
+        "format": "VPN {}",
         "exec": "mullvad status | grep -q 'Connected' && echo '' || echo ''",
         "interval": 5,
         "on-click": "mullvad connect",

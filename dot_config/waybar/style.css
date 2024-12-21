@@ -1,4 +1,5 @@
-@import "gruvbox.css";
+/* @import "gruvbox.css"; */
+@import "oxocarbon.css";
 
 * {
     font-family: "Roboto", sans-serif;
@@ -11,10 +12,17 @@
 window#waybar {
     background: transparent;
     color: @foreground;
+    padding: 0;
+    margin: 0;
+}
+
+window#waybar.empty #window {
+    background: transparent;
+    box-shadow: 0px 0px 0px;
 }
 
 #window {
-    margin: 2px;
+    margin-top: 4px;
     padding: 6px 12px;
     border-radius: 12px;
     background-color: alpha(@background, 0.90);
@@ -28,13 +36,19 @@ window#waybar {
 #tray,
 #idle_inhibitor,
 #custom-vpn {
-    margin: 4px;
+    margin-top: 4px;
+    margin-left: 4px;
+    margin-right: 4px;
     padding: 2px 16px;
     border-radius: 8px;
     background-color: alpha(@background, 0.90);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     border-width: 2px;
     border-style: solid;
+}
+
+#idle_inhibitor {
+    padding: 2px 15px 2px 10px;
 }
 
 #pulseaudio {
@@ -100,10 +114,10 @@ window#waybar {
 
 #workspaces button {
     padding: 0 12px;
-    margin: 4px 0;
+    margin-top: 4px;
     border-radius: 0;
     background-color: alpha(@background, 0.90);
-    border: 1px solid alpha(@foreground, 0.2);
+    /* border: 1px solid alpha(@foreground, 0.2); */
 }
 
 #workspaces button:first-child {

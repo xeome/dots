@@ -31,12 +31,12 @@ EOF
 cat <<EOF >/etc/sysctl.d/99-sysctl-custom.conf
 ### Memory tweaks
 vm.swappiness = 10
-# Reduce vfs_cache_pressure for more fs cache
-vm.vfs_cache_pressure = 110
+vm.vfs_cache_pressure = 40
 vm.page-cluster = 0
-vm.dirty_ratio = 10
-vm.dirty_background_ratio = 5
-vm.compaction_proactiveness = 20
+vm.dirty_ratio = 5
+vm.dirty_background_ratio = 3
+vm.compaction_proactiveness = 10
+vm.min_free_kbytes = 270336
 
 ### Network
 net.core.default_qdisc = cake
@@ -47,6 +47,9 @@ net.ipv4.tcp_adv_win_scale = -2
 net.ipv4.tcp_mtu_probing = 1
 net.core.busy_read=50
 net.core.busy_poll=50
+net.ipv4.tcp_ecn=1
+net.ipv4.tcp_slow_start_after_idle = 0
+net.ipv4.tcp_low_latency=1
 
 ### MISC
 kernel.nmi_watchdog = 0

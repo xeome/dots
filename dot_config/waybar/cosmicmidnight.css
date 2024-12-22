@@ -1,0 +1,24 @@
+/*
+*
+* Cosmic Midnight Palette
+*
+*/
+
+@define-color background #1b1b1b;
+@define-color foreground #e0e0e0;
+@define-color lighter #282828;
+
+/* Normal */
+@define-color black #1b1b1b;
+@define-color magenta #d16d92;
+@define-color green #50a664;
+@define-color yellow #dbb400;
+@define-color blue #6f92ff;
+@define-color red #ff6b81;
+@define-color cyan #4fb3c5;
+@define-color white #f0f0f0;
+@define-color orange #eaa560;
+@define-color purple #a87dbb;
+
+/* misc */
+@define-color hover #9ab0c9;

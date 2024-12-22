@@ -1,0 +1,35 @@
+/*
+*
+* Monochrome palette
+*
+*/
+
+@define-color background #0f0f0f;
+@define-color foreground #ffffff;
+@define-color lighter #262626;
+
+/* Normal */
+/* @define-color black #1a1a1a;
+@define-color magenta #cccccc;
+@define-color green #a6a6a6;
+@define-color yellow #e6e6e6;
+@define-color blue #999999;
+@define-color red #d9d9d9;
+@define-color cyan #b3b3b3;
+@define-color white #f2f2f2;
+@define-color orange #bfbfbf;
+@define-color purple #8c8c8c; */
+/* all white */
+@define-color black #ffffff;
+@define-color magenta #ffffff;
+@define-color green #ffffff;
+@define-color yellow #ffffff;
+@define-color blue #ffffff;
+@define-color red #ffffff;
+@define-color cyan #ffffff;
+@define-color white #ffffff;
+@define-color orange #ffffff;
+@define-color purple #ffffff;
+
+/* misc */
+@define-color hover #ffffff;

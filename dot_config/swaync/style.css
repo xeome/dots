@@ -1,0 +1,264 @@
+/* Global Styles */
+* {
+  font-family: "SF Pro";
+  transition: 200ms;
+  box-shadow: none;
+}
+
+/* Notifications */
+.notification-background .notification {
+  margin-bottom: 0.4rem;
+  border: 0;
+  border-radius: 0.8rem;
+  -gtk-outline-radius: 0.8rem;
+  transition: transform 200ms ease;
+}
+
+.notification-background .notification:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.notification-content {
+  padding: 1rem 1.2rem;
+  background-color: #141414;
+  border-bottom: 2px solid #4a6baf;
+}
+
+.notification.low .notification-content label,
+.notification.normal .notification-content label,
+.notification.low .notification-content image,
+.notification.normal .notification-content image {
+  color: #e8e8e8;
+}
+
+.notification.low .notification-content .body,
+.notification.normal .notification-content .body {
+  color: #a0a0a0;
+}
+
+.notification.critical .notification-content {
+  background-color: #2d1517;
+  border-bottom: 2px solid #ff4444;
+}
+
+.notification.critical .notification-content label {
+  color: #ff8080;
+}
+
+.notification .summary,
+.notification .time,
+.notification .body {
+  font-family: "SF Pro";
+}
+
+.notification .summary {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.notification .time {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-right: 2.4rem;
+  color: #888888;
+}
+
+.notification .body {
+  font-size: 0.95rem;
+  font-weight: 400;
+  margin-top: 0.4rem;
+}
+
+/* Close Button */
+.close-button {
+  background: none;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: none;
+  margin: 4px 10px 0 0;
+  padding: 4px 8px;
+  min-height: 24px;
+  min-width: 24px;
+  text-shadow: none;
+  color: #888888;
+}
+
+.close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e8e8e8;
+}
+
+.close-button:active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ff8080;
+}
+
+/* Control Center */
+.control-center {
+  border-radius: 1.2rem;
+  -gtk-outline-radius: 1.2rem;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+  margin: 8px;
+  background-color: #141414;
+  padding: 1.2rem;
+}
+
+.control-center slider {
+  background-color: rgba(158, 158, 158, 0.2);
+  border-radius: 1rem;
+}
+
+.control-center slider:hover {
+  background-color: rgba(158, 158, 158, 0.3);
+}
+
+.control-center slider:active {
+  background-color: #77767e;
+}
+
+/* Widget Titles */
+.widget-title {
+  padding: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.widget-title label {
+  font-family: "SF Pro";
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: #e8e8e8;
+  margin-left: 1rem;
+}
+
+.widget-title button {
+  background: none;
+  border: none;
+  border-radius: 1.16rem;
+  -gtk-outline-radius: 1.16rem;
+  padding: 0.14rem;
+  margin-left: 2rem;
+}
+
+.widget-title button label {
+  font-family: "Gabarito", sans-serif;
+  font-size: 1.04rem;
+  color: #e4e1e6;
+  margin-right: 0.84rem;
+}
+
+.widget-title button:hover {
+  background-color: rgba(128, 128, 128, 0.3);
+}
+
+.widget-title button:active {
+  background-color: rgba(128, 128, 128, 0.7);
+}
+
+/* Widget Buttons */
+.widget-buttons-grid {
+  border-radius: 1rem;
+  -gtk-outline-radius: 1rem;
+  background-color: #1a1a1a;
+  padding: 0.8rem;
+}
+
+.widget-buttons-grid button {
+  background: none;
+  border: none;
+  border-radius: 0.8rem;
+  min-width: 4.8rem;
+  min-height: 3.2rem;
+  padding: 0;
+  margin: 0.2rem;
+}
+
+.widget-buttons-grid button label {
+  font-family: "Material Symbols Rounded";
+  font-size: 1.3rem;
+  color: #e4e1e6;
+}
+
+.widget-buttons-grid button:hover {
+  background-color: rgba(128, 128, 128, 0.3);
+}
+
+.widget-buttons-grid button:checked {
+  background-color: #4a6baf;
+  color: #e0e0e0;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Volume Widget */
+.widget-volume {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  margin: 0.8rem;
+  border-radius: 1rem;
+}
+
+.widget-volume trough {
+  background-color: rgba(158, 158, 158, 0.15);
+  border-radius: 0.5rem;
+}
+
+.widget-volume trough slider {
+  background-color: #4a6baf;
+  border-radius: 50%;
+  min-height: 1.4rem;
+}
+
+/* MPRIS (Media) Widget */
+.widget-mpris {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  margin: 0.8rem;
+  border-radius: 1rem;
+}
+
+.widget-mpris-player {
+  padding: 1rem;
+  margin: 8px;
+  color: #e8e8e8;
+}
+
+.widget-mpris-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.widget-mpris-subtitle {
+  font-size: 1.1rem;
+}
+
+/* Do Not Disturb (DND) Widget */
+.widget-dnd {
+  margin: 0.8rem;
+}
+
+.widget-dnd label {
+  font-family: "SF Pro";
+  font-weight: bold;
+  font-size: 97%;
+  color: #e4e1e6;
+  margin-left: 0.94rem;
+}
+
+.widget-dnd switch {
+  font-size: initial;
+  border-radius: 1rem;
+  background: #1a1a1a;
+  border: 1px solid #2d2d2d;
+  box-shadow: none;
+  margin-right: 1rem;
+}
+
+.widget-dnd switch:checked {
+  background: #4a6baf;
+}
+
+.widget-dnd switch slider {
+  background: @noti-bg-hover;
+  border-radius: 12px;
+}

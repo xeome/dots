@@ -4,8 +4,8 @@
 *
 */
 
-@define-color background #0f0f0f;
-@define-color foreground #ffffff;
+@define-color background #1b1b1b;
+@define-color foreground #e0e0e0;
 @define-color lighter #262626;
 
 /* Normal */
@@ -20,16 +20,16 @@
 @define-color orange #bfbfbf;
 @define-color purple #8c8c8c; */
 /* all white */
-@define-color black #ffffff;
-@define-color magenta #ffffff;
-@define-color green #ffffff;
-@define-color yellow #ffffff;
-@define-color blue #ffffff;
-@define-color red #ffffff;
-@define-color cyan #ffffff;
-@define-color white #ffffff;
-@define-color orange #ffffff;
-@define-color purple #ffffff;
+@define-color black #e0e0e0;
+@define-color magenta #e0e0e0;
+@define-color green #e0e0e0;
+@define-color yellow #e0e0e0;
+@define-color blue #e0e0e0;
+@define-color red #e0e0e0;
+@define-color cyan #e0e0e0;
+@define-color white #e0e0e0;
+@define-color orange #e0e0e0;
+@define-color purple #e0e0e0;
 
 /* misc */
-@define-color hover #ffffff;
+@define-color hover #9ab0c9;

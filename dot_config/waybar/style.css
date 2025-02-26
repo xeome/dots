@@ -34,6 +34,7 @@ window#waybar.empty #window {
 #battery,
 #network,
 #tray,
+#custom-swaync,
 #idle_inhibitor,
 #custom-vpn {
     margin-top: 4px;
@@ -45,6 +46,12 @@ window#waybar.empty #window {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     border-width: 2px;
     border-style: solid;
+}
+
+#custom-swaync {
+    padding: 2px 15px 2px 10px;
+    color: @foreground;
+    border-color: alpha(@foreground, 1);
 }
 
 #idle_inhibitor {

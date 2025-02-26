@@ -9,6 +9,7 @@
         "sway/window"
     ],
     "modules-right": [
+        "custom/swaync",
         "idle_inhibitor",
         "custom/vpn",
         "network",
@@ -115,6 +116,26 @@
         "interval": 5,
         "on-click": "mullvad connect",
         "on-click-right": "mullvad disconnect"
+    },
+    "custom/swaync": {
+        "escape": true,
+        "exec": "swaync-client -swb",
+        "exec-if": "swaync-client",
+        "format": "{icon} {0}",
+        "format-icons": {
+            "dnd-inhibited-none": " ",
+            "dnd-inhibited-notification": " ",
+            "dnd-none": " ",
+            "dnd-notification": " ",
+            "inhibited-none": " ",
+            "inhibited-notification": " ",
+            "none": " ",
+            "notification": " "
+        },
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "return-type": "json",
+        "tooltip": false
     },
     "network": {
         "format-wifi": " {essid} ({signalStrength}%)",

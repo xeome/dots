@@ -26,7 +26,7 @@ key = "Plus"
 mods = "Control|Shift"
 
 [window]
-opacity = 0.45
+opacity = 0.55
 #opacity = 1
 
 [window.padding]
@@ -39,6 +39,7 @@ ipc_socket = true
 import = [
    #"~/.config/alacritty/catppuccin-mocha.toml"
    #"~/.config/alacritty/gruvbox_material_hard_dark.toml"
-   "~/.config/alacritty/monokai.toml"
+   #"~/.config/alacritty/monokai.toml"
+   "~/.config/alacritty/rose-pine.toml"
    # "~/.config/alacritty/cosmicmidnight.toml"
 ]

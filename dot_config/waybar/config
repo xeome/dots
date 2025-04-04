@@ -15,7 +15,6 @@
         "network",
         "pulseaudio",
         "clock",
-        "clock#date",
         "battery",
         "tray"
     ],
@@ -49,12 +48,9 @@
         "spacing": 10
     },
     "clock": {
+        "format": "{:%H:%M %d.%m.%Y}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
-    },
-    "clock#date": {
-        "format": "{:%d.%m.%Y}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "backlight": {
         "format": "{icon} {percent}%",

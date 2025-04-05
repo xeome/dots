@@ -1,6 +1,7 @@
 {
     "height": 32,
     "spacing": 0,
+    "reload_style_on_change": true,
     "modules-left": [
         "sway/workspaces",
         "custom/media"
@@ -48,7 +49,7 @@
         "spacing": 10
     },
     "clock": {
-        "format": "{:%H:%M %d.%m.%Y}",
+        "format": "{:%H:%M <big>|</big> %d.%m.%Y}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },

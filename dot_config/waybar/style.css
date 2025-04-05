@@ -1,34 +1,24 @@
-/* @import "cosmicmidnight.css"; */
+/* ===== IMPORTS ===== */
 @import "rosepine-mono.css";
 
+/* ===== GLOBAL STYLES ===== */
 * {
-    font-family: "Roboto", sans-serif;
+    font-family: "Roboto", "JetBrainsMono Nerd Font", sans-serif;
     font-size: 16px;
     font-weight: bold;
     min-height: 0;
     transition: none;
 }
 
+/* ===== MAIN WINDOW ===== */
 window#waybar {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.6);
     color: @foreground;
-    padding: 0;
-    margin: 0;
+    border-bottom: 2px solid alpha(@foreground, 0.15);
 }
 
-window#waybar.empty #window {
-    background: transparent;
-    box-shadow: 0px 0px 0px;
-}
 
-#window {
-    margin-top: 4px;
-    padding: 6px 12px;
-    border-radius: 12px;
-    background-color: alpha(@background, 0.90);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
+/* ===== COMMON MODULE STYLES ===== */
 #pulseaudio,
 #clock,
 #battery,
@@ -37,116 +27,97 @@ window#waybar.empty #window {
 #custom-swaync,
 #idle_inhibitor,
 #custom-vpn {
-    margin-top: 4px;
-    margin-left: 4px;
-    margin-right: 4px;
-    padding: 2px 16px;
-    border-radius: 8px;
-    background-color: alpha(@background, 0.90);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-    border-width: 2px;
-    border-style: solid;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 1px 8px;
+    background-color: transparent;
+    transition: background-color 150ms ease;
 }
 
+#pulseaudio:hover,
+#clock:hover,
+#battery:hover,
+#network:hover,
+#tray:hover,
+#custom-swaync:hover,
+#idle_inhibitor:hover,
+#custom-vpn:hover {
+    background-color: alpha(@foreground, 0.1);
+}
+
+/* ===== INDIVIDUAL MODULES ===== */
+/* Notification Center */
 #custom-swaync {
-    padding: 2px 15px 2px 10px;
-    color: @foreground;
-    border-color: alpha(@foreground, 1);
+    color: @magenta;
 }
 
-#idle_inhibitor {
-    padding: 2px 15px 2px 10px;
-}
-
+/* Audio */
 #pulseaudio {
     color: @blue;
-    border-color: alpha(@blue, 1);
 }
 
+/* Clock */
 #clock {
     color: @cyan;
-    border-color: alpha(@cyan, 1);
 }
 
 #clock.date {
     color: @purple;
-    border-color: alpha(@purple, 1);
 }
 
+/* Network */
 #network {
     color: @yellow;
-    border-color: alpha(@yellow, 1);
 }
 
-#tray {
-    border-color: alpha(@foreground, 1);
-}
 
+/* Idle Inhibitor */
 #idle_inhibitor {
-    color: @green;
-    border-color: alpha(@green, 1);
+    padding: 2px 18px 2px 10px;
+    color: @red;
 }
 
 #idle_inhibitor.activated {
-    color: @red;
-    border-color: alpha(@red, 1);
+    color: @green;
     animation: glow 2s infinite;
 }
 
-#battery {
-    border-color: alpha(@foreground, 1);
-}
-
+/* Battery */
 #battery.charging,
 #battery.plugged {
     color: @green;
-    border-color: alpha(@green, 1);
 }
 
 #battery.warning {
     color: @yellow;
-    border-color: alpha(@yellow, 1);
 }
 
 #battery.critical {
     color: @red;
-    border-color: alpha(@red, 1);
     animation: blink 1s infinite;
 }
 
+/* VPN */
 #custom-vpn {
-    color: @magenta;
-    border-color: alpha(@magenta, 1);
+    color: @green;
 }
 
+/* ===== WORKSPACES ===== */
 #workspaces button {
     padding: 0 12px;
-    margin-top: 4px;
+    margin-top: 2px;
     border-radius: 0;
-    background-color: alpha(@background, 0.90);
+    background-color: alpha(@background, 0.30);
     transition: background-color 150ms ease, color 150ms ease;
 }
 
 #workspaces button:hover {
     background-color: alpha(@foreground, 0.1);
-    box-shadow: inset 0 -2px @foreground;
-}
-
-#workspaces button:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    margin-left: 4px;
-}
-
-#workspaces button:last-child {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
 }
 
 #workspaces button.focused {
     background-color: @foreground;
     color: @background;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 #workspaces button.urgent {
@@ -154,52 +125,50 @@ window#waybar.empty #window {
     animation: pulse 1s infinite;
 }
 
-/* Animations */
+/* ===== ANIMATIONS ===== */
 @keyframes pulse {
-
     0% {
-        opacity: 1;
-    }
-
-    100% {
         opacity: 1;
     }
 
     50% {
         opacity: 0.7;
     }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes glow {
-
     0% {
         box-shadow: 0 0 5px @green;
-    }
-
-    100% {
-        box-shadow: 0 0 5px @red;
     }
 
     50% {
         box-shadow: 0 0 15px @red;
     }
+
+    100% {
+        box-shadow: 0 0 5px @red;
+    }
 }
 
 @keyframes blink {
-
     0% {
-        opacity: 1;
-    }
-
-    100% {
         opacity: 1;
     }
 
     50% {
         opacity: 0.5;
     }
+
+    100% {
+        opacity: 1;
+    }
 }
 
+/* ===== LAYOUT ADJUSTMENTS ===== */
 .modules-left>widget:first-child>#workspaces {
     margin-left: 0;
 }

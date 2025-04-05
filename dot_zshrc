@@ -12,4 +12,3 @@ for file in ~/.config/zsh/*.sh; do
   source "$file"
 done
 export PATH=~/.local/share/junest/bin:$PATH 
-[[ "$TERM_PROGRAM" == "vscode" ]] && unset ARGV0

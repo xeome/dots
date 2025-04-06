@@ -20,20 +20,20 @@
 
 .notification-content {
   padding: 1rem 1.2rem;
-  background-color: #141414;
-  border-bottom: 2px solid #4a6baf;
+  background-color: alpha(#000000, .55);
+  border-bottom: 2px solid #ea9a97;
 }
 
 .notification.low .notification-content label,
 .notification.normal .notification-content label,
 .notification.low .notification-content image,
 .notification.normal .notification-content image {
-  color: #e8e8e8;
+  color: #e0def4;
 }
 
 .notification.low .notification-content .body,
 .notification.normal .notification-content .body {
-  color: #a0a0a0;
+  color: #908caa;
 }
 
 .notification.critical .notification-content {
@@ -61,7 +61,7 @@
   font-size: 0.85rem;
   font-weight: 500;
   margin-right: 2.4rem;
-  color: #888888;
+  color: #908caa;
 }
 
 .notification .body {
@@ -81,12 +81,12 @@
   min-height: 24px;
   min-width: 24px;
   text-shadow: none;
-  color: #888888;
+  color: #524f67;
 }
 
 .close-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: #e8e8e8;
+  color: #e0def4;
 }
 
 .close-button:active {
@@ -100,21 +100,21 @@
   -gtk-outline-radius: 1.2rem;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
   margin: 8px;
-  background-color: #141414;
+  background-color: alpha(#000000, .55);
   padding: 1.2rem;
 }
 
 .control-center slider {
-  background-color: rgba(158, 158, 158, 0.2);
+  background-color: rgba(42, 39, 63, 0.2);
   border-radius: 1rem;
 }
 
 .control-center slider:hover {
-  background-color: rgba(158, 158, 158, 0.3);
+  background-color: rgba(42, 39, 63, 0.3);
 }
 
 .control-center slider:active {
-  background-color: #77767e;
+  background-color: #9ccfd8;
 }
 
 /* Widget Titles */
@@ -127,7 +127,7 @@
   font-family: "SF Pro";
   font-weight: 600;
   font-size: 1.4rem;
-  color: #e8e8e8;
+  color: #e0def4;
   margin-left: 1rem;
 }
 
@@ -143,23 +143,23 @@
 .widget-title button label {
   font-family: "Gabarito", sans-serif;
   font-size: 1.04rem;
-  color: #e4e1e6;
+  color: #e0def4;
   margin-right: 0.84rem;
 }
 
 .widget-title button:hover {
-  background-color: rgba(128, 128, 128, 0.3);
+  background-color: rgba(43, 39, 63, 0.3);
 }
 
 .widget-title button:active {
-  background-color: rgba(128, 128, 128, 0.7);
+  background-color: rgba(43, 39, 63, 0.7);
 }
 
 /* Widget Buttons */
 .widget-buttons-grid {
   border-radius: 1rem;
   -gtk-outline-radius: 1rem;
-  background-color: #1a1a1a;
+  background-color: alpha(#000000, .55);
   padding: 0.8rem;
 }
 
@@ -180,85 +180,20 @@
 }
 
 .widget-buttons-grid button:hover {
-  background-color: rgba(128, 128, 128, 0.3);
+  background-color: rgba(49, 39, 63, 0.3);
 }
 
 .widget-buttons-grid button:checked {
-  background-color: #4a6baf;
+  background-color: alpha(#000000, .55);
   color: #e0e0e0;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Volume Widget */
 .widget-volume {
-  background-color: #1a1a1a;
+  background-color: alpha(#000000, .55);
   padding: 1rem;
   margin: 0.8rem;
   border-radius: 1rem;
 }
 
-.widget-volume trough {
-  background-color: rgba(158, 158, 158, 0.15);
-  border-radius: 0.5rem;
-}
-
-.widget-volume trough slider {
-  background-color: #4a6baf;
-  border-radius: 50%;
-  min-height: 1.4rem;
-}
-
-/* MPRIS (Media) Widget */
-.widget-mpris {
-  background-color: #1a1a1a;
-  padding: 1rem;
-  margin: 0.8rem;
-  border-radius: 1rem;
-}
-
-.widget-mpris-player {
-  padding: 1rem;
-  margin: 8px;
-  color: #e8e8e8;
-}
-
-.widget-mpris-title {
-  font-weight: 600;
-  font-size: 1.2rem;
-  margin-bottom: 0.4rem;
-}
-
-.widget-mpris-subtitle {
-  font-size: 1.1rem;
-}
-
-/* Do Not Disturb (DND) Widget */
-.widget-dnd {
-  margin: 0.8rem;
-}
-
-.widget-dnd label {
-  font-family: "SF Pro";
-  font-weight: bold;
-  font-size: 97%;
-  color: #e4e1e6;
-  margin-left: 0.94rem;
-}
-
-.widget-dnd switch {
-  font-size: initial;
-  border-radius: 1rem;
-  background: #1a1a1a;
-  border: 1px solid #2d2d2d;
-  box-shadow: none;
-  margin-right: 1rem;
-}
-
-.widget-dnd switch:checked {
-  background: #4a6baf;
-}
-
-.widget-dnd switch slider {
-  background: @noti-bg-hover;
-  border-radius: 12px;
-}

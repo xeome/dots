@@ -4,7 +4,7 @@
 /* ===== GLOBAL STYLES ===== */
 * {
     font-family: "Roboto", "JetBrainsMono Nerd Font", sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     min-height: 0;
     transition: none;
@@ -115,7 +115,7 @@ window#waybar {
     background-color: alpha(@foreground, 0.1);
 }
 
-#workspaces button.focused {
+#workspaces button.active {
     background-color: @foreground;
     color: @background;
 }

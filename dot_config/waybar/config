@@ -3,11 +3,11 @@
     "spacing": 0,
     "reload_style_on_change": true,
     "modules-left": [
-        "sway/workspaces",
+        "hyprland/workspaces",
         "custom/media"
     ],
     "modules-center": [
-        "sway/window"
+        "hyprland/window"
     ],
     "modules-right": [
         "custom/swaync",
@@ -19,7 +19,7 @@
         "battery",
         "tray"
     ],
-    "sway/mode": {
+    "hyprland/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
     "sway/scratchpad": {
@@ -32,7 +32,7 @@
         "tooltip": true,
         "tooltip-format": "{app}: {title}"
     },
-    "sway/window": {
+    "hyprland/window": {
         "format": "{title}",
         "empty-format": "No active window",
         "on-click": "ags -t datemenu",

@@ -1,19 +1,18 @@
-/* Rosé Pine Monochromatic Theme for Waybar */
 @define-color background #191724;
 /* Base */
 @define-color foreground #e0def4;
 /* Text */
-@define-color blue #c4a7e7;
-/* Iris */
-@define-color cyan #c4a7e7;
-/* Iris */
+@define-color blue #908caa;
+/* Subtle */
+@define-color cyan #9ccfd8;
+/* Foam */
 @define-color purple #c4a7e7;
 /* Iris */
-@define-color yellow #ebbcba;
-/* Rose (Warning) */
-@define-color green #ebbcba;
-/* Rose (Success/OK) */
+@define-color yellow #f6c177;
+/* Gold */
+@define-color green #9ccfd8;
+/* Pine */
 @define-color red #eb6f92;
 /* Love (Error/Critical) */
-@define-color magenta #eb6f92;
-/* Love */
+@define-color magenta #c4a7e7;
+/* Iris */

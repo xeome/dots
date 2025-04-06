@@ -3,8 +3,8 @@
 
 /* ===== GLOBAL STYLES ===== */
 * {
-    font-family: "Roboto", "JetBrainsMono Nerd Font", sans-serif;
-    font-size: 14px;
+    font-family: "SF Pro Display", "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 16px;
     font-weight: bold;
     min-height: 0;
     transition: none;
@@ -30,7 +30,6 @@ window#waybar {
     margin-left: 2px;
     margin-right: 2px;
     padding: 1px 8px;
-    background-color: transparent;
     transition: background-color 150ms ease;
 }
 
@@ -53,12 +52,12 @@ window#waybar {
 
 /* Audio */
 #pulseaudio {
-    color: @blue;
+    color: @green;
 }
 
 /* Clock */
 #clock {
-    color: @cyan;
+    color: @red;
 }
 
 #clock.date {
@@ -69,7 +68,6 @@ window#waybar {
 #network {
     color: @yellow;
 }
-
 
 /* Idle Inhibitor */
 #idle_inhibitor {

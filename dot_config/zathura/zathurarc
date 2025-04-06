@@ -1,49 +1,57 @@
+# ┌──────────────────────────────────────┐
+# │                                      │
+# │     ░▀▀█░█▀█░▀█▀░█░█░█░█░█▀▄░█▀█     │
+# │     ░▄▀░░█▀█░░█░░█▀█░█░█░█▀▄░█▀█     │
+# │     ░▀▀▀░▀░▀░░▀░░▀░▀░▀▀▀░▀░▀░▀░▀     │
+# │                                      │
+# └──────────────────────────────────────┘
+
+set notification-error-bg       "#ffb4ab"
+set notification-error-fg       "#690005"
+set notification-warning-bg     "#ffb86c"
+set notification-warning-fg     "#44475a"
+set notification-bg             "#22191a"
+set notification-fg             "#d7c1c1"
+
+set completion-bg               "#22191a"
+set completion-fg               "#d7c1c1"
+set completion-group-bg         "#ffb3b6"
+set completion-group-fg         "#561d23"
+set completion-highlight-bg     "#e6bdbd"
+set completion-highlight-fg     "#44292a"
+
+set index-bg                    "#1a1111"
+set index-fg                    "#d7c1c1"
+set index-active-bg             "#ffb3b6"
+set index-active-fg             "#561d23"
+
+set inputbar-bg                 "#22191a"
+set inputbar-fg                 "#d7c1c1"
+set statusbar-bg                "#22191a"
+set statusbar-fg                "#d7c1c1"
+
+set highlight-fg                rgba(240,222,222,1.0)
+set highlight-active-color      rgba(255,192,141,0.5)
+set highlight-color             rgba(230,180,171,0.5)
+
+set default-bg                  "#1a1111"
+set default-fg                  "#d7c1c1"
+
+set render-loading              true
+set render-loading-fg           "#1a1111"
+set render-loading-bg           "#d7c1c1"
+
+# Recolor mode settings
+set recolor                     true
+set recolor-lightcolor          "#1a1111"
+set recolor-darkcolor           "#d7c1c1"
+
+# Custom settings
+set window-title-home-tilde true
+set statusbar-basename true
 set selection-clipboard clipboard
-
-# color config
-
-set default-bg "#1d2021"
-set statusbar-fg "#B0B0B0" #04
-set statusbar-bg "#202020" #01
-
-set inputbar-bg "#151515" #00 currently not used
-set inputbar-fg "#FFFFFF" #02
-
-set notification-error-bg "#AC4142" #08
-set notification-error-fg "#151515" #00
-
-set notification-warning-bg "#AC4142" #08
-set notification-warning-fg "#151515" #00
-
-set completion-highlight-fg "#151515" #02
-set completion-highlight-bg "#90A959" #0C
-
-set completion-bg "#303030" #02
-set completion-fg "#E0E0E0" #0C
-
-set notification-bg "#90A959" #0B
-set notification-fg "#151515" #00
-
-
-set recolor true
-set recolor-keephue true
-set recolor-reverse-video "true"
-set recolor-lightcolor "#1d2021"
-set recolor-darkcolor "#d4be98"
-
-
-
-# scrolling
-
-set scroll-page-aware "true"
-set smooth-scroll "true"
-set scroll-full-overlap 0.01
-set scroll-step 100
-
-# Font
-set font "SF Pro Display 15"
-
-# Bind
-unmap f
-map f toggle_fullscreen
-map [fullscreen] f toggle_fullscreen
+set adjust-open "width"
+set guioptions ""
+set first-page-column 1:2
+map j feedkeys "<C-Down>"
+map k feedkeys "<C-Up>"

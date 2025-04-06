@@ -8479,3 +8479,5 @@ read if you used those and something break with a version upgrade you're on your
 @define-color popover_fg_color #fbf1c7;
 @define-color shade_color rgba(251, 241, 199, 0.12);
 @define-color scrollbar_outline_color rgba(251, 241, 199, 0.12);
+
+@import 'colors.css'

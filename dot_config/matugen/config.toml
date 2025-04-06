@@ -1,0 +1,92 @@
+[config]
+reload_apps = true
+
+[config.reload_apps_list]
+kitty = true
+gtk_theme = true
+
+[config.wallpaper]
+command = "swww"
+arguments = [ "img", "-t", "outer", "--transition-duration", "1.5", "--transition-step", "255", "--transition-fps", "60", "-f", "Nearest",]
+set = true
+
+[templates.ghostty]
+input_path = "~/.config/matugen/templates/ghostty"
+output_path = "~/.config/ghostty/themes/matugen"
+
+[templates.slurp]
+input_path = "~/.config/matugen/templates/colors-slurp.sh"
+output_path = "~/.config/kitty/slurp.sh"
+
+[templates.gtk3]
+input_path = "~/.config/matugen/templates/colors.css"
+output_path = "~/.config/gtk-3.0/colors.css"
+
+[templates.gtk4]
+input_path = "~/.config/matugen/templates/colors.css"
+output_path = "~/.config/gtk-4.0/colors.css"
+
+[templates.nvim]
+input_path = "~/.config/matugen/templates/base46.lua"
+output_path = "~/.cache/wal/base46-dark.lua"
+
+[templates.discord]
+input_path = "~/.config/matugen/templates/discord-colors.theme.css"
+output_path = "~/.config/vesktop/themes/axmat.theme.css"
+
+[templates.pywalsh]
+input_path = "~/.config/matugen/templates/colors.sh"
+output_path = "~/.cache/wal/colors.sh"
+post_hook = "walogram -B > /dev/null 2>&1 &"
+
+[templates.pywalwalfile]
+input_path = "~/.config/matugen/templates/wal"
+output_path = "~/.cache/wal/wal"
+
+[templates.rofi]
+input_path = "~/.config/matugen/templates/colors-rofi.rasi"
+output_path = "~/.cache/wal/colors-rofi.rasi"
+
+[templates.zathura]
+input_path = "~/.config/matugen/templates/colors-zathura"
+output_path = "~/.config/zathura/zathurarc"
+
+[templates.yazi]
+input_path = "~/.config/matugen/templates/colors-yazi.toml"
+output_path = "~/.config/yazi/theme.toml"
+
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hyprland-colors.conf"
+output_path = "~/.config/hypr/conf.d/colors.conf"
+
+[templates.alacritty]
+input_path = '~/.config/matugen/templates/alacritty.toml'
+output_path = '~/.config/alacritty/colors.toml'
+
+[config.custom_colors.red]
+color = "#FF0000"
+blend = true
+
+[config.custom_colors.green]
+color = "#00FF00"
+blend = true
+
+[config.custom_colors.yellow]
+color = "#FFFF00"
+blend = true
+
+[config.custom_colors.blue]
+color = "#0000FF"
+blend = true
+
+[config.custom_colors.magenta]
+color = "#FF00FF"
+blend = true
+
+[config.custom_colors.cyan]
+color = "#00FFFF"
+blend = true
+
+[config.custom_colors.white]
+color = "#FFFFFF"
+blend = true

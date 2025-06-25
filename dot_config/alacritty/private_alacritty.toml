@@ -41,6 +41,6 @@ import = [
    #"~/.config/alacritty/gruvbox_material_hard_dark.toml"
    #"~/.config/alacritty/monokai.toml"
    "~/.config/alacritty/rose-pine.toml"
-   #"colors.toml"
+   # "colors.toml"
    # "~/.config/alacritty/cosmicmidnight.toml"
 ]

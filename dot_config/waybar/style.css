@@ -1,176 +1,326 @@
-/* ===== IMPORTS ===== */
-@import "rosepine-mono.css";
+/* vim:ft=css
+*
+* Catppuccin-like theme for Waybar
+*
+* Maintainer: @xeome
+*/
 
-/* ===== GLOBAL STYLES ===== */
+@import "colors.css";
+
+/* -----------------------------------------------------
+*   Global
+* ----------------------------------------------------- */
+
 * {
-    font-family: "SF Pro Display", "JetBrainsMono Nerd Font", sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-    min-height: 0;
-    transition: none;
+  /* `otf-font-awesome` is required for icons */
+  font-family: proportional_font, monospace_alt_font;
+  font-weight: 800;
+  font-size: 1.03em;
+  font-feature-settings: '"zero", "ss01", "ss02", "cv01", "cv03", "cv04", "cv05", "cv06", "cv07", "cv08", "cv09"';
+  border: none;
+  border-radius: 0;
+  padding: 0 0;
+  margin: 0 0;
+  transition: background-color 0.2s ease-in-out, color 0.1s ease-in-out;
 }
 
-/* ===== MAIN WINDOW ===== */
+/* -----------------------------------------------------
+*   Waybar
+* ----------------------------------------------------- */
 window#waybar {
-    background: rgba(0, 0, 0, 0.6);
-    color: @foreground;
-    border-bottom: 2px solid alpha(@foreground, 0.15);
+  background: transparent;
+  border-radius: 10px;
+  margin: 5px;
 }
 
-
-/* ===== COMMON MODULE STYLES ===== */
-#pulseaudio,
-#clock,
-#battery,
-#network,
-#tray,
-#custom-swaync,
-#idle_inhibitor,
-#custom-vpn {
-    margin-left: 2px;
-    margin-right: 2px;
-    padding: 1px 8px;
-    transition: background-color 150ms ease;
+window#waybar.hidden {
+  opacity: 0;
 }
 
-#pulseaudio:hover,
-#clock:hover,
-#battery:hover,
-#network:hover,
-#tray:hover,
-#custom-swaync:hover,
-#idle_inhibitor:hover,
-#custom-vpn:hover {
-    background-color: alpha(@foreground, 0.1);
+window#waybar.empty #window {
+  background: transparent;
+  box-shadow: 0px 0px 0px;
 }
 
-/* ===== INDIVIDUAL MODULES ===== */
-/* Notification Center */
-#custom-swaync {
-    color: @magenta;
+/* -----------------------------------------------------
+*   Tooltip
+* ----------------------------------------------------- */
+tooltip {
+  background: @surface;
+  border-radius: 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: @outline;
 }
 
-/* Audio */
-#pulseaudio {
-    color: @green;
+tooltip label {
+  color: @on_primary_container;
 }
 
-/* Clock */
-#clock {
-    color: @red;
+/* -----------------------------------------------------
+*   Workspaces
+* ----------------------------------------------------- */
+#workspaces {
+  background: @surface;
+  color: @outline;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 9px;
+  font-weight: 800;
+  font-size: 1.05em;
 }
 
-#clock.date {
-    color: @purple;
-}
-
-/* Network */
-#network {
-    color: @yellow;
-}
-
-/* Idle Inhibitor */
-#idle_inhibitor {
-    padding: 2px 18px 2px 10px;
-    color: @red;
-}
-
-#idle_inhibitor.activated {
-    color: @green;
-    animation: glow 2s infinite;
-}
-
-/* Battery */
-#battery.charging,
-#battery.plugged {
-    color: @green;
-}
-
-#battery.warning {
-    color: @yellow;
-}
-
-#battery.critical {
-    color: @red;
-    animation: blink 1s infinite;
-}
-
-/* VPN */
-#custom-vpn {
-    color: @green;
-}
-
-/* ===== WORKSPACES ===== */
 #workspaces button {
-    padding: 0 12px;
-    margin-top: 2px;
-    border-radius: 0;
-    background-color: alpha(@background, 0.30);
-    transition: background-color 150ms ease, color 150ms ease;
+  color: @primary;
+  background: transparent;
+  padding: 5px 10px;
+  border-radius: 10px;
 }
 
 #workspaces button:hover {
-    background-color: alpha(@foreground, 0.1);
+  box-shadow: inherit;
+  text-shadow: inherit;
+  background: @outline;
+  color: @surface;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
+#workspaces button.focused {
+  color: @on_primary_container;
 }
 
 #workspaces button.active {
-    background-color: @foreground;
-    color: @background;
+  background: @on_primary_container;
+  color: @surface;
+  border-radius: 10px;
+  padding: 0 10px;
 }
 
 #workspaces button.urgent {
-    background-color: @red;
-    animation: pulse 1s infinite;
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes pulse {
-    0% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes glow {
-    0% {
-        box-shadow: 0 0 5px @green;
-    }
-
-    50% {
-        box-shadow: 0 0 15px @red;
-    }
-
-    100% {
-        box-shadow: 0 0 5px @red;
-    }
-}
-
-@keyframes blink {
-    0% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.5;
-    }
-
-    100% {
-        opacity: 1;
-    }
+  background-color: @green;
+  border-radius: 10px;
 }
 
 /* ===== LAYOUT ADJUSTMENTS ===== */
 .modules-left>widget:first-child>#workspaces {
-    margin-left: 0;
+  padding-left: 0;
 }
 
 .modules-right>widget:last-child>#workspaces {
-    margin-right: 0;
+  padding-right: 0;
+}
+
+/* -----------------------------------------------------
+*   Window
+* ----------------------------------------------------- */
+#window {
+  background: @surface;
+  color: @on_primary_container;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 60px;
+  margin-right: 60px;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-weight: 800;
+}
+
+/* -----------------------------------------------------
+*   Clock
+* ----------------------------------------------------- */
+#clock {
+  background: @surface;
+  color: @yellow;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
+}
+
+#clock.date {
+  background: @surface;
+  color: @yellow;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
+}
+
+/* -----------------------------------------------------
+*   Pulseaudio
+* ----------------------------------------------------- */
+#pulseaudio {
+  background: @surface;
+  color: @red;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
+}
+
+#pulseaudio.muted {
+  background: @surface;
+  color: @error;
+}
+
+/* -----------------------------------------------------
+*   Network
+* ----------------------------------------------------- */
+#network {
+  background: @surface;
+  color: @blue;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
+}
+
+#network.disconnected {
+  color: @error;
+}
+
+/* -----------------------------------------------------
+*   tray
+* ----------------------------------------------------- */
+#tray {
+  background-color: @surface;
+  color: @secondary;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 9px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#tray>.passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray>.needs-attention {
+  -gtk-icon-effect: highlight;
+  background-color: @yellow;
+}
+
+/* -----------------------------------------------------
+*   Battery
+* ----------------------------------------------------- */
+#battery {
+  background: @surface;
+  color: @green;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
+}
+
+#battery.charging {
+  color: @cyan;
+}
+
+#battery.warning {
+  color: @green;
+}
+
+#battery.critical {
+  color: @yellow;
+}
+
+/* -----------------------------------------------------
+*   temperature
+* ----------------------------------------------------- */
+#temperature {
+  background: @surface;
+  color: @cyan;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
+}
+
+#temperature.critical {
+  color: @yellow;
+}
+
+
+/* -----------------------------------------------------
+*   idle-inhibitor
+* ----------------------------------------------------- */
+#idle_inhibitor {
+  background: @surface;
+  color: @white;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 0px;
+  font-weight: 800;
+}
+
+#idle_inhibitor.activated {
+  color: @error;
+}
+
+/* -----------------------------------------------------
+*   Custom
+* ----------------------------------------------------- */
+
+#custom-vpn {
+  background: @surface;
+  color: @secondary;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
+}
+
+#custom-hiddenwindow {
+  background: @surface;
+  color: @tertiary;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
+}
+
+
+#cpu {
+  background: @surface;
+  color: @magenta;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 800;
 }

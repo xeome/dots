@@ -40,7 +40,7 @@ import = [
    #"~/.config/alacritty/catppuccin-mocha.toml"
    #"~/.config/alacritty/gruvbox_material_hard_dark.toml"
    #"~/.config/alacritty/monokai.toml"
-   "~/.config/alacritty/rose-pine.toml"
-   # "colors.toml"
+   #"~/.config/alacritty/rose-pine.toml"
+   "colors.toml"
    # "~/.config/alacritty/cosmicmidnight.toml"
 ]

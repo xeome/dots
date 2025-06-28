@@ -6,9 +6,17 @@ kitty = true
 gtk_theme = true
 
 [config.wallpaper]
-command = "swww"
-arguments = [ "img", "-t", "outer", "--transition-duration", "1.5", "--transition-step", "255", "--transition-fps", "60", "-f", "Nearest",]
+command = "hyprpaper"
 set = true
+
+[templates.rofi-spotlight]
+input_path = '~/.config/matugen/rofi-spotlight.rasi'
+output_path = '~/.config/rofi/themes/spotlight-dark-matugen.rasi'
+
+[templates.waybar]
+input_path = '~/.config/matugen/templates/waybar'
+output_path = '~/.config/waybar/colors.css'
+post_hook = 'pkill -SIGUSR2 waybar'
 
 [templates.ghostty]
 input_path = "~/.config/matugen/templates/ghostty"

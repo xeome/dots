@@ -5,9 +5,10 @@ reload_apps = true
 kitty = true
 gtk_theme = true
 
-[config.wallpaper]
-command = "hyprpaper"
-set = true
+# [config.wallpaper]
+# command = "waypaper"
+# arguments = ["--wallpaper"]
+# set = true
 
 [templates.rofi-spotlight]
 input_path = '~/.config/matugen/rofi-spotlight.rasi'
@@ -70,6 +71,11 @@ output_path = "~/.config/hypr/conf.d/colors.conf"
 [templates.alacritty]
 input_path = '~/.config/matugen/templates/alacritty.toml'
 output_path = '~/.config/alacritty/colors.toml'
+
+[templates.tty]
+input_path = '~/.config/matugen/templates/pywal-colors.json'
+output_path = '~/.cache/wal/colors-tty.sh'
+post_hook = '~/.config/matugen/scripts/tty_generator.sh ~/.cache/wal/colors-tty.sh'
 
 [config.custom_colors.red]
 color = "#FF0000"

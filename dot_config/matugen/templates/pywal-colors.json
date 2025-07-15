@@ -1,14 +1,13 @@
 {
     "wallpaper": "{{image}}",
     "alpha": "100",
-
     "special": {
         "background": "{{colors.background.default.hex | set_lightness: -5.0}}",
         "foreground": "{{colors.on_background.default.hex}}",
         "cursor": "{{colors.surface_bright.default.hex}}"
     },
     "colors": {
-        "color0": "{{colors.surface.default.hex | set_lightness: -5.0}}",
+        "color0": "{{colors.surface.default.hex | set_lightness: +25.0}}",
         "color1": "{{colors.surface_variant.default.hex}}",
         "color2": "{{colors.secondary_fixed_dim.default.hex}}",
         "color3": "{{colors.outline.default.hex}}",

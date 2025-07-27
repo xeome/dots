@@ -77,6 +77,10 @@ input_path = '~/.config/matugen/templates/pywal-colors.json'
 output_path = '~/.cache/wal/colors-tty.sh'
 post_hook = '~/.config/matugen/scripts/tty_generator.sh ~/.cache/wal/colors-tty.sh'
 
+[templates.starship]
+input_path = '~/.config/matugen/templates/starship.toml'
+output_path = '~/.config/starship.toml'
+
 [config.custom_colors.red]
 color = "#FF0000"
 blend = true

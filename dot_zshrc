@@ -1,5 +1,5 @@
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="dst"
+#ZSH_THEME="dst"
 zstyle ':omz:update' mode auto      # update automatically without asking
 zstyle ':omz:update' frequency 13
 HIST_STAMPS="mm/dd/yyyy"
@@ -12,3 +12,4 @@ for file in ~/.config/zsh/*.sh; do
   source "$file"
 done
 export PATH=~/.local/share/junest/bin:$PATH 
+eval "$(starship init zsh)"

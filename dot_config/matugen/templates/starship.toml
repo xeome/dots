@@ -34,7 +34,7 @@ conda = "{{colors.primary.default.hex}}"
 java = "{{colors.error.default.hex}}"
 rust = "{{colors.tertiary.default.hex}}"
 clang = "{{colors.secondary.default.hex}}"
-duration = "{{colors.tertiary.default.hex}}"
+duration = "{{colors.tertiary.default.hex | set_lightness: -15.0}}"
 text_color = "{{colors.on_primary_container.default.hex | set_lightness: +10.0}}"
 text_light = "{{colors.on_secondary_container.default.hex}}"
 

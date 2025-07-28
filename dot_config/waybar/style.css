@@ -142,6 +142,7 @@ tooltip label {
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 800;
+  border: 2px solid @yellow;
 }
 
 #clock.date {
@@ -168,6 +169,7 @@ tooltip label {
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 800;
+  border: 2px solid @red;
 }
 
 #pulseaudio.muted {
@@ -188,6 +190,7 @@ tooltip label {
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 800;
+  border: 2px solid @blue;
 }
 
 #network.disconnected {
@@ -207,6 +210,7 @@ tooltip label {
   margin-right: 9px;
   padding-left: 10px;
   padding-right: 10px;
+  border: 2px solid @secondary;
 }
 
 #tray>.passive {
@@ -231,18 +235,22 @@ tooltip label {
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 800;
+  border: 2px solid @green;
 }
 
 #battery.charging {
   color: @cyan;
+  border: 2px solid @cyan;
 }
 
 #battery.warning {
   color: @green;
+  border: 2px solid @green;
 }
 
 #battery.critical {
   color: @yellow;
+  border: 2px solid @yellow;
 }
 
 /* -----------------------------------------------------
@@ -278,10 +286,12 @@ tooltip label {
   padding-left: 10px;
   padding-right: 0px;
   font-weight: 800;
+  border: 2px solid @white;
 }
 
 #idle_inhibitor.activated {
   color: @error;
+  border: 2px solid @error;
 }
 
 /* -----------------------------------------------------
@@ -298,6 +308,7 @@ tooltip label {
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 800;
+  border: 2px solid @secondary;
 }
 
 #custom-hiddenwindow {

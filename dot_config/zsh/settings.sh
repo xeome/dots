@@ -15,6 +15,7 @@ export PAGER="most"
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$HOME/.local/bin/
 export PATH="$HOME/.local/bin/zig/:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
 
 if command -v go &> /dev/null; then
     export PATH="$PATH:$(go env GOPATH)/bin"

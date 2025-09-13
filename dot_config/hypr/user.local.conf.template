@@ -1,0 +1,26 @@
+# =============================================================================
+# USER LOCAL OVERRIDES (TEMPLATE)
+# =============================================================================
+# Copy this file to user.local.conf and uncomment the include in hyprland.conf
+# This file should be git-ignored for per-user customizations
+# 
+# Use this file for:
+# - Personal keybind modifications
+# - User-specific application launches
+# - Temporary testing configurations
+# - Local path overrides
+# =============================================================================
+
+# Example: Override wallpaper path
+# $wallpaper = rgb(/path/to/your/personal/wallpaper.png)
+
+# Example: Add personal keybinds
+# bind = $mod SHIFT, t, exec, your-personal-app
+
+# Example: Override specific settings
+# general {
+#   gaps_in = 10
+# }
+
+# Example: Add personal startup applications
+# exec-once = your-personal-app &

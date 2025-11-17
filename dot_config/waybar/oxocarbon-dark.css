@@ -1,0 +1,48 @@
+/*
+ * Oxocarbon Dark theme for Waybar
+ * scheme: Oxocarbon Dark
+ * author: shaunsingh/IBM
+ */
+
+@define-color base00 #161616;
+@define-color base01 #262626;
+@define-color base02 #393939;
+@define-color base03 #525252;
+@define-color base04 #dde1e6;
+@define-color base05 #f2f4f8;
+@define-color base06 #ffffff;
+@define-color base07 #08bdba;
+@define-color base08 #3ddbd9;
+@define-color base09 #78a9ff;
+@define-color base0A #ee5396;
+@define-color base0B #33b1ff;
+@define-color base0C #ff7eb6;
+@define-color base0D #42be65;
+@define-color base0E #be95ff;
+@define-color base0F #82cfff;
+
+/* Core roles mapped from Oxocarbon palette */
+@define-color background #0a0a0a;       /* bar background (darker than base00) */
+@define-color surface #141414;          /* module background (darker than base01) */
+@define-color outline #525252;          /* borders/dividers (base03) */
+
+@define-color on_background #dde1e6;    /* default foreground (base04) */
+@define-color on_surface #dde1e6;       /* default foreground (base04) */
+@define-color on_primary_container #dde1e6; /* text on primary containers (base04) */
+
+@define-color primary #78a9ff;          /* primary accent (base09) */
+@define-color secondary #08bdba;        /* secondary accent (base07) */
+@define-color tertiary #be95ff;         /* tertiary accent (base0E) */
+
+@define-color blue #33b1ff;             /* base0B */
+@define-color green #42be65;            /* base0D */
+@define-color cyan #3ddbd9;             /* base08 */
+@define-color yellow #82cfff;           /* base0F */
+
+@define-color red #ee5396;              /* base0A */
+@define-color error #ee5396;            /* error/warning */
+
+@define-color white #dde1e6;            /* light foreground (base04) */
+@define-color magenta #ff7eb6;          /* base0C */
+@define-color audio #be95ff;            /* audio module color (purple/tertiary) */
+

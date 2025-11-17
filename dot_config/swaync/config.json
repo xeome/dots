@@ -15,7 +15,7 @@
   "hide-on-clear": true,
   "image-visibility": "when-available",
   "keyboard-shortcuts": true,
-  "layer": "layer",
+  "layer": "overlay",
   "notification-body-image-height": 100,
   "notification-body-image-width": 200,
   "notification-icon-size": 40,
@@ -68,14 +68,20 @@
         }
       ]
     },
+    "dnd": {
+      "text": "Do Not Disturb"
+    },
     "mpris": {
-      "image-radius": 12,
+      "image-radius": 3,
       "image-size": 96
+    },
+    "notifications": {
+      "clear-all-button": true
     },
     "title": {
       "text": "   Notifications",
       "button-text": "󰎟  Clear",
-      "clear-all-button": true      
+      "clear-all-button": true
     },
     "volume": {
       "label": " ",
@@ -87,10 +93,10 @@
 
   "widgets": [
     "title",
+    "notifications",
     "buttons-grid",
     "mpris",
     "dnd",
-    "notifications",
     "volume"
   ]
 }

@@ -5,7 +5,7 @@
 * Maintainer: @xeome
 */
 
-@import "colors.css";
+@import "oxocarbon-dark.css";
 
 /* -----------------------------------------------------
 *   Global
@@ -16,6 +16,7 @@
   font-family: proportional_font, monospace_alt_font;
   font-weight: 800;
   font-size: 1.03em;
+  color: #dde1e6;
   font-feature-settings: '"zero", "ss01", "ss02", "cv01", "cv03", "cv04", "cv05", "cv06", "cv07", "cv08", "cv09"';
   border: none;
   border-radius: 0;
@@ -28,9 +29,9 @@
 *   Waybar
 * ----------------------------------------------------- */
 window#waybar {
-  background: transparent;
-  border-radius: 10px;
-  margin: 5px;
+  background: #0a0a0a;
+  border-radius: 0;
+  margin: 0;
 }
 
 window#waybar.hidden {
@@ -38,7 +39,7 @@ window#waybar.hidden {
 }
 
 window#waybar.empty #window {
-  background: transparent;
+  background: #0a0a0a;
   box-shadow: 0px 0px 0px;
 }
 
@@ -47,7 +48,7 @@ window#waybar.empty #window {
 * ----------------------------------------------------- */
 tooltip {
   background: @surface;
-  border-radius: 10px;
+  border-radius: 0;
   border-width: 1px;
   border-style: solid;
   border-color: @outline;
@@ -63,7 +64,7 @@ tooltip label {
 #workspaces {
   background: @surface;
   color: @outline;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 9px;
@@ -73,9 +74,9 @@ tooltip label {
 
 #workspaces button {
   color: @primary;
-  background: transparent;
+  background: @surface;
   padding: 5px 10px;
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 #workspaces button:hover {
@@ -83,7 +84,7 @@ tooltip label {
   text-shadow: inherit;
   background: @outline;
   color: @surface;
-  border-radius: 10px;
+  border-radius: 0;
   padding: 5px 10px;
 }
 
@@ -92,15 +93,15 @@ tooltip label {
 }
 
 #workspaces button.active {
-  background: @on_primary_container;
-  color: @surface;
-  border-radius: 10px;
+  background: @outline;
+  color: #0a0a0a;
+  border-radius: 0;
   padding: 0 10px;
 }
 
 #workspaces button.urgent {
   background-color: @green;
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 /* ===== LAYOUT ADJUSTMENTS ===== */
@@ -118,7 +119,7 @@ tooltip label {
 #window {
   background: @surface;
   color: @on_primary_container;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 60px;
@@ -134,7 +135,7 @@ tooltip label {
 #clock {
   background: @surface;
   color: @yellow;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
@@ -148,7 +149,7 @@ tooltip label {
 #clock.date {
   background: @surface;
   color: @yellow;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   padding-left: 10px;
@@ -161,15 +162,15 @@ tooltip label {
 * ----------------------------------------------------- */
 #pulseaudio {
   background: @surface;
-  color: @red;
-  border-radius: 10px;
+  color: @audio;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 800;
-  border: 2px solid @red;
+  border: 2px solid @audio;
 }
 
 #pulseaudio.muted {
@@ -183,7 +184,7 @@ tooltip label {
 #network {
   background: @surface;
   color: @blue;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
@@ -203,7 +204,7 @@ tooltip label {
 #tray {
   background-color: @surface;
   color: @secondary;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
@@ -228,7 +229,7 @@ tooltip label {
 #battery {
   background: @surface;
   color: @green;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
@@ -259,7 +260,7 @@ tooltip label {
 #temperature {
   background: @surface;
   color: @cyan;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
@@ -279,7 +280,7 @@ tooltip label {
 #idle_inhibitor {
   background: @surface;
   color: @white;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
@@ -301,7 +302,7 @@ tooltip label {
 #custom-vpn {
   background: @surface;
   color: @secondary;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
@@ -314,7 +315,7 @@ tooltip label {
 #custom-hiddenwindow {
   background: @surface;
   color: @tertiary;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
@@ -327,7 +328,7 @@ tooltip label {
 #cpu {
   background: @surface;
   color: @magenta;
-  border-radius: 10px;
+  border-radius: 0;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;

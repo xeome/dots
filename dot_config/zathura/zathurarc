@@ -10,41 +10,41 @@ set notification-error-bg       "#ffb4ab"
 set notification-error-fg       "#690005"
 set notification-warning-bg     "#ffb86c"
 set notification-warning-fg     "#44475a"
-set notification-bg             "#181c20"
-set notification-fg             "#c2c7ce"
+set notification-bg             "#181c1f"
+set notification-fg             "#c1c7cd"
 
-set completion-bg               "#181c20"
-set completion-fg               "#c2c7ce"
-set completion-group-bg         "#98ccf9"
-set completion-group-fg         "#003351"
-set completion-highlight-bg     "#b8c8da"
-set completion-highlight-fg     "#23323f"
+set completion-bg               "#181c1f"
+set completion-fg               "#c1c7cd"
+set completion-group-bg         "#90cef4"
+set completion-group-fg         "#00344a"
+set completion-highlight-bg     "#b6c9d8"
+set completion-highlight-fg     "#20333e"
 
-set index-bg                    "#101418"
-set index-fg                    "#c2c7ce"
-set index-active-bg             "#98ccf9"
-set index-active-fg             "#003351"
+set index-bg                    "#0f1417"
+set index-fg                    "#c1c7cd"
+set index-active-bg             "#90cef4"
+set index-active-fg             "#00344a"
 
-set inputbar-bg                 "#181c20"
-set inputbar-fg                 "#c2c7ce"
-set statusbar-bg                "#181c20"
-set statusbar-fg                "#c2c7ce"
+set inputbar-bg                 "#181c1f"
+set inputbar-fg                 "#c1c7cd"
+set statusbar-bg                "#181c1f"
+set statusbar-fg                "#c1c7cd"
 
-set highlight-fg                rgba(224,226,232,1.0)
-set highlight-active-color      rgba(255,191,231,0.5)
-set highlight-color             rgba(209,180,171,0.5)
+set highlight-fg                rgba(223,227,231,1.0)
+set highlight-active-color      rgba(255,193,233,0.5)
+set highlight-color             rgba(203,180,171,0.5)
 
-set default-bg                  "#101418"
-set default-fg                  "#c2c7ce"
+set default-bg                  "#0f1417"
+set default-fg                  "#c1c7cd"
 
 set render-loading              true
-set render-loading-fg           "#101418"
-set render-loading-bg           "#c2c7ce"
+set render-loading-fg           "#0f1417"
+set render-loading-bg           "#c1c7cd"
 
 # Recolor mode settings
 set recolor                     true
-set recolor-lightcolor          "#101418"
-set recolor-darkcolor           "#c2c7ce"
+set recolor-lightcolor          "#0f1417"
+set recolor-darkcolor           "#c1c7cd"
 
 # Custom settings
 set window-title-home-tilde true

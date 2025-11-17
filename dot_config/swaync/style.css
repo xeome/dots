@@ -1,199 +1,395 @@
+/* ============================================
+   shadcn/ui-inspired SwayNC Theme
+   Minimal, modern, professional design
+   ============================================ */
+/* Color Tokens */
+@define-color bg-900 #09090b;
+@define-color bg-800 #18181b;
+@define-color bg-700 #27272a;
+@define-color bg-600 #3f3f46;
+@define-color bg-500 #52525b;
+@define-color fg-100 #fafafa;
+@define-color fg-300 #d4d4d8;
+@define-color fg-400 #a1a1aa;
+@define-color fg-500 #71717a;
+@define-color accent-blue #3b82f6;
+@define-color accent-blue-soft #a1c3ff;
+@define-color accent-red #ef4444;
+@define-color accent-red-soft #fca5a5;
+@define-color shadow-strong rgba(0, 0, 0, 0.3);
+@define-color shadow-soft rgba(0, 0, 0, 0.3);
+
 /* Global Styles */
 * {
-  font-family: "SF Pro";
-  transition: 200ms;
+  font-family: "SF Pro", "Inter", system-ui, -apple-system, sans-serif;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: none;
+  border-radius: 0;
 }
 
 /* Notifications */
 .notification-background .notification {
-  margin-bottom: 0.4rem;
-  border: 0;
-  border-radius: 0.8rem;
-  -gtk-outline-radius: 0.8rem;
-  transition: transform 200ms ease;
+  margin: 0;
+  padding: 0;
+  background-color: @bg-900;
+  border: none;
+  border-radius: 0;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .notification-background .notification:hover {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: transparent;
+  border-radius: 0;
 }
-
 .notification-content {
-  padding: 1rem 1.2rem;
-  background-color: alpha(#000000, .55);
-  border-bottom: 2px solid #ea9a97;
+  padding: 1rem 1.25rem;
+  background-color: @bg-800;
+  border: none;
+  border-left: 2px solid @accent-blue;
+  border-radius: 0;
+  box-shadow: 0 1px 3px 0 @shadow-strong, 0 1px 2px -1px @shadow-soft;
 }
-
+.notification.low .notification-content,
+.notification.normal .notification-content {
+  background-color: @bg-800;
+  border-left: 2px solid @accent-blue;
+}
 .notification.low .notification-content label,
 .notification.normal .notification-content label,
 .notification.low .notification-content image,
 .notification.normal .notification-content image {
-  color: #e0def4;
+  color: @fg-100;
+  border-radius: 0;
 }
-
 .notification.low .notification-content .body,
 .notification.normal .notification-content .body {
-  color: #908caa;
+  color: @fg-400;
 }
-
 .notification.critical .notification-content {
-  background-color: #2d1517;
-  border-bottom: 2px solid #ff4444;
+  background-color: @bg-800;
+  border-left: 2px solid @accent-red;
 }
-
 .notification.critical .notification-content label {
-  color: #ff8080;
+  color: @accent-red-soft;
 }
-
 .notification .summary,
 .notification .time,
 .notification .body {
-  font-family: "SF Pro";
+  font-family: "SF Pro", "Inter", system-ui, sans-serif;
 }
-
 .notification .summary {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  font-weight: 650;
+  margin-bottom: 0.35rem;
+  color: @fg-100;
+  letter-spacing: -0.01em;
 }
 
 .notification .time {
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-right: 2.4rem;
-  color: #908caa;
+  font-size: 0.9rem;
+  font-weight: 550;
+  margin-right: 2rem;
+  color: @fg-500;
 }
 
 .notification .body {
   font-size: 0.95rem;
-  font-weight: 400;
+  font-weight: 450;
   margin-top: 0.4rem;
+  line-height: 1.55;
+  color: @fg-400;
 }
 
 /* Close Button */
 .close-button {
   background: none;
   border: none;
-  border-radius: 1rem;
+  border-radius: 0;
   box-shadow: none;
-  margin: 4px 10px 0 0;
+  margin: 4px 8px 0 0;
   padding: 4px 8px;
-  min-height: 24px;
-  min-width: 24px;
+  min-height: 20px;
+  min-width: 20px;
   text-shadow: none;
-  color: #524f67;
+  color: @fg-500;
 }
-
 .close-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #e0def4;
+  background-color: @bg-700;
+  color: @fg-100;
 }
-
 .close-button:active {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #ff8080;
+  background-color: @bg-600;
+  color: @fg-100;
 }
 
 /* Control Center */
 .control-center {
-  border-radius: 1.2rem;
-  -gtk-outline-radius: 1.2rem;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+  box-shadow: 0 4px 6px -1px @shadow-strong, 0 2px 4px -2px @shadow-strong;
   margin: 8px;
-  background-color: alpha(#000000, .55);
-  padding: 1.2rem;
+  background-color: @bg-900;
+  border: 1px solid @bg-700;
+  padding: 1rem;
 }
-
 .control-center slider {
-  background-color: rgba(42, 39, 63, 0.2);
-  border-radius: 1rem;
+  background-color: @bg-700;
+  border-radius: 0;
 }
-
 .control-center slider:hover {
-  background-color: rgba(42, 39, 63, 0.3);
+  background-color: @bg-600;
+}
+.control-center slider:active {
+  background-color: @bg-500;
 }
 
-.control-center slider:active {
-  background-color: #9ccfd8;
+/* Slider trough (unfilled portion) */
+.control-center slider trough {
+  background-color: @bg-700;
+  border-radius: 0;
+  min-height: 4px;
+}
+
+/* Slider highlight (filled portion) */
+.control-center slider highlight {
+  background-color: @fg-500;
+  border-radius: 0;
+}
+.control-center slider highlight:hover {
+  background-color: @fg-400;
 }
 
 /* Widget Titles */
 .widget-title {
-  padding: 0.5rem;
-  margin-bottom: 0.8rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid @bg-700;
+  border-radius: 0;
 }
-
 .widget-title label {
-  font-family: "SF Pro";
+  font-family: "SF Pro", "Inter", system-ui, sans-serif;
   font-weight: 600;
-  font-size: 1.4rem;
-  color: #e0def4;
-  margin-left: 1rem;
+  font-size: 1.25rem;
+  color: @fg-100;
+  margin-left: 0.5rem;
+  letter-spacing: -0.02em;
 }
-
 .widget-title button {
   background: none;
-  border: none;
-  border-radius: 1.16rem;
-  -gtk-outline-radius: 1.16rem;
-  padding: 0.14rem;
-  margin-left: 2rem;
+  border: 1px solid @bg-700;
+  border-radius: 0;
+  padding: 0.375rem 0.75rem;
+  margin-left: 1.5rem;
 }
-
 .widget-title button label {
-  font-family: "Gabarito", sans-serif;
-  font-size: 1.04rem;
-  color: #e0def4;
-  margin-right: 0.84rem;
+  font-family: "SF Pro", "Inter", system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: @fg-100;
+  margin-right: 0.5rem;
 }
-
 .widget-title button:hover {
-  background-color: rgba(43, 39, 63, 0.3);
+  background-color: @bg-800;
+  border-color: @bg-600;
 }
-
 .widget-title button:active {
-  background-color: rgba(43, 39, 63, 0.7);
+  background-color: @bg-700;
 }
 
 /* Widget Buttons */
 .widget-buttons-grid {
-  border-radius: 1rem;
-  -gtk-outline-radius: 1rem;
-  background-color: alpha(#000000, .55);
-  padding: 0.8rem;
+  border-radius: 0;
+  background-color: @bg-800;
+  border: 1px solid @bg-700;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
 }
-
 .widget-buttons-grid button {
-  background: none;
-  border: none;
-  border-radius: 0.8rem;
-  min-width: 4.8rem;
-  min-height: 3.2rem;
+  background-color: @bg-900;
+  border: 1px solid @bg-700;
+  border-radius: 0;
+  min-width: 4.5rem;
+  min-height: 2.75rem;
   padding: 0;
-  margin: 0.2rem;
+  margin: 0.15rem;
 }
-
 .widget-buttons-grid button label {
-  font-family: "Material Symbols Rounded";
-  font-size: 1.3rem;
-  color: #e4e1e6;
+  font-family: "Material Symbols Rounded", "SF Pro", sans-serif;
+  font-size: 1.375rem;
+  color: @fg-100;
 }
-
 .widget-buttons-grid button:hover {
-  background-color: rgba(49, 39, 63, 0.3);
+  background-color: @bg-800;
+  border-color: @bg-600;
 }
-
 .widget-buttons-grid button:checked {
-  background-color: alpha(#000000, .55);
-  color: #e0e0e0;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  background-color: @accent-blue;
+  border-color: @accent-blue;
+  color: @fg-100;
+  box-shadow: 0 1px 2px 0 @shadow-strong;
 }
 
 /* Volume Widget */
 .widget-volume {
-  background-color: alpha(#000000, .55);
-  padding: 1rem;
-  margin: 0.8rem;
-  border-radius: 1rem;
+  background-color: @bg-800;
+  border: 1px solid @bg-700;
+  padding: 0.875rem;
+  margin: 0.75rem 0;
+  border-radius: 0;
+}
+.widget-volume slider {
+  background-color: @bg-700;
+  border-radius: 0;
+}
+.widget-volume slider:hover {
+  background-color: @bg-600;
+}
+.widget-volume slider:active {
+  background-color: @bg-500;
 }
 
+/* Volume slider trough */
+.widget-volume slider trough {
+  background-color: @bg-700;
+  border-radius: 0;
+  min-height: 4px;
+}
+
+/* Volume slider highlight */
+.widget-volume slider highlight {
+  background-color: @fg-500;
+  border-radius: 0;
+}
+.widget-volume slider highlight:hover {
+  background-color: @fg-400;
+}
+
+/* DND Widget */
+.widget-dnd {
+  background-color: @bg-800;
+  border: 1px solid @bg-700;
+  padding: 0.875rem;
+  margin: 0.75rem 0;
+  border-radius: 0;
+}
+.widget-dnd label {
+  font-family: "SF Pro", "Inter", system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: @fg-100;
+}
+.widget-dnd switch {
+  background-color: @bg-700;
+  border-radius: 0;
+  border: 1px solid @bg-600;
+}
+.widget-dnd switch:checked {
+  background-color: @accent-blue;
+  border-color: @accent-blue;
+}
+
+/* MPRIS Widget */
+.widget-mpris {
+  background-color: @bg-800;
+  border: 1px solid @bg-700;
+  padding: 0.875rem;
+  margin: 0.75rem 0;
+  border-radius: 0;
+}
+.widget-mpris-player {
+  background-color: @bg-900;
+  border-radius: 0;
+  padding: 0.75rem;
+}
+.widget-mpris-title {
+  font-family: "SF Pro", "Inter", system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: @fg-100;
+}
+.widget-mpris-subtitle {
+  font-family: "SF Pro", "Inter", system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: @fg-400;
+}
+.widget-mpris button {
+  background: none;
+  border: 1px solid @bg-700;
+  border-radius: 0;
+  padding: 0.5rem;
+  color: @fg-100;
+}
+.widget-mpris button:hover {
+  background-color: @bg-800;
+  border-color: @bg-600;
+}
+.widget-mpris button:active {
+  background-color: @bg-700;
+}
+
+/* Notification List */
+.notification-list {
+  background-color: transparent;
+}
+.notification-row {
+  margin-bottom: 0.375rem;
+}
+
+/* Scrollbar */
+scrollbar {
+  background-color: transparent;
+  border-radius: 0;
+}
+scrollbar slider {
+  background-color: @bg-700;
+  border-radius: 0;
+  min-width: 6px;
+}
+scrollbar slider:hover {
+  background-color: @bg-600;
+}
+
+/* Blank Window */
+.blank-window {
+  background-color: transparent;
+}
+
+/* Notification Actions */
+.notification-action {
+  background-color: @bg-900;
+  border: 1px solid @bg-700;
+  border-radius: 0;
+  padding: 0.5rem 0.75rem;
+  margin: 0.25rem;
+  color: @fg-100;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.notification-action:hover {
+  background-color: @bg-800;
+  border-color: @bg-600;
+}
+.notification-action:active {
+  background-color: @bg-700;
+}
+
+/* Inline Reply */
+.inline-reply {
+  background-color: @bg-900;
+  border: 1px solid @bg-700;
+  border-radius: 0;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  color: @fg-100;
+}
+.inline-reply:focus {
+  border-color: @accent-blue;
+  outline: none;
+}
+
+/* Image */
+.notification-content image {
+  border-radius: 0;
+}
+.widget-mpris-album-art {
+  border-radius: 0;
+}

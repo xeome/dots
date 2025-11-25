@@ -1,143 +1,110 @@
 // -*- mode: jsonc -*-
 {
-    "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 45,
-    "spacing": 2, // Gaps between modules (4px)
+    "position": "top",
+    "height": 48,
+    "spacing": 0,
     "reload_style_on_change": true,
-    // Choose the order of the modules
-    "group/cpuntemp": {
-        "orientation": "horizontal",
-        "on-click": "alacritty",
-        "modules": [
-            "cpu",
-            "temperature#cpu"
-        ],
-    },
-    "modules-right": [
-        "idle_inhibitor",
-        "custom/vpn",
-        "network",
-        "pulseaudio",
-        "clock",
-        "clock#date",
-        "battery",
-        "tray"
+    // Module Layout: Workspaces | Window Title | DateTime | System Info | Tray
+    "modules-left": [
+        "hyprland/workspaces"
     ],
     "modules-center": [
         "hyprland/window"
     ],
-    "modules-left": [
-        "custom/hiddenwindow",
-        "hyprland/workspaces"
+    "modules-right": [
+        "clock",
+        "network",
+        "custom/vpn",
+        "pulseaudio",
+        "idle_inhibitor",
+        "group/tray-expander"
     ],
-    "group/backlightnslider": {
-        "orientation": "horizontal",
-        "modules": [
-            "backlight",
-            "backlight/slider"
-        ],
-    },
+    // Merged DateTime Module - Shows both time and date with calendar on hover
     "clock": {
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
-    },
-    "clock#date": {
-        "format": "{:%d.%m.%Y}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+        "format": "{:%H:%M  %a %d %b}",
+        "format-alt": "{:%Y-%m-%d %H:%M:%S}",
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "custom/vpn": {
-        "tooltip": false,
-        "format": "{} VPN",
-        "exec": "mullvad status | grep -q 'Connected' && echo ' ' || echo ' '",
+        "format": "{}",
+        "exec": "mullvad status | grep -q 'Connected' && echo '{\"text\":\"󱚿\",\"class\":\"connected\"}' || echo '{\"text\":\"󱛀\",\"class\":\"disconnected\"}'",
+        "return-type": "json",
         "interval": 5,
+        "tooltip-format": "VPN Status\nClick to connect | Right-click to disconnect",
         "on-click": "mullvad connect",
         "on-click-right": "mullvad disconnect"
     },
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "  ",
-            "deactivated": "  "
-        }
-    },
-    "battery": {
-        "bat": "BAT0",
-        "interval": 20,
-        "states": {
-            "warning": 30,
-            "critical": 15,
+            "activated": "",
+            "deactivated": "󰾪"
         },
-        "format": "{icon} {capacity}%",
-        "format-charging": "{icon}󱐋 {capacity}%",
-        "format-icons": [
-            "󰂎",
-            "󰁺",
-            "󰁻",
-            "󰁼",
-            "󰁽",
-            "󰁾",
-            "󰁿",
-            "󰂀",
-            "󰂁",
-            "󰂂",
-            "󰁹"
+        "tooltip-format-activated": "Idle inhibitor: Active",
+        "tooltip-format-deactivated": "Idle inhibitor: Inactive"
+    },
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "move-to-monitor": true,
+        "on-click": "activate"
+    },
+    "network": {
+        "format-wifi": "  {essid}",
+        "format-ethernet": "  {bandwidthDownBytes}  {bandwidthUpBytes}",
+        "interval": 3,
+        "format-linked": "{ifname} (No IP) ",
+        "format": "",
+        "format-disconnected": "  ",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "on-click": "wl-copy $(ip address show up scope global | grep inet | head -n1 | cut -d/ -f 1 | tr -d [:space:] | cut -c5-)",
+        "tooltip-format": " {bandwidthUpBits}  {bandwidthDownBits}\n{ifname}\n{ipaddr}/{cidr}",
+        "tooltip-format-wifi": "  {essid} {frequency}MHz\nStrength: {signaldBm}dBm ({signalStrength}%)\nIP: {ipaddr}/{cidr}\n {bandwidthUpBits}  {bandwidthDownBits}",
+        "min-length": 18,
+        "max-length": 18
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "  {icon} {volume}%",
+        "format-bluetooth-muted": "   ",
+        "format-muted": "  ",
+        "format-icons": {
+            "default": [
+                "",
+                "",
+                ""
+            ]
+        },
+        "on-click": "pavucontrol",
+        "tooltip-format": "Volume: {volume}%\nClick to open mixer"
+    },
+    "tray": {
+        "spacing": 12,
+        "icon-size": 18
+    },
+    "custom/tray-expand-icon": {
+        "format": " ",
+        "oltip": false
+    },
+    "group/tray-expander": {
+        "drawer": {
+            "transition-duration": 325
+        },
+        "modules": [
+            "custom/tray-expand-icon",
+            "tray"
         ],
-        "max-length": 25,
-        "tooltip": true,
-        "tooltip-format": "Time: {time} left\nCapacity: {health}%\n{power} watts",
+        "orientation": "inherit"
+    },
+    "hyprland/window": {
+        "format": "{}",
+        "empty-format": "Desktop",
+        "separate-outputs": true,
+        "max-length": 50,
+        "tooltip": false
     },
     "custom/hiddenwindow": {
         "exec": "waybar-scripts check_special_workspace",
         "tooltip": true,
-        "signal": 3,
-    },
-    "hyprland/workspaces": {
-        "format": "{icon}",
-        "move-to-montior": true,
-    },
-    "network": {
-        "format-wifi": " {essid} ({signalStrength}%)",
-        "format-ethernet": "⬇{bandwidthDownBytes} ⬆{bandwidthUpBytes}",
-        "interval": 3,
-        "format-linked": "{ifname} (No IP) ",
-        "format": "",
-        "format-disconnected": "",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}",
-        "on-click": "wl-copy $(ip address show up scope global | grep inet | head -n1 | cut -d/ -f 1 | tr -d [:space:] | cut -c5-)",
-        "tooltip-format": " {bandwidthUpBits}  {bandwidthDownBits}\n{ifname}\n{ipaddr}/{cidr}\n",
-        "tooltip-format-wifi": " {essid} {frequency}MHz\nStrength: {signaldBm}dBm ({signalStrength}%)\nIP: {ipaddr}/{cidr}\n {bandwidthUpBits}  {bandwidthDownBits}",
-        "min-length": 17,
-        "max-length": 17
-    },
-    "pulseaudio": {
-        "format": "{icon} {volume}% {format_source}",
-        "format-bluetooth": " {icon} {volume}% {format_source}",
-        "format-bluetooth-muted": "  {icon} {format_source}",
-        "format-muted": "  {format_source}",
-        "format-source": " {volume}%",
-        "format-source-muted": "",
-        "format-icons": {
-            "default": [
-                "",
-                "",
-                ""
-            ]
-        },
-        "on-click": "pavucontrol"
-    },
-    "pulseaudio/slider": {
-        "min": 0,
-        "max": 110,
-        "orientation": "horizontal",
-    },
-    "tray": {
-        "spacing": 10,
-    },
-    "hyprland/window": {
-        "format": "{}",
-        "empty-format": "No active window",
-        "separate-outputs": true,
-        "max-length": 35,
-        "tooltip": false,
-    },
+        "signal": 3
+    }
 }

@@ -1,217 +1,236 @@
 /* vim:ft=css
 *
-* Catppuccin-like theme for Waybar
+* zinc theme for Waybar
+* Clean, modern, and interactive design
 *
 * Maintainer: @xeome
 */
 
-@import "oxocarbon-dark.css";
+@import "zinc.css";
 
 /* -----------------------------------------------------
-*   Global
+*   Global - zinc base
 * ----------------------------------------------------- */
 
 * {
-  /* `otf-font-awesome` is required for icons */
   font-family: proportional_font, monospace_alt_font;
-  font-weight: 800;
-  font-size: 1.03em;
-  color: #dde1e6;
+  font-weight: 600;
+  font-size: 1.0em;
+  color: @on_background;
   font-feature-settings: '"zero", "ss01", "ss02", "cv01", "cv03", "cv04", "cv05", "cv06", "cv07", "cv08", "cv09"';
   border: none;
-  border-radius: 0;
-  padding: 0 0;
-  margin: 0 0;
-  transition: background-color 0.2s ease-in-out, color 0.1s ease-in-out;
+  padding: 0;
+  margin: 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* -----------------------------------------------------
-*   Waybar
+*   Waybar Container
 * ----------------------------------------------------- */
 window#waybar {
-  background: #0a0a0a;
-  border-radius: 0;
-  margin: 0;
+  background: alpha(@background, 0.85);
+  border-bottom: 1px solid alpha(@outline, 0.3);
 }
 
 window#waybar.hidden {
   opacity: 0;
 }
 
-window#waybar.empty #window {
-  background: #0a0a0a;
-  box-shadow: 0px 0px 0px;
-}
-
 /* -----------------------------------------------------
-*   Tooltip
+*   Tooltip - shadcn card style
 * ----------------------------------------------------- */
 tooltip {
-  background: @surface;
-  border-radius: 0;
-  border-width: 1px;
-  border-style: solid;
-  border-color: @outline;
+  background: @tooltip_bg;
+  border-radius: 8px;
+  border: 1px solid alpha(@outline, 0.5);
+  padding: 8px 12px;
+  box-shadow: 0 4px 6px -1px alpha(@shadow_dark, 0.3), 0 2px 4px -1px alpha(@shadow_dark, 0.2);
 }
 
 tooltip label {
-  color: @on_primary_container;
+  color: @tooltip_text;
+  font-weight: 500;
 }
 
 /* -----------------------------------------------------
-*   Workspaces
+*   DateTime Module - Clean unified style
+* ----------------------------------------------------- */
+#clock {
+  background: alpha(@module_bg, 0.6);
+  color: @text_primary;
+  border-radius: 8px;
+  margin: 6px 6px 6px 4px;
+  padding: 5px 14px;
+  font-weight: 600;
+  font-size: 1.0em;
+  border: 1px solid alpha(@outline, 0.4);
+}
+
+#clock:hover {
+  background: alpha(@module_bg_hover, 0.8);
+  border-color: alpha(@outline, 0.6);
+}
+
+/* -----------------------------------------------------
+*   Workspaces - Unified grouped module
 * ----------------------------------------------------- */
 #workspaces {
-  background: @surface;
-  color: @outline;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 9px;
-  font-weight: 800;
-  font-size: 1.05em;
+  background: alpha(@module_bg, 0.6);
+  border-radius: 8px;
+  margin: 6px 4px 6px 10px;
+  padding: 0;
+  border: 1px solid alpha(@outline, 0.4);
 }
 
 #workspaces button {
-  color: @primary;
-  background: @surface;
-  padding: 5px 10px;
+  color: @text_muted;
+  background: transparent;
+  padding: 5px 8px;
+  margin: 0;
   border-radius: 0;
+  border: none;
+  border-right: 1px solid alpha(@outline, 0.3);
+  min-width: 28px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#workspaces button:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+#workspaces button:last-child {
+  border-radius: 0 8px 8px 0;
+  border-right: none;
 }
 
 #workspaces button:hover {
-  box-shadow: inherit;
-  text-shadow: inherit;
-  background: @outline;
-  color: @surface;
-  border-radius: 0;
-  padding: 5px 10px;
-}
-
-#workspaces button.focused {
-  color: @on_primary_container;
+  background: alpha(@state_hover, 0.3);
+  color: @text_primary;
 }
 
 #workspaces button.active {
-  background: @outline;
-  color: #0a0a0a;
-  border-radius: 0;
-  padding: 0 10px;
+  background: alpha(@state_active, 0.4);
+  color: @text_bright;
+  font-weight: 700;
 }
 
 #workspaces button.urgent {
-  background-color: @green;
-  border-radius: 0;
-}
-
-/* ===== LAYOUT ADJUSTMENTS ===== */
-.modules-left>widget:first-child>#workspaces {
-  padding-left: 0;
-}
-
-.modules-right>widget:last-child>#workspaces {
-  padding-right: 0;
+  background: alpha(@state_urgent, 0.3);
+  color: @text_bright;
 }
 
 /* -----------------------------------------------------
-*   Window
+*   Window Title - Borderless clean style
 * ----------------------------------------------------- */
 #window {
-  background: @surface;
-  color: @on_primary_container;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 60px;
-  margin-right: 60px;
-  padding-left: 15px;
-  padding-right: 15px;
-  font-weight: 800;
+  background: transparent;
+  color: @text_primary;
+  margin: 6px 8px;
+  padding: 5px 16px;
+  font-weight: 600;
+  font-size: 1.0em;
+}
+
+#window.empty {
+  background: transparent;
 }
 
 /* -----------------------------------------------------
-*   Clock
+*   System Info Modules - Unified group style
 * ----------------------------------------------------- */
-#clock {
-  background: @surface;
-  color: @yellow;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
-  border: 2px solid @yellow;
+#network,
+#custom-vpn,
+#pulseaudio,
+#idle_inhibitor {
+  background: alpha(@module_bg, 0.6);
+  margin: 6px 0px;
+  padding: 5px 0px;
+  font-weight: 600;
+  font-size: 1.0em;
+  border: 1px solid alpha(@outline, 0.4);
+  min-width: 60px;
 }
 
-#clock.date {
-  background: @surface;
-  color: @yellow;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
-}
 
-/* -----------------------------------------------------
-*   Pulseaudio
-* ----------------------------------------------------- */
-#pulseaudio {
-  background: @surface;
-  color: @audio;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
-  border: 2px solid @audio;
-}
-
-#pulseaudio.muted {
-  background: @surface;
-  color: @error;
-}
-
-/* -----------------------------------------------------
-*   Network
-* ----------------------------------------------------- */
+/* Network - First in group, rounded left */
 #network {
-  background: @surface;
-  color: @blue;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
-  border: 2px solid @blue;
+  color: @text_primary;
+  border-radius: 8px 0 0 8px;
+  margin-left: 6px;
+  border-right: none;
+}
+
+#network:hover {
+  background: alpha(@module_bg_hover, 0.8);
 }
 
 #network.disconnected {
-  color: @error;
+  color: @text_disabled;
+}
+
+/* VPN - Middle of group */
+#custom-vpn {
+  font-size: 1.25em;
+  color: @text_primary;
+  border-radius: 0;
+  border-right: none;
+  border-left: none;
+}
+
+#custom-vpn:hover {
+  background: alpha(@module_bg_hover, 0.8);
+}
+
+#custom-vpn.connected {
+  color: @accent_red;
+}
+
+/* Audio - Middle of group */
+#pulseaudio {
+  color: @text_primary;
+  border-radius: 0;
+  border-right: none;
+  border-left: none;
+}
+
+#pulseaudio:hover {
+  background: alpha(@module_bg_hover, 0.8);
+}
+
+#pulseaudio.muted {
+  color: @text_disabled;
+}
+
+/* Idle Inhibitor - Last in group, rounded right */
+#idle_inhibitor {
+  color: @text_primary;
+  border-radius: 0 8px 8px 0;
+  border-left: none;
+  font-size: 1.25em;
+}
+
+#idle_inhibitor:hover {
+  background: alpha(@module_bg_hover, 0.8);
+}
+
+#idle_inhibitor.activated {
+  color: @accent_red;
 }
 
 /* -----------------------------------------------------
-*   tray
+*   System Tray - Unified style with system modules
 * ----------------------------------------------------- */
 #tray {
-  background-color: @surface;
-  color: @secondary;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  margin-right: 9px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border: 2px solid @secondary;
+  background: alpha(@module_bg, 0.6);
+  border-radius: 8px;
+  margin: 6px 10px 6px 6px;
+  padding: 5px 12px;
+  border: 1px solid alpha(@outline, 0.4);
+}
+
+#tray:hover {
+  background: alpha(@module_bg_hover, 0.8);
+  border-color: alpha(@outline, 0.6);
 }
 
 #tray>.passive {
@@ -220,119 +239,18 @@ tooltip label {
 
 #tray>.needs-attention {
   -gtk-icon-effect: highlight;
-  background-color: @yellow;
+  background-color: alpha(@state_active, 0.3);
+  border-radius: 4px;
 }
 
 /* -----------------------------------------------------
-*   Battery
+*   Custom Hidden Window Indicator
 * ----------------------------------------------------- */
-#battery {
-  background: @surface;
-  color: @green;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
-  border: 2px solid @green;
-}
-
-#battery.charging {
-  color: @cyan;
-  border: 2px solid @cyan;
-}
-
-#battery.warning {
-  color: @green;
-  border: 2px solid @green;
-}
-
-#battery.critical {
-  color: @yellow;
-  border: 2px solid @yellow;
-}
-
-/* -----------------------------------------------------
-*   temperature
-* ----------------------------------------------------- */
-#temperature {
-  background: @surface;
-  color: @cyan;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
-}
-
-#temperature.critical {
-  color: @yellow;
-}
-
-
-/* -----------------------------------------------------
-*   idle-inhibitor
-* ----------------------------------------------------- */
-#idle_inhibitor {
-  background: @surface;
-  color: @white;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 0px;
-  font-weight: 800;
-  border: 2px solid @white;
-}
-
-#idle_inhibitor.activated {
-  color: @error;
-  border: 2px solid @error;
-}
-
-/* -----------------------------------------------------
-*   Custom
-* ----------------------------------------------------- */
-
-#custom-vpn {
-  background: @surface;
-  color: @secondary;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
-  border: 2px solid @secondary;
-}
-
 #custom-hiddenwindow {
-  background: @surface;
-  color: @tertiary;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
-}
-
-
-#cpu {
-  background: @surface;
-  color: @magenta;
-  border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 800;
+  background: alpha(@state_hover, 0.2);
+  color: @text_muted;
+  border-radius: 8px;
+  margin: 6px 4px;
+  padding: 6px 12px;
+  border: 1px solid alpha(@outline, 0.4);
 }

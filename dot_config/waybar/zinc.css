@@ -1,0 +1,45 @@
+/* Core background and foreground colors */
+@define-color background #0a0a0a;
+/* bar background */
+@define-color on_background #dde1e6;
+/* default foreground text */
+@define-color outline #525252;
+/* borders and dividers */
+
+/* Module backgrounds - various opacity levels */
+@define-color module_bg #212121;
+/* base module background (rgba(33, 33, 33, 1.0)) */
+@define-color module_bg_hover #212121;
+/* module background on hover (same base, different opacity in usage) */
+
+/* Tooltip colors */
+@define-color tooltip_bg #161616;
+/* tooltip background */
+@define-color tooltip_text #dde1e6;
+/* tooltip text */
+
+/* Shadow colors */
+@define-color shadow_dark #000000;
+/* black for shadows */
+
+/* Text colors - various states */
+@define-color text_primary #dde1e6;
+/* primary text color */
+@define-color text_muted #a8a8a8;
+/* muted/inactive text */
+@define-color text_bright #f4f4f5;
+/* bright/active text */
+@define-color text_disabled #a1a1aa;
+/* disabled/disconnected state */
+
+/* State colors */
+@define-color state_active #71717a;
+/* active state background (rgba(113, 113, 122, 1.0)) */
+@define-color state_urgent #a1a1aa;
+/* urgent state background (rgba(161, 161, 170, 1.0)) */
+@define-color state_hover #525252;
+/* hover state background */
+
+/* Accent colors */
+@define-color accent_red #ef4444;
+/* red accent for alerts/active states */

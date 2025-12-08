@@ -16,9 +16,35 @@
         "network",
         "custom/vpn",
         "pulseaudio",
+        "battery",
         "idle_inhibitor",
         "group/tray-expander"
     ],
+    "battery": {
+        "bat": "BAT0",
+        "interval": 20,
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "{icon}󱐋 {capacity}%",
+        "format-icons": [
+            "󰂎",
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ],
+        "tooltip": true,
+        "tooltip-format": "Time: {time} left\nCapacity: {health}%\n{power} watts"
+    },
     // Merged DateTime Module - Shows both time and date with calendar on hover
     "clock": {
         "format": "{:%H:%M  %a %d %b}",

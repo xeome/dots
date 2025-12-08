@@ -141,6 +141,7 @@ tooltip label {
 #network,
 #custom-vpn,
 #pulseaudio,
+#battery,
 #idle_inhibitor {
   background: alpha(@module_bg, 0.6);
   margin: 6px 0px;
@@ -199,6 +200,32 @@ tooltip label {
 
 #pulseaudio.muted {
   color: @text_disabled;
+}
+
+/* Battery - Middle of group */
+#battery {
+  color: @text_primary;
+  border-radius: 0;
+  border-right: none;
+  border-left: none;
+}
+
+#battery:hover {
+  background: alpha(@module_bg_hover, 0.8);
+}
+
+#battery.charging {
+  color: @text_bright;
+}
+
+#battery.warning {
+  color: @text_bright;
+  background: alpha(@state_urgent, 0.3);
+}
+
+#battery.critical {
+  color: @accent_red;
+  background: alpha(@state_urgent, 0.3);
 }
 
 /* Idle Inhibitor - Last in group, rounded right */

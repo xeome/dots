@@ -1,0 +1,26 @@
+[meta]
+version = 1
+name = "Zinc"
+description = "A clean, monochrome theme inspired by shadcn/ui (zinc)"
+variant = "dark"
+
+[colors.core]
+background = "#09090b"
+foreground = "#fafafa"
+secondary_background = "#18181b"
+border = "#27272a"
+accent = "#fafafa"
+
+[colors.accents]
+blue = "#3b82f6"
+green = "#22c55e"
+magenta = "#d946ef"
+orange = "#f97316"
+purple = "#a855f7"
+red = "#ef4444"
+yellow = "#eab308"
+cyan = "#06b6d4"
+
+[colors.list.item.selection]
+background = { name = "#27272a", opacity = 1.0 }
+secondary_background = "#3f3f46"

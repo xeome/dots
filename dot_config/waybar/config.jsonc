@@ -75,30 +75,31 @@
         "on-click": "activate"
     },
     "network": {
-        "format-wifi": "  {essid}",
-        "format-ethernet": "  {bandwidthDownBytes}  {bandwidthUpBytes}",
+        "format-wifi": "󰤟   {essid}",
+        "format-ethernet": "󰈀 {bandwidthDownBytes}  {bandwidthUpBytes}",
         "interval": 3,
         "format-linked": "{ifname} (No IP) ",
         "format": "",
-        "format-disconnected": "  ",
+        "format-disconnected": "󰤟 ",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "on-click": "wl-copy $(ip address show up scope global | grep inet | head -n1 | cut -d/ -f 1 | tr -d [:space:] | cut -c5-)",
         "tooltip-format": " {bandwidthUpBits}  {bandwidthDownBits}\n{ifname}\n{ipaddr}/{cidr}",
-        "tooltip-format-wifi": "  {essid} {frequency}MHz\nStrength: {signaldBm}dBm ({signalStrength}%)\nIP: {ipaddr}/{cidr}\n {bandwidthUpBits}  {bandwidthDownBits}",
-        "min-length": 18,
-        "max-length": 18
+        "tooltip-format-wifi": "󰤟 {essid} {frequency}MHz\nStrength: {signaldBm}dBm ({signalStrength}%)\nIP: {ipaddr}/{cidr}\n {bandwidthUpBits}  {bandwidthDownBits}",
+        "max-length": 15
     },
     "pulseaudio": {
         "format": "{icon} {volume}%",
-        "format-bluetooth": "  {icon} {volume}%",
-        "format-bluetooth-muted": "   ",
-        "format-muted": "  ",
+        "format-bluetooth": "󰂰  {volume}%",
+        "format-bluetooth-muted": "󰂰󰖁 ",
+        "format-muted": "󰖁 ",
+        "format-source": " micrófono",
+        "format-source-muted": "",
         "format-icons": {
-            "default": [
-                "",
-                "",
-                ""
-            ]
+            "headphone": "󰋋",
+            "headset": "󰋋",
+            "default": ["󰕾", "󰖀", "󰕾"], // low, medium, high
+            "bluetooth": "󰂰",
+            "phone": "󰂰"
         },
         "on-click": "pavucontrol",
         "tooltip-format": "Volume: {volume}%\nClick to open mixer"

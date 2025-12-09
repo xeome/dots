@@ -11,40 +11,40 @@ set notification-error-fg       "#690005"
 set notification-warning-bg     "#ffb86c"
 set notification-warning-fg     "#44475a"
 set notification-bg             "#181c20"
-set notification-fg             "#c1c7ce"
+set notification-fg             "#c2c7cf"
 
 set completion-bg               "#181c20"
-set completion-fg               "#c1c7ce"
-set completion-group-bg         "#94cdf6"
-set completion-group-fg         "#00344d"
-set completion-highlight-bg     "#b7c9d8"
-set completion-highlight-fg     "#21323f"
+set completion-fg               "#c2c7cf"
+set completion-group-bg         "#9ccbfb"
+set completion-group-fg         "#003354"
+set completion-highlight-bg     "#b9c8da"
+set completion-highlight-fg     "#243240"
 
-set index-bg                    "#101417"
-set index-fg                    "#c1c7ce"
-set index-active-bg             "#94cdf6"
-set index-active-fg             "#00344d"
+set index-bg                    "#101418"
+set index-fg                    "#c2c7cf"
+set index-active-bg             "#9ccbfb"
+set index-active-fg             "#003354"
 
 set inputbar-bg                 "#181c20"
-set inputbar-fg                 "#c1c7ce"
+set inputbar-fg                 "#c2c7cf"
 set statusbar-bg                "#181c20"
-set statusbar-fg                "#c1c7ce"
+set statusbar-fg                "#c2c7cf"
 
-set highlight-fg                rgba(223,227,231,1.0)
-set highlight-active-color      rgba(255,192,232,0.5)
-set highlight-color             rgba(205,180,171,0.5)
+set highlight-fg                rgba(224,226,232,1.0)
+set highlight-active-color      rgba(255,190,230,0.5)
+set highlight-color             rgba(212,180,171,0.5)
 
-set default-bg                  "#101417"
-set default-fg                  "#c1c7ce"
+set default-bg                  "#101418"
+set default-fg                  "#c2c7cf"
 
 set render-loading              true
-set render-loading-fg           "#101417"
-set render-loading-bg           "#c1c7ce"
+set render-loading-fg           "#101418"
+set render-loading-bg           "#c2c7cf"
 
 # Recolor mode settings
 set recolor                     true
-set recolor-lightcolor          "#101417"
-set recolor-darkcolor           "#c1c7ce"
+set recolor-lightcolor          "#101418"
+set recolor-darkcolor           "#c2c7cf"
 
 # Custom settings
 set window-title-home-tilde true

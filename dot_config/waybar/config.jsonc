@@ -97,7 +97,7 @@
         "format-icons": {
             "headphone": "󰋋",
             "headset": "󰋋",
-            "default": ["󰕾", "󰖀", "󰕾"], // low, medium, high
+            "default": ["󰕾  ", "󰖀  ", "󰕾  "], // low, medium, high
             "bluetooth": "󰂰",
             "phone": "󰂰"
         },
@@ -135,4 +135,3 @@
         "signal": 3
     }
 }
-

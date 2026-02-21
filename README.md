@@ -1,5 +1,3 @@
-![jomo_dotfiles](assets/unknown.png)
-
 This is my personal repo for my Arch linux configurations.
 
 # Dependencies
@@ -51,6 +49,3 @@ rm -rf "sf-pro.zip" "monaspace-v1.000.zip"
 | Super + R              | Start program launcher (`rofi`)    |
 | Super + 1-9            | Switch workspaces from 1 to 9      |
 
-## Screenshots
-
-![sway](assets/gruvbox_stacked.png)

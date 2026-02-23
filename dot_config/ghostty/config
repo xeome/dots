@@ -1,0 +1,25 @@
+# --- Environment ---
+shell-integration-features = ssh-terminfo,ssh-env
+
+# --- Fonts ---
+font-size = 10
+
+font-family = JetBrainsMono Nerd Font
+font-style = Bold
+
+font-family-bold = Monaspace Neon
+font-style-bold = ExtraBold
+
+font-family-italic = Monaspace Neon
+font-style-italic = Italic
+
+font-family-bold-italic = Monaspace Neon
+font-style-bold-italic = Bold Italic
+
+# --- Window ---
+background-opacity = 0.85
+window-padding-x = 15
+window-padding-y = 15
+
+theme = Carbonfox
+background = 000000

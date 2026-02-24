@@ -4,18 +4,19 @@ This is my personal repo for my Arch linux configurations.
 
 | Type            | Package(s)                                           |
 | --------------- | ---------------------------------------------------- |
-| WM              | `swayfx`                                             |
+| WM              | `hyprland`                                           |
 | Bar             | `waybar`                                             |
-| Launcher        | `rofi`                                               |
-| Notifications   | `ags`                                                |
-| Terminal        | `alacritty`                                          |
-| GTK             | `Colloid-Orange-Dark-Compact-Gruvbox`                |
-| QT              | `Gruvbox-Dark-Brown`                                 |
-| Icons           | `Flat-Remix-Orange-Dark`                             |
-| Cursor          | `bibata`                                             |
-| File manager    | `pcmanfm-qt`                                         |
+| Launcher        | `vicinae`                                            |
+| Notifications   | `swaync`                                             |
+| Terminal        | `ghostty`                                            |
+| Theming         | `matugen`                                            |
+| Cursor          | `Bibata-Modern-Classic`                              |
+| Wallpaper       | `waypaper`                                           |
+| Lock screen     | `hyprlock`                                           |
+| OSD             | `swayosd`                                            |
+| File manager    | `thunar`                                             |
 | Screenshot tool | `flameshot`                                          |
-| Polkit manager  | `lxsession`                                          |
+| Polkit manager  | `polkit-gnome`                                       |
 | Fonts           | `ttf-iosevka-nerd ttf-jetbrains-mono monaspace Neon` |
 | Editor          | `neovim`                                             |
 
@@ -28,24 +29,24 @@ Incomplete but should get you most things.
 ```bash
 chezmoi init https://github.com/xeome/dots
 chezmoi apply -v
-# Optional if you want to get san francisco pro font
+# Optional: install Monaspace font
 mkdir -p ~/.fonts
-wget xeome.dev/sf-pro.zip && unzip sf-pro.zip -d ~/.fonts
 wget https://github.com/githubnext/monaspace/releases/download/v1.000/monaspace-v1.000.zip && unzip monaspace-v1.000.zip -d ~/.fonts
 fc-cache -frv
-rm -rf "sf-pro.zip" "monaspace-v1.000.zip"
+rm -f monaspace-v1.000.zip
 ```
 
 # Some shortcuts
 
-| Shortcut               | Action                             |
-| ---------------------- | ---------------------------------- |
-| Super + Return (enter) | Launch terminal (`alacritty`)      |
-| Super + E              | Launch file manager (`pcmanfm-qt`) |
-| Super + Q              | Launch web browser (`zen-browser`) |
-| Super + Shift + C      | Close focused application          |
-| Super + Shift + R      | Restart window manager             |
-| Super + Shift + Q      | Quit window manager                |
-| Super + R              | Start program launcher (`rofi`)    |
-| Super + 1-9            | Switch workspaces from 1 to 9      |
-
+| Shortcut               | Action                              |
+| ---------------------- | ----------------------------------- |
+| Super + Return         | Launch terminal (`ghostty`)         |
+| Super + E              | Launch file manager (`thunar`)      |
+| Super + Q              | Launch web browser (`zen-browser`)  |
+| Super + R              | Launch app launcher (`vicinae`)     |
+| Super + L              | Lock screen (`hyprlock`)            |
+| Super + Shift + C      | Close focused window                |
+| Super + Shift + R      | Reload Hyprland config              |
+| Super + Shift + Q      | Open power menu                     |
+| Super + 1-9 / 0        | Switch to workspace 1–10            |
+| Print                  | Screenshot (`flameshot`)            |

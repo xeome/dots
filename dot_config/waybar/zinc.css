@@ -1,21 +1,21 @@
 /* Core background and foreground colors */
-@define-color background #0a0a0a;
-/* bar background */
-@define-color on_background #dde1e6;
-/* default foreground text */
-@define-color outline #525252;
-/* borders and dividers */
+@define-color background #000000;
+/* bar background - pure black */
+@define-color on_background #ffffff;
+/* default foreground text - pure white */
+@define-color outline #ffffff;
+/* borders and dividers - white */
 
-/* Module backgrounds - various opacity levels */
-@define-color module_bg #212121;
-/* base module background (rgba(33, 33, 33, 1.0)) */
-@define-color module_bg_hover #212121;
-/* module background on hover (same base, different opacity in usage) */
+/* Module backgrounds */
+@define-color module_bg #0f0f0f;
+/* base module background - near-black */
+@define-color module_bg_hover #1a1a1a;
+/* module background on hover */
 
 /* Tooltip colors */
-@define-color tooltip_bg #161616;
+@define-color tooltip_bg #0d0d0d;
 /* tooltip background */
-@define-color tooltip_text #dde1e6;
+@define-color tooltip_text #ffffff;
 /* tooltip text */
 
 /* Shadow colors */
@@ -23,23 +23,27 @@
 /* black for shadows */
 
 /* Text colors - various states */
-@define-color text_primary #dde1e6;
+@define-color text_primary #ffffff;
 /* primary text color */
-@define-color text_muted #a8a8a8;
+@define-color text_muted #555555;
 /* muted/inactive text */
-@define-color text_bright #f4f4f5;
+@define-color text_bright #ffffff;
 /* bright/active text */
-@define-color text_disabled #a1a1aa;
+@define-color text_disabled #333333;
 /* disabled/disconnected state */
+@define-color text_inverted #000000;
+/* black text for use on inverted (white) backgrounds */
 
 /* State colors */
-@define-color state_active #71717a;
-/* active state background (rgba(113, 113, 122, 1.0)) */
-@define-color state_urgent #a1a1aa;
-/* urgent state background (rgba(161, 161, 170, 1.0)) */
-@define-color state_hover #525252;
+@define-color state_active #ffffff;
+/* inverted fill - white background */
+@define-color state_active_hover #e0e0e0;
+/* hover on already-inverted (white bg) elements */
+@define-color state_urgent #ffffff;
+/* urgent state background */
+@define-color state_hover #ffffff;
 /* hover state background */
 
-/* Accent colors */
-@define-color accent_red #ef4444;
-/* red accent for alerts/active states */
+/* Accent - no hue; inversion serves all accent needs */
+@define-color accent_red #ffffff;
+/* replaced - kept for token compatibility */

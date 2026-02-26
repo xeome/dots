@@ -1,16 +1,25 @@
 /* vim:ft=css
-*
-* zinc theme for Waybar
-* Clean, modern, and interactive design
-*
-* Maintainer: @xeome
-*/
+ *
+ * mono theme for Waybar
+ * High-contrast black/white — inversion as sole semantic differentiator
+ *
+ * Maintainer: @xeome
+ */
 
 @import "zinc.css";
 
 /* -----------------------------------------------------
-*   Global - zinc base
-* ----------------------------------------------------- */
+ *   Animation - Urgent pulse
+ * ----------------------------------------------------- */
+
+@keyframes urgent-pulse {
+  from { background: alpha(@state_active, 0.45); }
+  to   { background: alpha(@state_active, 0.75); }
+}
+
+/* -----------------------------------------------------
+ *   Global - mono base
+ * ----------------------------------------------------- */
 
 * {
   font-family: proportional_font, monospace_alt_font;
@@ -25,11 +34,11 @@
 }
 
 /* -----------------------------------------------------
-*   Waybar Container
-* ----------------------------------------------------- */
+ *   Waybar Container
+ * ----------------------------------------------------- */
 window#waybar {
-  background: alpha(@background, 0.85);
-  border-bottom: 1px solid alpha(@outline, 0.3);
+  background: @background;
+  border-bottom: 1px solid alpha(@outline, 0.15);
 }
 
 window#waybar.hidden {
@@ -37,13 +46,13 @@ window#waybar.hidden {
 }
 
 /* -----------------------------------------------------
-*   Tooltip - shadcn card style
-* ----------------------------------------------------- */
+ *   Tooltip
+ * ----------------------------------------------------- */
 tooltip {
   background: @tooltip_bg;
-  border: 1px solid alpha(@outline, 0.5);
+  border: 1px solid alpha(@outline, 0.3);
   padding: 8px 12px;
-  box-shadow: 0 4px 6px -1px alpha(@shadow_dark, 0.3), 0 2px 4px -1px alpha(@shadow_dark, 0.2);
+  box-shadow: 0 4px 6px -1px alpha(@shadow_dark, 0.6), 0 2px 4px -1px alpha(@shadow_dark, 0.4);
 }
 
 tooltip label {
@@ -52,31 +61,32 @@ tooltip label {
 }
 
 /* -----------------------------------------------------
-*   DateTime Module - Clean unified style
-* ----------------------------------------------------- */
+ *   DateTime Module - Permanently inverted focal anchor
+ * ----------------------------------------------------- */
 #clock {
-  background: alpha(@module_bg, 0.6);
-  color: @text_primary;
+  background: @state_active;
+  color: @text_inverted;
   margin: 6px 6px 6px 4px;
   padding: 5px 14px;
   font-weight: 600;
   font-size: 1.0em;
-  border: 1px solid alpha(@outline, 0.4);
+  border: 1px solid @outline;
 }
 
 #clock:hover {
-  background: alpha(@module_bg_hover, 0.8);
-  border-color: alpha(@outline, 0.6);
+  background: @state_active_hover;
+  color: @text_inverted;
+  border-color: @outline;
 }
 
 /* -----------------------------------------------------
-*   Workspaces - Unified grouped module
-* ----------------------------------------------------- */
+ *   Workspaces - Unified grouped module
+ * ----------------------------------------------------- */
 #workspaces {
   background: alpha(@module_bg, 0.6);
   margin: 6px 4px 6px 10px;
   padding: 0;
-  border: 1px solid alpha(@outline, 0.4);
+  border: 1px solid alpha(@outline, 0.2);
 }
 
 #workspaces button {
@@ -86,7 +96,7 @@ tooltip label {
   margin: 0;
   border-radius: 0;
   border: none;
-  border-right: 1px solid alpha(@outline, 0.3);
+  border-right: 1px solid alpha(@outline, 0.15);
   min-width: 28px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -96,24 +106,41 @@ tooltip label {
 }
 
 #workspaces button:hover {
-  background: alpha(@state_hover, 0.3);
+  background: alpha(@state_hover, 0.1);
   color: @text_primary;
 }
 
 #workspaces button.active {
-  background: alpha(@state_active, 0.4);
-  color: @text_bright;
+  background: @state_active;
+  color: @text_inverted;
   font-weight: 700;
 }
 
+#workspaces button.active * {
+  color: @text_inverted;
+}
+
+#workspaces button.active:hover {
+  background: @state_active_hover;
+  color: @text_inverted;
+}
+
+#workspaces button.active:hover * {
+  color: @text_inverted;
+}
+
 #workspaces button.urgent {
-  background: alpha(@state_urgent, 0.3);
-  color: @text_bright;
+  animation: urgent-pulse 0.9s ease-in-out infinite alternate;
+  color: @text_inverted;
+}
+
+#workspaces button.urgent * {
+  color: @text_inverted;
 }
 
 /* -----------------------------------------------------
-*   Window Title - Borderless clean style
-* ----------------------------------------------------- */
+ *   Window Title - Borderless clean style
+ * ----------------------------------------------------- */
 #window {
   background: transparent;
   color: @text_primary;
@@ -128,8 +155,8 @@ tooltip label {
 }
 
 /* -----------------------------------------------------
-*   System Info Modules - Unified group style
-* ----------------------------------------------------- */
+ *   System Info Modules - Unified group style
+ * ----------------------------------------------------- */
 #network,
 #custom-vpn,
 #pulseaudio,
@@ -140,7 +167,7 @@ tooltip label {
   padding: 5px 0px;
   font-weight: 600;
   font-size: 1.0em;
-  border: 1px solid alpha(@outline, 0.4);
+  border: 1px solid alpha(@outline, 0.2);
   min-width: 60px;
 }
 
@@ -154,11 +181,12 @@ tooltip label {
 }
 
 #network:hover {
-  background: alpha(@module_bg_hover, 0.8);
+  background: alpha(@on_background, 0.08);
+  border-color: alpha(@outline, 0.45);
 }
 
 #network.disconnected {
-  color: @text_disabled;
+  color: alpha(@on_background, 0.3);
 }
 
 /* VPN - Middle of group */
@@ -170,11 +198,18 @@ tooltip label {
 }
 
 #custom-vpn:hover {
-  background: alpha(@module_bg_hover, 0.8);
+  background: alpha(@on_background, 0.08);
+  border-color: alpha(@outline, 0.45);
 }
 
 #custom-vpn.connected {
-  color: @accent_red;
+  background: @state_active;
+  color: @text_inverted;
+}
+
+#custom-vpn.connected:hover {
+  background: @state_active_hover;
+  color: @text_inverted;
 }
 
 /* Audio - Middle of group */
@@ -185,11 +220,12 @@ tooltip label {
 }
 
 #pulseaudio:hover {
-  background: alpha(@module_bg_hover, 0.8);
+  background: alpha(@on_background, 0.08);
+  border-color: alpha(@outline, 0.45);
 }
 
 #pulseaudio.muted {
-  color: @text_disabled;
+  color: alpha(@on_background, 0.3);
 }
 
 /* Battery - Middle of group */
@@ -200,21 +236,22 @@ tooltip label {
 }
 
 #battery:hover {
-  background: alpha(@module_bg_hover, 0.8);
+  background: alpha(@on_background, 0.08);
+  border-color: alpha(@outline, 0.45);
 }
 
 #battery.charging {
-  color: @text_bright;
+  color: @text_primary;
 }
 
 #battery.warning {
-  color: @text_bright;
-  background: alpha(@state_urgent, 0.3);
+  background: @state_active;
+  color: @text_inverted;
 }
 
 #battery.critical {
-  color: @accent_red;
-  background: alpha(@state_urgent, 0.3);
+  background: @state_active;
+  color: @text_inverted;
 }
 
 /* Idle Inhibitor - Last in group */
@@ -225,26 +262,33 @@ tooltip label {
 }
 
 #idle_inhibitor:hover {
-  background: alpha(@module_bg_hover, 0.8);
+  background: alpha(@on_background, 0.08);
+  border-color: alpha(@outline, 0.45);
 }
 
 #idle_inhibitor.activated {
-  color: @accent_red;
+  background: @state_active;
+  color: @text_inverted;
+}
+
+#idle_inhibitor.activated:hover {
+  background: @state_active_hover;
+  color: @text_inverted;
 }
 
 /* -----------------------------------------------------
-*   System Tray - Unified style with system modules
-* ----------------------------------------------------- */
+ *   System Tray - Unified style with system modules
+ * ----------------------------------------------------- */
 #tray {
   background: alpha(@module_bg, 0.6);
   margin: 6px 10px 6px 6px;
   padding: 5px 12px;
-  border: 1px solid alpha(@outline, 0.4);
+  border: 1px solid alpha(@outline, 0.2);
 }
 
 #tray:hover {
   background: alpha(@module_bg_hover, 0.8);
-  border-color: alpha(@outline, 0.6);
+  border-color: alpha(@outline, 0.4);
 }
 
 #tray>.passive {
@@ -257,12 +301,12 @@ tooltip label {
 }
 
 /* -----------------------------------------------------
-*   Custom Hidden Window Indicator
-* ----------------------------------------------------- */
+ *   Custom Hidden Window Indicator
+ * ----------------------------------------------------- */
 #custom-hiddenwindow {
-  background: alpha(@state_hover, 0.2);
+  background: alpha(@module_bg, 0.6);
   color: @text_muted;
   margin: 6px 4px;
   padding: 6px 12px;
-  border: 1px solid alpha(@outline, 0.4);
+  border: 1px solid alpha(@outline, 0.2);
 }

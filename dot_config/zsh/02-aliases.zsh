@@ -10,4 +10,3 @@ alias gia='git add .'
 alias gica='git commit -a'
 alias rsync='rsync -avz --progress --partial --human-readable'
 alias tldr='cht.sh'
-alias news_ai="auggie -if Documents/news_instructions.md -a -q -p -m haiku4.5 2>/dev/null | sed '1,2d' | tee ~/Documents/news/$(date +'%Y-%m-%d-%H%M%S')-news.md | glow -w 0"

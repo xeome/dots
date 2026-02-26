@@ -12,5 +12,8 @@ done
 # Starship
 eval "$(starship init zsh)"
 
+# Zoxide
+eval "$(zoxide init zsh)"
+
 # Status
 uptime

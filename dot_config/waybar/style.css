@@ -41,7 +41,6 @@ window#waybar.hidden {
 * ----------------------------------------------------- */
 tooltip {
   background: @tooltip_bg;
-  border-radius: 8px;
   border: 1px solid alpha(@outline, 0.5);
   padding: 8px 12px;
   box-shadow: 0 4px 6px -1px alpha(@shadow_dark, 0.3), 0 2px 4px -1px alpha(@shadow_dark, 0.2);
@@ -58,7 +57,6 @@ tooltip label {
 #clock {
   background: alpha(@module_bg, 0.6);
   color: @text_primary;
-  border-radius: 8px;
   margin: 6px 6px 6px 4px;
   padding: 5px 14px;
   font-weight: 600;
@@ -76,7 +74,6 @@ tooltip label {
 * ----------------------------------------------------- */
 #workspaces {
   background: alpha(@module_bg, 0.6);
-  border-radius: 8px;
   margin: 6px 4px 6px 10px;
   padding: 0;
   border: 1px solid alpha(@outline, 0.4);
@@ -94,12 +91,7 @@ tooltip label {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-#workspaces button:first-child {
-  border-radius: 8px 0 0 8px;
-}
-
 #workspaces button:last-child {
-  border-radius: 0 8px 8px 0;
   border-right: none;
 }
 
@@ -153,10 +145,9 @@ tooltip label {
 }
 
 
-/* Network - First in group, rounded left */
+/* Network - First in group */
 #network {
   color: @text_primary;
-  border-radius: 8px 0 0 8px;
   margin-left: 6px;
   border-right: none;
   padding: 5px 12px;
@@ -174,7 +165,6 @@ tooltip label {
 #custom-vpn {
   font-size: 1.25em;
   color: @text_primary;
-  border-radius: 0;
   border-right: none;
   border-left: none;
 }
@@ -190,7 +180,6 @@ tooltip label {
 /* Audio - Middle of group */
 #pulseaudio {
   color: @text_primary;
-  border-radius: 0;
   border-right: none;
   border-left: none;
 }
@@ -206,7 +195,6 @@ tooltip label {
 /* Battery - Middle of group */
 #battery {
   color: @text_primary;
-  border-radius: 0;
   border-right: none;
   border-left: none;
 }
@@ -229,10 +217,9 @@ tooltip label {
   background: alpha(@state_urgent, 0.3);
 }
 
-/* Idle Inhibitor - Last in group, rounded right */
+/* Idle Inhibitor - Last in group */
 #idle_inhibitor {
   color: @text_primary;
-  border-radius: 0 8px 8px 0;
   border-left: none;
   font-size: 1.25em;
 }
@@ -250,7 +237,6 @@ tooltip label {
 * ----------------------------------------------------- */
 #tray {
   background: alpha(@module_bg, 0.6);
-  border-radius: 8px;
   margin: 6px 10px 6px 6px;
   padding: 5px 12px;
   border: 1px solid alpha(@outline, 0.4);
@@ -268,7 +254,6 @@ tooltip label {
 #tray>.needs-attention {
   -gtk-icon-effect: highlight;
   background-color: alpha(@state_active, 0.3);
-  border-radius: 4px;
 }
 
 /* -----------------------------------------------------
@@ -277,7 +262,6 @@ tooltip label {
 #custom-hiddenwindow {
   background: alpha(@state_hover, 0.2);
   color: @text_muted;
-  border-radius: 8px;
   margin: 6px 4px;
   padding: 6px 12px;
   border: 1px solid alpha(@outline, 0.4);

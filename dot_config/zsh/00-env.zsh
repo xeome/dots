@@ -29,6 +29,7 @@ path=(
     "$HOME/.npm-global/bin"
     "$HOME/.opencode/bin"
     "/usr/local/go/bin"
+    "$HOME/.cache/.bun/bin"
     "${path[@]}"
 )
 

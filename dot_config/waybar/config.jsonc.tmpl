@@ -6,10 +6,10 @@
     "reload_style_on_change": true,
     // Module Layout: Workspaces | Window Title | DateTime | System Info | Tray
     "modules-left": [
-        "hyprland/workspaces"
+        {{ if eq .chezmoi.hostname "emin-probook" }}"sway/workspaces"{{ else }}"hyprland/workspaces"{{ end }}
     ],
     "modules-center": [
-        "hyprland/window"
+        {{ if eq .chezmoi.hostname "emin-probook" }}"sway/window"{{ else }}"hyprland/window"{{ end }}
     ],
     "modules-right": [
         "clock",
@@ -63,17 +63,24 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
+            "activated": "",
             "deactivated": "󰾪"
         },
         "tooltip-format-activated": "Idle inhibitor: Active",
         "tooltip-format-deactivated": "Idle inhibitor: Inactive"
     },
+    {{ if eq .chezmoi.hostname "emin-probook" }}
+    "sway/workspaces": {
+        "format": "{icon}",
+        "on-click": "focus"
+    },
+    {{ else }}
     "hyprland/workspaces": {
         "format": "{icon}",
         "move-to-monitor": true,
         "on-click": "activate"
     },
+    {{ end }}
     "network": {
         "format-wifi": "󰤟 {essid} ↓{bandwidthDownBits} ↑{bandwidthUpBits}",
         "format-ethernet": "󰈀 ↓{bandwidthDownBits} ↑{bandwidthUpBits}",
@@ -93,7 +100,7 @@
         "format-bluetooth-muted": "󰂰󰖁 ",
         "format-muted": "󰖁 ",
         "format-source": " micrófono",
-        "format-source-muted": "",
+        "format-source-muted": "",
         "format-icons": {
             "headphone": "󰋋",
             "headset": "󰋋",
@@ -122,6 +129,13 @@
         ],
         "orientation": "inherit"
     },
+    {{ if eq .chezmoi.hostname "emin-probook" }}
+    "sway/window": {
+        "format": "{}",
+        "max-length": 50,
+        "tooltip": false
+    },
+    {{ else }}
     "hyprland/window": {
         "format": "{}",
         "empty-format": "Desktop",
@@ -129,6 +143,7 @@
         "max-length": 50,
         "tooltip": false
     },
+    {{ end }}
     "custom/hiddenwindow": {
         "exec": "waybar-scripts check_special_workspace",
         "tooltip": true,

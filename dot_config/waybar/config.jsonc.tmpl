@@ -4,7 +4,7 @@
     "height": 48,
     "spacing": 0,
     "reload_style_on_change": true,
-    // Module Layout: Workspaces | Window Title | DateTime | System Info | Tray
+    // Module Layout: Workspaces | Window Title | MPRIS | DateTime | System Info | Tray
     "modules-left": [
         {{ if eq .chezmoi.hostname "emin-probook" }}"sway/workspaces"{{ else }}"hyprland/workspaces"{{ end }}
     ],
@@ -12,6 +12,7 @@
         {{ if eq .chezmoi.hostname "emin-probook" }}"sway/window"{{ else }}"hyprland/window"{{ end }}
     ],
     "modules-right": [
+        "mpris",
         "clock",
         "network",
         "custom/vpn",
@@ -44,6 +45,23 @@
         ],
         "tooltip": true,
         "tooltip-format": "Time: {time} left\nCapacity: {health}%\n{power} watts"
+    },
+    "mpris": {
+        "format": "{status_icon} {artist} - {title}",
+        "format-paused": "{status_icon} <i>{artist} - {title}</i>",
+        "format-stopped": "",
+        "tooltip-format": "{player}: {artist} - {title} [{position}/{length}]",
+        "status-icons": {
+            "playing": "󰐊",
+            "paused": "󰏤",
+            "stopped": "󰓛"
+        },
+        "player-icons": {
+            "default": "🎵"
+        },
+        "title-len": 20,
+        "artist-len": 20,
+        "album-len": 20
     },
     // Merged DateTime Module - Shows both time and date with calendar on hover
     "clock": {

@@ -1,3 +1,10 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+fpath=("/home/xeome/.oh-my-zsh/custom/completions" $fpath)
+autoload -Uz compinit
+compinit
+# OPENSPEC:END
+
 # Oh My Zsh
 export ZSH="$HOME/.oh-my-zsh"
 # ZSH_THEME="dst"

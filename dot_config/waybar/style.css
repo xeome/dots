@@ -161,7 +161,8 @@ tooltip label {
 #custom-vpn,
 #pulseaudio,
 #battery,
-#idle_inhibitor {
+#idle_inhibitor,
+#mpris {
   background: alpha(@module_bg, 0.6);
   margin: 6px 0px;
   padding: 5px 0px;
@@ -171,6 +172,27 @@ tooltip label {
   min-width: 60px;
 }
 
+
+/* MPRIS / Media Player */
+#mpris {
+  color: @text_primary;
+  margin: 6px 4px;
+  padding: 5px 12px;
+}
+
+#mpris:hover {
+  background: alpha(@on_background, 0.08);
+  border-color: alpha(@outline, 0.45);
+}
+
+#mpris.paused {
+  color: @text_muted;
+}
+
+#mpris.stopped {
+  background: transparent;
+  border: none;
+}
 
 /* Network - First in group */
 #network {

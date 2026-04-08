@@ -18,6 +18,7 @@
         "custom/vpn",
         "pulseaudio",
         "battery",
+        "custom/water",
         "idle_inhibitor",
         "group/tray-expander"
     ],
@@ -166,5 +167,13 @@
         "exec": "waybar-scripts check_special_workspace",
         "tooltip": true,
         "signal": 3
+    },
+    "custom/water": {
+        "format": "{}",
+        "exec": "~/.local/bin/water.py",
+        "return-type": "json",
+        "interval": 30,
+        "tooltip": true,
+        "on-click": "~/.local/bin/water.py --drank"
     }
 }

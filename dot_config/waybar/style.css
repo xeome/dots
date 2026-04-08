@@ -234,6 +234,37 @@ tooltip label {
   color: @text_inverted;
 }
 
+/* Water Module */
+#custom-water {
+  font-size: 1.1em;
+  color: @text_primary;
+  margin: 6px 0px;
+  padding: 5px 0px;
+  border: 1px solid alpha(@outline, 0.2);
+  border-left: none;
+  border-right: none;
+}
+
+#custom-water:hover {
+  background: alpha(@on_background, 0.08);
+  border-color: alpha(@outline, 0.45);
+  border-left: none;
+  border-right: none;
+}
+
+#custom-water.dehydrated {
+  background: @state_active;
+  color: @text_inverted;
+  animation: urgent-pulse 1.5s ease-in-out infinite alternate;
+  border-color: @state_active;
+}
+
+#custom-water.dehydrated:hover {
+  background: @state_active_hover;
+  color: @text_inverted;
+  border-color: @state_active_hover;
+}
+
 /* Audio - Middle of group */
 #pulseaudio {
   color: @text_primary;

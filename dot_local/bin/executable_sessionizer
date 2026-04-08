@@ -22,7 +22,7 @@ remove_from_recent() {
 }
 
 search_to_add() {
-    fd . "${SCAN_DIRS[@]}" --min-depth 2 --max-depth 3 -t d 2>/dev/null | fzf --prompt="Add: " --preview 'ls -la {}'
+    fd . "${SCAN_DIRS[@]}" --min-depth 1 --max-depth 3 -t d 2>/dev/null | fzf --prompt="Add: " --preview 'ls -la {}'
 }
 
 while true; do

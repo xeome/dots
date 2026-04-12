@@ -32,7 +32,8 @@ local user_opts = {
     font = 'mpv-osd-symbols',    -- default osc font
     seekrange = true,            -- show seekrange overlay
     seekrangealpha = 128,          -- transparency of seekranges
-    seekbarfg_color = "7FFFD4", -- color of seekbar and knot,there is no # before value	
+    seekbarfg_color = "7FFFD4", -- color of seekbar and knot,there is no # before value
+    seekbarbg_color = "555555", -- color of seekbar background, there is no # before value
     seekbarkeyframes = true,    -- use keyframes when dragging the seekbar
     title = '${media-title}',   -- string compatible with property-expansion
                                 -- to be shown as OSC title
@@ -101,7 +102,7 @@ end
 
 local osc_styles = {
     TransBg = '{\\blur100\\bord140\\1c&H000000&\\3c&H000000&}',
-    SeekbarBg = '{\\blur0\\bord0\\1c&HFFFFFF&}',
+    SeekbarBg = '{\\blur0\\bord0\\1c&H' .. osc_color_convert(user_opts.seekbarbg_color) .. '&}',
     SeekbarFg = '{\\blur1\\bord1\\1c&H' .. osc_color_convert(user_opts.seekbarfg_color) .. '&}',
     VolumebarBg = '{\\blur0\\bord0\\1c&H999999&}',
     VolumebarFg = '{\\blur1\\bord1\\1c&HFFFFFF&}',

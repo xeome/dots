@@ -4,7 +4,7 @@ SESSIONIZER_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/sessionizer"
 RECENT_FILE="$SESSIONIZER_DIR/recent"
 mkdir -p "$SESSIONIZER_DIR"
 
-SCAN_DIRS=("$HOME/Sync" "$HOME/.config")
+SCAN_DIRS=("$HOME/Sync" "$HOME/.config" "$HOME/work")
 
 add_to_recent() {
     local dir="$1"

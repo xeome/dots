@@ -253,16 +253,15 @@ tooltip label {
 }
 
 #custom-water.dehydrated {
-  background: @state_active;
-  color: @text_inverted;
-  animation: urgent-pulse 1.5s ease-in-out infinite alternate;
-  border-color: @state_active;
+  background: @red_container;
+  color: @on_red_container;
+  border-color: @red_container;
 }
 
 #custom-water.dehydrated:hover {
-  background: @state_active_hover;
-  color: @text_inverted;
-  border-color: @state_active_hover;
+  background: @red_container;
+  color: @on_red_container;
+  border-color: @red_container;
 }
 
 /* Audio - Middle of group */

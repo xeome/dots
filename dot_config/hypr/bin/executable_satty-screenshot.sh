@@ -9,5 +9,5 @@ mkdir -p "$screenshots_dir" || exit 1
 grimblast --freeze --filetype ppm save area - \
   | satty --filename - \
       --fullscreen \
-      --output-filename "$output_file" \
-      --copy-command wl-copy
+      --copy-command wl-copy \
+      --initial-tool brush

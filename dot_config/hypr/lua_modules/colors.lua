@@ -1,0 +1,40 @@
+-- =============================================================================
+-- SHARED COLORS
+-- =============================================================================
+-- Device-agnostic color definitions
+-- =============================================================================
+
+local colors = {
+  wallpaper = "rgb(/home/xeome/.config/wallpapers/dark_pixelart.png)",
+
+  background = "rgb(101010)",
+  foreground = "rgb(FFFFFF)",
+  primary = "rgb(FFC799)",
+  secondary = "rgb(A0A0A0)",
+  tertiary = "rgb(FFCFA8)",
+  surface = "rgb(161616)",
+  surface_bright = "rgb(1C1C1C)",
+  surface_brightest = "rgb(232323)",
+  error = "rgb(FF8080)",
+  success = "rgb(99FFE4)",
+  muted = "rgb(505050)",
+
+  color0 = "rgb(101010)",
+  color1 = "rgb(FF8080)",
+  color2 = "rgb(99FFE4)",
+  color3 = "rgb(FFC799)",
+  color4 = "rgb(A0A0A0)",
+  color5 = "rgb(FFCFA8)",
+  color6 = "rgb(808080)",
+  color7 = "rgb(FFFFFF)",
+  color8 = "rgb(161616)",
+  color9 = "rgb(FF8080)",
+  color10 = "rgb(99FFE4)",
+  color11 = "rgb(FFC799)",
+  color12 = "rgb(A0A0A0)",
+  color13 = "rgb(FFCFA8)",
+  color14 = "rgb(808080)",
+  color15 = "rgb(FFFFFF)",
+}
+
+return colors

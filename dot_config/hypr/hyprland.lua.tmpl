@@ -1,0 +1,173 @@
+-- =============================================================================
+-- HYPRLAND MAIN CONFIGURATION (LUA)
+-- =============================================================================
+-- This is the main entry point for Hyprland configuration.
+--
+-- Device profiles are selected via chezmoi templates based on hostname.
+-- =============================================================================
+
+-- =============================================================================
+-- ENVIRONMENT VARIABLES
+-- =============================================================================
+
+hl.env("XDG_SESSION_TYPE", "wayland")
+hl.env("SDL_VIDEODRIVER", "wayland")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
+hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+hl.env("SSH_AUTH_SOCK", "/run/user/1000/keyring/ssh")
+hl.env("GNOME_KEYRING_CONTROL", "/run/user/1000/keyring")
+hl.env("HYPRCURSOR_THEME", "Bibata-Modern-Classic")
+hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("XCURSOR_THEME", "Bibata-Modern-Classic")
+hl.env("XCURSOR_SIZE", "24")
+hl.env("OBSIDIAN_USE_WAYLAND", "1")
+
+-- =============================================================================
+-- DEVICE PROFILES
+-- =============================================================================
+
+{{ if eq .chezmoi.hostname "xeome-desktop" }}
+
+-- Monitor setup: Primary 1440p@75Hz + Secondary 1080p@144Hz
+hl.monitor({ output = "HDMI-A-1", mode = "2560x1440@75", position = "0x0", scale = 1 })
+hl.monitor({ output = "DP-3", mode = "1920x1080@144", position = "2560x360", scale = 1 })
+
+-- Workspace to monitor assignments
+hl.workspace_rule({ workspace = "1", monitor = "HDMI-A-1" })
+hl.workspace_rule({ workspace = "2", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "3", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "4", monitor = "HDMI-A-1" })
+hl.workspace_rule({ workspace = "5", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "6", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "7", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "8", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "9", monitor = "DP-3" })
+
+-- Input configuration
+hl.config({
+  input = {
+    kb_layout = "tr",
+    numlock_by_default = true,
+    kb_options = "grp:win_space_toggle",
+    touchpad = {
+      disable_while_typing = true,
+      tap_to_click = true,
+      natural_scroll = false,
+      middle_button_emulation = true,
+    },
+  },
+})
+
+-- Device-specific mouse configuration
+hl.device({
+  name = "steelseries-steelseries-prime",
+  natural_scroll = false,
+  disable_while_typing = true,
+  accel_profile = "flat",
+  sensitivity = -1,
+})
+
+-- Device-specific keybinds
+hl.bind("SUPER + d", hl.dsp.exec_cmd("equibop --ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations --enable-features=AcceleratedVideoDecodeLinuxGL --enable-features=AcceleratedVideoEncoder --enable-features=VaapiIgnoreDriverChecks --enable-features=CanvasOopRasterization --enable-gpu-rasterization --enable-zero-copy --enable-features=WebRTCPipeWireCapturer"))
+hl.bind("Print", hl.dsp.exec_cmd("~/.config/hypr/bin/satty-screenshot.sh"))
+
+{{ else if eq .chezmoi.hostname "emin-ultrabook" }}
+
+-- Monitor setup: External 4K@60Hz (HiDPI) + Internal 1200p
+-- NOTE: Original config had bitdepth=10 for DP-3. Lua monitor API does not
+-- document bitdepth support; verify manually if 10-bit is required.
+hl.monitor({ output = "DP-3", mode = "3840x2160@60", position = "0x0", scale = 1.50 })
+hl.monitor({ output = "eDP-1", mode = "1920x1200@60", position = "324x1440", scale = 1 })
+
+-- Workspace to monitor assignments
+hl.workspace_rule({ workspace = "1", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "2", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "3", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "4", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "5", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "6", monitor = "DP-3" })
+hl.workspace_rule({ workspace = "7", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "8", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "9", monitor = "eDP-1" })
+
+-- Input configuration
+hl.config({
+  input = {
+    kb_layout = "tr",
+    numlock_by_default = true,
+    kb_options = "grp:win_space_toggle",
+    touchpad = {
+      disable_while_typing = true,
+      tap_to_click = true,
+      natural_scroll = false,
+      middle_button_emulation = true,
+    },
+  },
+})
+
+-- Device-specific mouse configuration
+hl.device({
+  name = "steelseries-steelseries-prime",
+  natural_scroll = false,
+  disable_while_typing = true,
+  accel_profile = "flat",
+  sensitivity = -1,
+})
+
+-- Device-specific keybinds
+hl.bind("SUPER + d", hl.dsp.exec_cmd("equibop --ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations --enable-features=AcceleratedVideoDecodeLinuxGL --enable-features=AcceleratedVideoEncoder --enable-features=VaapiIgnoreDriverChecks --enable-features=CanvasOopRasterization --enable-gpu-rasterization --enable-zero-copy --enable-features=WebRTCPipeWireCapturer"))
+hl.bind("Print", hl.dsp.exec_cmd("~/.config/hypr/bin/satty-screenshot.sh"))
+
+{{ else }}
+
+-- Laptop fallback profile
+-- Monitor setup: Internal laptop display
+hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "0x0", scale = 1 })
+
+-- Workspace to monitor assignments
+hl.workspace_rule({ workspace = "1", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "2", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "3", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "4", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "5", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "6", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "7", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "8", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "9", monitor = "eDP-1" })
+
+-- Input configuration
+hl.config({
+  input = {
+    kb_layout = "tr",
+    numlock_by_default = true,
+    kb_options = "grp:win_space_toggle",
+    touchpad = {
+      disable_while_typing = true,
+      tap_to_click = true,
+      natural_scroll = true,
+      middle_button_emulation = true,
+    },
+  },
+})
+
+-- Device-specific keybinds
+hl.bind("SUPER + d", hl.dsp.exec_cmd("vesktop --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode"))
+
+{{ end }}
+
+-- =============================================================================
+-- SHARED MODULES
+-- =============================================================================
+
+require("lua_modules.colors")
+require("lua_modules.settings")
+require("lua_modules.keybinds")
+require("lua_modules.rules")
+require("lua_modules.startup")
+
+-- =============================================================================
+-- USER LOCAL OVERRIDES (OPTIONAL)
+-- =============================================================================
+
+pcall(dofile, "user.local.lua")

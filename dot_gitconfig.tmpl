@@ -1,6 +1,10 @@
 [user]
-    name  = {{ .name | quote }}
-    email = {{ .email | quote }}
+    name       = {{ .name | quote }}
+    email      = {{ .email | quote }}
+    signingkey = "3E4E41CBA53A8BEB"
+
+[commit]
+    gpgsign = true
 
 [core]
     editor     = nvim

@@ -4,7 +4,8 @@
 # =============================================================================
 
 # $scr2: monitor for device-specific widgets (input field, player, info)
-$scr2 = {{ if eq .chezmoi.hostname "xeome-desktop" }}DP-3{{ else }}eDP-1{{ end }}
+{{- $m := index .machines .chezmoi.hostname }}
+$scr2 = {{ $m.secondary_monitor }}
 
 # =============================================================================
 # GENERAL

@@ -1,4 +1,5 @@
 // -*- mode: jsonc -*-
+{{- $m := index .machines .chezmoi.hostname }}
 {
     "position": "top",
     "height": 48,
@@ -6,10 +7,10 @@
     "reload_style_on_change": true,
     // Module Layout: Workspaces | Window Title | MPRIS | DateTime | System Info | Tray
     "modules-left": [
-        {{ if eq .chezmoi.hostname "emin-probook" }}"sway/workspaces"{{ else }}"hyprland/workspaces"{{ end }}
+        {{ if eq $m.wm "sway" }}"sway/workspaces"{{ else }}"hyprland/workspaces"{{ end }}
     ],
     "modules-center": [
-        {{ if eq .chezmoi.hostname "emin-probook" }}"sway/window"{{ else }}"hyprland/window"{{ end }}
+        {{ if eq $m.wm "sway" }}"sway/window"{{ else }}"hyprland/window"{{ end }}
     ],
     "modules-right": [
         "mpris",
@@ -88,7 +89,7 @@
         "tooltip-format-activated": "Idle inhibitor: Active",
         "tooltip-format-deactivated": "Idle inhibitor: Inactive"
     },
-    {{ if eq .chezmoi.hostname "emin-probook" }}
+    {{ if eq $m.wm "sway" }}
     "sway/workspaces": {
         "format": "{icon}",
         "on-click": "focus"
@@ -148,7 +149,7 @@
         ],
         "orientation": "inherit"
     },
-    {{ if eq .chezmoi.hostname "emin-probook" }}
+    {{ if eq $m.wm "sway" }}
     "sway/window": {
         "format": "{}",
         "max-length": 50,

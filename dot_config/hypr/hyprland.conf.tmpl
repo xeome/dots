@@ -6,7 +6,7 @@
 # SWITCHING DEVICE PROFILES:
 # To switch between devices, change the device profile include below:
 # - Desktop dual monitor: source = devices/desktop-dual.conf
-# - Laptop: source = devices/laptop.conf
+# - emin-probook: source = devices/emin-probook.conf
 # - Add your own: source = devices/<your-profile>.conf
 # =============================================================================
 
@@ -17,8 +17,9 @@
 # 1. Shared configuration (device-agnostic settings)
 source = shared.conf
 
-# 2. Device-specific configuration (CHANGE THIS LINE TO SWITCH PROFILES)
-source = devices/{{ .chezmoi.hostname }}.conf
+# 2. Device-specific configuration (driven by .chezmoidata.toml [machines.<hostname>])
+{{- $m := index .machines .chezmoi.hostname }}
+source = devices/{{ $m.profile }}.conf
 
 # 3. Optional local user overrides (git-ignored, create if needed)
-# source = user.local.conf
+source = user.local.conf

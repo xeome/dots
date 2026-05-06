@@ -1,0 +1,9 @@
+# chezmoi bootstrap config
+# Generated on chezmoi init — stored at ~/.config/chezmoi/chezmoi.toml
+
+[bitwarden]
+    unlock = "auto"
+
+[data]
+    name  = "{{ promptStringOnce . "name"  "Full name (for git config)" }}"
+    email = "{{ promptStringOnce . "email" "Email (for git config)" }}"

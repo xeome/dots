@@ -1,0 +1,23 @@
+#!/bin/bash
+# chezmoi run_onchange_ script — re-runs whenever pkgs file changes.
+# hash: {{ include "pkgs" | sha256sum }}
+
+set -euo pipefail
+
+# Detect AUR helper
+if command -v yay &>/dev/null; then
+    AUR=yay
+elif command -v paru &>/dev/null; then
+    AUR=paru
+else
+    AUR=pacman
+fi
+
+PKGS=(
+{{ range (include "pkgs" | splitList "\n") -}}
+{{- if . }}    "{{ . }}"
+{{ end -}}
+{{- end }})
+
+echo "Installing/updating ${#PKGS[@]} packages via $AUR..."
+$AUR -S --needed --noconfirm "${PKGS[@]}"

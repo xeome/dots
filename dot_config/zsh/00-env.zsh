@@ -12,6 +12,7 @@ export LC_ALL="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US.UTF-8"
 export GPG_TTY="$(tty)"
+export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
 
 # Application Env
 export PARALLEL_HOME="$XDG_CONFIG_HOME/parallel"

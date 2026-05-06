@@ -1,5 +1,5 @@
 #!/bin/bash
-eval $(/usr/bin/gnome-keyring-daemon --start --foreground --components=gpg,pkcs11,secrets,ssh)
+eval $(/usr/bin/gnome-keyring-daemon --start --foreground --components=gpg,pkcs11,secrets)
 export SSH_AUTH_SOCK
 
 systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK

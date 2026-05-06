@@ -1,0 +1,26 @@
+[user]
+    name  = {{ .name | quote }}
+    email = {{ .email | quote }}
+
+[core]
+    editor     = nvim
+    autocrlf   = input
+    pager      = delta
+
+[pull]
+    rebase = true
+
+[push]
+    autoSetupRemote = true
+
+[merge]
+    tool = vimdiff
+
+[diff]
+    tool = vimdiff
+
+[alias]
+    st  = status
+    lg  = log --oneline --graph --decorate --all
+    co  = checkout
+    br  = branch

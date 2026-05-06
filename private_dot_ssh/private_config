@@ -1,0 +1,5 @@
+Host *
+    AddKeysToAgent yes
+    IdentityAgent ~/.bitwarden-ssh-agent.sock
+    ServerAliveInterval 60
+    ServerAliveCountMax 3

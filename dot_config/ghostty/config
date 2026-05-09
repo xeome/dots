@@ -23,3 +23,6 @@ window-padding-y = 15
 
 theme = Vesper
 background = 000000
+
+keybind = ctrl+shift+plus=increase_font_size:1
+keybind = ctrl+shift+minus=decrease_font_size:1

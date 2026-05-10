@@ -16,7 +16,7 @@ This is my personal repo for my Arch linux configurations.
 | OSD             | `swayosd`                                            |
 | File manager    | `thunar`                                             |
 | Screenshot tool | `flameshot`                                          |
-| Polkit manager  | `polkit-gnome`                                       |
+| Polkit manager  | `mate-polkit`                                        |
 | Fonts           | `ttf-iosevka-nerd ttf-jetbrains-mono monaspace Neon` |
 | Editor          | `neovim`                                             |
 

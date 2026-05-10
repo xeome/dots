@@ -46,7 +46,6 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lo
 hl.bind(mod .. " + o", hl.dsp.exec_cmd("xset dpms force off"))
 hl.bind(mod .. " + l", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mod .. " + b", hl.dsp.exec_cmd("sh ~/.config/emoji/emoji.sh &"))
-hl.bind(mod .. " + n", hl.dsp.exec_cmd("polybar-msg cmd toggle"))
 hl.bind(mod .. " + m", hl.dsp.exec_cmd("ags -t quicksettings"))
 hl.bind(mod .. " + k", hl.dsp.exec_cmd("swaync-client -t"))
 hl.bind(mod .. " + p", hl.dsp.exec_cmd("ghostty --class='com.sessionizer.fzf' -e ~/.local/bin/sessionizer"))

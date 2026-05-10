@@ -13,7 +13,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("/usr/bin/swayidle -w timeout 840 \"hyprlock\" timeout 900 'swaymsg \"output * dpms off\"' resume 'swaymsg \"output * dpms on\"' &")
 
   -- System Services
-  hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+  hl.exec_cmd("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
   hl.exec_cmd("/usr/bin/kdeconnectd &")
   hl.exec_cmd("hyprpm reload -n &")
   hl.exec_cmd("systemctl --user start vicinae.service &")

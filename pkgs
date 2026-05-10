@@ -13,7 +13,7 @@ hyprlock
 jq
 most
 neovim
-polkit-gnome
+mate-polkit
 seahorse
 swaync
 swayidle

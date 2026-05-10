@@ -1,6 +1,11 @@
 # chezmoi bootstrap config
 # Generated on chezmoi init — stored at ~/.config/chezmoi/chezmoi.toml
 
+encryption = "age"
+
+[age]
+    identity = "~/.config/sops/age/keys.txt"
+
 [bitwarden]
     unlock = "auto"
 

@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+age -d -i "$HOME/.config/sops/age/keys.txt" -o /tmp/gpg_import.asc "$HOME/.local/share/gpg-key.asc.age"
+gpg --import /tmp/gpg_import.asc
+rm -f /tmp/gpg_import.asc

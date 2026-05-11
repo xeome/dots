@@ -1,0 +1,8 @@
+Host *
+    AddKeysToAgent yes
+    IdentityAgent ~/.bitwarden-ssh-agent.sock
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    ControlMaster auto
+    ControlPath ~/.ssh/controlmasters/%C
+    ControlPersist 10m

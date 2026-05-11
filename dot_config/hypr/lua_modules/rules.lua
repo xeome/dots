@@ -133,6 +133,6 @@ hl.window_rule({
   name = "sessionizer-float",
   match = { class = "^(com.sessionizer.fzf)$" },
   float = true,
-  size = { x = 800, y = 500 },
+  size = { 800, 500 },
   center = true,
 })

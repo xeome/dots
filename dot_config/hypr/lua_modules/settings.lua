@@ -39,9 +39,10 @@ hl.config({
 hl.config({
   general = {
     allow_tearing = true,
+    layout = "scrolling",
     border_size = 2,
     col = {
-      active_border = { colors = { colors.secondary, colors.primary }, angle = 45 },
+      active_border = { colors = { colors.secondary, colors.primary } },
       inactive_border = colors.surface,
     },
     gaps_in = 5,
@@ -49,12 +50,14 @@ hl.config({
   },
 })
 
-hl.curve("fast", { type = "bezier", points = { {0, 0}, {1, 1} } })
+hl.curve("fast", { type = "bezier", points = { {0.48, 0}, {0.15, 1} } })
 hl.animation({ leaf = "global", enabled = true, speed = 3, bezier = "fast" })
 
 hl.config({
   misc = {
     vrr = 2,
+  },
+  debug = {
     vfr = true,
   },
 })

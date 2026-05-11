@@ -5,8 +5,6 @@
 -- =============================================================================
 
 local colors = {
-  wallpaper = "rgb(/home/xeome/.config/wallpapers/dark_pixelart.png)",
-
   background = "rgb(101010)",
   foreground = "rgb(FFFFFF)",
   primary = "rgb(FFC799)",

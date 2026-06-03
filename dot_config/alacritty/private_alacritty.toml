@@ -25,8 +25,13 @@ action = "IncreaseFontSize"
 key = "Plus"
 mods = "Control|Shift"
 
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control|Shift"
+
 [window]
-opacity = 0.55
+opacity = 0.85
 #opacity = 1
 
 [window.padding]
@@ -37,10 +42,12 @@ y = 15
 ipc_socket = true
 
 import = [
+   # Vesper theme to match ~/.config/ghostty/config
+   "~/.config/alacritty/vesper.toml"
    #"~/.config/alacritty/catppuccin-mocha.toml"
    #"~/.config/alacritty/gruvbox_material_hard_dark.toml"
    #"~/.config/alacritty/monokai.toml"
    #"~/.config/alacritty/rose-pine.toml"
-   "colors.toml"
+   #"colors.toml"
    # "~/.config/alacritty/cosmicmidnight.toml"
 ]

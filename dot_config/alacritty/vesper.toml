@@ -1,0 +1,34 @@
+# Vesper theme — mirrors ~/.config/ghostty/config (theme = Vesper, background = 000000)
+# Palette taken verbatim from /usr/share/ghostty/themes/Vesper.
+
+[colors.primary]
+foreground = "#ffffff"
+background = "#000000"
+
+[colors.cursor]
+text = "#ffffff"
+cursor = "#acb1ab"
+
+[colors.selection]
+text = "#b9beb8"
+background = "#988049"
+
+[colors.normal]
+black = "#101010"
+red = "#f5a191"
+green = "#90b99f"
+yellow = "#e6b99d"
+blue = "#aca1cf"
+magenta = "#e29eca"
+cyan = "#ea83a5"
+white = "#a0a0a0"
+
+[colors.bright]
+black = "#7e7e7e"
+red = "#ff8080"
+green = "#99ffe4"
+yellow = "#ffc799"
+blue = "#b9aeda"
+magenta = "#ecaad6"
+cyan = "#f591b2"
+white = "#ffffff"

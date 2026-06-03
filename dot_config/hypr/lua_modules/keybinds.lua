@@ -18,7 +18,7 @@ hl.bind(mod .. " + SHIFT + r", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind(mod .. " + SHIFT + q", hl.dsp.exec_cmd("ags -t powermenu"))
 
 -- ~~~ user applications (device-agnostic)
-hl.bind(mod .. " + return", hl.dsp.exec_cmd("ghostty +new-window"))
+hl.bind(mod .. " + return", hl.dsp.exec_cmd(terminal or "alacritty"))
 hl.bind(mod .. " + q", hl.dsp.exec_cmd("zen-browser"))
 hl.bind(mod .. " + e", hl.dsp.exec_cmd("thunar"))
 hl.bind(mod .. " + r", hl.dsp.exec_cmd("vicinae toggle"))

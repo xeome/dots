@@ -9,6 +9,13 @@
 {{- $m := index .machines .chezmoi.hostname }}
 
 -- =============================================================================
+-- USER PREFERENCES
+-- =============================================================================
+-- Terminal launch command (bound to SUPER + Return in lua_modules/keybinds.lua).
+-- Change this to use a different terminal, e.g. "alacritty" or "kitty".
+terminal = "alacritty"
+
+-- =============================================================================
 -- ENVIRONMENT VARIABLES
 -- =============================================================================
 

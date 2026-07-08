@@ -34,10 +34,15 @@
 }
 
 /* -----------------------------------------------------
- *   Waybar Container
+ *   Waybar Container - floating glass panel
+ *   Hyprland already blurs this layer surface (waybar-blur
+ *   rule); background alpha is what actually lets that
+ *   blur show through. Kept fairly opaque (0.82) so text
+ *   contrast stays safe over any wallpaper - raise/lower
+ *   this one value to trade legibility for more glass.
  * ----------------------------------------------------- */
 window#waybar {
-  background: @background;
+  background: alpha(@background, 0.82);
   border-bottom: 1px solid alpha(@outline, 0.15);
 }
 
@@ -71,6 +76,8 @@ tooltip label {
   font-weight: 600;
   font-size: 1.0em;
   border: 1px solid @outline;
+  box-shadow: 0 1px 3px alpha(@shadow_dark, 0.4),
+              inset 0 1px 0 alpha(@on_background, 0.08);
 }
 
 #clock:hover {
@@ -87,6 +94,8 @@ tooltip label {
   margin: 6px 4px 6px 10px;
   padding: 0;
   border: 1px solid alpha(@outline, 0.2);
+  box-shadow: 0 1px 3px alpha(@shadow_dark, 0.35),
+              inset 0 1px 0 alpha(@on_background, 0.06);
 }
 
 #workspaces button {
@@ -159,6 +168,7 @@ tooltip label {
  * ----------------------------------------------------- */
 #network,
 #custom-vpn,
+#privacy,
 #pulseaudio,
 #battery,
 #idle_inhibitor,
@@ -169,20 +179,28 @@ tooltip label {
   font-weight: 600;
   font-size: 1.0em;
   border: 1px solid alpha(@outline, 0.2);
+  border-radius: 0;
   min-width: 60px;
 }
 
+#mpris:hover,
+#network:hover,
+#custom-vpn:hover,
+#privacy:hover,
+#pulseaudio:hover,
+#battery:hover,
+#idle_inhibitor:hover {
+  background: alpha(@on_background, 0.08);
+  border-color: alpha(@outline, 0.45);
+}
 
-/* MPRIS / Media Player */
+/* MPRIS / Media Player - standalone pill */
 #mpris {
   color: @text_primary;
   margin: 6px 4px;
   padding: 5px 12px;
-}
-
-#mpris:hover {
-  background: alpha(@on_background, 0.08);
-  border-color: alpha(@outline, 0.45);
+  box-shadow: 0 1px 3px alpha(@shadow_dark, 0.35),
+              inset 0 1px 0 alpha(@on_background, 0.06);
 }
 
 #mpris.paused {
@@ -202,11 +220,6 @@ tooltip label {
   padding: 5px 12px;
 }
 
-#network:hover {
-  background: alpha(@on_background, 0.08);
-  border-color: alpha(@outline, 0.45);
-}
-
 #network.disconnected {
   color: alpha(@on_background, 0.3);
 }
@@ -219,11 +232,6 @@ tooltip label {
   border-left: none;
 }
 
-#custom-vpn:hover {
-  background: alpha(@on_background, 0.08);
-  border-color: alpha(@outline, 0.45);
-}
-
 #custom-vpn.connected {
   background: @state_active;
   color: @text_inverted;
@@ -231,6 +239,23 @@ tooltip label {
 
 #custom-vpn.connected:hover {
   background: @state_active_hover;
+  color: @text_inverted;
+}
+
+/* Privacy - mic/screenshare in-use indicator, hidden when idle */
+#privacy {
+  border-right: none;
+  border-left: none;
+}
+
+#privacy-item {
+  color: @text_primary;
+  padding: 0 6px;
+}
+
+#privacy-item.screenshare,
+#privacy-item.audio-in {
+  background: @state_active;
   color: @text_inverted;
 }
 
@@ -271,11 +296,6 @@ tooltip label {
   border-left: none;
 }
 
-#pulseaudio:hover {
-  background: alpha(@on_background, 0.08);
-  border-color: alpha(@outline, 0.45);
-}
-
 #pulseaudio.muted {
   color: alpha(@on_background, 0.3);
 }
@@ -285,11 +305,6 @@ tooltip label {
   color: @text_primary;
   border-right: none;
   border-left: none;
-}
-
-#battery:hover {
-  background: alpha(@on_background, 0.08);
-  border-color: alpha(@outline, 0.45);
 }
 
 #battery.charging {
@@ -313,11 +328,6 @@ tooltip label {
   font-size: 1.25em;
 }
 
-#idle_inhibitor:hover {
-  background: alpha(@on_background, 0.08);
-  border-color: alpha(@outline, 0.45);
-}
-
 #idle_inhibitor.activated {
   background: @state_active;
   color: @text_inverted;
@@ -336,6 +346,8 @@ tooltip label {
   margin: 6px 10px 6px 6px;
   padding: 5px 12px;
   border: 1px solid alpha(@outline, 0.2);
+  box-shadow: 0 1px 3px alpha(@shadow_dark, 0.35),
+              inset 0 1px 0 alpha(@on_background, 0.06);
 }
 
 #tray:hover {
@@ -350,15 +362,4 @@ tooltip label {
 #tray>.needs-attention {
   -gtk-icon-effect: highlight;
   background-color: alpha(@state_active, 0.3);
-}
-
-/* -----------------------------------------------------
- *   Custom Hidden Window Indicator
- * ----------------------------------------------------- */
-#custom-hiddenwindow {
-  background: alpha(@module_bg, 0.6);
-  color: @text_muted;
-  margin: 6px 4px;
-  padding: 6px 12px;
-  border: 1px solid alpha(@outline, 0.2);
 }

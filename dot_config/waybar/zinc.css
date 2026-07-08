@@ -27,10 +27,6 @@
 /* primary text color */
 @define-color text_muted #555555;
 /* muted/inactive text */
-@define-color text_bright #ffffff;
-/* bright/active text */
-@define-color text_disabled #333333;
-/* disabled/disconnected state */
 @define-color text_inverted #000000;
 /* black text for use on inverted (white) backgrounds */
 
@@ -39,8 +35,6 @@
 /* inverted fill - white background */
 @define-color state_active_hover #e0e0e0;
 /* hover on already-inverted (white bg) elements */
-@define-color state_urgent #ffffff;
-/* urgent state background */
 @define-color state_hover #ffffff;
 /* hover state background */
 

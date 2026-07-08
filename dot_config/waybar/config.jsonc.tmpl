@@ -17,6 +17,7 @@
         "clock",
         "network",
         "custom/vpn",
+        "privacy",
         "pulseaudio",
         "battery",
         "custom/water",
@@ -137,7 +138,16 @@
     },
     "custom/tray-expand-icon": {
         "format": " ",
-        "oltip": false
+        "tooltip": false
+    },
+    "privacy": {
+        "icon-spacing": 6,
+        "icon-size": 16,
+        "transition-duration": 250,
+        "modules": [
+            { "type": "screenshare", "tooltip": true },
+            { "type": "audio-in", "tooltip": true }
+        ]
     },
     "group/tray-expander": {
         "drawer": {
@@ -164,11 +174,6 @@
         "tooltip": false
     },
     {{ end }}
-    "custom/hiddenwindow": {
-        "exec": "waybar-scripts check_special_workspace",
-        "tooltip": true,
-        "signal": 3
-    },
     "custom/water": {
         "format": "{}",
         "exec": "~/.local/bin/water.py",

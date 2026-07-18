@@ -92,27 +92,25 @@
     },
     {{ if eq $m.wm "sway" }}
     "sway/workspaces": {
-        "format": "{icon}",
-        "on-click": "focus"
+        "format": "{icon}"
     },
     {{ else }}
     "hyprland/workspaces": {
         "format": "{icon}",
-        "move-to-monitor": true,
-        "on-click": "activate"
+        "move-to-monitor": true
     },
     {{ end }}
     "network": {
-        "format-wifi": "󰤟 {essid} ↓{bandwidthDownBits} ↑{bandwidthUpBits}",
-        "format-ethernet": "󰈀 ↓{bandwidthDownBits} ↑{bandwidthUpBits}",
+        "format-wifi": "󰤟 {essid} ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+        "format-ethernet": "󰈀 ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
         "interval": 3,
         "format-linked": "{ifname} (No IP)",
         "format": "",
         "format-disconnected": "󰤟",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "on-click": "wl-copy $(ip address show up scope global | grep inet | head -n1 | cut -d/ -f 1 | tr -d [:space:] | cut -c5-)",
-        "tooltip-format": "↑ {bandwidthUpBits}  ↓ {bandwidthDownBits}\n{ifname}\n{ipaddr}/{cidr}",
-        "tooltip-format-wifi": "󰤟 {essid} {frequency}MHz\nStrength: {signaldBm}dBm ({signalStrength}%)\nIP: {ipaddr}/{cidr}\n↑ {bandwidthUpBits}  ↓ {bandwidthDownBits}",
+        "tooltip-format": "{ifname}\n{ipaddr}/{cidr}",
+        "tooltip-format-wifi": "󰤟 {essid} {frequency}MHz\nStrength: {signaldBm}dBm ({signalStrength}%)\nIP: {ipaddr}/{cidr}",
         "max-length": 50
     },
     "pulseaudio": {
@@ -145,8 +143,8 @@
         "icon-size": 16,
         "transition-duration": 250,
         "modules": [
-            { "type": "screenshare", "tooltip": true },
-            { "type": "audio-in", "tooltip": true }
+            { "type": "screenshare", "icon-name": "screen-shared-symbolic", "tooltip": true },
+            { "type": "audio-in", "icon-name": "audio-input-microphone-symbolic", "tooltip": true }
         ]
     },
     "group/tray-expander": {

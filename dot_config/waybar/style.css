@@ -253,9 +253,18 @@ tooltip label {
   padding: 0 6px;
 }
 
+#privacy-item image {
+  color: @text_primary;
+}
+
 #privacy-item.screenshare,
 #privacy-item.audio-in {
   background: @state_active;
+  color: @text_inverted;
+}
+
+#privacy-item.screenshare image,
+#privacy-item.audio-in image {
   color: @text_inverted;
 }
 

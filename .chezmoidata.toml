@@ -11,6 +11,7 @@ profile            = "xeome-desktop"
 secondary_monitor  = "DP-3"
 numlock            = true
 natural_scroll     = false
+is_laptop          = false
 has_steelseries    = true
 discord_cmd        = "equibop --ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations --enable-features=AcceleratedVideoDecodeLinuxGL --enable-features=AcceleratedVideoEncoder --enable-features=VaapiIgnoreDriverChecks --enable-features=CanvasOopRasterization --enable-gpu-rasterization --enable-zero-copy --enable-features=WebRTCPipeWireCapturer"
 
@@ -71,6 +72,7 @@ profile            = "emin-ultrabook"
 secondary_monitor  = "eDP-1"
 numlock            = true
 natural_scroll     = false
+is_laptop          = true
 has_steelseries    = false
 discord_cmd        = "equibop --ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations --enable-features=AcceleratedVideoDecodeLinuxGL --enable-features=AcceleratedVideoEncoder --enable-features=VaapiIgnoreDriverChecks --enable-features=CanvasOopRasterization --enable-gpu-rasterization --enable-zero-copy --enable-features=WebRTCPipeWireCapturer"
 
@@ -131,6 +133,7 @@ profile            = "emin-probook"
 secondary_monitor  = "eDP-1"
 numlock            = false
 natural_scroll     = true
+is_laptop          = true
 has_steelseries    = false
 discord_cmd        = "vesktop"
 

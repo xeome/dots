@@ -83,6 +83,10 @@ hl.device({
 
 hl.bind("SUPER + d", hl.dsp.exec_cmd({{ $m.discord_cmd | quote }}))
 hl.bind("Print", hl.dsp.exec_cmd("~/.config/hypr/bin/satty-screenshot.sh"))
+{{ if $m.is_laptop }}
+-- Lock the screen when the laptop lid closes
+hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd("hyprlock"), { locked = true })
+{{ end }}
 
 -- =============================================================================
 -- SHARED MODULES

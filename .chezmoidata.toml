@@ -8,6 +8,7 @@
 [machines.xeome-desktop]
 wm                 = "hyprland"
 profile            = "xeome-desktop"
+terminal           = "ghostty"
 secondary_monitor  = "DP-3"
 numlock            = true
 natural_scroll     = false
@@ -69,6 +70,7 @@ monitor   = "DP-3"
 [machines.emin-ultrabook]
 wm                 = "hyprland"
 profile            = "emin-ultrabook"
+terminal           = "ghostty"
 secondary_monitor  = "eDP-1"
 numlock            = true
 natural_scroll     = false

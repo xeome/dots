@@ -15,6 +15,10 @@ Rectangle {
     signal dismissed
 
     readonly property bool critical: notif?.urgency === NotificationUrgency.Critical
+    // Spec reserves the "default" action id for click-to-activate on the
+    // notification body itself — it isn't meant to get its own button.
+    readonly property var defaultAction: notif?.actions.find(a => a.identifier === "default") ?? null
+    readonly property var otherActions: notif?.actions.filter(a => a.identifier !== "default") ?? []
 
     implicitWidth: 400
     implicitHeight: Math.max(64, col.implicitHeight + 28)
@@ -43,7 +47,8 @@ Rectangle {
         id: ma
         anchors.fill: parent
         hoverEnabled: true
-        onClicked: root.dismissed()
+        // No dismiss() after invoke(): see the action buttons' MouseArea below.
+        onClicked: root.defaultAction ? root.defaultAction.invoke() : root.dismissed()
     }
 
     IconImage {
@@ -97,11 +102,11 @@ Rectangle {
 
         Row {
             spacing: 6
-            visible: (root.notif?.actions.length ?? 0) > 0
+            visible: root.otherActions.length > 0
             topPadding: 4
 
             Repeater {
-                model: root.notif?.actions ?? []
+                model: root.otherActions
 
                 delegate: Rectangle {
                     id: action

@@ -35,6 +35,7 @@ PanelWindow {
     }
 
     Workspaces {
+        id: workspaces
         screen: root.modelData
         anchors {
             left: parent.left
@@ -46,9 +47,15 @@ PanelWindow {
     WindowTitle {
         screen: root.modelData
         anchors.centerIn: parent
+        // Workspaces and the right-side Row both change width at runtime
+        // (workspace count, tray items, wifi visibility...); centerIn alone
+        // doesn't know that, so a long title can slide under either one.
+        // Clamp to whichever side is currently closer to center.
+        width: Math.min(implicitWidth, Math.max(0, 2 * (Math.min(root.width / 2 - 10 - workspaces.width, root.width / 2 - 10 - rightRow.width) - 16)))
     }
 
     Row {
+        id: rightRow
         anchors {
             right: parent.right
             rightMargin: 10

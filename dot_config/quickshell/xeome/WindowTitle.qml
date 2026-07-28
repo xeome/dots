@@ -1,7 +1,8 @@
+import QtQuick
 import Quickshell.Hyprland
 import Quickshell.Wayland
 
-// waybar `hyprland/window`: borderless, 50 char cap, "Desktop" when empty.
+// waybar `hyprland/window`: borderless, "Desktop" when empty.
 //
 // Title comes from the wlr foreign-toplevel protocol, not Hyprland's IPC:
 // Hyprland.activeToplevel stays null until the first focus change after
@@ -15,5 +16,6 @@ BarText {
 
     readonly property string title: Hyprland.focusedMonitor?.name === screen.name ? ToplevelManager.activeToplevel?.title ?? "" : ""
 
-    text: title === "" ? "Desktop" : title.length > 50 ? title.slice(0, 50) + "…" : title
+    text: title === "" ? "Desktop" : title
+    elide: Text.ElideRight
 }

@@ -1,0 +1,155 @@
+#!/bin/bash
+# Power profiles for the quickshell bar's battery module.
+#
+# Two backends behind one three-way choice:
+#   - tlp-pd answers org.freedesktop.UPower.PowerProfiles, which quickshell
+#     binds natively. TLP applies the profile; polkit allows an active session
+#     without a password.
+#   - scx_loader switches the sched_ext scheduler mode. Its stock polkit action
+#     is auth_admin_keep, so the rule below is what stops a bar click from
+#     popping a password dialog.
+#
+# Everything here is root-owned and outside chezmoi's $HOME scope, so the files
+# are staged as the user and installed with one pkexec. chezmoi re-runs this
+# whenever the rendered content changes, which includes the tlp.conf below —
+# so from now on the profile definitions are edited HERE, not in /etc.
+set -euo pipefail
+{{- $m := index .machines .chezmoi.hostname }}
+
+STAGE="$(mktemp -d)"
+trap 'rm -rf "$STAGE"' EXIT
+
+cat > "$STAGE/49-scx-loader.rules" <<'RULES'
+// Let the desktop shell switch sched_ext schedulers without an auth prompt.
+// Stock policy is auth_admin_keep, which pops a password dialog once per
+// session — unusable for a power-profile button in the bar.
+//
+// This grants scheduler control to anything running as a wheel user. That is
+// not privilege escalation, but it is a self-DoS vector: a broken scheduler
+// can stall the machine.
+polkit.addRule(function (action, subject) {
+    if (action.id == "org.scx.loader.manage-schedulers" && subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+    }
+});
+RULES
+
+cat > "$STAGE/scx-cake.toml" <<'CAKE'
+
+[scheds.scx_cake]
+# auto_mode is empty on purpose: bare scx_cake already defaults to -p gaming.
+# That is why the shell maps its performance profile to lowlatency rather than
+# gaming — mapping it to gaming would make two profiles the same scheduler.
+auto_mode = []
+gaming_mode = ["-p", "gaming"]
+lowlatency_mode = ["-p", "esports"]
+powersave_mode = ["-p", "battery"]
+server_mode = ["-p", "legacy"]
+CAKE
+
+{{ if $m.is_laptop -}}
+cat > "$STAGE/tlp.conf" <<'TLPCONF'
+# Managed by chezmoi — edit: ~/.local/share/chezmoi/run_onchange_after_configure-power.sh.tmpl
+#
+# In TLP 1.10 the parameter suffix IS the profile (see `man 8 tlp`):
+#   performance -> *_ON_AC     balanced -> *_ON_BAT     power-saver -> *_ON_SAV
+# (_ON_SAV falls back to the _ON_BAT value where it isn't set.)
+#
+# TLP_PROFILE_* is pinned to BAL for both power sources on purpose. At stock
+# (AC=PRF) simply plugging in would select the performance profile, so EPP
+# would sit at `performance` all day with the charger in. Pinning both to
+# balanced makes the bar menu the only thing that selects a profile, and — as a
+# side effect of TLP_AUTO_SWITCH=2 — makes a manual pick survive plug and
+# unplug, because it never matches the source default it would be replaced by.
+
+TLP_PROFILE_AC=BAL
+TLP_PROFILE_BAT=BAL
+
+# --- performance ------------------------------------------------------------
+CPU_DRIVER_OPMODE_ON_AC=active
+CPU_SCALING_GOVERNOR_ON_AC=powersave
+CPU_ENERGY_PERF_POLICY_ON_AC=performance
+CPU_MIN_PERF_ON_AC=0
+# Deliberate ceiling: the top turbo bins are what make this chassis loud and
+# hot. Raise to 100 if you want the full thing.
+CPU_MAX_PERF_ON_AC=85
+CPU_BOOST_ON_AC=1
+CPU_HWP_DYN_BOOST_ON_AC=1
+PLATFORM_PROFILE_ON_AC=performance
+INTEL_GPU_MIN_FREQ_ON_AC=400
+INTEL_GPU_MAX_FREQ_ON_AC=1500
+INTEL_GPU_BOOST_FREQ_ON_AC=1500
+
+# --- balanced (the default on both AC and battery) --------------------------
+CPU_DRIVER_OPMODE_ON_BAT=active
+CPU_SCALING_GOVERNOR_ON_BAT=powersave
+CPU_ENERGY_PERF_POLICY_ON_BAT=balance_performance
+CPU_MIN_PERF_ON_BAT=0
+# Mirrored from the AC block, along with the iGPU caps below: with AC=BAL this
+# is the everyday profile, so the ceiling has to live here too or it would only
+# apply while performance is selected.
+CPU_MAX_PERF_ON_BAT=85
+CPU_BOOST_ON_BAT=1
+CPU_HWP_DYN_BOOST_ON_BAT=1
+PLATFORM_PROFILE_ON_BAT=balanced
+INTEL_GPU_MIN_FREQ_ON_BAT=400
+INTEL_GPU_MAX_FREQ_ON_BAT=1500
+INTEL_GPU_BOOST_FREQ_ON_BAT=1500
+
+# --- power-saver ------------------------------------------------------------
+CPU_ENERGY_PERF_POLICY_ON_SAV=power
+# Killing turbo is the single largest battery win here; it is also why this
+# profile feels slow, which is the point of pressing it deliberately.
+CPU_BOOST_ON_SAV=0
+CPU_HWP_DYN_BOOST_ON_SAV=0
+PLATFORM_PROFILE_ON_SAV=low-power
+INTEL_GPU_POWER_PROFILE_ON_SAV=power_saving
+
+# --- unchanged, profile-independent -----------------------------------------
+WIFI_PWR_ON_BAT=off
+RESTORE_DEVICE_STATE_ON_STARTUP=1
+DEVICES_TO_ENABLE_ON_STARTUP="bluetooth wifi"
+TLPCONF
+{{- end }}
+
+cat > "$STAGE/install.sh" <<'INSTALL'
+#!/bin/bash
+set -euo pipefail
+STAGE="$1"
+
+# tlp.service is not enabled by the package on Arch, and without it nothing
+# applies a profile at boot — tlp-pd alone only covers switching at runtime.
+systemctl enable --now tlp.service tlp-pd.service scx_loader.service
+
+install -Dm644 -o root -g root "$STAGE/49-scx-loader.rules" \
+    /etc/polkit-1/rules.d/49-scx-loader.rules
+
+# Appended rather than templated: the rest of the file is the distro's, and
+# every other scheduler's modes in it are none of our business. Guarded on the
+# file existing, because appending to a missing one would produce a config with
+# a cake section and no default_sched, which is worse than doing nothing.
+if [ ! -f /etc/scx_loader.toml ]; then
+    echo "warning: /etc/scx_loader.toml is missing — cake mode map not installed" >&2
+elif ! grep -q '^\[scheds.scx_cake\]' /etc/scx_loader.toml; then
+    cp -n /etc/scx_loader.toml /etc/scx_loader.toml.pre-quickshell || true
+    cat "$STAGE/scx-cake.toml" >> /etc/scx_loader.toml
+    systemctl restart scx_loader.service
+fi
+
+# Only touched when it actually differs — `tlp start` re-applies everything and
+# drops manual mode, so it should not fire on every chezmoi apply.
+if [ -f "$STAGE/tlp.conf" ] && ! cmp -s "$STAGE/tlp.conf" /etc/tlp.conf; then
+    cp -n /etc/tlp.conf /etc/tlp.conf.pre-quickshell || true
+    install -m644 -o root -g root "$STAGE/tlp.conf" /etc/tlp.conf
+    tlp start
+fi
+INSTALL
+
+pkexec /usr/bin/bash "$STAGE/install.sh" "$STAGE"
+{{ if not $m.is_laptop }}
+# ponytail: no tlp.conf for this machine yet. Its profiles are whatever /etc
+# already says, which was tuned by hand and has never been read into this repo.
+# Reconcile it here — the desktop wants TLP_PROFILE_AC=PRF, since it is always
+# on AC and the menu is how you step *down* to quiet.
+echo "note: tlp.conf is not managed on {{ .chezmoi.hostname }} yet — profiles use the existing /etc/tlp.conf"
+{{- end }}

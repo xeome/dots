@@ -20,8 +20,9 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("autotiling-rs &")
 
   -- Desktop Environment
-  hl.exec_cmd("waybar &")
-  hl.exec_cmd("swayosd-server &")
+  -- Bar, notifications and OSD, all one process. Replaced waybar +
+  -- swayosd-server + the swaync user unit.
+  hl.exec_cmd("qs -c xeome &")
   hl.exec_cmd("waypaper --restore")
 
   -- Applications

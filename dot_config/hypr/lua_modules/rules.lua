@@ -3,45 +3,25 @@
 -- =============================================================================
 
 hl.layer_rule({
-  name = "swaync-control-center-blur",
-  match = { namespace = "swaync-control-center" },
+  name = "quickshell-bar-blur",
+  match = { namespace = "quickshell-bar" },
   blur = true,
+})
+
+hl.layer_rule({
+  name = "quickshell-notifications-blur",
+  match = { namespace = "quickshell-notifications" },
+  blur = true,
+  -- The gaps between stacked cards are fully transparent; only the cards
+  -- themselves (alpha 0.82) should get a blurred backdrop.
   ignore_alpha = 0.5,
 })
 
 hl.layer_rule({
-  name = "waybar-blur",
-  match = { namespace = "waybar" },
-  blur = true,
-})
-
-hl.layer_rule({
-  name = "swaync-notification-blur",
-  match = { namespace = "swaync-notification-window" },
-  blur = true,
-  ignore_alpha = 0.5,
-})
-
-hl.layer_rule({
-  name = "swayosd-client-blur",
-  match = { namespace = "swayosd-client" },
+  name = "quickshell-osd-blur",
+  match = { namespace = "quickshell-osd" },
   blur = true,
   ignore_alpha = 0,
-})
-
-hl.layer_rule({
-  name = "swayosd-server-blur",
-  match = { namespace = "swayosd-server" },
-  blur = true,
-  ignore_alpha = 0,
-})
-
-hl.layer_rule({
-  name = "swayosd-blur",
-  match = { namespace = "swayosd" },
-  blur = true,
-  ignore_alpha = 0,
-  xray = false,
 })
 
 hl.layer_rule({
@@ -54,13 +34,6 @@ hl.layer_rule({
 -- =============================================================================
 -- SHARED WINDOW RULES
 -- =============================================================================
-
-hl.window_rule({
-  name = "swaync-no-focus",
-  match = { class = "swaync-notification-window" },
-  no_initial_focus = true,
-  no_focus = true,
-})
 
 hl.window_rule({
   name = "telegram-no-screen-share",

@@ -41,6 +41,9 @@ BarModule {
 
         text: root.hasBattery ? `${profileGlyph}${icons[Math.min(10, Math.floor(root.pct / 10))]}${root.charging ? "󱐋" : ""} ${root.pct}%` : menu.glyph(PowerProfiles.profile)
         color: root.fg
+        // md-speedometer* is drawn shorter than neighboring glyphs — only
+        // matters standalone (no battery), since the ramp icon carries it otherwise.
+        font.pixelSize: root.hasBattery ? Theme.size : Theme.size + 2
     }
 
     // A PopupWindow isn't an Item, so the RowLayout that BarModule's default

@@ -71,7 +71,7 @@ Rectangle {
 
         BarText {
             text: root.notif?.appName ?? ""
-            color: Theme.fgMuted
+            color: Theme.fgDim
             font.pixelSize: Theme.size - 3
         }
 
@@ -87,7 +87,7 @@ Rectangle {
             width: parent.width
             visible: text !== ""
             text: root.notif?.body ?? ""
-            color: Theme.fgMuted
+            color: Theme.fgDim
             font.weight: 450
             textFormat: Text.StyledText   // swaync advertised body markup
             wrapMode: Text.Wrap

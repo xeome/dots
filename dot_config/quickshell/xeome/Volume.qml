@@ -21,5 +21,8 @@ BarModule {
     BarText {
         text: root.muted ? "󰖁" : `${root.volume > 66 ? "󰕾" : root.volume > 33 ? "󰖀" : "󰕿"} ${root.volume}%`
         color: root.muted ? Qt.rgba(1, 1, 1, 0.3) : Theme.fg
+        // md-volume_medium/_low are drawn smaller than neighboring glyphs
+        // (bell, mic) at the same pixel size.
+        font.pixelSize: Theme.size + 1
     }
 }

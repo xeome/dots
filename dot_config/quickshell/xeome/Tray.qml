@@ -8,7 +8,12 @@ import Quickshell.Widgets
 Rectangle {
     id: root
 
-    readonly property bool expanded: hover.containsMouse
+    // The open menu is a grabbing popup, so the compositor takes the pointer
+    // away from this surface and `hover` goes false. Without the second term
+    // the drawer would collapse, destroy the delegate, and take the menu down
+    // with it the instant it appeared.
+    readonly property bool expanded: hover.containsMouse || menuOpen
+    property bool menuOpen: false
 
     // Bound eagerly: quickshell's service singletons only start syncing when
     // something references them, and reading this first inside the Repeater
@@ -84,6 +89,7 @@ Rectangle {
                     anchor.item: item
                     anchor.edges: Edges.Bottom
                     anchor.gravity: Edges.Bottom
+                    onVisibleChanged: root.menuOpen = visible
                 }
             }
         }

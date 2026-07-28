@@ -20,6 +20,14 @@ Rectangle {
     // would leave the drawer empty for seconds after the first open.
     readonly property var items: SystemTray.items.values
 
+    // Ayatana indicators publish no Activate method at all — their whole UI is
+    // the menu — so a left click on one is a D-Bus call into nothing. They
+    // still report onlyMenu=false, so there is no flag to key off; waybar hid
+    // this by falling back to the menu whenever Activate returned an error.
+    // ponytail: an id list, since quickshell surfaces neither the flag nor the
+    // failed call. Append ids as they turn up (blueman, print-applet, …).
+    readonly property var menuOnlyIds: ["nm-applet"]
+
     implicitWidth: layout.implicitWidth + Theme.pad * 2
     implicitHeight: Theme.barHeight - Theme.gap * 2
     color: Theme.surface
@@ -76,7 +84,7 @@ Rectangle {
                     onClicked: e => {
                         if (e.button === Qt.MiddleButton)
                             item.modelData.secondaryActivate();
-                        else if (e.button === Qt.RightButton && item.modelData.hasMenu)
+                        else if (item.modelData.hasMenu && (e.button === Qt.RightButton || root.menuOnlyIds.includes(item.modelData.id)))
                             menu.open();
                         else
                             item.modelData.activate();

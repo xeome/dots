@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
@@ -85,51 +86,30 @@ PanelWindow {
 
     // ---- brightness --------------------------------------------------------
 
-    property string backlight: ""
-    property int briMax: 0
+    // Backlight owns the sysfs watch, since Power's slider needs the same
+    // reading; this end only decides when a change is worth flashing.
+    Connections {
+        target: Backlight
 
-    Process {
-        running: true
-        command: ["sh", "-c", "ls -1 /sys/class/backlight | head -n1"]
-
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const dev = text.trim();
-                if (dev)
-                    root.backlight = "/sys/class/backlight/" + dev;
-            }
-        }
-    }
-
-    FileView {
-        path: root.backlight ? root.backlight + "/max_brightness" : ""
-        onLoaded: root.briMax = parseInt(text()) || 0
-    }
-
-    FileView {
-        path: root.backlight ? root.backlight + "/brightness" : ""
-        watchChanges: true
-        onFileChanged: reload()
-        onLoaded: {
-            const v = parseInt(text()) || 0;
-            const changed = root.lastBrightness >= 0 && v !== root.lastBrightness;
-            root.lastBrightness = v;
-            if (changed && root.briMax > 0)
-                root.flash("󰃠", v / root.briMax, "");
+        function onRawChanged(): void {
+            const changed = root.lastBrightness >= 0 && Backlight.raw !== root.lastBrightness;
+            root.lastBrightness = Backlight.raw;
+            if (changed && Backlight.available)
+                root.flash("󰃠", Backlight.value, "");
         }
     }
 
     // ---- caps lock ---------------------------------------------------------
 
-    property string capsDir: ""
+    readonly property string capsDir: caps.count > 0 ? caps.get(0, "filePath") : ""
 
-    Process {
-        running: true
-        command: ["sh", "-c", "ls -1d /sys/class/leds/*capslock 2>/dev/null | head -n1"]
+    FolderListModel {
+        id: caps
 
-        stdout: StdioCollector {
-            onStreamFinished: root.capsDir = text.trim()
-        }
+        folder: "file:///sys/class/leds"
+        nameFilters: ["*capslock"]
+        showFiles: false
+        showDotAndDotDot: false
     }
 
     // ponytail: if this never fires, the LED is written by a path inotify

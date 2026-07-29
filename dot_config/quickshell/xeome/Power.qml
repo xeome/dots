@@ -188,6 +188,49 @@ PopupWindow {
                 Layout.topMargin: 4
                 implicitHeight: 1
                 color: Theme.border
+                visible: bri.visible
+            }
+
+            ColumnLayout {
+                id: bri
+
+                Layout.fillWidth: true
+                spacing: 2
+                visible: Backlight.available
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 10
+
+                    BarText {
+                        Layout.preferredWidth: 24
+                        horizontalAlignment: Text.AlignHCenter
+                        text: Backlight.value > 0.66 ? "󰃠" : Backlight.value > 0.33 ? "󰃟" : "󰃞"
+                        font.pixelSize: Theme.size + 5
+                    }
+
+                    BarText {
+                        Layout.fillWidth: true
+                        text: "Brightness"
+                    }
+
+                    BarText {
+                        text: `${Math.round(Backlight.value * 100)}%`
+                        font.weight: 500
+                    }
+                }
+
+                Track {
+                    value: Backlight.value
+                    onMoved: fraction => Backlight.set(fraction)
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.topMargin: 4
+                implicitHeight: 1
+                color: Theme.border
                 visible: footer.visible
             }
 

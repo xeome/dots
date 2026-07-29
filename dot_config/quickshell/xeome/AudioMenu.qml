@@ -62,46 +62,6 @@ PopupWindow {
         color: Theme.border
     }
 
-    // 8px of bar in 18px of hit area: the visual weight the OSD uses, with a
-    // target you can actually hit.
-    component Track: Item {
-        id: track
-
-        property real value: 0
-        signal moved(real fraction)
-
-        Layout.fillWidth: true
-        implicitHeight: 18
-
-        Rectangle {
-            anchors {
-                left: parent.left
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-            }
-            height: 8
-            color: Qt.rgba(1, 1, 1, 0.15)
-
-            Rectangle {
-                width: parent.width * root.clamp(track.value)
-                height: parent.height
-                color: ma.containsMouse ? Theme.fg : Qt.rgba(1, 1, 1, 0.75)
-            }
-        }
-
-        MouseArea {
-            id: ma
-            anchors.fill: parent
-            hoverEnabled: true
-            onPressed: e => track.moved(e.x / track.width)
-            onPositionChanged: e => {
-                if (pressed)
-                    track.moved(e.x / track.width);
-            }
-            onWheel: e => track.moved(track.value + (e.angleDelta.y > 0 ? 0.05 : -0.05))
-        }
-    }
-
     // Output and input are the same three widgets, so they're one component:
     // click the glyph to mute, drag or scroll the bar to set volume.
     component Device: ColumnLayout {

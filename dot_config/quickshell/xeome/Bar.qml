@@ -81,10 +81,7 @@ PanelWindow {
                 Net {
                     bordered: false
                 }
-                Mic {
-                    bordered: false
-                }
-                Volume {
+                Audio {
                     bordered: false
                 }
                 Battery {

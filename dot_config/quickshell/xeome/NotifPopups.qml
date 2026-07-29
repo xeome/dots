@@ -11,6 +11,8 @@ PanelWindow {
     // if you switch mid-popup. Latch it at spawn time if that annoys you.
     screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
 
+    readonly property int maxVisible: 5
+
     WlrLayershell.namespace: "quickshell-notifications"
     anchors {
         top: true
@@ -38,13 +40,23 @@ PanelWindow {
                 id: card
 
                 required property var modelData
+                required property int index
+
+                // A burst of twenty would otherwise build a column taller than
+                // the screen. The rest wait their turn rather than being
+                // dropped — hence the countdown below only running once a card
+                // is actually on screen to be read.
+                visible: card.index < root.maxVisible
 
                 notif: modelData
                 onDismissed: Notifs.drop(card.modelData)
 
                 Timer {
                     interval: Notifs.timeout(card.modelData)
-                    running: interval > 0
+                    // Hovering restarts rather than resumes: leaving the card
+                    // hands back the whole timeout, which is the behaviour you
+                    // want when you moved the mouse there to read it.
+                    running: interval > 0 && card.visible && !card.hovered
                     onTriggered: {
                         card.modelData.expire();
                         Notifs.drop(card.modelData);
@@ -60,6 +72,25 @@ PanelWindow {
                         Notifs.drop(card.modelData);
                     }
                 }
+            }
+        }
+
+        // Without this the queued ones are simply invisible, and a burst reads
+        // as "five notifications" when it was twenty.
+        Rectangle {
+            width: parent.width
+            implicitHeight: 24
+            visible: Notifs.popups.length > root.maxVisible
+            color: Theme.glass
+            border.width: 1
+            border.color: Theme.border
+
+            BarText {
+                anchors.centerIn: parent
+                text: `+${Notifs.popups.length - root.maxVisible} more`
+                font.pixelSize: Theme.size - 3
+                font.weight: 500
+                color: Theme.fgDim
             }
         }
     }

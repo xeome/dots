@@ -20,6 +20,23 @@ Rectangle {
     // would leave the drawer empty for seconds after the first open.
     readonly property var items: SystemTray.items.values
 
+    // Which icon the cursor is over, worked out from the drawer's own hover
+    // area rather than a hover area per icon.
+    //
+    // Anything that reports hover per icon — a MouseArea with hoverEnabled, a
+    // HoverHandler — competes with `hover` below for the same events. When it
+    // wins, the drawer collapses, which destroys the icon, which hands hover
+    // back to the drawer, which reopens: the whole thing oscillates under the
+    // cursor. Reading a coordinate off the one area that already exists can't.
+    readonly property var hoveredItem: {
+        if (!hover.containsMouse)
+            return null;
+
+        const p = root.mapToItem(layout, hover.mouseX, hover.mouseY);
+        // Misses on the chevron, which has no modelData to speak of.
+        return layout.childAt(p.x, p.y)?.modelData ?? null;
+    }
+
     // Ayatana indicators publish no Activate method at all — their whole UI is
     // the menu — so a left click on one is a D-Bus call into nothing. They
     // still report onlyMenu=false, so there is no flag to key off; waybar hid
@@ -100,6 +117,19 @@ Rectangle {
                     onVisibleChanged: root.menuOpen = visible
                 }
             }
+        }
+    }
+
+    // Bare 18px icons, with nothing to say which is which. Anchored to the
+    // whole module rather than the icon, the way every other tooltip in the bar
+    // is; only the text changes as you move along the row.
+    Tooltip {
+        anchorItem: root
+        hovered: root.hoveredItem !== null
+
+        BarText {
+            text: root.hoveredItem?.tooltipTitle || root.hoveredItem?.title || root.hoveredItem?.id || ""
+            font.weight: 500
         }
     }
 }

@@ -183,11 +183,8 @@ PopupWindow {
                 }
             }
 
-            Rectangle {
-                Layout.fillWidth: true
+            Rule {
                 Layout.topMargin: 4
-                implicitHeight: 1
-                color: Theme.border
                 visible: bri.visible
             }
 
@@ -226,11 +223,8 @@ PopupWindow {
                 }
             }
 
-            Rectangle {
-                Layout.fillWidth: true
+            Rule {
                 Layout.topMargin: 4
-                implicitHeight: 1
-                color: Theme.border
                 visible: footer.visible
             }
 

@@ -6,15 +6,23 @@ import Quickshell.Widgets
 // swaync's 2px accent left-border becomes white here: dim for normal,
 // solid for critical, since this theme has no hues.
 //
-// ponytail: no timestamps and no inline replies. Both need state the
-// Notification object doesn't carry; add them if you miss them.
+// ponytail: no inline replies — that needs state the Notification object
+// doesn't carry; add it if you miss it.
 Rectangle {
     id: root
 
     required property var notif
+    // Only the history list asks for it: a popup is by definition seconds old,
+    // so an age there is a permanent, pointless "now".
+    property bool showAge: false
+
     signal dismissed
 
+    // The popup stack stops its expiry countdown while you're on a card, so
+    // reaching for an action button doesn't race it.
+    readonly property bool hovered: ma.containsMouse
     readonly property bool critical: notif?.urgency === NotificationUrgency.Critical
+    readonly property string age: root.showAge && root.notif ? Notifs.age(root.notif) : ""
     // Spec reserves the "default" action id for click-to-activate on the
     // notification body itself — it isn't meant to get its own button.
     readonly property var defaultAction: notif?.actions.find(a => a.identifier === "default") ?? null
@@ -75,7 +83,7 @@ Rectangle {
         spacing: 3
 
         BarText {
-            text: root.notif?.appName ?? ""
+            text: (root.notif?.appName ?? "") + (root.age === "" ? "" : `  ·  ${root.age}`)
             color: Theme.fgDim
             font.pixelSize: Theme.size - 3
         }

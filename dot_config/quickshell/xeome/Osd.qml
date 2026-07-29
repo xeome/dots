@@ -54,7 +54,7 @@ PanelWindow {
     readonly property var sink: Pipewire.defaultAudioSink
 
     PwObjectTracker {
-        objects: [root.sink]
+        objects: [root.sink, root.source]
     }
 
     Connections {
@@ -82,6 +82,42 @@ PanelWindow {
 
         const pct = Math.round(a.volume * 100);
         root.flash(a.muted ? "󰖁" : pct > 66 ? "󰕾" : pct > 33 ? "󰖀" : "󰕿", a.muted ? 0 : a.volume, "");
+    }
+
+    // ---- mic mute ----------------------------------------------------------
+    //
+    // Mute only, not level: XF86AudioMicMute is the one bind that changes this
+    // with nothing on screen, and AudioMenu's slider already shows the level
+    // while you drag it.
+    //
+    // The sink's trick of seeding from the first value it sees doesn't work on
+    // a boolean — a mic that starts unmuted never emits a change to seed from,
+    // and the first real toggle would be swallowed as the initial read. So the
+    // seed is a delay instead: once the node has had a moment to bind, every
+    // change after that is someone pressing the key.
+    readonly property var source: Pipewire.defaultAudioSource
+    property bool micReady: false
+
+    onSourceChanged: root.micReady = false
+
+    Timer {
+        interval: 500
+        // Re-arms itself when micReady is cleared, so switching the default
+        // input mid-session seeds again without any of this being imperative.
+        running: root.source !== null && !root.micReady
+        onTriggered: root.micReady = true
+    }
+
+    Connections {
+        target: root.source?.audio ?? null
+
+        function onMutedChanged(): void {
+            if (!root.micReady)
+                return;
+
+            const muted = root.source.audio.muted;
+            root.flash(muted ? "󰍭" : "󰍬", 0, muted ? "Mic muted" : "Mic unmuted");
+        }
     }
 
     // ---- brightness --------------------------------------------------------

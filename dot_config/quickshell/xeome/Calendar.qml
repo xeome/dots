@@ -100,12 +100,6 @@ PopupWindow {
         }
     }
 
-    component Rule: Rectangle {
-        Layout.fillWidth: true
-        implicitHeight: 1
-        color: Theme.border
-    }
-
     Rectangle {
         anchors.fill: parent
         color: Theme.panel

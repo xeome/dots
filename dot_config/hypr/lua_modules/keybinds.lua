@@ -25,7 +25,8 @@ hl.bind(mod .. " + q", hl.dsp.exec_cmd("zen-browser"))
 hl.bind(mod .. " + e", hl.dsp.exec_cmd("thunar"))
 hl.bind(mod .. " + r", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind(mod .. " + v", hl.dsp.exec_cmd("code --ozone-platform=wayland"))
-hl.bind(mod .. " + j", hl.dsp.exec_cmd("quickshell:toggle-llm-overlay"))
+-- Dropped: SUPER+j exec'd a literal `quickshell:toggle-llm-overlay`, which is
+-- not a binary and never was — same dead bind as the two ags ones above.
 
 -- ~~~ audio
 hl.bind(alt .. " + up", hl.dsp.exec_cmd("pamixer -i 5"))

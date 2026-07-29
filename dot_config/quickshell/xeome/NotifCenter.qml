@@ -89,11 +89,7 @@ PanelWindow {
                 }
             }
 
-            Rectangle {
-                Layout.fillWidth: true
-                implicitHeight: 1
-                color: Theme.border
-            }
+            Rule {}
 
             Rectangle {
                 Layout.fillWidth: true
@@ -160,6 +156,7 @@ PanelWindow {
 
                     width: ListView.view.width
                     notif: modelData
+                    showAge: true
                     onDismissed: card.modelData.dismiss()
                 }
 

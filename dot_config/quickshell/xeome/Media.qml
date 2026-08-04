@@ -1,7 +1,12 @@
 import Quickshell.Services.Mpris
 
-// waybar `mpris`: "{status_icon} {artist} - {title}", 20 chars each,
-// italic when paused, hidden entirely when no player exists.
+// waybar `mpris`: "{status_icon} {artist} - {title}", italic when paused,
+// hidden entirely when no player exists.
+//
+// waybar clipped artist and title to 20 chars each, so a track with both could
+// take 43 characters — wider than the whole network/audio/battery strip, on the
+// one module whose text changes every few minutes. The budget is on the joined
+// label now; the full text is a hover away and already in the menu.
 //
 // Left-click opens MediaMenu, the way Audio and Battery open theirs; the
 // one-click play/pause that used to be on the left button moves to the middle
@@ -39,7 +44,7 @@ BarModule {
         readonly property var p: root.player
         // Artist is empty often enough — podcasts, streams, browser tabs — that
         // the separator has to earn its place rather than dangle off the front.
-        readonly property string label: [root.clip(p?.trackArtist ?? "", 20), root.clip(p?.trackTitle ?? "", 20)].filter(s => s !== "").join(" - ")
+        readonly property string label: root.clip([p?.trackArtist ?? "", p?.trackTitle ?? ""].filter(s => s !== "").join(" - "), 28)
 
         text: `${p?.isPlaying ? "󰐊" : "󰏤"} ${label}`
         color: p?.isPlaying ? Theme.fg : Theme.fgMuted

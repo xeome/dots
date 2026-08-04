@@ -10,6 +10,7 @@ BarModule {
     required property var screen
 
     inverted: Notifs.dnd
+    minWidth: 0
     tooltipText: Notifs.dnd ? "Do not disturb is on\nRight-click to turn off" : `${Notifs.history.length === 0 ? "No notifications" : Notifs.history.length === 1 ? "1 notification" : `${Notifs.history.length} notifications`}\nRight-click for do not disturb`
 
     onClicked: button => {

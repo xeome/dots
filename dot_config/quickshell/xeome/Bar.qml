@@ -81,6 +81,9 @@ PanelWindow {
                 Net {
                     bordered: false
                 }
+                Bt {
+                    bordered: false
+                }
                 Audio {
                     bordered: false
                 }

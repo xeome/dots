@@ -3,12 +3,18 @@ import QtQuick.Layouts
 
 // The bordered box every right-side bar module sits in — waybar's shared
 // `#network, #custom-vpn, #pulseaudio, #battery, ...` rule, including its
-// 60px min-width and 0.2s hover transition.
+// 0.2s hover transition.
 Rectangle {
     id: root
 
     // This theme's only accent: white fill, black text.
     property bool inverted: false
+    // waybar's `min-width: 60px`, which is there to stop a module resizing the
+    // whole row every time its text changes width — a muted Audio collapsing to
+    // one glyph, a Battery crossing 100%. Modules that only ever draw a single
+    // glyph can't jitter, so they set this to 0 and come out square instead of
+    // padded out to a box two thirds empty.
+    property int minWidth: 60
     // False for modules inside a connected strip, which is bordered as a
     // group — otherwise every junction draws a seam.
     property bool bordered: true
@@ -22,7 +28,7 @@ Rectangle {
     // Modules bind their labels/icons to this so inversion flips them too.
     readonly property color fg: inverted ? Theme.fgInverted : Theme.fg
 
-    implicitWidth: Math.max(60, layout.implicitWidth + Theme.pad * 2)
+    implicitWidth: Math.max(minWidth, layout.implicitWidth + Theme.pad * 2)
     implicitHeight: Theme.barHeight - Theme.gap * 2
 
     color: inverted ? (hovered ? Theme.activeHover : Theme.active) : (hovered ? Theme.surfaceHover : Theme.surface)

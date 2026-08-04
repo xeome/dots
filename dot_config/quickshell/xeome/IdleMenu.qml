@@ -8,7 +8,7 @@ import QtQuick.Layouts
 // three days and wondering why the laptop is warm.
 //
 // Picking the duration that's already running turns it off, the way clicking a
-// connected device in BtMenu disconnects it.
+// connected bluetooth device in AudioMenu disconnects it.
 Menu {
     id: root
 

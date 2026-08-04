@@ -37,7 +37,7 @@ BarModule {
 
     function set(minutes: int): void {
         // Re-picking what's already running means "stop" — the same gesture as
-        // clicking a connected device in BtMenu.
+        // clicking a connected bluetooth device in AudioMenu.
         if (minutes === root.span) {
             root.span = -1;
             root.until = 0;

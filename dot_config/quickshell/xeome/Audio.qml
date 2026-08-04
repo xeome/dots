@@ -15,6 +15,12 @@ BarModule {
     readonly property int volume: Math.round((sink?.audio?.volume ?? 0) * 100)
     readonly property bool muted: sink?.audio?.muted ?? false
 
+    // Read off the node name rather than `device.api`, which would be the more
+    // precise test but lives in `properties` and so only exists for nodes bound
+    // through a tracker. pipewire's bluez5 module names every sink it creates
+    // `bluez_output.<mac>.<profile>`, and the name is free on any node.
+    readonly property bool overBluetooth: sink?.name.startsWith("bluez_output.") ?? false
+
     // PwNode.properties is empty unless the node is bound through a
     // PwObjectTracker; `type` and `name` are available on every node for free.
     // Filter-chain based noise suppression (e.g. rnnoise) keeps an internal
@@ -40,7 +46,10 @@ BarModule {
     }
 
     BarText {
-        text: `${root.recorders.length > 0 ? "󰍬 " : ""}${root.muted ? "󰖁" : `${root.volume > 66 ? "󰕾" : root.volume > 33 ? "󰖀" : "󰕿"} ${root.volume}%`}`
+        // Over bluetooth the headset glyph replaces the volume ramp rather than
+        // riding alongside it — which speaker you're on is worth more than which
+        // third of the range you're in, and the bar has no width for both.
+        text: `${root.recorders.length > 0 ? "󰍬 " : ""}${root.muted ? "󰖁" : `${root.overBluetooth ? "󰂰" : root.volume > 66 ? "󰕾" : root.volume > 33 ? "󰖀" : "󰕿"} ${root.volume}%`}`
         color: root.muted ? Theme.fgMuted : root.fg
         // md-volume_medium/_low are drawn smaller than neighboring glyphs
         // (bell, mic) at the same pixel size.

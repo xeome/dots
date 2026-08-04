@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Bluetooth
 import Quickshell.Services.Pipewire
 
 // The audio module's menu, hung off it the way Power hangs off Battery:
@@ -30,6 +31,26 @@ PopupWindow {
     // (a loopback, a virtual cable) match both lists rather than neither.
     readonly property var sinks: Pipewire.nodes.values.filter(n => !n.isStream && (n.type & PwNodeType.AudioSink) === PwNodeType.AudioSink)
     readonly property var sources: Pipewire.nodes.values.filter(n => !n.isStream && (n.type & PwNodeType.AudioSource) === PwNodeType.AudioSource)
+
+    readonly property var adapter: Bluetooth.defaultAdapter
+    // Paired audio devices only. Bluez classifies by icon — "audio-headset",
+    // "audio-card" — which is what keeps the mouse out of the audio menu, and
+    // the mouse battery out of the bar where it used to sit reading 100% at
+    // nobody. Unpaired devices need a scan and a pairing flow that live in
+    // blueman; this list is the ones you already own.
+    readonly property var headsets: (root.adapter ? Bluetooth.devices.values.filter(d => d.paired && d.icon.startsWith("audio")) : []).slice().sort((a, b) => b.connected - a.connected)
+
+    function btLabel(d: var): string {
+        return d.deviceName || d.name || d.address;
+    }
+
+    function btDetail(d: var): string {
+        if (d.state === BluetoothDeviceState.Connecting || d.state === BluetoothDeviceState.Disconnecting)
+            return "···";
+        if (d.connected && d.batteryAvailable)
+            return `󰥉 ${Math.round(d.battery * 100)}%`;
+        return d.connected ? "connected" : "";
+    }
 
     function clamp(v: real): real {
         return Math.max(0, Math.min(1, v));
@@ -206,6 +227,49 @@ PopupWindow {
                 devices: root.sources
                 glyph: mic.muted ? "󰍭" : "󰍬"
                 onPicked: node => Pipewire.preferredDefaultAudioSource = node
+            }
+
+            Rule {
+                visible: bt.visible
+            }
+
+            // Bluetooth lives here rather than in a module of its own: it is an
+            // audio device menu 99% of the time, and a second bar button for it
+            // meant two clicks and a mouse battery nobody asked for. The toggle
+            // is the only switch left now that the module is gone, so it stays
+            // even when nothing is paired.
+            ColumnLayout {
+                id: bt
+
+                Layout.fillWidth: true
+                spacing: 2
+                visible: !!root.adapter
+
+                Pick {
+                    label: "Bluetooth"
+                    suffix: root.adapter?.enabled ? "on" : "off"
+                    current: root.adapter?.enabled ?? false
+                    onClicked: root.adapter.enabled = !root.adapter.enabled
+                }
+
+                Repeater {
+                    model: root.headsets
+
+                    delegate: Pick {
+                        required property var modelData
+
+                        label: root.btLabel(modelData)
+                        suffix: root.btDetail(modelData)
+                        current: modelData.connected
+                        // Connecting a headset makes it a pipewire node, so the
+                        // Output picker above grows the entry on its own — no
+                        // sink switching duplicated down here.
+                        onClicked: if (modelData.connected)
+                            modelData.disconnect();
+                        else
+                            modelData.connect()
+                    }
+                }
             }
 
             Rule {}

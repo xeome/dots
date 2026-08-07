@@ -1,0 +1,32 @@
+{{- $m := index .machines .chezmoi.hostname -}}
+pragma Singleton
+
+import Quickshell
+{{ if eq $m.wm "sway" }}import Quickshell.I3{{ else }}import Quickshell.Hyprland{{ end }}
+
+// The only two things this shell needs from the compositor: which monitor has
+// focus, and the workspace list. Hyprland and sway hand both back through
+// near-identical objects — name, active, urgent, monitor, activate() — so every
+// other file stays compositor-agnostic and this is the single seam.
+//
+// Templated rather than detected at runtime: importing the wrong backend
+// connects to a socket that isn't there and logs about it forever, and chezmoi
+// already knows which compositor each machine runs.
+//
+// Managed by chezmoi — edit dot_config/quickshell/xeome/Compositor.qml.tmpl
+Singleton {
+{{- if eq $m.wm "sway" }}
+    readonly property string focusedMonitor: I3.focusedMonitor?.name ?? ""
+
+    // Sorted by `num`, not `id`: sway hands out arbitrary workspace ids (25, 5,
+    // 12, 57...) and returns them grouped by output, so id order is neither
+    // stable nor the order you want to read. Named workspaces and the
+    // scratchpad carry num -1, which is what the filter drops.
+    readonly property var workspaces: [...I3.workspaces.values].filter(w => w.num > 0).sort((a, b) => a.num - b.num)
+{{- else }}
+    readonly property string focusedMonitor: Hyprland.focusedMonitor?.name ?? ""
+
+    // Negative ids are Hyprland's special workspaces (scratchpads).
+    readonly property var workspaces: [...Hyprland.workspaces.values].filter(w => w.id > 0).sort((a, b) => a.id - b.id)
+{{- end }}
+}

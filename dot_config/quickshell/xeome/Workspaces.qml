@@ -1,5 +1,4 @@
 import QtQuick
-import Quickshell.Hyprland
 
 // waybar `hyprland/workspaces`: one grouped box, hairline-divided buttons,
 // active button inverted. Per-output, matching waybar's `all-outputs: false`.
@@ -9,9 +8,9 @@ Rectangle {
     required property var screen
 
     // ponytail: re-filters when workspaces are created/destroyed, not when an
-    // existing one is dragged to another monitor. Swap to a Connections on
-    // Hyprland.rawEvent("moveworkspace") if that turns out to bite.
-    readonly property var list: Hyprland.workspaces.values.filter(w => w.id > 0 && w.monitor?.name === root.screen.name)
+    // existing one is dragged to another monitor. Swap to a Connections on the
+    // backend's moveworkspace event if that turns out to bite.
+    readonly property var list: Compositor.workspaces.filter(w => w.monitor?.name === root.screen.name)
 
     implicitWidth: row.implicitWidth + 2
     implicitHeight: Theme.barHeight - Theme.gap * 2

@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Wayland
 
 // swaync's notification popups: top-right, 400px, newest first.
@@ -9,7 +8,7 @@ PanelWindow {
 
     // ponytail: follows the focused monitor live, so a toast can hop screens
     // if you switch mid-popup. Latch it at spawn time if that annoys you.
-    screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
+    screen: Quickshell.screens.find(s => s.name === Compositor.focusedMonitor) ?? null
 
     readonly property int maxVisible: 5
 

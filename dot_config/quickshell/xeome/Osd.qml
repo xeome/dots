@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 import Qt.labs.folderlistmodel
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Pipewire
 import Quickshell.Wayland
@@ -33,7 +32,7 @@ PanelWindow {
         hide.restart();
     }
 
-    screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
+    screen: Quickshell.screens.find(s => s.name === Compositor.focusedMonitor) ?? null
     WlrLayershell.namespace: "quickshell-osd"
     anchors.bottom: true
     margins.bottom: 120

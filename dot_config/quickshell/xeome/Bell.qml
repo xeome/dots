@@ -1,5 +1,4 @@
 import QtQuick
-import Quickshell.Hyprland
 
 // Not a waybar module. swaync was toggled by a keybind with nothing on screen;
 // the centre needs something to hang off, and DND needs somewhere to be
@@ -37,7 +36,7 @@ BarModule {
         target: Notifs
 
         function onToggleCentre(): void {
-            if (Hyprland.focusedMonitor?.name === root.screen.name)
+            if (Compositor.focusedMonitor === root.screen.name)
                 centre.visible = !centre.visible;
         }
     }

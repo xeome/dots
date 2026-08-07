@@ -1,6 +1,8 @@
 #!/bin/bash
-# chezmoi run_onchange_ script — re-runs whenever pkgs file changes.
-# hash: {{ include "pkgs" | sha256sum }}
+# chezmoi run_onchange_ script — re-runs whenever pkgs or the machine's wm
+# changes.
+{{- $m := index .machines .chezmoi.hostname }}
+# hash: {{ include "pkgs" | sha256sum }} wm={{ $m.wm }}
 
 set -euo pipefail
 
@@ -18,6 +20,17 @@ PKGS=(
 {{- if . }}    "{{ . }}"
 {{ end -}}
 {{- end }})
+
+# Compositor-specific packages, so a sway box isn't made to install hyprland
+# and the hyprland boxes aren't made to install swayfx. hyprlock stays in the
+# shared list — every machine locks with it.
+{{- if eq $m.wm "sway" }}
+PKGS+=("swayfx" "flameshot")
+{{- else }}
+# grimblast comes from hyprland-contrib, which isn't in any configured repo —
+# install it by hand if Print stops working.
+PKGS+=("hyprland" "satty")
+{{- end }}
 
 echo "Installing/updating ${#PKGS[@]} packages via $AUR..."
 $AUR -S --needed --noconfirm "${PKGS[@]}"

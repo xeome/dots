@@ -1,6 +1,9 @@
+autotiling-rs
 btop
 bitwarden
+brightnessctl
 chezmoi
+equibop
 evince
 fd
 fzf
@@ -9,13 +12,16 @@ git-delta
 gnome-keyring
 grc
 htop
-hyprland
 hyprlock
 jq
 libnotify
 most
 neovim
 mate-polkit
+network-manager-applet
+pamixer
+pavucontrol
+playerctl
 quickshell
 scx-scheds
 scx-tools
@@ -31,5 +37,6 @@ xorg-xprop
 xorg-xwayland
 yazi
 zathura
+zen-browser-bin
 zsh
 zsh-completions

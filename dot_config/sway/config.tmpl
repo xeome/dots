@@ -1,6 +1,24 @@
-Include /etc/sway/config.d/*
-Include conf.d/*.conf
+# =============================================================================
+# SWAY MAIN CONFIGURATION
+# =============================================================================
+# Managed by chezmoi — edit dot_config/sway/config.tmpl
+#
+# Device profiles come from .chezmoidata.toml, the same [machines.<hostname>]
+# entries hyprland.lua.tmpl reads. Monitors, workspaces, input and the app
+# commands below are all generated from there, so the two compositors can't
+# drift apart the way they had.
+#
+# swayfx is assumed: blur, corner_radius, shadows and layer_effects are its
+# extensions, not vanilla sway.
+# =============================================================================
+{{- $m := index .machines .chezmoi.hostname }}
 
+include /etc/sway/config.d/*
+include conf.d/*.conf
+
+# =============================================================================
+# APPEARANCE (swayfx)
+# =============================================================================
 
 blur enable
 blur_radius 10
@@ -10,40 +28,37 @@ blur_saturation 1.2
 blur_contrast 1.1
 shadows disable
 corner_radius 12
-layer_effects "rofi" blur enable
-layer_effects "waybar" blur enable
-layer_effects "zen-beta" blur enable
-layer_effects "swaync" blur enable
 
-#~~~ keyboard
+# Layers to blur behind. The quickshell-* namespaces replace the waybar and
+# swaync entries that used to be here — both are retired; one qs process draws
+# the bar, the notifications and the OSD now. Mirrors lua_modules/rules.lua.
+layer_effects "quickshell-bar" blur enable
+# Only the cards get a backdrop; the gaps between stacked ones are transparent.
+layer_effects "quickshell-notifications" blur enable; blur_ignore_transparent enable
+layer_effects "quickshell-osd" blur enable
+layer_effects "vicinae" blur enable
+
+# =============================================================================
+# INPUT
+# =============================================================================
+
 input "type:keyboard" {
 	xkb_layout  tr
-	xkb_numlock enabled
+	xkb_numlock {{ if $m.numlock }}enabled{{ else }}disabled{{ end }}
 	xkb_options "grp:win_space_toggle"
-	#xkb_file    ~/.config/sway/keyboard.xkb
 }
 
-#~~~ touchpad configuration (for Laptops)
 input "type:touchpad" {
 	dwt enabled
 	tap enabled
-	natural_scroll disabled
+	natural_scroll {{ if $m.natural_scroll }}enabled{{ else }}disabled{{ end }}
 	middle_emulation enabled
 }
-
+{{ if $m.has_steelseries }}
 input "4152:6190:SteelSeries_SteelSeries_Prime" {
-  natural_scroll disabled
-  dwt enabled
-  accel_profile "flat" 
-  pointer_accel -0.88 
+	natural_scroll disabled
+	dwt enabled
+	accel_profile "flat"
+	pointer_accel -0.88
 }
-
-for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
-
-exec waypaper --restore
-
-workspace 2
-#exec brave --enable-features=VaapiVideoDecodeLinuxGL,UseOzonePlatform --ozone-platform=wayland
-exec zen-browser
-workspace 1
-exec vesktop --ozone-platform=wayland --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder # --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode
+{{ end }}

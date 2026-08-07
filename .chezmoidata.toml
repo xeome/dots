@@ -127,22 +127,34 @@ workspace = "9"
 monitor   = "eDP-1"
 
 # =============================================================================
-# emin-probook — Laptop running Sway (not Hyprland)
+# emin-probook — HP ProBook laptop running swayfx, docked to an HP E24 G4
 # =============================================================================
+# The sway config is templated from these entries exactly like hyprland.lua.tmpl
+# is, so this block is the single source of truth for both compositors.
 [machines.emin-probook]
 wm                 = "sway"
 profile            = "emin-probook"
+terminal           = "ghostty"
 secondary_monitor  = "eDP-1"
-numlock            = false
-natural_scroll     = true
+numlock            = true
+natural_scroll     = false
 is_laptop          = true
 has_steelseries    = false
-discord_cmd        = "vesktop"
+discord_cmd        = "equibop --ozone-platform=wayland --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode"
 
+# eDP-1 sits left of the external. Undocking is safe: sway ignores output
+# directives for outputs that aren't connected, and the workspaces assigned to
+# HDMI-A-1 fall back to the only screen left.
 [[machines.emin-probook.monitors]]
 output   = "eDP-1"
 mode     = "1920x1080@60"
 position = "0x0"
+scale    = 1
+
+[[machines.emin-probook.monitors]]
+output   = "HDMI-A-1"
+mode     = "1920x1080@60"
+position = "1920x0"
 scale    = 1
 
 [[machines.emin-probook.workspaces]]
@@ -151,7 +163,7 @@ monitor   = "eDP-1"
 
 [[machines.emin-probook.workspaces]]
 workspace = "2"
-monitor   = "eDP-1"
+monitor   = "HDMI-A-1"
 
 [[machines.emin-probook.workspaces]]
 workspace = "3"
@@ -159,24 +171,24 @@ monitor   = "eDP-1"
 
 [[machines.emin-probook.workspaces]]
 workspace = "4"
-monitor   = "eDP-1"
+monitor   = "HDMI-A-1"
 
 [[machines.emin-probook.workspaces]]
 workspace = "5"
-monitor   = "eDP-1"
+monitor   = "HDMI-A-1"
 
 [[machines.emin-probook.workspaces]]
 workspace = "6"
-monitor   = "eDP-1"
+monitor   = "HDMI-A-1"
 
 [[machines.emin-probook.workspaces]]
 workspace = "7"
-monitor   = "eDP-1"
+monitor   = "HDMI-A-1"
 
 [[machines.emin-probook.workspaces]]
 workspace = "8"
-monitor   = "eDP-1"
+monitor   = "HDMI-A-1"
 
 [[machines.emin-probook.workspaces]]
 workspace = "9"
-monitor   = "eDP-1"
+monitor   = "HDMI-A-1"

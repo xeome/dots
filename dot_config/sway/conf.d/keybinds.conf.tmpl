@@ -1,82 +1,85 @@
 #################################
 #             Binds             #
 #################################
+# Managed by chezmoi — edit dot_config/sway/conf.d/keybinds.conf.tmpl
+#
+# Kept 1:1 with hyprland lua_modules/keybinds.lua wherever sway has an
+# equivalent, so muscle memory carries between machines. Divergences are
+# commented where they exist.
+{{- $m := index .machines .chezmoi.hostname }}
 
 set $mod Mod4
 set $alt Mod1
 floating_modifier $mod
+
+# ~~~ general
 bindsym $mod+Shift+r reload
-bindsym $mod+Shift+q exec "ags -t powermenu"
+# Dropped: $mod+Shift+q and $mod+m ran `ags -t powermenu` / `-t quicksettings`.
+# ags was never installed here, so both have been dead binds for as long as this
+# file has existed. quickshell's power menu opens by clicking the battery
+# module in the bar.
+# Dropped: $mod+j and $mod+t sent SIGUSR1/SIGUSR2 to a `test.py` that is long
+# gone.
 
+# ~~~ user applications
+bindsym $mod+Return exec {{ $m.terminal }}
+bindsym $mod+q exec zen-browser
+bindsym $mod+e exec thunar
+bindsym $mod+r exec vicinae toggle
+bindsym $mod+v exec code --ozone-platform=wayland
+bindsym $mod+d exec {{ $m.discord_cmd }}
+# Diverges from hyprland, which uses grimblast + satty. Neither is installed
+# here and flameshot is, so sway keeps flameshot.
+bindsym Print exec flameshot gui -r | wl-copy
 
-# Keybinding to send SIGUSR1 (calibrate)
-bindsym $mod+j exec "pkill -SIGUSR1 -f test.py"
+# ~~~ audio
+bindsym $alt+Up exec pamixer -i 5
+bindsym $alt+Down exec pamixer -d 5
+bindsym $mod+a exec bash ~/.local/bin/status
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 
-# Keybinding to send SIGUSR2 (toggle monitoring)
-bindsym $mod+t exec "pkill -SIGUSR2 -f test.py"
+# ~~~ media keys
+# These only change the value. The quickshell OSD watches Pipewire and the
+# backlight sysfs node directly, so nothing has to tell it something happened —
+# which is why swayosd-client is gone from every line here (it was never
+# installed on this machine either, making all six of these dead).
+#
+# Caps Lock is deliberately unbound: its OSD keys off the keyboard LED, and
+# binding the key here would take over the actual toggle.
+bindsym XF86AudioRaiseVolume exec pamixer -i 5
+bindsym XF86AudioLowerVolume exec pamixer -d 5
+bindsym XF86AudioMute exec pamixer -t
+bindsym XF86AudioMicMute exec pamixer --default-source -t
+bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 
-# User applications
-bindsym $mod+Return exec "ghostty +new-window"
-#bindsym $mod+q exec "brave --enable-features=VaapiVideoDecodeLinuxGL,UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-bindsym $mod+q exec "zen-browser"
-bindsym $mod+d exec "equibop --ozone-platform=wayland --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode"
-bindsym $mod+e exec "thunar"
-bindsym Print exec "flameshot gui -r | wl-copy"
-bindsym $mod+r exec "vicinae toggle"
-bindsym $mod+v exec "code --ozone-platform=wayland"
+# ~~~ misc utilities
+bindsym $mod+l exec hyprlock
+bindsym $mod+b exec sh ~/.config/emoji/emoji.sh
+bindsym $mod+k exec qs -c xeome ipc call notifs toggle
+bindsym $mod+p exec {{ $m.terminal }} --class=com.sessionizer.fzf -e ~/.local/bin/sessionizer
+# Dropped: $mod+o ran `xset dpms force off`, an X11 command with no effect on
+# wayland outputs. swayidle blanks the screen on its own after 15 minutes.
 
-# Audio
-bindsym $alt+Up exec "pamixer -i 5"
-bindsym $alt+Down exec "pamixer -d 5"
-bindsym $mod+a exec "bash ~/.local/bin/status"
-bindsym XF86AudioRaiseVolume exec "swayosd-client --output-volume raise"
-bindsym XF86AudioLowerVolume exec "swayosd-client --output-volume lower"
-bindsym XF86AudioMute exec "swayosd-client --output-volume mute-toggle"
-bindsym XF86AudioMicMute exec "swayosd-client --input-volume mute-toggle"
-bindsym XF86AudioPlay exec "playerctl play-pause"
-bindsym XF86AudioNext exec "playerctl next"
-bindsym XF86AudioPrev exec "playerctl previous"
-
-# Misc utilities
-bindsym $mod+o exec "xset dpms force off"
-bindsym $mod+l exec "gtklock"
-bindsym $mod+b exec "sh ~/.config/emoji/emoji.sh &"
-bindsym XF86MonBrightnessUp exec "swayosd-client --brightness raise"
-bindsym XF86MonBrightnessDown exec "swayosd-client --brightness lower"
-bindsym --release Caps_Lock exec "swayosd-client --caps-lock"
-bindsym $mod+m exec "ags -t quicksettings"
-bindsym $mod+k exec "swaync-client -t"
-
-# Window management
+# ~~~ window management
 bindsym $mod+Escape workspace back_and_forth
 bindsym $mod+Shift+c kill
-bindsym $mod+Right workspace next
-bindsym $mod+Left workspace prev
+bindsym $mod+Left focus left
+bindsym $mod+Right focus right
+bindsym $mod+Up focus up
+bindsym $mod+Down focus down
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Control+space floating toggle
+# Kept beyond hyprland parity: hyprland's scrolling layout doesn't need these,
+# sway's tiling does, and they collide with nothing.
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
-bindsym $mod+f fullscreen toggle
-bindsym $mod+Control+space floating toggle
-bindsym $mod+Down move scratchpad
-bindsym $mod+Up scratchpad show, floating disable
-#bindsym $mod+s layout stacking
-#bindsym $mod+w layout tabbed
-#bindsym $mod+g layout toggle split
 
-# Define names for default workspaces for which we configure key bindings later on.
-# We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
-
+# ~~~ workspaces
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
 bindsym $mod+3 workspace 3
@@ -98,4 +101,3 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
-

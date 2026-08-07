@@ -4,9 +4,14 @@ pkgs
 
 {{- $m := index .machines .chezmoi.hostname }}
 {{- if eq $m.wm "sway" }}
-.config/hypr
+# hyprlock is the lock screen on every machine, so .config/hypr/hyprlock.conf
+# and the bin/ scripts its labels call stay here. Only Hyprland-the-compositor
+# is excluded.
+.config/hypr/hyprland.lua
+.config/hypr/user.local.lua
+.config/hypr/lua_modules
+.config/hypr/bin/satty-screenshot.sh
 {{- end }}
 {{- if eq $m.wm "hyprland" }}
 .config/sway
 {{- end }}
-

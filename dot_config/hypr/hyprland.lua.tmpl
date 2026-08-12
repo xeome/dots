@@ -64,18 +64,23 @@ hl.config({
 })
 
 -- =============================================================================
--- DEVICE-SPECIFIC HARDWARE
+-- MOUSE
 -- =============================================================================
-{{ if $m.has_steelseries }}
-hl.device({
-  name = "steelseries-steelseries-prime",
-  natural_scroll = false,
-  disable_while_typing = true,
-  accel_profile = "flat",
-  sensitivity = -0.3,
-  scroll_factor = 0.8,
-})
-{{ end }}
+-- ponytail: the wireless dongle enumerates two pointer interfaces, so both get
+-- the same settings. Device blocks for absent devices are ignored, so this is
+-- unconditional — no per-machine flag needed.
+for _, name in ipairs({
+  "razer-razer-basilisk-v3-x-hyperspeed",
+  "razer-razer-basilisk-v3-x-hyperspeed-2",
+}) do
+  hl.device({
+    name = name,
+    natural_scroll = false,
+    accel_profile = "flat",
+    sensitivity = -0.3,
+    scroll_factor = 0.8,
+  })
+end
 
 -- =============================================================================
 -- DEVICE-SPECIFIC KEYBINDS

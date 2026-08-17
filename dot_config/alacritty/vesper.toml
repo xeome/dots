@@ -1,17 +1,25 @@
-# Vesper theme — mirrors ~/.config/ghostty/config (theme = Vesper, background = 000000)
-# Palette taken verbatim from /usr/share/ghostty/themes/Vesper.
+# Vesper, warmed to match quickshell's Theme.qml — mirrors ~/.config/ghostty/config.
+#
+# The normal/bright blocks below are still verbatim /usr/share/ghostty/themes/Vesper:
+# it is where the shell's accent (#ffc799) and warn (#ff8080) came from, so the
+# ANSI 16 already matched and only the surfaces and the selection moved.
 
 [colors.primary]
-foreground = "#ffffff"
-background = "#000000"
+foreground = "#eeeeee"
+# Was #000000, darker than even stock Vesper's #101010. This is the shell's bar
+# colour, so a terminal and the bar above it are now the same black.
+background = "#111111"
 
 [colors.cursor]
-text = "#ffffff"
-cursor = "#acb1ab"
+text = "#111111"
+cursor = "#ffc799"
 
+# The shell fills selections with the accent and sets dark text on top
+# (Theme.accent / Theme.fgOnAccent); stock Vesper's muddy olive was the one
+# colour here that belonged to no other surface on the desktop.
 [colors.selection]
-text = "#b9beb8"
-background = "#988049"
+text = "#111111"
+background = "#ffc799"
 
 [colors.normal]
 black = "#101010"

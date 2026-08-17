@@ -21,8 +21,10 @@ background-opacity = 0.85
 window-padding-x = 15
 window-padding-y = 15
 
-theme = Vesper
-background = 000000
+# Every colour lives in themes/vesper-shell — Vesper warmed to match
+# quickshell's Theme.qml. Nothing colour-related belongs in this file: anything
+# set here would silently override the theme rather than sit alongside it.
+theme = vesper-shell
 
 keybind = ctrl+shift+plus=increase_font_size:1
 keybind = ctrl+shift+minus=decrease_font_size:1

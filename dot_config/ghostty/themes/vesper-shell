@@ -1,0 +1,55 @@
+# Vesper, warmed to match quickshell's Theme.qml.
+#
+# Managed by chezmoi — edit dot_config/ghostty/themes/vesper-shell
+#
+# Ghostty resolves a bare theme name against ~/.config/ghostty/themes before
+# its own share/ghostty/themes, so `theme = vesper-shell` in the config finds
+# this file. The name is deliberately not "Vesper": a user theme of that name
+# would shadow the built-in everywhere, including for anything else that asks
+# for stock Vesper by name.
+#
+# Self-contained on purpose, not by choice — a theme file cannot set `theme`,
+# so there is no way to inherit stock Vesper and override a few colours from
+# here. The palette below is therefore copied verbatim from
+# /usr/share/ghostty/themes/Vesper and only the surfaces below it differ.
+#
+# Colours only. A theme file may set any config option, but the built-in themes
+# are audited to stay colour-only and this follows that: window opacity, padding
+# and fonts stay in the config where they can be read alongside each other.
+#
+# Mirrors ~/.config/alacritty/vesper.toml — the two terminals are meant to be
+# indistinguishable, so a change here wants the same change there.
+
+# --- ANSI 16: verbatim stock Vesper ---------------------------------------
+# Untouched because they already matched: palette 11 (#ffc799) is the shell's
+# accent and palette 9 (#ff8080) its warn colour. The shell took them from here.
+palette = 0=#101010
+palette = 1=#f5a191
+palette = 2=#90b99f
+palette = 3=#e6b99d
+palette = 4=#aca1cf
+palette = 5=#e29eca
+palette = 6=#ea83a5
+palette = 7=#a0a0a0
+palette = 8=#7e7e7e
+palette = 9=#ff8080
+palette = 10=#99ffe4
+palette = 11=#ffc799
+palette = 12=#b9aeda
+palette = 13=#ecaad6
+palette = 14=#f591b2
+palette = 15=#ffffff
+
+# --- Surfaces: matched to the bar -----------------------------------------
+# Theme.bar, so a terminal and the bar above it are the same black. Stock Vesper
+# is #101010 here and the old inline override was #000000, darker than either.
+background = #111111
+foreground = #eeeeee
+
+# The shell fills selected text with the accent and sets dark text on it
+# (Theme.accent / Theme.fgOnAccent, see quickshell NetMenu.qml). Stock Vesper's
+# #988049 was the one colour on this desktop that belonged to nothing else.
+selection-background = #ffc799
+selection-foreground = #111111
+cursor-color = #ffc799
+cursor-text = #111111

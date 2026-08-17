@@ -85,6 +85,8 @@ BarModule {
         text: `${root.active ? "󰅶" : "󰾪"}${root.until > 0 ? ` ${root.countdown()}` : ""}`
         color: root.fg
         font.pixelSize: Theme.size + 3   // waybar: font-size 1.25em
+        // The only space here is the one before the countdown.
+        font.wordSpacing: Theme.glyphGap
     }
 
     // A PopupWindow isn't an Item, so the RowLayout that BarModule's default

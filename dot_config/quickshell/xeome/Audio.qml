@@ -56,6 +56,8 @@ BarModule {
         // md-volume_medium/_low are drawn smaller than neighboring glyphs
         // (bell, mic) at the same pixel size.
         font.pixelSize: Theme.size + 1
+        // Every space in this label separates a glyph from a value.
+        font.wordSpacing: Theme.glyphGap
     }
 
     // A PopupWindow isn't an Item, so the RowLayout that BarModule's default

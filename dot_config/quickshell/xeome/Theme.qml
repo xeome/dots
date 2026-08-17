@@ -76,6 +76,14 @@ Singleton {
     // standard assigns the same glyph to the same private-use codepoint in
     // every patched font, so only the advance width varies by machine.
     readonly property string family: "Adwaita Sans"
+
+    // Added to the space that separates a glyph from its value in the bar's
+    // icon+number labels ("󰂰 35%"). Lives here because it is a property of the
+    // font above, not of any one module: a proportional space is far narrower
+    // than the monospace advance those labels were spaced by, and the glyphs
+    // arrive from a fallback font narrower still, so the two ended up touching.
+    // Brings the gap to roughly BarModule's own 6px row spacing.
+    readonly property int glyphGap: 3
     // 14 rather than a sans-flattering 13: Adwaita Sans and the JetBrains Mono
     // this replaced have all but identical x-heights (0.546 vs 0.550 of em), so
     // the same pixelSize draws the same letter height and dropping it only made

@@ -46,6 +46,9 @@ BarModule {
         // md-speedometer* is drawn shorter than neighboring glyphs — only
         // matters standalone (no battery), since the ramp icon carries it otherwise.
         font.pixelSize: root.hasBattery ? Theme.size : Theme.size + 2
+        // Both spaces here sit between glyphs, or between a glyph and the
+        // percentage — none of them are between words.
+        font.wordSpacing: Theme.glyphGap
     }
 
     // A PopupWindow isn't an Item, so the RowLayout that BarModule's default

@@ -29,13 +29,20 @@ blur_contrast 1.1
 shadows disable
 corner_radius 12
 
-# Layers to blur behind. The quickshell-* namespaces replace the waybar and
-# swaync entries that used to be here — both are retired; one qs process draws
-# the bar, the notifications and the OSD now. Mirrors lua_modules/rules.lua.
-layer_effects "quickshell-bar" blur enable
+# Layers to blur behind. Mirrors lua_modules/rules.lua.
+#
+# The default shell (`qs -c xeome`) draws every surface opaque, so it has no
+# blur rules at all — there is nothing to see through them, and its hairline
+# borders work precisely because the surfaces sit at a known lightness.
+#
+# `qs -c zinc` is the old translucent theme, kept alongside it. It is the only
+# reason blur rules still exist for quickshell, which is why it carries its own
+# namespaces: shared ones would have meant blurring behind the opaque bar too,
+# every frame, for nothing.
+layer_effects "quickshell-zinc-bar" blur enable
 # Only the cards get a backdrop; the gaps between stacked ones are transparent.
-layer_effects "quickshell-notifications" blur enable; blur_ignore_transparent enable
-layer_effects "quickshell-osd" blur enable
+layer_effects "quickshell-zinc-notifications" blur enable; blur_ignore_transparent enable
+layer_effects "quickshell-zinc-osd" blur enable
 layer_effects "vicinae" blur enable
 
 # =============================================================================

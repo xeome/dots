@@ -2,15 +2,24 @@
 -- SHARED LAYER RULES
 -- =============================================================================
 
+-- The default shell (`qs -c xeome`) draws every surface opaque, so it has no
+-- blur rules at all — there is nothing to see through them, and its hairline
+-- borders work precisely because the surfaces sit at a known lightness.
+--
+-- `qs -c zinc` is the old translucent theme, kept alongside it. It is the only
+-- reason blur rules still exist here, which is why it carries its own
+-- namespaces: shared ones would have meant blurring behind the opaque bar too,
+-- every frame, for nothing.
+
 hl.layer_rule({
-  name = "quickshell-bar-blur",
-  match = { namespace = "quickshell-bar" },
+  name = "quickshell-zinc-bar-blur",
+  match = { namespace = "quickshell-zinc-bar" },
   blur = true,
 })
 
 hl.layer_rule({
-  name = "quickshell-notifications-blur",
-  match = { namespace = "quickshell-notifications" },
+  name = "quickshell-zinc-notifications-blur",
+  match = { namespace = "quickshell-zinc-notifications" },
   blur = true,
   -- The gaps between stacked cards are fully transparent; only the cards
   -- themselves (alpha 0.82) should get a blurred backdrop.
@@ -18,8 +27,8 @@ hl.layer_rule({
 })
 
 hl.layer_rule({
-  name = "quickshell-osd-blur",
-  match = { namespace = "quickshell-osd" },
+  name = "quickshell-zinc-osd-blur",
+  match = { namespace = "quickshell-zinc-osd" },
   blur = true,
   ignore_alpha = 0,
 })

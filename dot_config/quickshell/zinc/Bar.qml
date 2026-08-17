@@ -1,0 +1,109 @@
+import QtQuick
+import Quickshell
+import Quickshell.Wayland
+
+// waybar: 48px top bar, one per monitor.
+PanelWindow {
+    id: root
+
+    required property var modelData
+    screen: modelData
+
+    WlrLayershell.namespace: "quickshell-zinc-bar"
+    anchors {
+        top: true
+        left: true
+        right: true
+    }
+    implicitHeight: Theme.barHeight
+    color: "transparent"
+
+    Rectangle {
+        anchors.fill: parent
+        color: Theme.bar
+
+        // waybar's `border-bottom: 1px solid alpha(@outline, 0.15)`
+        Rectangle {
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+            height: 1
+            color: Qt.rgba(1, 1, 1, 0.15)
+        }
+    }
+
+    Workspaces {
+        id: workspaces
+        screen: root.modelData
+        anchors {
+            left: parent.left
+            leftMargin: 10
+            verticalCenter: parent.verticalCenter
+        }
+    }
+
+    WindowTitle {
+        screen: root.modelData
+        anchors.centerIn: parent
+        // Workspaces and the right-side Row both change width at runtime
+        // (workspace count, tray items, wifi visibility...); centerIn alone
+        // doesn't know that, so a long title can slide under either one.
+        // Clamp to whichever side is currently closer to center.
+        width: Math.min(implicitWidth, Math.max(0, 2 * (Math.min(root.width / 2 - 10 - workspaces.width, root.width / 2 - 10 - rightRow.width) - 16)))
+    }
+
+    Row {
+        id: rightRow
+        anchors {
+            right: parent.right
+            rightMargin: 10
+            verticalCenter: parent.verticalCenter
+        }
+        spacing: 4
+
+        Media {}
+        Clock {}
+
+        // waybar stripped the inner left/right borders off these so they read
+        // as one connected strip. The border is drawn once, over the whole
+        // group, rather than per module — overlapping per-module borders still
+        // leaves a visible seam at every junction.
+        Item {
+            implicitWidth: strip.implicitWidth
+            implicitHeight: strip.implicitHeight
+
+            Row {
+                id: strip
+                spacing: 0
+
+                Net {
+                    bordered: false
+                }
+                Audio {
+                    bordered: false
+                }
+                Battery {
+                    bordered: false
+                }
+                Idle {
+                    bordered: false
+                    window: root
+                }
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+                border.width: 1
+                border.color: Theme.border
+            }
+        }
+
+        Bell {
+            screen: root.modelData
+        }
+        Tray {}
+    }
+}

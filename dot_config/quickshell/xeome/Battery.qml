@@ -1,6 +1,8 @@
 import Quickshell.Services.UPower
 
-// waybar `battery`: 11-step icon ramp, inverted at waybar's 30% warning line.
+// 11-step icon ramp, filled with the warn tone below the 30% line — the one
+// module on the bar that means "do something about this", so it gets the only
+// red in the shell rather than sharing a fill with the toggles.
 //
 // Also the power-profile button — clicking it opens Power. On a machine
 // without a laptop battery (xeome-desktop) there is no charge to report, so
@@ -14,7 +16,7 @@ BarModule {
     readonly property int pct: Math.round((bat?.percentage ?? 0) * 100)
     // waybar only showed the bolt for `format-charging`, i.e. actively
     // charging — a full battery on AC gets the plain icon. `plugged` is the
-    // wider test, used to suppress the low-battery inversion.
+    // wider test, used to suppress the low-battery warning.
     readonly property bool charging: bat?.state === UPowerDeviceState.Charging
     readonly property bool plugged: charging || bat?.state === UPowerDeviceState.FullyCharged || bat?.state === UPowerDeviceState.PendingCharge
 
@@ -22,7 +24,7 @@ BarModule {
         return s > 0 ? `${Math.floor(s / 3600)}h ${Math.floor(s % 3600 / 60)}m` : "unknown";
     }
 
-    inverted: hasBattery && !plugged && pct <= 30
+    tone: hasBattery && !plugged && pct <= 30 ? "warn" : ""
     // healthSupported is false on this hardware, so the health line is
     // dropped rather than reporting waybar's misleading "Capacity: 0%".
     // Suppressed while the menu is open: both anchor below this module, so

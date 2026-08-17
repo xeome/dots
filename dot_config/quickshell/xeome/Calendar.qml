@@ -83,6 +83,7 @@ PopupWindow {
 
         implicitWidth: 26
         implicitHeight: 26
+        radius: Theme.radius - 2
         color: navMa.containsMouse ? Theme.surfaceHover : "transparent"
         border.width: 1
         border.color: navMa.containsMouse ? Theme.borderHover : Theme.border
@@ -103,6 +104,7 @@ PopupWindow {
     Rectangle {
         anchors.fill: parent
         color: Theme.panel
+        radius: Theme.radiusLg
         border.width: 1
         border.color: Theme.border
 
@@ -191,7 +193,6 @@ PopupWindow {
                             verticalAlignment: Text.AlignVCenter
                             text: weekRow.modelData.week
                             font.pixelSize: Theme.size - 3
-                            font.weight: 500
                             color: weekRow.modelData.week === root.todayWeek && root.offset === 0 ? Theme.fgDim : Theme.fgMuted
                         }
 
@@ -205,13 +206,14 @@ PopupWindow {
 
                                 width: 32
                                 height: 26
-                                color: cell.modelData.today ? Theme.active : "transparent"
+                                radius: Theme.radius - 2
+                                color: cell.modelData.today ? Theme.accent : "transparent"
 
                                 BarText {
                                     anchors.centerIn: parent
                                     text: cell.modelData.day
-                                    font.weight: cell.modelData.today ? 700 : 500
-                                    color: cell.modelData.today ? Theme.fgInverted : !cell.modelData.inMonth ? Theme.fgMuted : cell.modelData.weekend ? Theme.fgDim : Theme.fg
+                                    weight: cell.modelData.today ? 700 : Theme.weight
+                                    color: cell.modelData.today ? Theme.fgOnAccent : !cell.modelData.inMonth ? Theme.fgMuted : cell.modelData.weekend ? Theme.fgDim : Theme.fg
                                 }
                             }
                         }
@@ -226,7 +228,6 @@ PopupWindow {
                 horizontalAlignment: Text.AlignHCenter
                 text: Qt.formatDateTime(root.today, "dddd, d MMMM yyyy") + "  ·  week " + root.todayWeek
                 font.pixelSize: Theme.size - 2
-                font.weight: 500
                 color: Theme.fgDim
             }
         }

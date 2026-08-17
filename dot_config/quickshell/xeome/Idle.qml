@@ -48,7 +48,7 @@ BarModule {
         root.until = minutes > 0 ? root.now + minutes * 60000 : 0;
     }
 
-    inverted: active
+    tone: active ? "toggle" : ""
     minWidth: 0
     tooltipText: menu.visible ? "" : !active ? "Idle inhibitor: Inactive\nRight-click to keep awake for a while" : until > 0 ? `Idle inhibitor: ${countdown()} left\nRight-click to change` : "Idle inhibitor: Active\nRight-click to set an expiry"
 

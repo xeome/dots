@@ -2,7 +2,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 
-// waybar: 48px top bar, one per monitor.
+// 48px top bar, one per monitor. Edge-to-edge and square on purpose: a radius
+// in this shell means "this responds to you", and the bar itself does not.
 PanelWindow {
     id: root
 
@@ -22,7 +23,9 @@ PanelWindow {
         anchors.fill: parent
         color: Theme.bar
 
-        // waybar's `border-bottom: 1px solid alpha(@outline, 0.15)`
+        // The bar's only edge. Full-strength border rather than the dimmer
+        // divider: this one separates the shell from arbitrary window content,
+        // not two rows of the same panel.
         Rectangle {
             anchors {
                 left: parent.left
@@ -30,7 +33,7 @@ PanelWindow {
                 bottom: parent.bottom
             }
             height: 1
-            color: Qt.rgba(1, 1, 1, 0.15)
+            color: Theme.border
         }
     }
 
@@ -66,10 +69,15 @@ PanelWindow {
         Media {}
         Clock {}
 
-        // waybar stripped the inner left/right borders off these so they read
-        // as one connected strip. The border is drawn once, over the whole
-        // group, rather than per module — overlapping per-module borders still
-        // leaves a visible seam at every junction.
+        // These four read as one connected strip: no inner borders, and the
+        // outer border is drawn once over the whole group rather than per
+        // module, since overlapping per-module borders leave a visible seam at
+        // every junction.
+        //
+        // The rounding follows the same logic. `clip` is a rectangular scissor
+        // in Qt and would square the corners straight back off, so the end
+        // members carry the radius themselves via per-corner properties — the
+        // group is round because its ends are, not because something masks it.
         Item {
             implicitWidth: strip.implicitWidth
             implicitHeight: strip.implicitHeight
@@ -80,6 +88,8 @@ PanelWindow {
 
                 Net {
                     bordered: false
+                    topLeftRadius: Theme.radius
+                    bottomLeftRadius: Theme.radius
                 }
                 Audio {
                     bordered: false
@@ -90,12 +100,15 @@ PanelWindow {
                 Idle {
                     bordered: false
                     window: root
+                    topRightRadius: Theme.radius
+                    bottomRightRadius: Theme.radius
                 }
             }
 
             Rectangle {
                 anchors.fill: parent
                 color: "transparent"
+                radius: Theme.radius
                 border.width: 1
                 border.color: Theme.border
             }

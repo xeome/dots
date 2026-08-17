@@ -17,10 +17,11 @@ Rectangle {
     signal clicked
 
     Layout.fillWidth: true
-    implicitHeight: 28
-    color: root.current ? Theme.active : ma.containsMouse ? Theme.surfaceHover : "transparent"
+    implicitHeight: 30
+    radius: Theme.radius
+    color: root.current ? Theme.accent : ma.containsMouse ? Theme.surfaceHover : "transparent"
     border.width: 1
-    border.color: root.current ? Theme.active : ma.containsMouse ? Theme.borderHover : Theme.border
+    border.color: root.current ? Theme.accent : ma.containsMouse ? Theme.borderHover : Theme.border
 
     Behavior on color {
         ColorAnimation {
@@ -41,14 +42,14 @@ Rectangle {
             text: root.label
             elide: Text.ElideRight
             font.pixelSize: Theme.size - 2
-            color: root.current ? Theme.fgInverted : Theme.fg
+            color: root.current ? Theme.fgOnAccent : Theme.fg
         }
 
         BarText {
             visible: root.suffix !== ""
             text: root.suffix
             font.pixelSize: Theme.size - 2
-            color: root.current ? Theme.fgInverted : Theme.fgDim
+            color: root.current ? Theme.fgOnAccent : Theme.fgDim
         }
     }
 

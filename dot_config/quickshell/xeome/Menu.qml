@@ -3,8 +3,8 @@ import QtQuick.Layouts
 import Quickshell
 
 // The chrome every bar popup shares: hung under its module, opaque panel,
-// hairline border, one width, one padding. Children go straight into the
-// column — a menu is its rows and nothing else.
+// hairline border, one radius, one width, one padding. Children go straight
+// into the column — a menu is its rows and nothing else.
 //
 // A menu that needs to do more on open or close declares its own
 // `onVisibleChanged` and both run; a handler here isn't replaced by one in a
@@ -39,6 +39,7 @@ PopupWindow {
     Rectangle {
         anchors.fill: parent
         color: Theme.panel
+        radius: Theme.radiusLg
         border.width: 1
         border.color: Theme.border
 

@@ -112,6 +112,7 @@ PopupWindow {
     Rectangle {
         anchors.fill: parent
         color: Theme.panel
+        radius: Theme.radiusLg
         border.width: 1
         border.color: Theme.border
 
@@ -132,9 +133,10 @@ PopupWindow {
                     Layout.fillWidth: true
                     implicitWidth: 272
                     implicitHeight: 46
-                    color: row.current ? Theme.active : rowMa.containsMouse ? Theme.surfaceHover : "transparent"
+                    radius: Theme.radius
+                    color: row.current ? Theme.accent : rowMa.containsMouse ? Theme.surfaceHover : "transparent"
                     border.width: 1
-                    border.color: row.current ? Theme.active : rowMa.containsMouse ? Theme.borderHover : Theme.border
+                    border.color: row.current ? Theme.accent : rowMa.containsMouse ? Theme.borderHover : Theme.border
 
                     Behavior on color {
                         ColorAnimation {
@@ -153,7 +155,7 @@ PopupWindow {
                         BarText {
                             text: root.glyph(row.modelData.profile)
                             font.pixelSize: Theme.size + 5
-                            color: row.current ? Theme.fgInverted : Theme.fg
+                            color: row.current ? Theme.fgOnAccent : Theme.fg
                         }
 
                         ColumnLayout {
@@ -162,14 +164,14 @@ PopupWindow {
 
                             BarText {
                                 text: row.modelData.name
-                                color: row.current ? Theme.fgInverted : Theme.fg
+                                color: row.current ? Theme.fgOnAccent : Theme.fg
                             }
 
                             BarText {
                                 text: row.modelData.detail
                                 font.pixelSize: Theme.size - 4
-                                font.weight: 450
-                                color: row.current ? Theme.fgInverted : Theme.fgMuted
+                                weight: 450
+                                color: row.current ? Theme.fgOnAccent : Theme.fgMuted
                             }
                         }
                     }
@@ -213,7 +215,6 @@ PopupWindow {
 
                     BarText {
                         text: `${Math.round(Backlight.value * 100)}%`
-                        font.weight: 500
                     }
                 }
 
@@ -240,7 +241,6 @@ PopupWindow {
                     visible: root.sched !== ""
                     text: `󰬔  ${root.sched} · ${root.modeLabel}`
                     font.pixelSize: Theme.size - 3
-                    font.weight: 500
                     color: Theme.fgDim
                 }
 
@@ -251,7 +251,6 @@ PopupWindow {
                     // what profile is selected.
                     text: PowerProfiles.degradationReason === PerformanceDegradationReason.HighTemperature ? "󰀦  capped: high temperature" : "󰀦  capped: lap detected"
                     font.pixelSize: Theme.size - 3
-                    font.weight: 500
                     color: Theme.fgDim
                 }
 
@@ -267,7 +266,6 @@ PopupWindow {
                         Layout.fillWidth: true
                         text: `󰅢  ${modelData.applicationId} holds ${PowerProfile.toString(modelData.profile)}`
                         font.pixelSize: Theme.size - 3
-                        font.weight: 500
                         color: Theme.fgDim
                     }
                 }

@@ -4,7 +4,9 @@ import Quickshell.Services.Pipewire
 
 // waybar `pulseaudio` plus the audio-in half of `privacy`, merged into one
 // module — the recording indicator was its own box until it grew a menu worth
-// sharing. Inverted (white fill) while something is recording, same as waybar.
+// sharing. Carries the toggle fill while something holds the mic: that's a
+// switch someone flipped, not something asking you to act, so it shares a tone
+// with DND and the idle inhibitor rather than with the low-battery warning.
 //
 // Left-click opens AudioMenu; right-click still goes to pavucontrol, which is
 // the escape hatch for per-app volume the menu deliberately doesn't do.
@@ -28,7 +30,7 @@ BarModule {
     // someone recording, so it's excluded rather than showing this lit 24/7.
     readonly property var recorders: Pipewire.nodes.values.filter(n => n.type === PwNodeType.AudioInStream && !n.name.startsWith("capture."))
 
-    inverted: recorders.length > 0
+    tone: recorders.length > 0 ? "toggle" : ""
     // Suppressed while the menu is open: both anchor below this module, so
     // otherwise they stack on top of each other.
     tooltipText: menu.visible ? "" : [`Volume: ${volume}%`].concat(recorders.map(n => `󰍬 ${n.description || n.name}`)).join("\n")
@@ -50,7 +52,7 @@ BarModule {
         // riding alongside it — which speaker you're on is worth more than which
         // third of the range you're in, and the bar has no width for both.
         text: `${root.recorders.length > 0 ? "󰍬 " : ""}${root.muted ? "󰖁" : `${root.overBluetooth ? "󰂰" : root.volume > 66 ? "󰕾" : root.volume > 33 ? "󰖀" : "󰕿"} ${root.volume}%`}`
-        color: root.muted ? Theme.fgMuted : root.fg
+        color: root.muted && root.tone === "" ? Theme.fgMuted : root.fg
         // md-volume_medium/_low are drawn smaller than neighboring glyphs
         // (bell, mic) at the same pixel size.
         font.pixelSize: Theme.size + 1

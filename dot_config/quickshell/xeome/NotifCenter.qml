@@ -8,10 +8,9 @@ import Quickshell.Wayland
 // — two of those buttons pointed at scripts that don't exist, and mpris is
 // already in the bar.
 //
-// A full-screen layer rather than a PopupWindow, for two reasons: Hyprland's
-// blur rules only reach layer surfaces, not the xdg-popups a PopupWindow
-// creates, and the empty area around the panel doubles as the click-to-dismiss
-// target that PopupWindow.grabFocus used to provide.
+// A full-screen layer rather than a PopupWindow: the empty area around the
+// panel doubles as the click-to-dismiss target that PopupWindow.grabFocus used
+// to provide.
 PanelWindow {
     id: root
 
@@ -40,7 +39,8 @@ PanelWindow {
         }
         width: 420
         height: 520
-        color: Theme.bar
+        color: Theme.panel
+        radius: Theme.radiusLg
         border.width: 1
         border.color: Theme.border
 
@@ -68,16 +68,16 @@ PanelWindow {
                 Rectangle {
                     implicitWidth: clearLabel.implicitWidth + 20
                     implicitHeight: 28
+                    radius: Theme.radius
                     color: clearMa.containsMouse ? Theme.surfaceHover : "transparent"
                     border.width: 1
-                    border.color: Theme.border
+                    border.color: clearMa.containsMouse ? Theme.borderHover : Theme.border
 
                     BarText {
                         id: clearLabel
                         anchors.centerIn: parent
                         text: "󰎟  Clear"
                         font.pixelSize: Theme.size - 2
-                        font.weight: 500
                     }
 
                     MouseArea {
@@ -94,9 +94,10 @@ PanelWindow {
             Rectangle {
                 Layout.fillWidth: true
                 implicitHeight: 44
+                radius: Theme.radius
                 color: dndMa.containsMouse ? Theme.surfaceHover : "transparent"
                 border.width: 1
-                border.color: Theme.border
+                border.color: dndMa.containsMouse ? Theme.borderHover : Theme.border
 
                 BarText {
                     anchors {
@@ -115,16 +116,26 @@ PanelWindow {
                     }
                     implicitWidth: 40
                     implicitHeight: 20
-                    color: Notifs.dnd ? Theme.active : "transparent"
+                    // A switch is round because a switch is round; the shell's
+                    // 8px is for boxes, not for tracks a knob slides along.
+                    radius: height / 2
+                    color: Notifs.dnd ? Theme.accent : "transparent"
                     border.width: 1
-                    border.color: Theme.border
+                    border.color: Notifs.dnd ? Theme.accent : Theme.border
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Theme.anim
+                        }
+                    }
 
                     Rectangle {
                         y: 2
                         x: Notifs.dnd ? 22 : 2
                         width: 16
                         height: 16
-                        color: Notifs.dnd ? Theme.fgInverted : Theme.fg
+                        radius: height / 2
+                        color: Notifs.dnd ? Theme.fgOnAccent : Theme.fgMuted
 
                         Behavior on x {
                             NumberAnimation {
@@ -165,7 +176,7 @@ PanelWindow {
                     visible: Notifs.history.length === 0
                     text: "No notifications"
                     color: Theme.fgMuted
-                    font.weight: 450
+                    weight: 450
                 }
             }
         }

@@ -6,8 +6,10 @@ import Quickshell.Io
 import Quickshell.Services.Pipewire
 import Quickshell.Wayland
 
-// Replaces swayosd, restyled from its black pill into the bar's square mono
-// chrome. Volume comes from Pipewire's own signals and brightness/caps-lock
+// Replaces swayosd, restyled into the shell's own panel chrome — this is an
+// overlay you interact with the result of, so it takes the popup radius rather
+// than the bar's square edge. Volume comes from Pipewire's own signals and
+// brightness/caps-lock
 // from sysfs inotify — verified to fire on this machine — so nothing polls and
 // no keybind has to tell the OSD that something changed.
 PanelWindow {
@@ -167,7 +169,8 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.bar
+        color: Theme.panel
+        radius: Theme.radiusLg
         border.width: 1
         border.color: Theme.border
 
@@ -185,12 +188,14 @@ PanelWindow {
                 Layout.fillWidth: true
                 implicitHeight: 6
                 visible: root.label === ""
-                color: Qt.rgba(1, 1, 1, 0.15)
+                radius: height / 2
+                color: Theme.divider
 
                 Rectangle {
                     width: parent.width * Math.max(0, Math.min(1, root.value))
                     height: parent.height
-                    color: Theme.fg
+                    radius: height / 2
+                    color: Theme.accent
 
                     Behavior on width {
                         NumberAnimation {
@@ -209,7 +214,6 @@ PanelWindow {
             BarText {
                 visible: root.label === ""
                 text: `${Math.round(root.value * 100)}%`
-                font.weight: 500
             }
         }
     }

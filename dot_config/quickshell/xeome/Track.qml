@@ -4,6 +4,9 @@ import QtQuick.Layouts
 // 8px of bar in 18px of hit area: the visual weight the OSD uses, with a target
 // you can actually hit. Drag, click-to-seek and scroll all report a fraction;
 // whoever placed it decides what that means and whether it sticks.
+//
+// Fully rounded rather than the shell's 8px: at 8px tall a radius that isn't
+// half the height reads as a mistake rather than a choice.
 Item {
     id: root
 
@@ -24,12 +27,14 @@ Item {
             verticalCenter: parent.verticalCenter
         }
         height: 8
-        color: Qt.rgba(1, 1, 1, 0.15)
+        radius: height / 2
+        color: Theme.divider
 
         Rectangle {
             width: parent.width * root.clamp(root.value)
             height: parent.height
-            color: ma.containsMouse ? Theme.fg : Qt.rgba(1, 1, 1, 0.75)
+            radius: height / 2
+            color: ma.containsMouse ? Theme.accentHover : Theme.accent
         }
     }
 

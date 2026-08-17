@@ -74,6 +74,7 @@ PopupWindow {
 
         implicitWidth: 34
         implicitHeight: 30
+        radius: Theme.radius
         color: btnMa.containsMouse ? Theme.surfaceHover : "transparent"
         border.width: 1
         border.color: btnMa.containsMouse ? Theme.borderHover : Theme.border
@@ -105,6 +106,7 @@ PopupWindow {
     Rectangle {
         anchors.fill: parent
         color: Theme.panel
+        radius: Theme.radiusLg
         border.width: 1
         border.color: Theme.border
 
@@ -147,7 +149,7 @@ PopupWindow {
                     BarText {
                         Layout.fillWidth: true
                         text: root.player?.trackTitle ?? ""
-                        font.weight: 650
+                        weight: 650
                         elide: Text.ElideRight
                     }
 
@@ -166,7 +168,6 @@ PopupWindow {
                         text: root.player?.trackAlbum ?? ""
                         elide: Text.ElideRight
                         font.pixelSize: Theme.size - 3
-                        font.weight: 500
                         color: Theme.fgMuted
                     }
                 }
@@ -195,14 +196,12 @@ PopupWindow {
                         Layout.fillWidth: true
                         text: root.mmss(root.player?.position ?? 0)
                         font.pixelSize: Theme.size - 4
-                        font.weight: 500
                         color: Theme.fgDim
                     }
 
                     BarText {
                         text: root.mmss(root.length)
                         font.pixelSize: Theme.size - 4
-                        font.weight: 500
                         color: Theme.fgDim
                     }
                 }

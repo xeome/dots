@@ -1,22 +1,26 @@
 import QtQuick
 import QtQuick.Layouts
 
-// The bordered box every right-side bar module sits in — waybar's shared
-// `#network, #custom-vpn, #pulseaudio, #battery, ...` rule, including its
-// 0.2s hover transition.
+// The rounded box every right-side bar module sits in, including its 0.2s hover
+// transition.
 Rectangle {
     id: root
 
-    // This theme's only accent: white fill, black text.
-    property bool inverted: false
-    // waybar's `min-width: 60px`, which is there to stop a module resizing the
-    // whole row every time its text changes width — a muted Audio collapsing to
-    // one glyph, a Battery crossing 100%. Modules that only ever draw a single
-    // glyph can't jitter, so they set this to 0 and come out square instead of
-    // padded out to a box two thirds empty.
+    // The signal split. "" is the resting state; the three filled tones each
+    // mean one thing shell-wide:
+    //   "focus"   this is what you're on          (cream)
+    //   "toggle"  you switched something on       (warm brown)
+    //   "warn"    something wants your attention  (red)
+    // These used to be one shared white fill, so a battery at 25% and a clock
+    // that is always lit were visually identical.
+    property string tone: ""
+    // Stops a module resizing the whole row every time its text changes width —
+    // a muted Audio collapsing to one glyph, a Battery crossing 100%. Modules
+    // that only ever draw a single glyph can't jitter, so they set this to 0
+    // and come out square instead of padded out to a box two thirds empty.
     property int minWidth: 60
-    // False for modules inside a connected strip, which is bordered as a
-    // group — otherwise every junction draws a seam.
+    // False for modules inside a connected strip, which is bordered and rounded
+    // as a group — otherwise every junction draws a seam.
     property bool bordered: true
     property string tooltipText: ""
     default property alias content: layout.data
@@ -25,15 +29,28 @@ Rectangle {
     signal clicked(int button)
 
     readonly property bool hovered: ma.containsMouse
-    // Modules bind their labels/icons to this so inversion flips them too.
-    readonly property color fg: inverted ? Theme.fgInverted : Theme.fg
+    // Modules bind their labels/icons to this so a fill takes its text with it.
+    // Toggle is dark enough to keep light text; the other two fills are not.
+    readonly property color fg: tone === "toggle" ? Theme.accent : tone !== "" ? Theme.fgOnAccent : Theme.fg
 
     implicitWidth: Math.max(minWidth, layout.implicitWidth + Theme.pad * 2)
     implicitHeight: Theme.barHeight - Theme.gap * 2
 
-    color: inverted ? (hovered ? Theme.activeHover : Theme.active) : (hovered ? Theme.surfaceHover : Theme.surface)
+    radius: bordered ? Theme.radius : 0
+    color: switch (tone) {
+    case "focus":
+        return hovered ? Theme.accentHover : Theme.accent;
+    case "toggle":
+        return hovered ? Theme.toggleHover : Theme.toggle;
+    case "warn":
+        return hovered ? Theme.warnHover : Theme.warn;
+    default:
+        return hovered ? Theme.surfaceHover : Theme.surface;
+    }
     border.width: bordered ? 1 : 0
-    border.color: hovered ? Theme.borderHover : Theme.border
+    // A filled module draws its own edge; a border on top of it only muddies
+    // the one thing on the bar that is meant to be unambiguous.
+    border.color: tone !== "" ? "transparent" : hovered ? Theme.borderHover : Theme.border
 
     Behavior on color {
         ColorAnimation {
@@ -69,7 +86,7 @@ Rectangle {
 
             BarText {
                 text: root.tooltipText
-                font.weight: 500
+                color: Theme.fgDim
             }
         }
     ]

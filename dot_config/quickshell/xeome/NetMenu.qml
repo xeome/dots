@@ -90,7 +90,6 @@ Menu {
             visible: root.networks.length > root.shown
             text: `+${root.networks.length - root.shown} weaker`
             font.pixelSize: Theme.size - 4
-            font.weight: 500
             color: Theme.fgDim
         }
 
@@ -99,7 +98,6 @@ Menu {
             visible: root.networks.length === 0
             text: Networking.wifiEnabled ? "Scanning…" : "Wi-Fi is off"
             font.pixelSize: Theme.size - 3
-            font.weight: 500
             color: Theme.fgDim
         }
     }
@@ -125,10 +123,11 @@ Menu {
 
         Rectangle {
             Layout.fillWidth: true
-            implicitHeight: 28
+            implicitHeight: 30
+            radius: Theme.radius
             color: "transparent"
             border.width: 1
-            border.color: psk.activeFocus ? Theme.borderHover : Theme.border
+            border.color: psk.activeFocus ? Theme.accent : Theme.border
 
             TextInput {
                 id: psk
@@ -144,8 +143,8 @@ Menu {
                 font.family: Theme.family
                 font.pixelSize: Theme.size - 2
                 font.weight: Theme.weight
-                selectionColor: Theme.active
-                selectedTextColor: Theme.fgInverted
+                selectionColor: Theme.accent
+                selectedTextColor: Theme.fgOnAccent
 
                 // No submit button: this field has exactly one thing to do, and
                 // the row above already names the network it does it to.

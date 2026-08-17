@@ -1,7 +1,7 @@
 import QtQuick
 
-// waybar `hyprland/workspaces`: one grouped box, hairline-divided buttons,
-// active button inverted. Per-output, matching waybar's `all-outputs: false`.
+// One grouped box, hairline-divided buttons, the focused one filled with the
+// accent. Per-output, so each monitor shows only its own workspaces.
 Rectangle {
     id: root
 
@@ -15,6 +15,7 @@ Rectangle {
     implicitWidth: row.implicitWidth + 2
     implicitHeight: Theme.barHeight - Theme.gap * 2
     color: Theme.surface
+    radius: Theme.radius
     border.width: 1
     border.color: Theme.border
 
@@ -36,7 +37,16 @@ Rectangle {
 
                 width: Math.max(44, label.implicitWidth + 26)
                 height: row.height
-                color: active ? (ma.containsMouse ? Theme.activeHover : Theme.active) : ma.containsMouse ? Theme.surfaceHover : "transparent"
+                color: active ? (ma.containsMouse ? Theme.accentHover : Theme.accent) : ma.containsMouse ? Theme.surfaceHover : "transparent"
+
+                // The ends round themselves rather than being masked by the
+                // parent: Qt's `clip` is a rectangular scissor and would put
+                // the square corners straight back. One less than the parent's
+                // radius, to nest inside its 1px inset.
+                topLeftRadius: index === 0 ? Theme.radius - 1 : 0
+                bottomLeftRadius: index === 0 ? Theme.radius - 1 : 0
+                topRightRadius: index === root.list.length - 1 ? Theme.radius - 1 : 0
+                bottomRightRadius: index === root.list.length - 1 ? Theme.radius - 1 : 0
 
                 Behavior on color {
                     ColorAnimation {
@@ -47,17 +57,26 @@ Rectangle {
                 BarText {
                     id: label
                     anchors.centerIn: parent
+                    // Workspace numbers are what you navigate by, so the
+                    // inactive ones stay legible (fgDim) rather than dropping
+                    // to the muted tier labels use.
                     text: btn.modelData.name
-                    color: btn.active ? Theme.fgInverted : Theme.fgMuted
-                    font.weight: btn.active ? 700 : Theme.weight
+                    color: btn.active ? Theme.fgOnAccent : Theme.fgDim
+                    weight: btn.active ? 700 : Theme.weight
                 }
 
-                // waybar pulsed urgent workspaces between 45% and 75% white.
-                // Kept on a separate layer so it can't clobber the colour
-                // binding above the way an animation on `color` would.
+                // Urgent pulses in the warn colour, not the accent — an urgent
+                // workspace is not the one you're on. Kept on a separate layer
+                // so it can't clobber the colour binding above the way an
+                // animation on `color` would.
                 Rectangle {
                     anchors.fill: parent
-                    color: Theme.active
+                    color: Theme.warn
+                    radius: parent.radius
+                    topLeftRadius: btn.topLeftRadius
+                    bottomLeftRadius: btn.bottomLeftRadius
+                    topRightRadius: btn.topRightRadius
+                    bottomRightRadius: btn.bottomRightRadius
                     visible: btn.modelData.urgent
                     opacity: 0.45
 
@@ -78,7 +97,7 @@ Rectangle {
                     }
                 }
 
-                // waybar's `border-right` on every button but the last
+                // A divider on every button but the last
                 Rectangle {
                     anchors {
                         right: parent.right
@@ -87,7 +106,7 @@ Rectangle {
                     }
                     width: 1
                     visible: btn.index < root.list.length - 1
-                    color: Qt.rgba(1, 1, 1, 0.15)
+                    color: Theme.divider
                 }
 
                 MouseArea {

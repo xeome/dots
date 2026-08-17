@@ -80,7 +80,8 @@ PanelWindow {
             width: parent.width
             implicitHeight: 24
             visible: Notifs.popups.length > root.maxVisible
-            color: Theme.glass
+            color: Theme.card
+            radius: Theme.radiusLg
             border.width: 1
             border.color: Theme.border
 
@@ -88,7 +89,6 @@ PanelWindow {
                 anchors.centerIn: parent
                 text: `+${Notifs.popups.length - root.maxVisible} more`
                 font.pixelSize: Theme.size - 3
-                font.weight: 500
                 color: Theme.fgDim
             }
         }

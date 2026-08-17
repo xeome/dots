@@ -138,7 +138,6 @@ PopupWindow {
 
             BarText {
                 text: dev.muted ? "muted" : `${Math.round(dev.volume * 100)}%`
-                font.weight: 500
                 color: dev.muted ? Theme.fgMuted : Theme.fg
             }
         }
@@ -190,6 +189,7 @@ PopupWindow {
     Rectangle {
         anchors.fill: parent
         color: Theme.panel
+        radius: Theme.radiusLg
         border.width: 1
         border.color: Theme.border
 
@@ -295,7 +295,6 @@ PopupWindow {
                         text: root.appName(modelData)
                         elide: Text.ElideRight
                         font.pixelSize: Theme.size - 3
-                        font.weight: 500
                         color: Theme.fgDim
                     }
                 }

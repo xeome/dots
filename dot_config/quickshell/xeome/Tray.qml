@@ -48,6 +48,7 @@ Rectangle {
     implicitWidth: layout.implicitWidth + Theme.pad * 2
     implicitHeight: Theme.barHeight - Theme.gap * 2
     color: Theme.surface
+    radius: Theme.radius
     border.width: 1
     border.color: Theme.border
 
@@ -129,7 +130,6 @@ Rectangle {
 
         BarText {
             text: root.hoveredItem?.tooltipTitle || root.hoveredItem?.title || root.hoveredItem?.id || ""
-            font.weight: 500
         }
     }
 }

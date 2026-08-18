@@ -11,6 +11,8 @@ ghostty
 git-delta
 gnome-keyring
 grc
+gsettings-desktop-schemas
+gtk-update-icon-cache
 htop
 hyprlock
 jq
@@ -23,6 +25,7 @@ pamixer
 pavucontrol
 playerctl
 quickshell
+sassc
 scx-scheds
 scx-tools
 seahorse

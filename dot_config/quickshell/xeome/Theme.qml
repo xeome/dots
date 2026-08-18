@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import Quickshell.Io
 
 // Caffeine's warm surface stack over the accent this repo already had:
 // #ffc799 is the same primary sway/conf.d/colors.conf and hypr's colors.lua
@@ -11,34 +12,85 @@ import Quickshell
 // which made every contrast ratio a function of the wallpaper. Flat surfaces at
 // a known lightness are what let the hairline borders below be this quiet.
 Singleton {
+    id: root
+
+    // Toggle with `qs -c xeome ipc call theme toggle`, bound to SUPER+T via
+    // ~/.local/bin/theme-toggle (which also flips the Colloid GTK theme so
+    // the shell and GTK apps never drift apart). Persisted to stateDir since
+    // this is flipped rarely and forgetting it on every restart would be
+    // more annoying than a stray state file.
+    property alias light: persisted.light
+
+    // stateDir isn't created just by quickshell running — nothing else here
+    // writes to it — so make sure it exists before FileView tries to.
+    Process {
+        command: ["mkdir", "-p", Quickshell.stateDir]
+        running: true
+    }
+
+    FileView {
+        path: `${Quickshell.stateDir}/theme.json`
+        watchChanges: true
+        onFileChanged: reload()
+        onAdapterUpdated: writeAdapter()
+        onLoadFailed: error => {
+            if (error === FileViewError.FileNotFound)
+                writeAdapter();
+        }
+
+        adapter: JsonAdapter {
+            id: persisted
+            property bool light: false
+        }
+    }
+
+    IpcHandler {
+        target: "theme"
+
+        function toggle(): bool {
+            root.light = !root.light;
+            return root.light;
+        }
+    }
+
     // Surfaces, three steps. Warm-neutral, not grey: the tint is most of what
     // makes this read differently from the zinc theme it replaces.
-    readonly property color bar: "#111111"
-    readonly property color panel: "#191919"     // menus, tooltips
-    readonly property color card: "#191919"      // notification cards
-    readonly property color cardHover: "#221f1c"
-    readonly property color surface: "#1b1917"   // a module sitting on the bar
-    readonly property color surfaceHover: "#262220"
+    //
+    // Light values are the same warm hue pushed to the opposite end, not an
+    // inversion of the dark ones — elevated surfaces stay *lighter* than the
+    // bar in both modes (there are no shadows to read elevation from
+    // otherwise), and every hover moves *away* from the mode's extreme
+    // (lighter in dark mode, darker in light mode) rather than reusing one
+    // fixed direction.
+    readonly property color bar: light ? "#f2efe9" : "#111111"
+    readonly property color panel: light ? "#fbf9f6" : "#191919"     // menus, tooltips
+    readonly property color card: light ? "#fbf9f6" : "#191919"      // notification cards
+    readonly property color cardHover: light ? "#eee6d9" : "#221f1c"
+    readonly property color surface: light ? "#f6f2ec" : "#1b1917"   // a module sitting on the bar
+    readonly property color surfaceHover: light ? "#e9e0d0" : "#262220"
 
     // Caffeine ships --border: #201e18, which is invisible against #191919 —
     // in the web app the separation comes from the lightness step between
     // surfaces plus a shadow. Nothing here casts a shadow, so the hairline is
     // the only separator and has to be lifted until it reads.
-    readonly property color border: "#2e2a24"
-    readonly property color borderHover: "#4a4238"
+    readonly property color border: light ? "#ddd3c4" : "#2e2a24"
+    readonly property color borderHover: light ? "#b8a688" : "#4a4238"
     // Dividers inside an already-bordered group, which only need to be seen
     // against their own container, not against the desktop.
-    readonly property color divider: "#242019"
+    readonly property color divider: light ? "#e8e0d3" : "#242019"
 
-    readonly property color fg: "#eeeeee"
-    readonly property color fgDim: "#b4b4b4"
-    // 4.6:1 on `panel`, which is the floor rather than a preference: the
-    // smallest thing wearing this is Power's 9px profile detail line, and the
-    // old #555555 sat around 2.6:1 there.
-    readonly property color fgMuted: "#8a817a"
+    readonly property color fg: light ? "#201d18" : "#eeeeee"
+    readonly property color fgDim: light ? "#55504a" : "#b4b4b4"
+    // 4.6:1 on `panel` in both modes, which is the floor rather than a
+    // preference: the smallest thing wearing this is Power's 9px profile
+    // detail line, and the old #555555 sat around 2.6:1 there.
+    readonly property color fgMuted: light ? "#746c60" : "#8a817a"
     // Text on a filled module. Named for the job, not the colour, because
-    // `warn` and `accent` fills both want it and `toggle` doesn't.
-    readonly property color fgOnAccent: "#111111"
+    // `warn` and `accent` fills both want it and `toggle` doesn't. Dark text
+    // on a pale fill in dark mode; light text on a saturated fill in light
+    // mode — accent/warn have to stay saturated enough to read as a chip
+    // against a near-white bar, so the fill can no longer carry dark text.
+    readonly property color fgOnAccent: light ? "#fff8f0" : "#111111"
 
     // One colour, one meaning — see BarModule.tone:
     //   accent  focus or selection    (active workspace, selected menu row)
@@ -46,12 +98,17 @@ Singleton {
     //   warn    something wants you   (battery below the 30% line)
     // The old theme filled all three with the same white, so a battery at 25%
     // looked exactly like a clock that is lit permanently.
-    readonly property color accent: "#ffc799"
-    readonly property color accentHover: "#ffd7b3"
-    readonly property color toggle: "#393028"
-    readonly property color toggleHover: "#4a3d31"
-    readonly property color warn: "#ff8080"
-    readonly property color warnHover: "#ff9999"
+    //
+    // accent stays the same hue in both modes (peach in dark, the same peach
+    // burnt down to a burnt-orange in light) — it's the one colour meant to
+    // read as "this shell" regardless of mode, and it's also the accent
+    // Colloid's GTK theme is built with (`-t orange`), so the two match.
+    readonly property color accent: light ? "#94500f" : "#ffc799"
+    readonly property color accentHover: light ? "#7a4009" : "#ffd7b3"
+    readonly property color toggle: light ? "#f0dfc7" : "#393028"
+    readonly property color toggleHover: light ? "#e3cba8" : "#4a3d31"
+    readonly property color warn: light ? "#b83b34" : "#ff8080"
+    readonly property color warnHover: light ? "#9c322c" : "#ff9999"
 
     readonly property int barHeight: 48
     readonly property int gap: 6

@@ -53,6 +53,7 @@ hl.bind(mod .. " + o", hl.dsp.exec_cmd("xset dpms force off"))
 hl.bind(mod .. " + l", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mod .. " + b", hl.dsp.exec_cmd("sh ~/.config/emoji/emoji.sh &"))
 hl.bind(mod .. " + k", hl.dsp.exec_cmd("qs -c xeome ipc call notifs toggle"))
+hl.bind(mod .. " + t", hl.dsp.exec_cmd("bash ~/.local/bin/theme-toggle"))
 hl.bind(mod .. " + p", hl.dsp.exec_cmd("ghostty --class='com.sessionizer.fzf' -e ~/.local/bin/sessionizer"))
 
 -- ~~~ window management

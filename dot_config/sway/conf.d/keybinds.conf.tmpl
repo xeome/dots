@@ -18,8 +18,9 @@ bindsym $mod+Shift+r reload
 # ags was never installed here, so both have been dead binds for as long as this
 # file has existed. quickshell's power menu opens by clicking the battery
 # module in the bar.
-# Dropped: $mod+j and $mod+t sent SIGUSR1/SIGUSR2 to a `test.py` that is long
-# gone.
+# Dropped: $mod+j sent SIGUSR1 to a `test.py` that is long gone. $mod+t used
+# to send SIGUSR2 to the same script; it's back below, now bound to
+# theme-toggle instead.
 
 # ~~~ user applications
 bindsym $mod+Return exec {{ $m.terminal }}
@@ -59,6 +60,7 @@ bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym $mod+l exec hyprlock
 bindsym $mod+b exec sh ~/.config/emoji/emoji.sh
 bindsym $mod+k exec qs -c xeome ipc call notifs toggle
+bindsym $mod+t exec bash ~/.local/bin/theme-toggle
 bindsym $mod+p exec {{ $m.terminal }} --class=com.sessionizer.fzf -e ~/.local/bin/sessionizer
 # Dropped: $mod+o ran `xset dpms force off`, an X11 command with no effect on
 # wayland outputs. swayidle blanks the screen on its own after 15 minutes.

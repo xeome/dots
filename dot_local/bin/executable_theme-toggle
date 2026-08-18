@@ -1,0 +1,29 @@
+#!/bin/bash
+# Flips quickshell's Theme.qml light/dark and the Colloid GTK theme together,
+# so they can never end up disagreeing. Bound to SUPER+T instead of a bar
+# module — this is toggled rarely enough that it doesn't earn permanent space
+# on the bar.
+set -euo pipefail
+
+# Source of truth: quickshell's persisted `light` property. If this fails
+# (shell not running), stop here rather than flip GTK out of sync with it.
+light=$(qs -c xeome ipc call theme toggle)
+
+gtk4_css="$HOME/.config/gtk-4.0/gtk.css"
+
+if [[ "$light" == "true" ]]; then
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
+    gsettings set org.gnome.desktop.interface gtk-theme 'Colloid-Orange-Light'
+    gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Orange-Light'
+    # Colloid-cursors is built from svg (a dark cursor) — right for a light bg.
+    gsettings set org.gnome.desktop.interface cursor-theme 'Colloid-cursors'
+    ln -sf "$HOME/.config/gtk-4.0/colloid-light.css" "$gtk4_css"
+else
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    gsettings set org.gnome.desktop.interface gtk-theme 'Colloid-Orange-Dark'
+    gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Orange-Dark'
+    # Colloid-dark-cursors is built from svg-white (a light cursor) — right
+    # for a dark bg, despite the name.
+    gsettings set org.gnome.desktop.interface cursor-theme 'Colloid-dark-cursors'
+    ln -sf "$HOME/.config/gtk-4.0/colloid-dark.css" "$gtk4_css"
+fi

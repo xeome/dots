@@ -77,7 +77,8 @@ for _, name in ipairs({
     name = name,
     natural_scroll = false,
     accel_profile = "flat",
-    sensitivity = -0.3,
+    -- flat profile speed is a 1+x multiplier: 0.4 -> 1.4x, twice the old -0.3.
+    sensitivity = 0.4,
     scroll_factor = 0.8,
   })
 end

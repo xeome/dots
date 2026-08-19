@@ -18,7 +18,6 @@ export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
 export PARALLEL_HOME="$XDG_CONFIG_HOME/parallel"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export GHCUP_USE_XDG_DIRS="true"
-export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export CMAKE_CXX_COMPILER_LAUNCHER="ccache"
 

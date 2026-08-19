@@ -39,7 +39,6 @@ hl.config({
 hl.config({
   general = {
     allow_tearing = true,
-    layout = "scrolling",
     border_size = 2,
     col = {
       active_border = { colors = { colors.secondary, colors.primary } },

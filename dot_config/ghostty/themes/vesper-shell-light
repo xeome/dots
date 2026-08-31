@@ -1,0 +1,45 @@
+# The light counterpart to vesper-shell, matched to quickshell's Theme.qml.
+#
+# Managed by chezmoi — edit dot_config/ghostty/themes/vesper-shell-light
+#
+# Selected by `theme = light:vesper-shell-light,dark:vesper-shell` in the
+# config: ghostty follows the desktop colour scheme through the settings
+# portal, and theme-toggle already flips that (gsettings color-scheme), so the
+# terminal switches with the bar without theme-toggle knowing ghostty exists.
+#
+# Stock Vesper has no light variant and a theme file cannot inherit from
+# another, so the ANSI 16 below is copied verbatim from stock Dawnfox — the
+# warmest light palette ghostty ships with a correct hue mapping (Rose Pine
+# Dawn, its closest neighbour, puts blue in the green slot). Only the surfaces
+# under it differ, same as vesper-shell does with stock Vesper.
+
+# --- ANSI 16: verbatim stock Dawnfox ---------------------------------------
+palette = 0=#575279
+palette = 1=#b4637a
+palette = 2=#618774
+palette = 3=#ea9d34
+palette = 4=#286983
+palette = 5=#907aa9
+palette = 6=#56949f
+palette = 7=#b2b6bd
+palette = 8=#5f5695
+palette = 9=#c26d85
+palette = 10=#629f81
+palette = 11=#eea846
+palette = 12=#2d81a3
+palette = 13=#9a80b9
+palette = 14=#5ca7b4
+palette = 15=#e6ebf3
+
+# --- Surfaces: matched to the bar -----------------------------------------
+# Theme.bar / Theme.fg in light mode, so a terminal and the bar above it are
+# the same off-white. Dawnfox's own #faf4ed / #575279 are close but not these.
+background = #f2efe9
+foreground = #201d18
+
+# Theme.accent / Theme.fgOnAccent in light mode, the same roles vesper-shell
+# fills with the dark-mode pair.
+selection-background = #94500f
+selection-foreground = #fff8f0
+cursor-color = #94500f
+cursor-text = #fff8f0

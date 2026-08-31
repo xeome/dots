@@ -2,11 +2,11 @@ format = """$hostname$directory$git_branch$git_state$git_status$cmd_duration$pyt
 
 [hostname]
 ssh_only = true
-format = '[ $hostname ](bg:#ffffff fg:#000000 bold)'
+format = '[ $hostname ](inverted bold)'
 disabled = false
 
 [directory]
-style = "bg:#ffffff fg:#000000 bold"
+style = "inverted bold"
 format = '[ $path ]($style)'
 truncation_length = 4
 truncation_symbol = '…/'
@@ -15,11 +15,11 @@ home_symbol = '~'
 
 [git_branch]
 format = ' [$branch]($style)'
-style = "fg:#666666"
+style = "dimmed"
 
 [git_status]
 format = '([$all_status$ahead_behind]($style))'
-style = "fg:#ffffff bold"
+style = "bold"
 conflicted = "~"
 untracked = "?"
 modified = "!"
@@ -33,24 +33,24 @@ diverged = "⇕${ahead_count}⇣${behind_count}"
 
 [git_state]
 format = ' \([$state( $progress_current/$progress_total)]($style)\) '
-style = "fg:#767676"
+style = "dimmed"
 
 [character]
-success_symbol = "[❯](fg:#ffffff bold)"
-error_symbol = "[❯](bg:#ffffff fg:#000000 bold)"
-vimcmd_symbol = "[❮](fg:#ffffff bold)"
-vimcmd_replace_one_symbol = "[❮](fg:#ffffff bold)"
-vimcmd_replace_symbol = "[❮](fg:#ffffff bold)"
-vimcmd_visual_symbol = "[❮](fg:#ffffff bold)"
+success_symbol = "[❯](bold)"
+error_symbol = "[❯](inverted bold)"
+vimcmd_symbol = "[❮](bold)"
+vimcmd_replace_one_symbol = "[❮](bold)"
+vimcmd_replace_symbol = "[❮](bold)"
+vimcmd_visual_symbol = "[❮](bold)"
 
 [cmd_duration]
 format = " [$duration]($style)"
-style = "fg:#666666"
+style = "dimmed"
 min_time = 500
 
 [python]
 format = " [$virtualenv]($style)"
-style = "fg:#666666"
+style = "dimmed"
 
 [fill]
 symbol = " "
@@ -60,10 +60,10 @@ format = '$symbol[${ram_pct}]($style)'
 disabled = false
 threshold = -1
 symbol = '  '
-style = 'fg:#666666'
+style = 'dimmed'
 
 [status]
-style = 'fg:#666666'
+style = 'dimmed'
 symbol = ''
 success_symbol = ''
 format = '[$common_meaning$signal_name$maybe_int]($style) '

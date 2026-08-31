@@ -21,10 +21,14 @@ background-opacity = 0.85
 window-padding-x = 15
 window-padding-y = 15
 
-# Every colour lives in themes/vesper-shell — Vesper warmed to match
+# Every colour lives in themes/vesper-shell{,-light} — Vesper warmed to match
 # quickshell's Theme.qml. Nothing colour-related belongs in this file: anything
 # set here would silently override the theme rather than sit alongside it.
-theme = vesper-shell
+#
+# The pair form follows the desktop colour scheme live, so SUPER+T (which flips
+# gsettings color-scheme) switches the terminal too, with no ghostty-specific
+# step in theme-toggle.
+theme = light:vesper-shell-light,dark:vesper-shell
 
 keybind = ctrl+shift+plus=increase_font_size:1
 keybind = ctrl+shift+minus=decrease_font_size:1

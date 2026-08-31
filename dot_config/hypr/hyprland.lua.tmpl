@@ -105,7 +105,8 @@ require("lua_modules.rules")
 require("lua_modules.startup")
 
 -- =============================================================================
--- USER LOCAL OVERRIDES (OPTIONAL)
+-- OPTIONAL OVERRIDES
 -- =============================================================================
+-- Absolute path: dofile() resolves relative to Hyprland's CWD, not this dir.
 
-pcall(dofile, "user.local.lua")
+pcall(dofile, os.getenv("HOME") .. "/.config/hypr/user.local.lua")

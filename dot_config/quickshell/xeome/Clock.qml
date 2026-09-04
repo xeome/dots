@@ -9,25 +9,33 @@ import Quickshell
 BarModule {
     id: root
 
-    // Only ever has to open. If the calendar was up, its own grabFocus already
-    // dismissed it on this very click — see Calendar.closedAt.
-    onClicked: if (!cal.visible && Date.now() - cal.closedAt > 200)
-        cal.visible = true
+    // Right click swaps the glanceable form for the precise one — seconds and
+    // a full numeric date, for when you need to read a timestamp off the bar.
+    property bool precise: false
+
+    // Left click only ever has to open. If the calendar was up, its own
+    // grabFocus already dismissed it on this very click — see Calendar.closedAt.
+    onClicked: button => {
+        if (button === Qt.RightButton)
+            root.precise = !root.precise;
+        else if (!cal.visible && Date.now() - cal.closedAt > 200)
+            cal.visible = true;
+    }
 
     SystemClock {
         id: clock
-        precision: SystemClock.Minutes
+        precision: root.precise ? SystemClock.Seconds : SystemClock.Minutes
     }
 
     BarText {
-        text: Qt.formatDateTime(clock.date, "HH:mm")
+        text: Qt.formatDateTime(clock.date, root.precise ? "HH:mm:ss" : "HH:mm")
         color: Theme.accent
         font.pixelSize: Theme.size + 2
         weight: 650
     }
 
     BarText {
-        text: Qt.formatDateTime(clock.date, "ddd dd MMM")
+        text: Qt.formatDateTime(clock.date, root.precise ? "dd/MM/yyyy" : "ddd dd MMM")
         color: Theme.fgDim
     }
 

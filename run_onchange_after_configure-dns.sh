@@ -1,19 +1,32 @@
 #!/bin/bash
-# DoT to Cloudflare/Quad9, with nothing on the network able to override it.
-# resolved's global DNS= only wins once no link publishes its own servers.
+# DoT to Cloudflare/Quad9 as the machine's only system resolvers.
+#
+# What this buys is privacy from passive observers — the ISP, the AP you happen
+# to be sitting on. Not integrity: DNSOverTLS=opportunistic is documented as
+# downgradeable (man resolved.conf), so an active on-path attacker can still
+# force cleartext. Deliberate trade — strict `yes` hard-fails on every captive
+# portal, and ~/.local/bin/portal covers the portals that break anyway.
+#
+# Global servers race per-link ones ("in parallel to suitable per-link DNS
+# servers"), they do not wait for them — so dns=none below is load-bearing.
 set -euo pipefail
 
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 
-# Drop-in, so the package's resolved.conf stays stock. It has to: DNS= appends
-# across files, so an uncommented DNS= over there would add to this list.
+# Drop-in, so the package's resolved.conf stays stock. Drop-ins outrank it for
+# single-value keys, but DNS= and Domains= are lists that *append* — hence the
+# empty assignment before each. Without it a hand-edited DNS= in the main file
+# (this repo has met one) silently prepends the router to the system resolvers.
 cat > "$STAGE/10-dot.conf" <<'RESOLVED'
 # Managed by chezmoi — edit: ~/.local/share/chezmoi/run_onchange_after_configure-dns.sh
 [Resolve]
+DNS=
 DNS=1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com 9.9.9.9#dns.quad9.net
-DNSOverTLS=opportunistic
+Domains=
 Domains=~.
+DNSOverTLS=opportunistic
+DNSSEC=allow-downgrade
 MulticastDNS=no
 RESOLVED
 

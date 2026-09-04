@@ -1,0 +1,52 @@
+#!/bin/bash
+# Captive-portal escape hatch.
+#
+# System DNS is pinned to DoT and NetworkManager publishes no per-link servers
+# (run_onchange_after_configure-dns.sh), so a portal that blocks port 53 leaves
+# nothing resolvable — including the portal's own sign-in page.
+#
+# This hands ONE interface back to the network's own resolver. While it is on,
+# every lookup this machine makes goes to a resolver run by whoever owns that
+# access point, in cleartext and unvalidated. Run `portal off` once you are
+# through. It also expires by itself: per-link settings die with the link.
+#
+# Each resolvectl call here is polkit auth_admin_keep, so this costs one
+# password prompt. That prompt is the point — the downgrade cannot happen
+# without you.
+#
+# usage: portal [DEVICE] | portal off [DEVICE]
+set -euo pipefail
+
+mode=on
+if [[ ${1-} == off ]]; then
+    mode=off
+    shift
+fi
+
+dev="${1-}"
+if [[ -z $dev ]]; then
+    # Real NICs only. A tun default route (Tailscale) is not what we want here.
+    dev="$(nmcli -g DEVICE,TYPE,STATE device |
+           awk -F: '$3 == "connected" && ($2 == "wifi" || $2 == "ethernet") { print $1; exit }')"
+fi
+[[ -n $dev ]] || { echo "portal: no connected wifi/ethernet device" >&2; exit 1; }
+
+if [[ $mode == off ]]; then
+    resolvectl revert "$dev"
+    resolvectl flush-caches
+    echo "portal: $dev back on pinned DoT"
+    exit 0
+fi
+
+# NM still parses the DHCP lease under dns=none, it just publishes it nowhere.
+mapfile -t dns < <(nmcli -g IP4.DNS,IP6.DNS device show "$dev" | tr '|' '\n' | grep .)
+[[ ${#dns[@]} -gt 0 ]] || { echo "portal: $dev advertised no DNS server" >&2; exit 1; }
+
+resolvectl dns "$dev" "${dns[@]}"
+resolvectl domain "$dev" '~.'
+resolvectl dnsovertls "$dev" no  # skip a TLS handshake that is not going to land
+resolvectl dnssec "$dev" no      # the portal's answers are forged by design
+resolvectl flush-caches          # or the failures from before stay cached
+
+echo "portal: $dev -> ${dns[*]}  (cleartext, unvalidated)"
+echo "portal: sign in, then run: portal off"

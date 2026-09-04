@@ -9,6 +9,14 @@
 #
 # Global servers race per-link ones ("in parallel to suitable per-link DNS
 # servers"), they do not wait for them — so dns=none below is load-bearing.
+#
+# DNSSEC=no is deliberate. Against an active attacker it buys nothing that
+# opportunistic DoT hasn't already conceded — allow-downgrade is strippable by
+# the same attacker — and against a passive one DoT does all the work, since
+# DNSSEC is integrity, not confidentiality. Cloudflare and Quad9 both validate
+# upstream regardless. What local validation did buy was silent dead sites:
+# resolved fails `no-signature` on CNAME chains into unsigned zones
+# (discordstatus.com -> stspg-customer.com), with nothing but a journal line.
 set -euo pipefail
 
 STAGE="$(mktemp -d)"
@@ -26,7 +34,7 @@ DNS=1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com 9.9.9.9#dns.quad9.net
 Domains=
 Domains=~.
 DNSOverTLS=opportunistic
-DNSSEC=allow-downgrade
+DNSSEC=no
 MulticastDNS=no
 RESOLVED
 

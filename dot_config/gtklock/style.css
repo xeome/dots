@@ -1,12 +1,16 @@
-@define-color background #0a0a0a;
-@define-color foreground #fafafa;
-@define-color muted #a1a1aa;
-@define-color surface #18181b;
-@define-color border #27272a;
-@define-color input #27272a;
-@define-color primary #7289da;
-@define-color primary-foreground #fafafa;
-@define-color destructive #ef4444;
+/* The Caffeine colour scheme, same values as quickshell's Theme.qml. Dark
+ * only: a lock screen has no light mode to follow. `border` is lifted off
+ * Caffeine's own #201e18 for the same reason Theme.qml lifts it — nothing
+ * here casts a shadow, so the hairline is the only separator. */
+@define-color background #111111;
+@define-color foreground #eeeeee;
+@define-color muted #b4b4b4;
+@define-color surface #191919;
+@define-color border #2e2e2e;
+@define-color input #222222;
+@define-color primary #ffe0c2;
+@define-color primary-foreground #081a1b;
+@define-color destructive #e54d2e;
 
 /* Transitions */
 @keyframes fadeIn {

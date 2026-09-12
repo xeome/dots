@@ -1,0 +1,32 @@
+# Renamed to their Caffeine equivalents; chezmoi does not delete a target just
+# because its source file went away.
+.config/alacritty/vesper.toml
+.config/ghostty/themes/vesper-shell
+.config/ghostty/themes/vesper-shell-light
+.local/share/vicinae/themes/zinc.toml
+
+# matugen, removed entirely. It derived a Material You palette from the
+# wallpaper, which is the opposite of pinning one scheme — and every file it
+# generated was already dead: nvim never read its base46, Colloid's gtk.css
+# never imported its colors.css, hypr loads only lua_modules/, vesktop had a
+# different theme enabled, nothing called slurp.sh, and rofi, alacritty and
+# ghostty all select themes of their own. zathura and yazi were the only live
+# consumers, and they are pinned to Caffeine now.
+#
+# Every entry below can be dropped once each machine has applied once.
+.config/matugen
+.config/rofi/themes/spotlight-dark-matugen.rasi
+.config/ghostty/themes/matugen
+.config/kitty/slurp.sh
+.config/gtk-3.0/colors.css
+.config/gtk-4.0/colors.css
+.config/vesktop/themes/axmat.theme.css
+.config/alacritty/colors.toml
+.cache/wal
+
+# Only colors.conf here was matugen's. The other four modules/*.conf are
+# hand-written, and belong to the .conf config that predates the Lua one —
+# `hyprctl systeminfo` reports `configProvider: lua`, so hyprland.conf,
+# shared.conf and modules/ are all dead, but pruning that is its own cleanup
+# and not matugen's doing.
+.config/hypr/modules/colors.conf

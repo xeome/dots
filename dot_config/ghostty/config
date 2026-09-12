@@ -17,18 +17,20 @@ font-family-bold-italic = Monaspace Neon
 font-style-bold-italic = Bold Italic
 
 # --- Window ---
-background-opacity = 0.85
+# Opaque — no background-opacity line, whose default is 1. The whole point of
+# pinning a scheme is that #111111 is #111111 everywhere; at 0.85 every
+# contrast ratio was a function of the wallpaper.
 window-padding-x = 15
 window-padding-y = 15
 
-# Every colour lives in themes/vesper-shell{,-light} — Vesper warmed to match
-# quickshell's Theme.qml. Nothing colour-related belongs in this file: anything
+# Every colour lives in themes/caffeine{,-light} — the Caffeine scheme, also
+# carried by quickshell's Theme.qml. Nothing colour-related belongs here: anything
 # set here would silently override the theme rather than sit alongside it.
 #
 # The pair form follows the desktop colour scheme live, so SUPER+T (which flips
 # gsettings color-scheme) switches the terminal too, with no ghostty-specific
 # step in theme-toggle.
-theme = light:vesper-shell-light,dark:vesper-shell
+theme = light:caffeine-light,dark:caffeine
 
 keybind = ctrl+shift+plus=increase_font_size:1
 keybind = ctrl+shift+minus=decrease_font_size:1

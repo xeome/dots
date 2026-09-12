@@ -4,13 +4,10 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Caffeine's warm surface stack over the accent this repo already had:
-// #ffc799 is the same primary sway/conf.d/colors.conf and hypr's colors.lua
-// paint window borders with, so the shell and the compositor finally agree.
-//
-// Opaque by design. The bar used to be 82% black on a compositor blur layer,
-// which made every contrast ratio a function of the wallpaper. Flat surfaces at
-// a known lightness are what let the hairline borders below be this quiet.
+// The Caffeine colour scheme. One palette for the whole desktop — the shell,
+// all three terminals, hypr's window borders, hyprlock, gtklock, rofi and
+// vicinae all read the values below from their own config. See the block above
+// `bar` for where they come from.
 Singleton {
     id: root
 
@@ -53,44 +50,61 @@ Singleton {
         }
     }
 
-    // Surfaces, three steps. Warm-neutral, not grey: the tint is most of what
-    // makes this read differently from the zinc theme it replaces.
+    // Caffeine's own values, from
+    // github.com/crynta/terax-ai src/modules/theme/themes/caffeine.ts — the
+    // same file ~/.config/ghostty/themes/caffeine, alacritty's caffeine.toml
+    // and foot.ini are cut from. A colour that appears in two places on this
+    // desktop is the same colour in both.
     //
-    // Light values are the same warm hue pushed to the opposite end, not an
-    // inversion of the dark ones — elevated surfaces stay *lighter* than the
-    // bar in both modes (there are no shadows to read elevation from
-    // otherwise), and every hover moves *away* from the mode's extreme
-    // (lighter in dark mode, darker in light mode) rather than reusing one
-    // fixed direction.
-    readonly property color bar: light ? "#f2efe9" : "#111111"
-    readonly property color panel: light ? "#fbf9f6" : "#191919"     // menus, tooltips
-    readonly property color card: light ? "#fbf9f6" : "#191919"      // notification cards
-    readonly property color cardHover: light ? "#eee6d9" : "#221f1c"
-    readonly property color surface: light ? "#f6f2ec" : "#1b1917"   // a module sitting on the bar
-    readonly property color surfaceHover: light ? "#e9e0d0" : "#262220"
+    // Caffeine's neutrals are pure grey (#111111 → #191919 → #222222 →
+    // #2a2a2a); all of its warmth lives in `primary`, `secondary` and the
+    // ANSI ramp. The surfaces below used to carry a hand-mixed tint of their
+    // own, which is precisely the drift this replaces.
+    //
+    // Opaque by design. The bar used to be 82% black on a compositor blur
+    // layer, which made every contrast ratio a function of the wallpaper.
+    // Flat surfaces at a known lightness are what let the hairline borders
+    // below be this quiet — and the terminals are opaque for the same reason.
+    //
+    // `light` is Caffeine's own light variant, not an inversion of the dark
+    // one. Floating surfaces (panel, card) stay *lighter* than the bar in
+    // both modes, since there are no shadows to read elevation from; a module
+    // sitting *in* the bar (`surface`) is Caffeine's `muted`, which reads as
+    // recessed in light mode and raised in dark. Either way hover always
+    // moves away from the mode's extreme.
+    readonly property color bar: light ? "#f9f9f9" : "#111111"          // background
+    readonly property color panel: light ? "#fcfcfc" : "#191919"        // popover: menus, tooltips
+    readonly property color card: light ? "#fcfcfc" : "#191919"         // notification cards
+    readonly property color cardHover: light ? "#efefef" : "#222222"    // muted
+    readonly property color surface: light ? "#efefef" : "#222222"      // muted
+    readonly property color surfaceHover: light ? "#e8e8e8" : "#2a2a2a" // accent
 
-    // Caffeine ships --border: #201e18, which is invisible against #191919 —
-    // in the web app the separation comes from the lightness step between
-    // surfaces plus a shadow. Nothing here casts a shadow, so the hairline is
-    // the only separator and has to be lifted until it reads.
-    readonly property color border: light ? "#ddd3c4" : "#2e2a24"
-    readonly property color borderHover: light ? "#b8a688" : "#4a4238"
+    // Caffeine's light `border` (#d8d8d8) is used as-is. Its dark one
+    // (#201e18) is invisible against #191919 — in the web app the separation
+    // comes from the lightness step between surfaces plus a shadow. Nothing
+    // here casts a shadow, so the hairline is the only separator and has to
+    // be lifted until it reads. `input` (#484848) is the scheme's own
+    // brighter stroke, so the hover state needs no invention.
+    readonly property color border: light ? "#d8d8d8" : "#2e2e2e"
+    readonly property color borderHover: light ? "#b5b5b5" : "#484848"  // sidebarRing / input
     // Dividers inside an already-bordered group, which only need to be seen
-    // against their own container, not against the desktop.
-    readonly property color divider: light ? "#e8e0d3" : "#242019"
+    // against their own container, not against the desktop — so they sit one
+    // Caffeine step below `border`. Not `muted` (#222222), which check-palette
+    // rejects at 1.11:1 against the #191919 panel it draws on; `accent`
+    // (#2a2a2a) is the next step up and the first one that reads.
+    readonly property color divider: light ? "#e8e8e8" : "#2a2a2a"
 
-    readonly property color fg: light ? "#201d18" : "#eeeeee"
-    readonly property color fgDim: light ? "#55504a" : "#b4b4b4"
-    // 4.6:1 on `panel` in both modes, which is the floor rather than a
-    // preference: the smallest thing wearing this is Power's 9px profile
-    // detail line, and the old #555555 sat around 2.6:1 there.
-    readonly property color fgMuted: light ? "#746c60" : "#8a817a"
-    // Text on a filled module. Named for the job, not the colour, because
-    // `warn` and `accent` fills both want it and `toggle` doesn't. Dark text
-    // on a pale fill in dark mode; light text on a saturated fill in light
-    // mode — accent/warn have to stay saturated enough to read as a chip
-    // against a near-white bar, so the fill can no longer carry dark text.
-    readonly property color fgOnAccent: light ? "#fff8f0" : "#111111"
+    readonly property color fg: light ? "#202020" : "#eeeeee"           // foreground
+    readonly property color fgDim: light ? "#646464" : "#b4b4b4"        // mutedForeground
+    // Caffeine has no third foreground, so this one is derived — and derived
+    // against a floor rather than a preference: 4.8:1 on `panel` in both
+    // modes. The smallest thing wearing it is Power's 9px profile detail
+    // line, where anything looser stops being text.
+    readonly property color fgMuted: light ? "#707070" : "#8a8a8a"
+    // Text on a filled module — Caffeine's `primaryForeground`. Named for the
+    // job, not the colour, because `warn` and `accent` fills both want it and
+    // `toggle` doesn't.
+    readonly property color fgOnAccent: light ? "#ffffff" : "#081a1b"
 
     // One colour, one meaning — see BarModule.tone:
     //   accent  focus or selection    (active workspace, selected menu row)
@@ -99,16 +113,20 @@ Singleton {
     // The old theme filled all three with the same white, so a battery at 25%
     // looked exactly like a clock that is lit permanently.
     //
-    // accent stays the same hue in both modes (peach in dark, the same peach
-    // burnt down to a burnt-orange in light) — it's the one colour meant to
-    // read as "this shell" regardless of mode, and it's also the accent
-    // Colloid's GTK theme is built with (`-t orange`), so the two match.
-    readonly property color accent: light ? "#94500f" : "#ffc799"
-    readonly property color accentHover: light ? "#7a4009" : "#ffd7b3"
-    readonly property color toggle: light ? "#f0dfc7" : "#393028"
-    readonly property color toggleHover: light ? "#e3cba8" : "#4a3d31"
-    readonly property color warn: light ? "#b83b34" : "#ff8080"
-    readonly property color warnHover: light ? "#9c322c" : "#ff9999"
+    // accent is Caffeine's `primary`/`ring` and toggle its `secondary`, in
+    // both modes. This is also the accent Colloid's GTK theme is built with
+    // (`-t orange`) and the gradient hypr paints its active border with, so
+    // shell, compositor and GTK apps agree.
+    readonly property color accent: light ? "#644a40" : "#ffe0c2"
+    readonly property color accentHover: light ? "#4f3a31" : "#ffecd8"
+    readonly property color toggle: light ? "#ffdfb5" : "#393028"
+    readonly property color toggleHover: light ? "#ffd39b" : "#4a3d31"
+    // Caffeine's `destructive` in dark. In light it is the same #e54d2e, but
+    // white on it is only 3.9:1 and this is a chip with a battery percentage
+    // inside it — so light mode borrows the scheme's own light ANSI red,
+    // which is the same hue two steps down and clears 5:1.
+    readonly property color warn: light ? "#c0392b" : "#e54d2e"
+    readonly property color warnHover: light ? "#a52e22" : "#f0664a"
 
     readonly property int barHeight: 48
     readonly property int gap: 6

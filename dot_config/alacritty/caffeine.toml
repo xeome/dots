@@ -1,0 +1,46 @@
+# Caffeine — https://github.com/crynta/terax-ai src/modules/theme/themes/caffeine.ts
+#
+# Mirrors ~/.config/ghostty/themes/caffeine and ~/.config/foot/foot.ini — the
+# terminals are meant to be indistinguishable, so a change here wants the same
+# change there. quickshell's Theme.qml carries the same scheme for the shell.
+
+[colors.primary]
+foreground = "#eeeeee"
+# Caffeine's `background`, which is also Theme.bar: a terminal and the bar
+# above it are the same black.
+background = "#111111"
+
+# Caffeine's `primary`, its cursor and ring colour.
+[colors.cursor]
+text = "#081a1b"
+cursor = "#ffe0c2"
+
+# Caffeine's selection is `rgba(255,224,194,0.20)` — the primary as a 20% wash,
+# not a fill. Alacritty has no alpha here, so it is flattened over the
+# background and the ordinary foreground stays on top.
+[colors.selection]
+text = "#eeeeee"
+background = "#413a34"
+
+# Caffeine's `terminal.ansi`, verbatim. Slot 0 is the scheme's `secondary`
+# (#393028, espresso) rather than a true black: the background is already
+# near-black, so a black "black" would be invisible.
+[colors.normal]
+black = "#393028"
+red = "#e06c75"
+green = "#b5c98f"
+yellow = "#ffd9a0"
+blue = "#8fb0d9"
+magenta = "#cba6c9"
+cyan = "#88c0c8"
+white = "#d8cbb8"
+
+[colors.bright]
+black = "#5c5046"
+red = "#ff8a93"
+green = "#c9dba8"
+yellow = "#ffe6c4"
+blue = "#a9c3e0"
+magenta = "#ddc0db"
+cyan = "#a4d4da"
+white = "#f0e6d6"

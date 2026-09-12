@@ -1,0 +1,38 @@
+# The light counterpart to caffeine — Caffeine's own `variants.light`.
+#
+# Managed by chezmoi — edit dot_config/ghostty/themes/caffeine-light
+#
+# Selected by `theme = light:caffeine-light,dark:caffeine` in the config:
+# ghostty follows the desktop colour scheme through the settings portal, and
+# theme-toggle already flips that (gsettings color-scheme), so the terminal
+# switches with the bar without theme-toggle knowing ghostty exists.
+
+# --- ANSI 16 -------------------------------------------------------------
+palette = 0=#3a322a
+palette = 1=#c0392b
+palette = 2=#5a7d3c
+palette = 3=#a9762a
+palette = 4=#3a6ea5
+palette = 5=#9a4f8a
+palette = 6=#2a8589
+palette = 7=#c8c0b4
+palette = 8=#6b6258
+palette = 9=#d04a3a
+palette = 10=#6a9048
+palette = 11=#c08a3a
+palette = 12=#4a7eb5
+palette = 13=#aa5f9a
+palette = 14=#3a989c
+palette = 15=#202020
+
+# --- Surfaces ------------------------------------------------------------
+background = #f9f9f9
+foreground = #202020
+
+cursor-color = #644a40
+cursor-text = #ffffff
+
+# `rgba(100,74,64,0.16)` flattened over the background, same reasoning as the
+# dark theme.
+selection-background = #e1dddb
+selection-foreground = #202020

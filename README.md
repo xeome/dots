@@ -8,7 +8,6 @@ This is my personal repo for my Arch linux configurations.
 | Bar, notifications and OSD | `quickshell`                                         |
 | Launcher                   | `vicinae`                                            |
 | Terminal                   | `ghostty`                                            |
-| Theming                    | `matugen`                                            |
 | Cursor                     | `Bibata-Modern-Classic`                              |
 | Wallpaper                  | `waypaper`                                           |
 | Lock screen                | `hyprlock`                                           |

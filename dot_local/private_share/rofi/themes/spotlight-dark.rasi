@@ -7,13 +7,16 @@
 * {
     font: "SF Pro rounded 12";
 
-    bg0: #000000a6;
-    bg1: #7E7E7E80;
-    bg2: #0860f2D6;
+    /* The Caffeine colour scheme, same values as quickshell's Theme.qml.
+     * Opaque: bg0 was 65% black over the compositor blur, which made the
+     * launcher's contrast a function of whatever was behind it. */
+    bg0: #111111;
+    bg1: #2e2e2e;
+    bg2: #ffe0c2;
 
-    fg0: #DEDEDE;
-    fg1: #FFFFFF;
-    fg2: #DEDEDE80;
+    fg0: #eeeeee;
+    fg1: #081a1b;
+    fg2: #8a8a8a;
 
     background-color: transparent;
     text-color: @fg0;

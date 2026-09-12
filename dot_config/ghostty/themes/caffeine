@@ -1,0 +1,52 @@
+# Caffeine — https://github.com/crynta/terax-ai src/modules/theme/themes/caffeine.ts
+#
+# Managed by chezmoi — edit dot_config/ghostty/themes/caffeine
+#
+# Ghostty resolves a bare theme name against ~/.config/ghostty/themes before
+# its own share/ghostty/themes, so `theme = caffeine` in the config finds this
+# file.
+#
+# Colours only. A theme file may set any config option, but the built-in themes
+# are audited to stay colour-only and this follows that: opacity, padding and
+# fonts stay in the config where they can be read alongside each other.
+#
+# Mirrors ~/.config/alacritty/caffeine.toml, ~/.config/foot/foot.ini and
+# quickshell's Theme.qml — a change here wants the same change there.
+
+# --- ANSI 16 -------------------------------------------------------------
+# Caffeine's `terminal.ansi`, verbatim and in order. Slot 0 is the scheme's
+# `secondary` (#393028, espresso) rather than a true black: the background
+# below is already near-black, so a black "black" would be invisible.
+palette = 0=#393028
+palette = 1=#e06c75
+palette = 2=#b5c98f
+palette = 3=#ffd9a0
+palette = 4=#8fb0d9
+palette = 5=#cba6c9
+palette = 6=#88c0c8
+palette = 7=#d8cbb8
+palette = 8=#5c5046
+palette = 9=#ff8a93
+palette = 10=#c9dba8
+palette = 11=#ffe6c4
+palette = 12=#a9c3e0
+palette = 13=#ddc0db
+palette = 14=#a4d4da
+palette = 15=#f0e6d6
+
+# --- Surfaces ------------------------------------------------------------
+# Caffeine's `background` / `foreground`, which are also Theme.bar / Theme.fg,
+# so a terminal and the bar above it are the same black.
+background = #111111
+foreground = #eeeeee
+
+# Caffeine's `primary`, its cursor and ring colour.
+cursor-color = #ffe0c2
+cursor-text = #081a1b
+
+# Caffeine's selection is `rgba(255,224,194,0.20)` — the primary as a 20% wash,
+# not a fill. Ghostty has no alpha here, so it is flattened over the background
+# (0.2*#ffe0c2 + 0.8*#111111) and the ordinary foreground stays on top. A solid
+# accent fill would be the shell's selection style, not this scheme's.
+selection-background = #413a34
+selection-foreground = #eeeeee

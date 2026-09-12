@@ -1,0 +1,87 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+
+    // Colours are ANSI names on purpose, not hex. Every terminal here now
+    // carries Caffeine's 16-colour ramp (see ~/.config/ghostty/themes/caffeine),
+    // so `light_yellow` *is* the scheme's cream and `green`/`cyan` its sage and
+    // teal — which means this config needs no palette of its own and follows
+    // the terminal if the scheme ever changes. light_yellow is the accent.
+    //
+    // Nerd Font glyphs are \u escapes so the file stays ASCII; the cat in
+    // ~/.config/fastfetch/cat is the only non-ASCII here. Note that fastfetch's
+    // JSON parser rejects  even escaped, so colour goes through the
+    // `color` / `outputColor` / `keyColor` options and never inline SGR.
+    "logo": {
+        "type": "file",
+        "source": "~/.config/fastfetch/cat",
+        "color": { "1": "light_yellow" },
+        "padding": { "top": 1, "right": 3 }
+    },
+
+    "display": {
+        "separator": "  ",
+        // 12, not the 9 that just fits " kernel": fastfetch aligns values
+        // with an absolute-column escape, so a key that overruns the column
+        // loses its separator entirely rather than pushing the value right —
+        // and a Nerd glyph is two cells wide in some fonts, which is exactly
+        // enough to tip the longest key over.
+        "key": { "width": 12 },
+        "color": { "separator": "light_black" },
+        // Bars rather than bare percentages for memory and disk: the number is
+        // noise at a glance, the fill is the signal.
+        "bar": {
+            "char": { "elapsed": "━", "total": "─" },
+            "width": 12,
+            // No brackets around the bar, and the unfilled run in Theme.border
+            // rather than fastfetch's default bright white — otherwise the
+            // empty part of the bar shouts louder than the full part.
+            "border": { "left": "", "right": "" },
+            "color": { "total": "light_black" }
+        },
+        // type 2 = bar only, no number. The three states keep fastfetch's
+        // green/yellow/red thresholds, which are Caffeine's ANSI 2/3/1 now, so
+        // a disk at 90% still reads as a warning without leaving the scheme.
+        "percent": {
+            "type": 2,
+            "color": { "green": "green", "yellow": "yellow", "red": "red" }
+        }
+    },
+
+    "modules": [
+        // No `format` on the title — a custom one loses the per-part colouring
+        // that this `color` object drives.
+        {
+            "type": "title",
+            "color": { "user": "light_yellow", "at": "light_black", "host": "light_yellow" }
+        },
+        {
+            "type": "custom",
+            "format": "────────────────────────────────────────────",
+            "outputColor": "light_black"
+        },
+
+        { "type": "os",       "key": " os",     "keyColor": "light_yellow" },
+        { "type": "kernel",   "key": " kernel", "keyColor": "light_yellow", "format": "{release}" },
+        { "type": "uptime",   "key": " uptime", "keyColor": "light_yellow" },
+        { "type": "packages", "key": " pkgs",   "keyColor": "light_yellow", "format": "{all}" },
+        { "type": "shell",    "key": " shell",  "keyColor": "light_yellow" },
+
+        "break",
+
+        { "type": "wm",       "key": " wm",    "keyColor": "green" },
+        { "type": "terminal", "key": " term",  "keyColor": "green" },
+        { "type": "display",  "key": " disp",  "keyColor": "green", "format": "{width}x{height} @ {refresh-rate}Hz" },
+        { "type": "custom",   "key": " theme", "keyColor": "green", "format": "Caffeine" },
+
+        "break",
+
+        { "type": "cpu",    "key": " cpu",  "keyColor": "cyan", "format": "{name}" },
+        { "type": "gpu",    "key": " gpu",  "keyColor": "cyan", "format": "{name}" },
+        { "type": "memory", "key": " mem",  "keyColor": "cyan" },
+        { "type": "disk",   "key": " disk", "keyColor": "cyan", "folders": "/" },
+
+        "break",
+
+        { "type": "colors", "paddingLeft": 2, "symbol": "circle" }
+    ]
+}

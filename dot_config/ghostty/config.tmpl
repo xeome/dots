@@ -1,19 +1,18 @@
+{{- $m := index .machines .chezmoi.hostname -}}
 # --- Environment ---
 shell-integration-features = ssh-env
 
 # --- Fonts ---
-font-size = 10
+font-size = {{ mulf 10.0 $m.text_scale }}
 
+# One family for all four styles. Medium, not Bold: extra weight only buys
+# legibility at small visual angles (Beier & Oderkerk 2019), and monitor
+# scale or text_scale now puts text at a ~12' x-height, past the critical
+# print size.
 font-family = JetBrainsMono Nerd Font
-font-style = Bold
-
-font-family-bold = Monaspace Neon
-font-style-bold = ExtraBold
-
-font-family-italic = Monaspace Neon
-font-style-italic = Italic
-
-font-family-bold-italic = Monaspace Neon
+font-style = Medium
+font-style-bold = Bold
+font-style-italic = Medium Italic
 font-style-bold-italic = Bold Italic
 
 # --- Window ---

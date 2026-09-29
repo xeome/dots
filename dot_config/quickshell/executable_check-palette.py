@@ -2,7 +2,7 @@
 """Guards the two claims the Caffeine palette makes that a human can't eyeball.
 
 1. The contrast floors asserted in Theme.qml's comments, in both modes.
-   The smallest text on this desktop is 9px, so a token drifting to 3:1 is a
+   The smallest text on this desktop is 10px, so a token drifting to 3:1 is a
    legibility bug that only shows up on the one label nobody looks at.
 2. That the terminals, the compositor and the shell agree. The whole point of
    pinning a scheme is that #111111 is #111111 everywhere; six config files in
@@ -59,6 +59,8 @@ PAIRS = [
     ("fgDim", "panel", 4.5),
     ("fgMuted", "panel", 4.5),   # 9px Power detail line, the tightest case
     ("fgMuted", "bar", 4.5),
+    ("fgMuted", "surface", 4.5),       # Audio's muted label sits on a module fill
+    ("fgMuted", "surfaceHover", 4.5),  # ...and on the hover fill under the pointer
     ("accent", "bar", 4.5),      # accent also draws as text, not just as fill
     ("fgOnAccent", "accent", 4.5),
     ("fgOnAccent", "warn", 4.5),
@@ -95,7 +97,7 @@ SHARED = {
     "dot_config/ghostty/themes/caffeine": ("background = #111111", "cursor-color = #ffe0c2"),
     "dot_config/ghostty/themes/caffeine-light": ("background = #f9f9f9", "cursor-color = #644a40"),
     "dot_config/alacritty/caffeine.toml": ('background = "#111111"', 'cursor = "#ffe0c2"'),
-    "dot_config/foot/foot.ini": ("background=111111", "cursor=081a1b ffe0c2"),
+    "dot_config/foot/foot.ini.tmpl": ("background=111111", "cursor=081a1b ffe0c2"),
     "dot_config/hypr/lua_modules/colors.lua": ('background = "rgb(111111)"', 'primary = "rgb(FFE0C2)"'),
     "dot_config/sway/conf.d/colors.conf": ("set $background #111111", "set $primary #ffe0c2"),
     "dot_config/gtklock/style.css": ("@define-color background #111111;", "@define-color primary #ffe0c2;"),

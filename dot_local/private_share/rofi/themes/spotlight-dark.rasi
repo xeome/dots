@@ -5,7 +5,7 @@
  *******************************************************************************/
 
 * {
-    font: "SF Pro rounded 12";
+    font: "Adwaita Sans 12";
 
     /* The Caffeine colour scheme, same values as quickshell's Theme.qml.
      * Opaque: bg0 was 65% black over the compositor blur, which made the
@@ -36,7 +36,7 @@ window {
 }
 
 inputbar {
-    font: "Montserrat 20";
+    font: "Adwaita Sans 20";
     padding: 12px;
     spacing: 12px;
     children: [ icon-search, entry];

@@ -1,3 +1,4 @@
+{{- $m := index .machines .chezmoi.hostname -}}
 # Caffeine — https://github.com/crynta/terax-ai src/modules/theme/themes/caffeine.ts
 #
 # Mirrors ~/.config/ghostty/themes/caffeine{,-light} and alacritty's
@@ -5,10 +6,10 @@
 # A change here wants the same change there.
 
 [main]
-font=JetBrainsMono Nerd Font:style=Bold:size=10
-font-bold=Monaspace Neon:style=ExtraBold:size=10
-font-italic=Monaspace Neon:style=Italic:size=10
-font-bold-italic=Monaspace Neon:style=Bold Italic:size=10
+font=JetBrainsMono Nerd Font:style=Medium:size={{ mulf 10.0 $m.text_scale }}
+font-bold=JetBrainsMono Nerd Font:style=Bold:size={{ mulf 10.0 $m.text_scale }}
+font-italic=JetBrainsMono Nerd Font:style=Medium Italic:size={{ mulf 10.0 $m.text_scale }}
+font-bold-italic=JetBrainsMono Nerd Font:style=Bold Italic:size={{ mulf 10.0 $m.text_scale }}
 pad=15x15
 term=xterm-256color
 

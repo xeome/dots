@@ -11,7 +11,7 @@ hl.config({
   group = {
     groupbar = {
       enabled = true,
-      font_family = "Source Code Pro Semi-Bold",
+      font_family = "Adwaita Sans",
       font_size = 8,
     },
   },

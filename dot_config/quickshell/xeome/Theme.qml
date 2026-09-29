@@ -97,10 +97,10 @@ Singleton {
     readonly property color fg: light ? "#202020" : "#eeeeee"           // foreground
     readonly property color fgDim: light ? "#646464" : "#b4b4b4"        // mutedForeground
     // Caffeine has no third foreground, so this one is derived — and derived
-    // against a floor rather than a preference: 4.8:1 on `panel` in both
-    // modes. The smallest thing wearing it is Power's 9px profile detail
-    // line, where anything looser stops being text.
-    readonly property color fgMuted: light ? "#707070" : "#8a8a8a"
+    // against a floor rather than a preference: 4.5:1 on every fill it sits
+    // on, surfaceHover included, in both modes. The smallest thing wearing it
+    // is Power's 10px profile detail line, where anything looser stops being text.
+    readonly property color fgMuted: light ? "#686868" : "#919191"
     // Text on a filled module — Caffeine's `primaryForeground`. Named for the
     // job, not the colour, because `warn` and `accent` fills both want it and
     // `toggle` doesn't.
@@ -165,7 +165,9 @@ Singleton {
     // the bar smaller. What did shrink is horizontal — proportional advances
     // render the clock's "14:32  Mon 17 Aug" at 122px where mono took 143 — and
     // that part is the point, not something to compensate for with size.
-    readonly property int size: 14
+    // Scaled per machine by TEXT_SCALE (hyprland.lua, from .chezmoidata.toml);
+    // unset means 1.
+    readonly property int size: Math.round(14 * (Number(Quickshell.env("TEXT_SCALE")) || 1))
     // Every ordinary label inherits this. Eighteen of them used to pin 500
     // explicitly, which meant "lighter than the old 600" and silently became a
     // no-op once the default dropped — so raising the token moved almost

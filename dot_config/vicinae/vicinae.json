@@ -3,7 +3,7 @@
     "considerPreedit": false,
     "faviconService": "twenty",
     "font": {
-        "normal": "SF Pro Text",
+        "normal": "Adwaita Sans",
         "size": 10
     },
     "keybinding": "default",

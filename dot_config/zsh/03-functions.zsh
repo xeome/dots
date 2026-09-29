@@ -9,3 +9,5 @@ zst() {
 jqi() {
     jq . "$1" > "tmp_$$.json" && mv "tmp_$$.json" "$1"
 }
+
+kb() { npx kanban-cli@0.3.1 "$@"; }

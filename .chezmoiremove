@@ -30,3 +30,7 @@
 # shared.conf and modules/ are all dead, but pruning that is its own cleanup
 # and not matugen's doing.
 .config/hypr/modules/colors.conf
+
+# Manual captive-portal toggle, replaced by the NetworkManager dispatcher hook
+# that run_after_configure-dns.sh installs.
+.local/bin/portal

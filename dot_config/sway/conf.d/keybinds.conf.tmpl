@@ -9,7 +9,6 @@
 {{- $m := index .machines .chezmoi.hostname }}
 
 set $mod Mod4
-set $alt Mod1
 floating_modifier $mod
 
 # ~~~ general
@@ -34,8 +33,6 @@ bindsym $mod+d exec {{ $m.discord_cmd }}
 bindsym Print exec flameshot gui -r | wl-copy
 
 # ~~~ audio
-bindsym $alt+Up exec pamixer -i 5
-bindsym $alt+Down exec pamixer -d 5
 bindsym $mod+a exec bash ~/.local/bin/status
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next

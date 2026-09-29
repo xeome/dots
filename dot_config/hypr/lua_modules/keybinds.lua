@@ -5,7 +5,6 @@
 -- =============================================================================
 
 local mod = "SUPER"
-local alt = "ALT"
 
 hl.config({
   binds = {
@@ -29,8 +28,6 @@ hl.bind(mod .. " + v", hl.dsp.exec_cmd("code --ozone-platform=wayland"))
 -- not a binary and never was — same dead bind as the two ags ones above.
 
 -- ~~~ audio
-hl.bind(alt .. " + up", hl.dsp.exec_cmd("pamixer -i 5"))
-hl.bind(alt .. " + down", hl.dsp.exec_cmd("pamixer -d 5"))
 hl.bind(mod .. " + a", hl.dsp.exec_cmd("bash ~/.local/bin/status"))
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"))
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"))

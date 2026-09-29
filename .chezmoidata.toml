@@ -13,10 +13,11 @@ secondary_monitor  = "DP-3"
 numlock            = true
 natural_scroll     = false
 is_laptop          = false
-# text_scale multiplies terminal, GTK and quickshell text. 1.35 puts the 27" 1440p
-# at 65 cm on the ~12' x-height reading floor; the ultrabook gets there through
-# monitor scale 2 instead, so its text stays at 1.
-text_scale         = 1.35
+# text_scale multiplies terminal, GTK and quickshell text. 1.35 put the 27" 1440p
+# at 65 cm on the ~12' x-height reading floor but read as too big in practice;
+# 1.1 (~10') is the compromise. The ultrabook gets there through monitor
+# scale 2 instead, so its text stays at 1.
+text_scale         = 1.1
 discord_cmd        = "equibop --ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations --enable-features=AcceleratedVideoDecodeLinuxGL --enable-features=AcceleratedVideoEncoder --enable-features=VaapiIgnoreDriverChecks --enable-features=CanvasOopRasterization --enable-gpu-rasterization --enable-zero-copy --enable-features=WebRTCPipeWireCapturer"
 
 [[machines.xeome-desktop.monitors]]

@@ -1,13 +1,14 @@
 #!/bin/bash
 # Power profiles for the quickshell bar's battery module.
 #
-# Two backends behind one three-way choice:
+# Two halves behind one three-way choice:
 #   - tlp-pd answers org.freedesktop.UPower.PowerProfiles, which quickshell
 #     binds natively. TLP applies the profile; polkit allows an active session
 #     without a password.
-#   - scx_loader switches the sched_ext scheduler mode. Its stock polkit action
-#     is auth_admin_keep, so the rule below is what stops a bar click from
-#     popping a password dialog.
+#   - On a hybrid Intel CPU, power-saver also pins user.slice to the E-cores
+#     via `systemctl set-property --runtime`. The scheduler stays stock EEVDF,
+#     which has no E-core preference of its own. The rule below is what stops
+#     that from popping a password dialog.
 #
 # Everything here is root-owned and outside chezmoi's $HOME scope, so the files
 # are staged as the user and installed with one pkexec. chezmoi re-runs this
@@ -19,33 +20,23 @@ set -euo pipefail
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 
-cat > "$STAGE/49-scx-loader.rules" <<'RULES'
-// Let the desktop shell switch sched_ext schedulers without an auth prompt.
-// Stock policy is auth_admin_keep, which pops a password dialog once per
-// session — unusable for a power-profile button in the bar.
+cat > "$STAGE/49-ecore-pin.rules" <<'RULES'
+// Let the power menu pin user.slice to the E-cores without an auth prompt.
+// Scoped to set-property on user.slice alone: manage-units at large would let
+// any wheel process start and stop system services unprompted.
 //
-// This grants scheduler control to anything running as a wheel user. That is
-// not privilege escalation, but it is a self-DoS vector: a broken scheduler
-// can stall the machine.
+// set-property still takes any property, not just AllowedCPUs. That is not
+// privilege escalation, but it is a self-DoS vector: CPUQuota=1% on
+// user.slice would stall your own session.
 polkit.addRule(function (action, subject) {
-    if (action.id == "org.scx.loader.manage-schedulers" && subject.isInGroup("wheel")) {
+    if (action.id == "org.freedesktop.systemd1.manage-units" &&
+        action.lookup("unit") == "user.slice" &&
+        action.lookup("verb") == "set-property" &&
+        subject.active && subject.isInGroup("wheel")) {
         return polkit.Result.YES;
     }
 });
 RULES
-
-cat > "$STAGE/scx-cake.toml" <<'CAKE'
-
-[scheds.scx_cake]
-# auto_mode is empty on purpose: bare scx_cake already defaults to -p gaming.
-# That is why the shell maps its performance profile to lowlatency rather than
-# gaming — mapping it to gaming would make two profiles the same scheduler.
-auto_mode = []
-gaming_mode = ["-p", "gaming"]
-lowlatency_mode = ["-p", "esports"]
-powersave_mode = ["-p", "battery"]
-server_mode = ["-p", "legacy"]
-CAKE
 
 {{ if $m.is_laptop -}}
 cat > "$STAGE/tlp.conf" <<'TLPCONF'
@@ -119,21 +110,17 @@ STAGE="$1"
 
 # tlp.service is not enabled by the package on Arch, and without it nothing
 # applies a profile at boot — tlp-pd alone only covers switching at runtime.
-systemctl enable --now tlp.service tlp-pd.service scx_loader.service
+systemctl enable --now tlp.service tlp-pd.service
 
-install -Dm644 -o root -g root "$STAGE/49-scx-loader.rules" \
-    /etc/polkit-1/rules.d/49-scx-loader.rules
+install -Dm644 -o root -g root "$STAGE/49-ecore-pin.rules" \
+    /etc/polkit-1/rules.d/49-ecore-pin.rules
 
-# Appended rather than templated: the rest of the file is the distro's, and
-# every other scheduler's modes in it are none of our business. Guarded on the
-# file existing, because appending to a missing one would produce a config with
-# a cake section and no default_sched, which is worse than doing nothing.
-if [ ! -f /etc/scx_loader.toml ]; then
-    echo "warning: /etc/scx_loader.toml is missing — cake mode map not installed" >&2
-elif ! grep -q '^\[scheds.scx_cake\]' /etc/scx_loader.toml; then
-    cp -n /etc/scx_loader.toml /etc/scx_loader.toml.pre-quickshell || true
-    cat "$STAGE/scx-cake.toml" >> /etc/scx_loader.toml
-    systemctl restart scx_loader.service
+# Retired: the menu used to switch scx_cake modes through scx_loader. cake
+# dropped its -p profiles in scx-scheds 1.1.3, so it had been failing to start
+# and leaving EEVDF running anyway. Undo what this script used to install.
+rm -f /etc/polkit-1/rules.d/49-scx-loader.rules
+if systemctl is-enabled -q scx_loader.service 2>/dev/null; then
+    systemctl disable --now scx_loader.service
 fi
 
 # Only touched when it actually differs — `tlp start` re-applies everything and

@@ -14,8 +14,10 @@ import Quickshell.Services.UPower
 // balanced *_ON_BAT, power-saver *_ON_SAV — which is why the row subtitles
 // stay vague: the specifics live in /etc/tlp.conf and differ per machine.
 //
-// The scheduler half shells out to scxctl, which 49-scx-loader.rules lets a
-// wheel user do unprompted.
+// The E-core half: on a hybrid Intel CPU, power-saver pins user.slice (your
+// session and every app in it) to the E-cores with a runtime cpuset. It
+// follows the profile rather than the click, so a profile set from anywhere
+// else pins too. 49-ecore-pin.rules lets a wheel user do it unprompted.
 PopupWindow {
     id: root
 
@@ -26,29 +28,25 @@ PopupWindow {
     // immediately reopen what it just closed.
     property double closedAt: 0
 
-    // Parsed out of `scxctl get`. Both empty when scx_loader isn't answering,
-    // which is what hides the scheduler line on a machine without it.
-    property string sched: ""
-    property string modeLabel: ""
+    // The E-core list, e.g. "4-11". Empty on a CPU without E-cores, which is
+    // what turns the pin into a no-op on every other machine.
+    property string ecores: ""
 
     readonly property var profiles: [
         {
             profile: PowerProfile.Performance,
-            mode: "lowlatency",
             name: "Performance",
-            detail: "max EPP · esports scheduler"
+            detail: "max EPP"
         },
         {
             profile: PowerProfile.Balanced,
-            mode: "auto",
             name: "Balanced",
-            detail: "stock tuning · default scheduler"
+            detail: "stock tuning"
         },
         {
             profile: PowerProfile.PowerSaver,
-            mode: "powersave",
             name: "Power saver",
-            detail: "no turbo · battery scheduler"
+            detail: root.ecores !== "" ? "no turbo · E-cores only" : "no turbo"
         }
     ]
 
@@ -59,16 +57,17 @@ PopupWindow {
 
     function apply(p: var): void {
         PowerProfiles.profile = p.profile;
-
-        // A mode change stops and restarts the BPF scheduler, and the kernel
-        // falls back to EEVDF for the gap — so it only happens when the mode
-        // actually differs. Re-picking the profile you're already on is free.
-        if (root.modeLabel.toLowerCase() !== p.mode) {
-            switcher.command = ["scxctl", "switch", "--mode", p.mode];
-            switcher.running = true;
-        }
-
         root.visible = false;
+    }
+
+    // --runtime, so a reboot always comes back unpinned. An empty AllowedCPUs
+    // resets to every CPU.
+    function pin(): void {
+        if (root.ecores === "")
+            return;
+        const cpus = PowerProfiles.profile === PowerProfile.PowerSaver ? root.ecores : "";
+        pinner.command = ["systemctl", "--no-ask-password", "set-property", "--runtime", "user.slice", `AllowedCPUs=${cpus}`];
+        pinner.running = true;
     }
 
     anchor.item: anchorItem
@@ -82,31 +81,34 @@ PopupWindow {
     visible: false
     grabFocus: true
 
-    onVisibleChanged: if (visible)
-        reader.running = true;
-    else
-        closedAt = Date.now();
+    onVisibleChanged: if (!visible)
+        closedAt = Date.now()
+
+    Connections {
+        target: PowerProfiles
+
+        function onProfileChanged(): void {
+            root.pin();
+        }
+    }
 
     Process {
-        id: reader
-        command: ["scxctl", "get"]
+        // The perf PMU for the E-cores only exists on hybrid Intel. Read once:
+        // the list cannot change while running. Pinning on load also
+        // reconciles the cpuset after a quickshell restart.
+        running: true
+        command: ["cat", "/sys/devices/cpu_atom/cpus"]
 
         stdout: StdioCollector {
-            // "running Cake in LowLatency mode"
             onStreamFinished: {
-                const m = text.match(/running (\w+) in (\w+) mode/);
-                root.sched = m ? m[1] : "";
-                root.modeLabel = m ? m[2] : "";
+                root.ecores = text.trim();
+                root.pin();
             }
         }
     }
 
     Process {
-        id: switcher
-        // Read the state back rather than assuming the switch took: if the
-        // scheduler fails to start, scx_loader leaves you on EEVDF quietly and
-        // this line is the only place that shows it.
-        onExited: reader.running = true
+        id: pinner
     }
 
     Rectangle {
@@ -234,15 +236,7 @@ PopupWindow {
 
                 Layout.fillWidth: true
                 spacing: 1
-                visible: root.sched !== "" || PowerProfiles.degradationReason !== PerformanceDegradationReason.None || PowerProfiles.holds.length > 0
-
-                BarText {
-                    Layout.fillWidth: true
-                    visible: root.sched !== ""
-                    text: `󰬔  ${root.sched} · ${root.modeLabel}`
-                    font.pixelSize: Theme.size - 3
-                    color: Theme.fgDim
-                }
+                visible: PowerProfiles.degradationReason !== PerformanceDegradationReason.None || PowerProfiles.holds.length > 0
 
                 BarText {
                     Layout.fillWidth: true

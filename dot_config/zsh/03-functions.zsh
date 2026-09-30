@@ -11,3 +11,15 @@ jqi() {
 }
 
 kb() { npx kanban-cli@0.3.1 "$@"; }
+
+# Claude Code session types. Test session: writes tests, hooks off (its new
+# tests fail by design). Build session: tests and fixtures read-only, no commit.
+cc-test() { claude --settings '{"disableAllHooks":true}' "$@"; }
+cc-build() {
+    claude --settings '{"permissions":{"deny":[
+        "Edit(**/*_test.go)", "Edit(**/testdata/**)",
+        "Edit(**/test_*.py)", "Edit(**/*_test.py)",
+        "Edit(**/*.test.*)", "Edit(**/*.spec.*)", "Edit(**/__tests__/**)",
+        "Edit(**/tests/**)", "Edit(**/test/**)", "Edit(**/fixtures/**)",
+        "Bash(git commit *)"]}}' "$@"
+}

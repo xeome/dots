@@ -31,5 +31,15 @@ window-padding-y = 15
 # step in theme-toggle.
 theme = light:caffeine-light,dark:caffeine
 
+# --- Chrome ---
+# Hyprland tiles, so the headerbar's window buttons do nothing. Without it
+# the tab bar appears only at 2+ tabs; new tab and the menu live in the
+# right-click menu and keybinds.
+gtk-titlebar = false
+gtk-wide-tabs = false
+window-title-font-family = JetBrainsMono Nerd Font
+# Square, flat, monospace chrome; see the file header for how it beats Colloid.
+gtk-custom-css = brutal.css
+
 keybind = ctrl+shift+plus=increase_font_size:1
 keybind = ctrl+shift+minus=decrease_font_size:1

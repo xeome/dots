@@ -97,7 +97,7 @@ SHARED = {
     "dot_config/ghostty/themes/caffeine": ("background = #111111", "cursor-color = #ffe0c2"),
     "dot_config/ghostty/themes/caffeine-light": ("background = #f9f9f9", "cursor-color = #644a40"),
     "dot_config/alacritty/caffeine.toml": ('background = "#111111"', 'cursor = "#ffe0c2"'),
-    "dot_config/foot/foot.ini.tmpl": ("background=111111", "cursor=081a1b ffe0c2"),
+    "dot_config/foot/foot.ini": ("background=111111", "cursor=081a1b ffe0c2"),
     "dot_config/hypr/lua_modules/colors.lua": ('background = "rgb(111111)"', 'primary = "rgb(FFE0C2)"'),
     "dot_config/sway/conf.d/colors.conf": ("set $background #111111", "set $primary #ffe0c2"),
     "dot_config/gtklock/style.css": ("@define-color background #111111;", "@define-color primary #ffe0c2;"),

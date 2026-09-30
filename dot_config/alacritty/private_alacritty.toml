@@ -1,9 +1,8 @@
-{{- $m := index .machines .chezmoi.hostname -}}
 [env]
 TERM = "xterm-256color"
 
 [font]
-size = {{ mulf 10.0 $m.text_scale }}
+size = 10
 
 [font.normal]
 family = "JetBrainsMono Nerd Font"

@@ -13,7 +13,7 @@ secondary_monitor  = "DP-3"
 numlock            = true
 natural_scroll     = false
 is_laptop          = false
-# text_scale multiplies terminal, GTK and quickshell text. 1.35 put the 27" 1440p
+# text_scale multiplies GTK and quickshell text; terminals stay at 10pt. 1.35 put the 27" 1440p
 # at 65 cm on the ~12' x-height reading floor but read as too big in practice;
 # 1.1 (~10') is the compromise. The ultrabook gets there through monitor
 # scale 2 instead, so its text stays at 1.

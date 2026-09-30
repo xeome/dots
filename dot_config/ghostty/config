@@ -1,14 +1,12 @@
-{{- $m := index .machines .chezmoi.hostname -}}
 # --- Environment ---
 shell-integration-features = ssh-env
 
 # --- Fonts ---
-font-size = {{ mulf 10.0 $m.text_scale }}
+font-size = 10
 
 # One family for all four styles. Medium, not Bold: extra weight only buys
-# legibility at small visual angles (Beier & Oderkerk 2019), and monitor
-# scale or text_scale now puts text at a ~12' x-height, past the critical
-# print size.
+# legibility at small visual angles (Beier & Oderkerk 2019). Fixed at 10pt,
+# not scaled by text_scale: larger read as too big in a terminal.
 font-family = JetBrainsMono Nerd Font
 font-style = Medium
 font-style-bold = Bold

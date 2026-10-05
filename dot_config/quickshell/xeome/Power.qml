@@ -41,7 +41,7 @@ PopupWindow {
         {
             profile: PowerProfile.Balanced,
             name: "Balanced",
-            detail: "stock tuning"
+            detail: "balanced EPP"
         },
         {
             profile: PowerProfile.PowerSaver,

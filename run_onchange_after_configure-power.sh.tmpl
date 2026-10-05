@@ -6,8 +6,7 @@
 #     binds natively. TLP applies the profile; polkit allows an active session
 #     without a password.
 #   - On a hybrid Intel CPU, power-saver also pins user.slice to the E-cores
-#     via `systemctl set-property --runtime`. The scheduler stays stock EEVDF,
-#     which has no E-core preference of its own. The rule below is what stops
+#     via `systemctl set-property --runtime`. The rule below is what stops
 #     that from popping a password dialog.
 #
 # Everything here is root-owned and outside chezmoi's $HOME scope, so the files
@@ -74,11 +73,9 @@ CPU_DRIVER_OPMODE_ON_BAT=active
 CPU_SCALING_GOVERNOR_ON_BAT=powersave
 CPU_ENERGY_PERF_POLICY_ON_BAT=balance_performance
 CPU_MIN_PERF_ON_BAT=0
-# Deliberate ceilings: the top turbo bins are what make this chassis loud and
-# hot, so the everyday profile stops short of them. Performance lifts both.
 # The iGPU cap is a hard limit on i915 (RP0 here is 1500): measured peaking at
-# exactly 1200 under load. Boost is capped with it so a boost request cannot
-# overshoot. Power-saver inherits all of these via the _ON_SAV fallback.
+# exactly 1200 under load, with boost capped alongside. Power-saver inherits
+# these via the _ON_SAV fallback.
 CPU_MAX_PERF_ON_BAT=85
 CPU_BOOST_ON_BAT=1
 CPU_HWP_DYN_BOOST_ON_BAT=1
@@ -89,8 +86,6 @@ INTEL_GPU_BOOST_FREQ_ON_BAT=1200
 
 # --- power-saver ------------------------------------------------------------
 CPU_ENERGY_PERF_POLICY_ON_SAV=power
-# Killing turbo is the single largest battery win here; it is also why this
-# profile feels slow, which is the point of pressing it deliberately.
 CPU_BOOST_ON_SAV=0
 CPU_HWP_DYN_BOOST_ON_SAV=0
 PLATFORM_PROFILE_ON_SAV=low-power
@@ -136,7 +131,5 @@ pkexec /usr/bin/bash "$STAGE/install.sh" "$STAGE"
 {{ if not $m.is_laptop }}
 # ponytail: no tlp.conf for this machine yet. Its profiles are whatever /etc
 # already says, which was tuned by hand and has never been read into this repo.
-# Reconcile it here — the desktop wants TLP_PROFILE_AC=PRF, since it is always
-# on AC and the menu is how you step *down* to quiet.
 echo "note: tlp.conf is not managed on {{ .chezmoi.hostname }} yet — profiles use the existing /etc/tlp.conf"
 {{- end }}

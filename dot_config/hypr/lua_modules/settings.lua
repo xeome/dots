@@ -55,6 +55,7 @@ hl.animation({ leaf = "global", enabled = true, speed = 3, bezier = "fast" })
 hl.config({
   misc = {
     vrr = 2,
+    enable_anr_dialog = false,
   },
   debug = {
     vfr = true,

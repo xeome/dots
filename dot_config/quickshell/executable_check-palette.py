@@ -204,7 +204,10 @@ if not any("lacks" in f for f in fails):
     # and its theme folders can't import from ~). The needles above pin a few
     # lines; this holds the rest of each block equal to its twin.
     def defines(text):
-        return [l.strip() for l in text.splitlines() if l.strip().startswith("@define-color")]
+        # theme_* are GTK3's legacy aliases, derived from the palette, and
+        # libadwaita has none.
+        return [l.strip() for l in text.splitlines()
+                if l.strip().startswith("@define-color") and not l.strip().startswith("@define-color theme_")]
 
     g4 = (SRC / "dot_config/gtk-4.0/gtk.css").read_text()
     g4_dark, _, g4_light = g4.partition("@media (prefers-color-scheme: light)")

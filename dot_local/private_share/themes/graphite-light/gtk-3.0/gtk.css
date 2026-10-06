@@ -67,3 +67,14 @@ headerbar switch:backdrop:checked:not(:disabled) > slider,
 .titlebar switch:backdrop:checked:not(:disabled) > slider {
   background-color: @accent_fg_color;
 }
+
+/* Thunar, and other GTK3 apps that draw their own rows, fill a selected row
+ * with the solid theme_selected_bg_color (thunar-util.c), which adw-gtk3
+ * aliases to the accent, and keep the row's text in the window's text colour.
+ * The accent is the text colour, so the label vanished. These are the colour
+ * adw-gtk3's own lists draw, a quarter of the accent over the view, made
+ * opaque because those apps paint it without blending. */
+@define-color theme_selected_bg_color mix(@view_bg_color, @accent_bg_color, 0.25);
+@define-color theme_selected_fg_color @window_fg_color;
+@define-color theme_unfocused_selected_bg_color mix(@view_bg_color, @accent_bg_color, 0.25);
+@define-color theme_unfocused_selected_fg_color @window_fg_color;

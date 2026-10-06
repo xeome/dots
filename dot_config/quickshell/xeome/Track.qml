@@ -28,13 +28,13 @@ Item {
         }
         height: 8
         radius: height / 2
-        color: Theme.divider
+        color: Theme.rule
 
         Rectangle {
             width: parent.width * root.clamp(root.value)
             height: parent.height
             radius: height / 2
-            color: ma.containsMouse ? Theme.accentHover : Theme.accent
+            color: ma.containsMouse ? Theme.bright : Theme.text
         }
     }
 

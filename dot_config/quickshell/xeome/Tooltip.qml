@@ -32,12 +32,9 @@ PopupWindow {
 
     onHoveredChanged: if (!hovered) visible = false
 
-    Rectangle {
+    Surface {
         anchors.fill: parent
-        color: Theme.panel
         radius: Theme.radius
-        border.width: 1
-        border.color: Theme.border
 
         Column {
             id: body

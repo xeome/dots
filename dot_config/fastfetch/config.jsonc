@@ -71,7 +71,7 @@
         { "type": "wm",       "key": " wm",    "keyColor": "green" },
         { "type": "terminal", "key": " term",  "keyColor": "green" },
         { "type": "display",  "key": " disp",  "keyColor": "green", "format": "{width}x{height} @ {refresh-rate}Hz" },
-        { "type": "custom",   "key": " theme", "keyColor": "green", "format": "Caffeine" },
+        { "type": "custom",   "key": " theme", "keyColor": "green", "format": "graphite" },
 
         "break",
 

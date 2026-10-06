@@ -35,9 +35,10 @@ palette = 14=#a4d4da
 palette = 15=#f0e6d6
 
 # --- Surfaces ------------------------------------------------------------
-# Caffeine's `background` / `foreground`, which are also Theme.bar / Theme.fg,
-# so a terminal and the bar above it are the same black.
-background = #111111
+# The background is graphite's panel (quickshell's Theme.panel), one step above
+# the bar's ground, so a terminal reads as a window on the desktop. The
+# foreground is still Caffeine's.
+background = #0e0e10
 foreground = #eeeeee
 
 # Caffeine's `primary`, its cursor and ring colour.

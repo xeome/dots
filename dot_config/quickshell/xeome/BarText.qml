@@ -4,7 +4,7 @@ import QtQuick
 //
 // Set `weight`, not `font.weight`. Qt rounds font.weight to the nearest 100 when
 // it picks a face, so on its own a 550 renders as a 500 and the shell's 450s and
-// 650s were silently landing on 500 and 700. Adwaita Sans is a variable font, so
+// 650s were silently landing on 500 and 700. Inter Variable is a variable font, so
 // the weight also has to go into its wght axis to come out as the value asked
 // for — and driving both off one property is what keeps that pair honest.
 // Reading font.weight from inside the axis binding instead is a binding loop:
@@ -20,7 +20,7 @@ import QtQuick
 Text {
     property int weight: Theme.weight
 
-    color: Theme.fg
+    color: Theme.text
     font.family: Theme.family
     font.pixelSize: Theme.size
     font.weight: weight

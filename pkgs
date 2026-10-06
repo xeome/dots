@@ -1,3 +1,4 @@
+adw-gtk-theme
 autotiling-rs
 btop
 bitwarden
@@ -15,6 +16,7 @@ gsettings-desktop-schemas
 gtk-update-icon-cache
 htop
 hyprlock
+inter-font
 jq
 libnotify
 most
@@ -25,7 +27,6 @@ pamixer
 pavucontrol
 playerctl
 quickshell
-sassc
 seahorse
 swayidle
 thunar

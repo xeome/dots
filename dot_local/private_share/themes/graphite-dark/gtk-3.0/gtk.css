@@ -1,0 +1,69 @@
+/* graphite dark for GTK3: adw-gtk3-dark with graphite's colours on top.
+ * A theme folder rather than ~/.config/gtk-3.0/gtk.css because GTK reads the
+ * user stylesheet once at app start, while a gtk-theme switch (theme-toggle)
+ * restyles running apps. Values are graphite-ui's tokens; check-palette.py
+ * holds them to Quickshell's Theme.qml. */
+@import url("file:///usr/share/themes/adw-gtk3-dark/gtk-3.0/gtk.css");
+
+@define-color window_bg_color #0a0a0c;
+@define-color window_fg_color #e6e7ea;
+@define-color view_bg_color #0e0e10;
+@define-color view_fg_color #e6e7ea;
+@define-color headerbar_bg_color #0a0a0c;
+@define-color headerbar_fg_color #e6e7ea;
+@define-color headerbar_border_color rgba(255, 255, 255, 0.08);
+@define-color headerbar_backdrop_color #0a0a0c;
+@define-color headerbar_shade_color rgba(0, 0, 0, 0.3);
+@define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.3);
+@define-color sidebar_bg_color #0a0a0c;
+@define-color sidebar_fg_color #e6e7ea;
+@define-color sidebar_backdrop_color #0a0a0c;
+@define-color sidebar_border_color rgba(255, 255, 255, 0.08);
+@define-color sidebar_shade_color rgba(0, 0, 0, 0.3);
+@define-color secondary_sidebar_bg_color #0a0a0c;
+@define-color secondary_sidebar_fg_color #e6e7ea;
+@define-color secondary_sidebar_backdrop_color #0a0a0c;
+@define-color secondary_sidebar_border_color rgba(255, 255, 255, 0.08);
+@define-color secondary_sidebar_shade_color rgba(0, 0, 0, 0.3);
+@define-color card_bg_color rgba(255, 255, 255, 0.02);
+@define-color card_fg_color #e6e7ea;
+@define-color card_shade_color rgba(0, 0, 0, 0.3);
+@define-color dialog_bg_color #151618;
+@define-color dialog_fg_color #e6e7ea;
+@define-color popover_bg_color #151618;
+@define-color popover_fg_color #e6e7ea;
+@define-color popover_shade_color rgba(0, 0, 0, 0.3);
+@define-color thumbnail_bg_color #151618;
+@define-color thumbnail_fg_color #e6e7ea;
+@define-color shade_color rgba(0, 0, 0, 0.3);
+@define-color scrollbar_outline_color rgba(0, 0, 0, 0.3);
+@define-color borders rgba(255, 255, 255, 0.08);
+@define-color unfocused_borders rgba(255, 255, 255, 0.08);
+/* Colour on meaning only: selection is the text colour inverted, and the
+   only hues are status. */
+@define-color accent_bg_color #e6e7ea;
+@define-color accent_fg_color #0a0a0c;
+@define-color accent_color #e6e7ea;
+@define-color destructive_bg_color #e2715a;
+@define-color destructive_fg_color #0a0a0c;
+@define-color destructive_color #e2715a;
+@define-color error_bg_color #e2715a;
+@define-color error_fg_color #0a0a0c;
+@define-color error_color #e2715a;
+@define-color warning_bg_color #e5ae52;
+@define-color warning_fg_color #0a0a0c;
+@define-color warning_color #e5ae52;
+@define-color success_bg_color #62a6b0;
+@define-color success_fg_color #0a0a0c;
+@define-color success_color #62a6b0;
+
+/* The accent is the text colour, and adw-gtk3's switch knob is white, so an
+ * "on" switch was a white knob on a near-white track. The knob takes the
+ * ground instead. gtk-4.0/gtk.css does the same for libadwaita. The headerbar
+ * lines out-rank adw-gtk3's unfocused-window knob, which is grey on a
+ * half-strength track; a disabled switch keeps adw-gtk3's faded knob. */
+switch:checked:not(:disabled) slider,
+headerbar switch:backdrop:checked:not(:disabled) > slider,
+.titlebar switch:backdrop:checked:not(:disabled) > slider {
+  background-color: @accent_fg_color;
+}

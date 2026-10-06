@@ -1,0 +1,51 @@
+/* graphite for Zen. run_after_link-zen-chrome.sh links this into every Zen
+ * profile's chrome/ folder.
+ *
+ * Only Zen's and Firefox's own theme variables, set on two IDs and one class
+ * Firefox has had for years. Layout selectors are left alone, because those are
+ * what Zen updates break. A renamed variable stops one colour applying; it
+ * cannot break the window.
+ *
+ * light-dark() picks the half that matches Zen's colour scheme, so the theme
+ * follows theme-toggle. Values are graphite-ui's tokens; check-palette.py holds
+ * them to Quickshell's Theme.qml. userChrome is a user sheet, which ranks below
+ * Zen's own styles unless a value is !important, hence every one is. */
+
+:root {
+  /* Zen mixes its whole palette from these two: the primary colour and the
+   * branding ground. Zen's JS sets the primary inline from the accent pref
+   * (zenThemeModifier.js), so the !important also beats that. Graphite has no
+   * brand accent: the "accent" is the text tone. */
+  --zen-primary-color: light-dark(#26272b, #e6e7ea) !important;
+  --zen-branding-dark: #0a0a0c !important;
+  --zen-branding-paper: #ededef !important;
+
+  --zen-colors-tertiary: light-dark(#ededef, #0a0a0c) !important;
+  --zen-colors-border: light-dark(rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.08)) !important;
+  --zen-colors-input-bg: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.02)) !important;
+
+  /* Popovers, menus and the floating URL bar are graphite's raised surface. */
+  --zen-dialog-background: light-dark(#ffffff, #151618) !important;
+  --arrowpanel-background: light-dark(#ffffff, #151618) !important;
+  --zen-urlbar-background: light-dark(#ffffff, #151618) !important;
+  --panel-separator-color: light-dark(rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.08)) !important;
+
+  --toolbarbutton-background-color-hover: light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.05)) !important;
+  --toolbarbutton-background-color-active: light-dark(rgba(0, 0, 0, 0.055), rgba(255, 255, 255, 0.07)) !important;
+}
+
+/* The ground. Zen's theme picker writes its workspace gradient inline on these
+ * two elements (ZenGradientGenerator.mjs), so they are named directly. Private
+ * windows keep Zen's own darker ground, because it marks the window as private. */
+:root:not([zen-private-window="true"]) :is(#zen-browser-background, #zen-toolbar-background),
+:root:not([zen-private-window="true"]) {
+  --zen-main-browser-background: light-dark(#ededef, #0a0a0c) !important;
+  --zen-main-browser-background-toolbar: light-dark(#ededef, #0a0a0c) !important;
+  --zen-themed-toolbar-bg-transparent: light-dark(#ededef, #0a0a0c) !important;
+}
+
+/* Zen sets these on the tab strip, below :root, so they are set on the tab. */
+.tabbrowser-tab {
+  --tab-background-color-selected: light-dark(rgba(0, 0, 0, 0.055), rgba(255, 255, 255, 0.07)) !important;
+  --tab-background-color-hover: light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.05)) !important;
+}

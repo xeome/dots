@@ -1,0 +1,84 @@
+[meta]
+version = 1
+name = "Graphite"
+description = "Graphite, same values as quickshell's Theme.qml"
+variant = "dark"
+inherits = "vicinae-dark"
+
+# Every colour is opaque. Graphite's translucent tokens (line, sel, hover) are
+# written pre-flattened over the ground they sit on: vicinae read the 8-digit
+# and { opacity } forms as solid, so a faint edge came out bright and the
+# selected row as a light bar under light text. check-palette.py recomputes the
+# flattened border and selection from Theme.qml.
+
+[colors.core]
+background = "#0a0a0c"
+foreground = "#e6e7ea"
+secondary_background = "#151618"
+border = "#1d1d1f"
+# No brand accent: vicinae's leftover accent uses take the text tone, the way
+# graphite's selected day or chip inverts text and ground.
+accent = "#e6e7ea"
+accent_foreground = "#0a0a0c"
+
+# Graphite's three data hues fill the slots they match; the rest keep the
+# terminal ANSI hues, which are the only other hues on this desktop.
+[colors.accents]
+blue = "#8fb0d9"
+green = "#b5c98f"
+magenta = "#cba6c9"
+orange = "#e5ae52"
+purple = "#ddc0db"
+red = "#e2715a"
+yellow = "#e5ae52"
+cyan = "#62a6b0"
+
+[colors.main_window]
+border = "colors.core.border"
+footer = { background = "colors.core.secondary_background" }
+
+[colors.shortcut]
+border = "colors.core.border"
+
+[colors.text]
+default = "colors.core.foreground"
+muted = "#8a8f98"
+placeholder = "#8a8f98"
+danger = "#e2715a"
+success = "#62a6b0"
+selection = { background = "#e6e7ea", foreground = "#0a0a0c" }
+
+# Focus is graphite's one non-status colour.
+[colors.input]
+border = "colors.core.border"
+border_focus = "#e5ae52"
+border_error = "#e2715a"
+
+[colors.button.primary]
+background = "colors.core.secondary_background"
+foreground = "colors.core.foreground"
+hover = { background = "#212224" }
+focus = { outline = "#e5ae52" }
+
+[colors.list.item.hover]
+background = "#161618"
+foreground = "#e6e7ea"
+secondary_foreground = "#8a8f98"
+
+[colors.list.item.selection]
+background = "#1b1b1d"
+foreground = "#f7f8f8"
+secondary_background = "#1b1b1d"
+secondary_foreground = "#8a8f98"
+
+[colors.grid.item]
+background = "colors.core.secondary_background"
+hover = { outline = "#1d1d1f" }
+selection = { outline = "#8a8f98" }
+
+[colors.scrollbars]
+background = "#232427"
+
+[colors.loading]
+bar = "#8a8f98"
+spinner = "#e6e7ea"

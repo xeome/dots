@@ -4,14 +4,14 @@
 # Managed by chezmoi — edit dot_config/sway/conf.d/settings.conf.tmpl
 {{- $m := index .machines .chezmoi.hostname }}
 
-font pango:Adwaita Sans SemiBold 8
+font pango:Inter SemiBold 8
 
 #~~~ gaps and borders — matched to hyprland lua_modules/settings.lua
 gaps inner                                       5
 gaps outer                                       5
 smart_borders off
 smart_gaps off
-default_border                                   pixel 2
+default_border                                   pixel 1
 default_floating_border                          none
 floating_modifier                                $mod
 hide_edge_borders --i3                           none

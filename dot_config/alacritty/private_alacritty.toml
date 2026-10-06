@@ -43,7 +43,7 @@ y = 15
 ipc_socket = true
 
 import = [
-   # Caffeine, the same scheme as ~/.config/ghostty/config and quickshell
+   # Caffeine, the same scheme as ~/.config/ghostty/config
    "~/.config/alacritty/caffeine.toml"
    #"~/.config/alacritty/catppuccin-mocha.toml"
    #"~/.config/alacritty/gruvbox_material_hard_dark.toml"

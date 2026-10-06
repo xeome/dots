@@ -1,0 +1,22 @@
+// The managed half of vicinae's config. settings.json is vicinae's own file,
+// rewritten by its GUI, so it only imports this one (modify_settings.json makes
+// sure of that); a value set in the GUI still wins over the same key here.
+{
+	// Graphite (~/.local/share/vicinae/themes/graphite.toml).
+	"theme": {
+		"dark": {
+			"name": "graphite"
+		}
+	},
+
+	// No file search: the indexer stays off, and an unmatched query no longer
+	// offers to search files instead.
+	"fallbacks": [],
+	"providers": {
+		"files": {
+			"preferences": {
+				"autoIndexing": false
+			}
+		}
+	}
+}

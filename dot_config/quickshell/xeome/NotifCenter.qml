@@ -30,7 +30,7 @@ PanelWindow {
         onClicked: root.visible = false
     }
 
-    Rectangle {
+    Surface {
         anchors {
             top: parent.top
             right: parent.right
@@ -39,10 +39,6 @@ PanelWindow {
         }
         width: 420
         height: 520
-        color: Theme.panel
-        radius: Theme.radiusLg
-        border.width: 1
-        border.color: Theme.border
 
         // Swallows clicks on the panel itself so they don't reach the
         // dismiss area behind it. Declared first, so the controls below
@@ -63,15 +59,16 @@ PanelWindow {
                     Layout.fillWidth: true
                     text: "󰂚  Notifications"
                     font.pixelSize: Theme.size + 3
+                    color: Theme.bright
                 }
 
                 Rectangle {
                     implicitWidth: clearLabel.implicitWidth + 20
                     implicitHeight: 28
                     radius: Theme.radius
-                    color: clearMa.containsMouse ? Theme.surfaceHover : "transparent"
+                    color: clearMa.containsMouse ? Theme.hover : "transparent"
                     border.width: 1
-                    border.color: clearMa.containsMouse ? Theme.borderHover : Theme.border
+                    border.color: Theme.line
 
                     BarText {
                         id: clearLabel
@@ -95,9 +92,9 @@ PanelWindow {
                 Layout.fillWidth: true
                 implicitHeight: 44
                 radius: Theme.radius
-                color: dndMa.containsMouse ? Theme.surfaceHover : "transparent"
+                color: dndMa.containsMouse ? Theme.hover : "transparent"
                 border.width: 1
-                border.color: dndMa.containsMouse ? Theme.borderHover : Theme.border
+                border.color: Theme.line
 
                 BarText {
                     anchors {
@@ -119,9 +116,9 @@ PanelWindow {
                     // A switch is round because a switch is round; the shell's
                     // 8px is for boxes, not for tracks a knob slides along.
                     radius: height / 2
-                    color: Notifs.dnd ? Theme.accent : "transparent"
+                    color: Notifs.dnd ? Theme.sel : "transparent"
                     border.width: 1
-                    border.color: Notifs.dnd ? Theme.accent : Theme.border
+                    border.color: Theme.line
 
                     Behavior on color {
                         ColorAnimation {
@@ -135,7 +132,7 @@ PanelWindow {
                         width: 16
                         height: 16
                         radius: height / 2
-                        color: Notifs.dnd ? Theme.fgOnAccent : Theme.fgMuted
+                        color: Notifs.dnd ? Theme.bright : Theme.dim
 
                         Behavior on x {
                             NumberAnimation {
@@ -175,7 +172,7 @@ PanelWindow {
                     anchors.centerIn: parent
                     visible: Notifs.history.length === 0
                     text: "No notifications"
-                    color: Theme.fgMuted
+                    color: Theme.dim
                     weight: 450
                 }
             }

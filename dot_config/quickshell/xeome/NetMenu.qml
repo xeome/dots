@@ -90,7 +90,7 @@ Menu {
             visible: root.networks.length > root.shown
             text: `+${root.networks.length - root.shown} weaker`
             font.pixelSize: Theme.size - 4
-            color: Theme.fgDim
+            color: Theme.dim
         }
 
         BarText {
@@ -98,7 +98,7 @@ Menu {
             visible: root.networks.length === 0
             text: Networking.wifiEnabled ? "Scanning…" : "Wi-Fi is off"
             font.pixelSize: Theme.size - 3
-            color: Theme.fgDim
+            color: Theme.dim
         }
     }
 
@@ -118,7 +118,7 @@ Menu {
             Layout.fillWidth: true
             text: `Password for ${root.pending?.name ?? ""}`
             font.pixelSize: Theme.size - 3
-            color: Theme.fgDim
+            color: Theme.dim
         }
 
         Rectangle {
@@ -127,7 +127,7 @@ Menu {
             radius: Theme.radius
             color: "transparent"
             border.width: 1
-            border.color: psk.activeFocus ? Theme.accent : Theme.border
+            border.color: psk.activeFocus ? Theme.warm : Theme.line
 
             TextInput {
                 id: psk
@@ -139,12 +139,12 @@ Menu {
                 }
                 verticalAlignment: TextInput.AlignVCenter
                 echoMode: TextInput.Password
-                color: Theme.fg
+                color: Theme.text
                 font.family: Theme.family
                 font.pixelSize: Theme.size - 2
                 font.weight: Theme.weight
-                selectionColor: Theme.accent
-                selectedTextColor: Theme.fgOnAccent
+                selectionColor: Theme.text
+                selectedTextColor: Theme.ground
 
                 // No submit button: this field has exactly one thing to do, and
                 // the row above already names the network it does it to.

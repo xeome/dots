@@ -2,13 +2,14 @@
 #
 # Mirrors ~/.config/ghostty/themes/caffeine and ~/.config/foot/foot.ini — the
 # terminals are meant to be indistinguishable, so a change here wants the same
-# change there. quickshell's Theme.qml carries the same scheme for the shell.
+# change there. The dark background is graphite's panel, from quickshell's
+# Theme.qml; the rest is Caffeine.
 
 [colors.primary]
 foreground = "#eeeeee"
-# Caffeine's `background`, which is also Theme.bar: a terminal and the bar
-# above it are the same black.
-background = "#111111"
+# graphite's panel, one step above the bar's ground: a terminal reads as
+# a window sitting on the desktop, not as part of the bar.
+background = "#0e0e10"
 
 # Caffeine's `primary`, its cursor and ring colour.
 [colors.cursor]

@@ -47,10 +47,12 @@ Rectangle {
 
     implicitWidth: layout.implicitWidth + Theme.pad * 2
     implicitHeight: Theme.barHeight - Theme.gap * 2
-    color: Theme.surface
+    color: Theme.card
     radius: Theme.radius
     border.width: 1
-    border.color: Theme.border
+    border.color: Theme.line
+
+    CardEdges {}
 
     Behavior on implicitWidth {
         NumberAnimation {

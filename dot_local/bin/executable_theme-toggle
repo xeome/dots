@@ -1,34 +1,27 @@
 #!/bin/bash
-# Flips quickshell's Theme.qml light/dark and the Colloid GTK theme together,
-# so they can never end up disagreeing. Bound to SUPER+T instead of a bar
-# module — this is toggled rarely enough that it doesn't earn permanent space
-# on the bar.
+# Flips quickshell's Theme.qml light/dark and the GTK theme together, so they
+# can never end up disagreeing. Bound to SUPER+T instead of a bar module — this
+# is toggled rarely enough that it doesn't earn permanent space on the bar.
 set -euo pipefail
 
 # Source of truth: quickshell's persisted `light` property. If this fails
 # (shell not running), stop here rather than flip GTK out of sync with it.
 light=$(qs -c xeome ipc call theme toggle)
 
-gtk4_css="$HOME/.config/gtk-4.0/gtk.css"
-
-# ghostty, gtklock and GTK apps all follow the gsettings colour scheme below.
-# foot cannot, so it gets a signal: SIGUSR1 picks [colors-dark] from foot.ini,
-# SIGUSR2 [colors-light]. `|| true` because no foot running is the normal case.
+# GTK3 apps restyle on the gtk-theme switch (graphite-* theme folders); GTK4
+# and libadwaita apps, ghostty included, follow color-scheme through the media
+# query in ~/.config/gtk-4.0/gtk.css. Both happen live in running apps.
+# foot cannot follow either, so it gets a signal: SIGUSR1 picks [colors-dark]
+# from foot.ini, SIGUSR2 [colors-light]. `|| true` because no foot running is
+# the normal case.
 if [[ "$light" == "true" ]]; then
     pkill -USR2 -x foot || true
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
-    gsettings set org.gnome.desktop.interface gtk-theme 'Colloid-Orange-Light'
-    gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Orange-Light'
-    # Colloid-cursors is built from svg (a dark cursor) — right for a light bg.
-    gsettings set org.gnome.desktop.interface cursor-theme 'Colloid-cursors'
-    ln -sf "$HOME/.config/gtk-4.0/colloid-light.css" "$gtk4_css"
+    gsettings set org.gnome.desktop.interface gtk-theme 'graphite-light'
+    gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Grey-Light'
 else
     pkill -USR1 -x foot || true
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-    gsettings set org.gnome.desktop.interface gtk-theme 'Colloid-Orange-Dark'
-    gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Orange-Dark'
-    # Colloid-dark-cursors is built from svg-white (a light cursor) — right
-    # for a dark bg, despite the name.
-    gsettings set org.gnome.desktop.interface cursor-theme 'Colloid-dark-cursors'
-    ln -sf "$HOME/.config/gtk-4.0/colloid-dark.css" "$gtk4_css"
+    gsettings set org.gnome.desktop.interface gtk-theme 'graphite-dark'
+    gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Grey-Dark'
 fi

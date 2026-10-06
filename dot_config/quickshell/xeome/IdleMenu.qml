@@ -50,7 +50,7 @@ Menu {
         Layout.fillWidth: true
         text: root.span < 0 ? "󰾪  Sleep allowed" : root.span === 0 ? "󰅶  Staying awake" : `󰅶  Staying awake · ${root.remaining} left`
         font.pixelSize: Theme.size - 2
-        color: root.span < 0 ? Theme.fgDim : Theme.fg
+        color: root.span < 0 ? Theme.dim : Theme.text
     }
 
     Rule {}

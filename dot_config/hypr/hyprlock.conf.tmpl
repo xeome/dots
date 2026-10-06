@@ -19,13 +19,12 @@ general {
 # =============================================================================
 # BACKGROUND
 # =============================================================================
+# graphite's ground with its corner glow and grain, baked by
+# quickshell/grain.py; hyprlock can't draw a gradient. No screenshot and no
+# blur: the lock screen is a surface of its own, not a frosted desktop.
 background {
-    path = screenshot
-    blur_passes = 4
-    contrast = 1.5916
-    brightness = 1.0172
-    vibrancy = 1.1696
-    vibrancy_darkness = 0
+    path = ~/.config/hypr/graphite-lock.png
+    color = rgba(10, 10, 12, 1)
 }
 
 # =============================================================================
@@ -35,12 +34,9 @@ background {
 # Hours
 label {
     text = cmd[update:1000] echo "$(date +'%H')"
-    color = rgba(238, 238, 238, 1)
-    shadow_size = 3
-    shadow_color = rgb(0,0,0)
-    shadow_boost = 1.2
+    color = rgba(247, 248, 248, 1)
     font_size = 150
-    font_family = Adwaita Sans Black
+    font_family = Inter SemiBold
     position = 0, -250
     halign = center
     valign = top
@@ -49,9 +45,9 @@ label {
 # Minutes
 label {
     text = cmd[update:1000] echo "$(date +'%M')"
-    color = rgba(238, 238, 238, 1)
+    color = rgba(247, 248, 248, 1)
     font_size = 150
-    font_family = Adwaita Sans Black
+    font_family = Inter SemiBold
     position = 0, -420
     halign = center
     valign = top
@@ -60,9 +56,9 @@ label {
 # Date
 label {
     text = cmd[update:1000] echo "$(date +'%d %b %A')"
-    color = rgba(238, 238, 238, 1)
+    color = rgba(138, 143, 152, 1)
     font_size = 14
-    font_family = JetBrains Mono Nerd Font Mono ExtraBold
+    font_family = Inter Medium
     position = 0, -130
     halign = center
     valign = center
@@ -73,9 +69,9 @@ label {
 # =============================================================================
 label {
     text = cmd[update:1000] echo "$(bash ~/.config/hypr/bin/location.sh) $(bash ~/.config/hypr/bin/weather.sh)"
-    color = rgba(238, 238, 238, 1)
+    color = rgba(138, 143, 152, 1)
     font_size = 10
-    font_family = JetBrains Mono Nerd Font Mono ExtraBold
+    font_family = Inter Medium
     position = 0, 465
     halign = center
     valign = center
@@ -90,8 +86,9 @@ image {
     monitor = $scr2
     path = ~/.cache/playerctlock-art/latest.png
     size = 60
-    rounding = 5
-    border_size = 0
+    rounding = 6
+    border_size = 1
+    border_color = rgba(255, 255, 255, 0.08)
     rotate = 0
     reload_time = 1
     reload_cmd = ~/.config/hypr/bin/playerctlock.sh --arturl
@@ -104,9 +101,9 @@ image {
 label {
     monitor = $scr2
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --title)"
-    color = rgba(180, 180, 180, 1)
+    color = rgba(247, 248, 248, 1)
     font_size = 12
-    font_family = JetBrains Mono Nerd Font Mono ExtraBold
+    font_family = Inter SemiBold
     position = 880, -290
     halign = left
     valign = center
@@ -116,9 +113,9 @@ label {
 label {
     monitor = $scr2
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --length)"
-    color = rgba(238, 238, 238, 1)
+    color = rgba(138, 143, 152, 1)
     font_size = 11
-    font_family = JetBrains Mono Nerd Font Mono
+    font_family = Inter
     position = -730, -310
     halign = right
     valign = center
@@ -128,9 +125,9 @@ label {
 label {
     monitor = $scr2
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --status)"
-    color = rgba(238, 238, 238, 1)
+    color = rgba(230, 231, 234, 1)
     font_size = 14
-    font_family = JetBrains Mono Nerd Font Mono
+    font_family = Inter
     position = -740, -290
     halign = right
     valign = center
@@ -140,9 +137,9 @@ label {
 label {
     monitor = $scr2
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --source)"
-    color = rgba(138, 138, 138, 1)
+    color = rgba(138, 143, 152, 1)
     font_size = 10
-    font_family = JetBrains Mono Nerd Font Mono
+    font_family = Inter
     position = -740, -330
     halign = right
     valign = center
@@ -152,9 +149,9 @@ label {
 label {
     monitor = $scr2
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --album)"
-    color = rgba(238, 238, 238, 1)
+    color = rgba(138, 143, 152, 1)
     font_size = 10
-    font_family = JetBrains Mono Nerd Font Mono
+    font_family = Inter
     position = 880, -330
     halign = left
     valign = center
@@ -164,9 +161,9 @@ label {
 label {
     monitor = $scr2
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --artist)"
-    color = rgba(180, 180, 180, 1)
+    color = rgba(230, 231, 234, 1)
     font_size = 10
-    font_family = JetBrains Mono Nerd Font Mono ExtraBold
+    font_family = Inter Medium
     position = 880, -310
     halign = left
     valign = center
@@ -175,19 +172,40 @@ label {
 # =============================================================================
 # INPUT
 # =============================================================================
+# graphite's edge is two lines: the field's own translucent line, and this dark
+# ring one pixel outside it.
+shape {
+    monitor = $scr2
+    size = 252, 62
+    color = rgba(0, 0, 0, 0)
+    rounding = 11
+    border_size = 1
+    border_color = rgba(0, 0, 0, 0.3)
+    position = 0, -470
+    halign = center
+    valign = center
+    zindex = 9
+}
+
 input-field {
     monitor = $scr2
     size = 250, 60
-    outline_thickness = 0
-    outer_color = rgba(46, 46, 46, 1)
+    rounding = 10
+    outline_thickness = 1
+    outer_color = rgba(255, 255, 255, 0.08)
+    # Checking brightens the line, as focus does on windows; colour only for
+    # meaning: hot for a wrong password, warm for caps lock.
+    check_color = rgba(255, 255, 255, 0.5)
+    fail_color = rgba(226, 113, 90, 1)
+    capslock_color = rgba(229, 174, 82, 1)
     dots_size = 0.1
     dots_spacing = 1
     dots_center = true
-    inner_color = rgba(34, 34, 34, 1)
-    font_color = rgba(238, 238, 238, 1)
+    inner_color = rgba(21, 22, 24, 1)
+    font_color = rgba(230, 231, 234, 1)
     fade_on_empty = false
-    font_family = JetBrains Mono Nerd Font Mono
-    placeholder_text = <span foreground="##8a8a8a"> $USER</span>
+    font_family = Inter
+    placeholder_text = <span foreground="##8a8f98"> $USER</span>
     hide_input = false
     position = 0, -470
     halign = center
@@ -201,9 +219,9 @@ input-field {
 label {
     monitor = $scr2
     text = cmd[update:1000] echo -e "$(~/.config/hypr/bin/infonlock.sh)"
-    color = rgba(238, 238, 238, 1)
+    color = rgba(138, 143, 152, 1)
     font_size = 12
-    font_family = JetBrains Mono Nerd Font Mono ExtraBold
+    font_family = Inter Medium
     position = -20, -510
     halign = right
     valign = center

@@ -36,12 +36,8 @@ PopupWindow {
     onVisibleChanged: if (!visible)
         closedAt = Date.now()
 
-    Rectangle {
+    Surface {
         anchors.fill: parent
-        color: Theme.panel
-        radius: Theme.radiusLg
-        border.width: 1
-        border.color: Theme.border
 
         ColumnLayout {
             id: body

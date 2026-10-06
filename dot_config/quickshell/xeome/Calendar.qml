@@ -84,9 +84,9 @@ PopupWindow {
         implicitWidth: 26
         implicitHeight: 26
         radius: Theme.radius - 2
-        color: navMa.containsMouse ? Theme.surfaceHover : "transparent"
+        color: navMa.containsMouse ? Theme.hover : "transparent"
         border.width: 1
-        border.color: navMa.containsMouse ? Theme.borderHover : Theme.border
+        border.color: Theme.line
 
         BarText {
             anchors.centerIn: parent
@@ -101,12 +101,8 @@ PopupWindow {
         }
     }
 
-    Rectangle {
+    Surface {
         anchors.fill: parent
-        color: Theme.panel
-        radius: Theme.radiusLg
-        border.width: 1
-        border.color: Theme.border
 
         ColumnLayout {
             id: body
@@ -129,7 +125,7 @@ PopupWindow {
                     font.pixelSize: Theme.size + 1
                     // Dimmed once you've browsed away, as a hint that it's the
                     // way back.
-                    color: root.offset === 0 ? Theme.fg : Theme.fgDim
+                    color: root.offset === 0 ? Theme.bright : Theme.text
 
                     MouseArea {
                         anchors.fill: parent
@@ -171,7 +167,7 @@ PopupWindow {
                             verticalAlignment: Text.AlignVCenter
                             text: modelData
                             font.pixelSize: Theme.size - 3
-                            color: index > 4 ? Theme.fgMuted : Theme.fgDim
+                            color: Theme.dim
                         }
                     }
                 }
@@ -193,7 +189,7 @@ PopupWindow {
                             verticalAlignment: Text.AlignVCenter
                             text: weekRow.modelData.week
                             font.pixelSize: Theme.size - 3
-                            color: weekRow.modelData.week === root.todayWeek && root.offset === 0 ? Theme.fgDim : Theme.fgMuted
+                            color: weekRow.modelData.week === root.todayWeek && root.offset === 0 ? Theme.text : Theme.dim
                         }
 
                         Repeater {
@@ -207,13 +203,13 @@ PopupWindow {
                                 width: 32
                                 height: 26
                                 radius: Theme.radius - 2
-                                color: cell.modelData.today ? Theme.accent : "transparent"
+                                color: cell.modelData.today ? Theme.text : "transparent"
 
                                 BarText {
                                     anchors.centerIn: parent
                                     text: cell.modelData.day
-                                    weight: cell.modelData.today ? 700 : Theme.weight
-                                    color: cell.modelData.today ? Theme.fgOnAccent : !cell.modelData.inMonth ? Theme.fgMuted : cell.modelData.weekend ? Theme.fgDim : Theme.fg
+                                    weight: cell.modelData.today ? 600 : Theme.weight
+                                    color: cell.modelData.today ? Theme.ground : cell.modelData.inMonth ? Theme.text : Theme.dim
                                 }
                             }
                         }
@@ -228,7 +224,7 @@ PopupWindow {
                 horizontalAlignment: Text.AlignHCenter
                 text: Qt.formatDateTime(root.today, "dddd, d MMMM yyyy") + "  ·  week " + root.todayWeek
                 font.pixelSize: Theme.size - 2
-                color: Theme.fgDim
+                color: Theme.dim
             }
         }
     }

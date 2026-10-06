@@ -167,12 +167,8 @@ PanelWindow {
 
     // ---- chrome ------------------------------------------------------------
 
-    Rectangle {
+    Surface {
         anchors.fill: parent
-        color: Theme.panel
-        radius: Theme.radiusLg
-        border.width: 1
-        border.color: Theme.border
 
         RowLayout {
             anchors.fill: parent
@@ -189,13 +185,13 @@ PanelWindow {
                 implicitHeight: 6
                 visible: root.label === ""
                 radius: height / 2
-                color: Theme.divider
+                color: Theme.rule
 
                 Rectangle {
                     width: parent.width * Math.max(0, Math.min(1, root.value))
                     height: parent.height
                     radius: height / 2
-                    color: Theme.accent
+                    color: Theme.text
 
                     Behavior on width {
                         NumberAnimation {

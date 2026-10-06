@@ -121,7 +121,7 @@ PopupWindow {
                 horizontalAlignment: Text.AlignHCenter
                 text: dev.glyph
                 font.pixelSize: Theme.size + 5
-                color: dev.muted ? Theme.fgMuted : Theme.fg
+                color: dev.muted ? Theme.dim : Theme.text
 
                 MouseArea {
                     anchors.fill: parent
@@ -133,12 +133,12 @@ PopupWindow {
             BarText {
                 Layout.fillWidth: true
                 text: dev.label
-                color: dev.muted ? Theme.fgMuted : Theme.fg
+                color: dev.muted ? Theme.dim : Theme.text
             }
 
             BarText {
                 text: dev.muted ? "muted" : `${Math.round(dev.volume * 100)}%`
-                color: dev.muted ? Theme.fgMuted : Theme.fg
+                color: dev.muted ? Theme.dim : Theme.text
             }
         }
 
@@ -186,12 +186,8 @@ PopupWindow {
         }
     }
 
-    Rectangle {
+    Surface {
         anchors.fill: parent
-        color: Theme.panel
-        radius: Theme.radiusLg
-        border.width: 1
-        border.color: Theme.border
 
         ColumnLayout {
             id: body
@@ -281,7 +277,7 @@ PopupWindow {
                 BarText {
                     text: root.recorders.length > 0 ? "󰍬  Mic in use by" : "󰍭  Mic not in use"
                     font.pixelSize: Theme.size - 2
-                    color: root.recorders.length > 0 ? Theme.fg : Theme.fgDim
+                    color: root.recorders.length > 0 ? Theme.text : Theme.dim
                 }
 
                 Repeater {
@@ -295,7 +291,7 @@ PopupWindow {
                         text: root.appName(modelData)
                         elide: Text.ElideRight
                         font.pixelSize: Theme.size - 3
-                        color: Theme.fgDim
+                        color: Theme.dim
                     }
                 }
             }

@@ -111,12 +111,8 @@ PopupWindow {
         id: pinner
     }
 
-    Rectangle {
+    Surface {
         anchors.fill: parent
-        color: Theme.panel
-        radius: Theme.radiusLg
-        border.width: 1
-        border.color: Theme.border
 
         ColumnLayout {
             id: body
@@ -136,9 +132,9 @@ PopupWindow {
                     implicitWidth: 272
                     implicitHeight: 46
                     radius: Theme.radius
-                    color: row.current ? Theme.accent : rowMa.containsMouse ? Theme.surfaceHover : "transparent"
+                    color: row.current ? Theme.sel : rowMa.containsMouse ? Theme.hover : "transparent"
                     border.width: 1
-                    border.color: row.current ? Theme.accent : rowMa.containsMouse ? Theme.borderHover : Theme.border
+                    border.color: Theme.line
 
                     Behavior on color {
                         ColorAnimation {
@@ -157,7 +153,7 @@ PopupWindow {
                         BarText {
                             text: root.glyph(row.modelData.profile)
                             font.pixelSize: Theme.size + 5
-                            color: row.current ? Theme.fgOnAccent : Theme.fg
+                            color: row.current ? Theme.bright : Theme.text
                         }
 
                         ColumnLayout {
@@ -166,14 +162,14 @@ PopupWindow {
 
                             BarText {
                                 text: row.modelData.name
-                                color: row.current ? Theme.fgOnAccent : Theme.fg
+                                color: row.current ? Theme.bright : Theme.text
                             }
 
                             BarText {
                                 text: row.modelData.detail
                                 font.pixelSize: Theme.size - 4
                                 weight: 450
-                                color: row.current ? Theme.fgOnAccent : Theme.fgMuted
+                                color: Theme.dim
                             }
                         }
                     }
@@ -245,7 +241,7 @@ PopupWindow {
                     // what profile is selected.
                     text: PowerProfiles.degradationReason === PerformanceDegradationReason.HighTemperature ? "󰀦  capped: high temperature" : "󰀦  capped: lap detected"
                     font.pixelSize: Theme.size - 3
-                    color: Theme.fgDim
+                    color: Theme.dim
                 }
 
                 Repeater {
@@ -260,7 +256,7 @@ PopupWindow {
                         Layout.fillWidth: true
                         text: `󰅢  ${modelData.applicationId} holds ${PowerProfile.toString(modelData.profile)}`
                         font.pixelSize: Theme.size - 3
-                        color: Theme.fgDim
+                        color: Theme.dim
                     }
                 }
             }

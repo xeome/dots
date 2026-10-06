@@ -76,20 +76,16 @@ PanelWindow {
 
         // Without this the queued ones are simply invisible, and a burst reads
         // as "five notifications" when it was twenty.
-        Rectangle {
+        Surface {
             width: parent.width
             implicitHeight: 24
             visible: Notifs.popups.length > root.maxVisible
-            color: Theme.card
-            radius: Theme.radiusLg
-            border.width: 1
-            border.color: Theme.border
 
             BarText {
                 anchors.centerIn: parent
                 text: `+${Notifs.popups.length - root.maxVisible} more`
                 font.pixelSize: Theme.size - 3
-                color: Theme.fgDim
+                color: Theme.dim
             }
         }
     }

@@ -75,9 +75,9 @@ PopupWindow {
         implicitWidth: 34
         implicitHeight: 30
         radius: Theme.radius
-        color: btnMa.containsMouse ? Theme.surfaceHover : "transparent"
+        color: btnMa.containsMouse ? Theme.hover : "transparent"
         border.width: 1
-        border.color: btnMa.containsMouse ? Theme.borderHover : Theme.border
+        border.color: Theme.line
         // `enabled` is inherited by the MouseArea below, so a player that can't
         // skip gets a dead button rather than one that lies.
         opacity: btn.enabled ? 1 : 0.3
@@ -103,12 +103,8 @@ PopupWindow {
         }
     }
 
-    Rectangle {
+    Surface {
         anchors.fill: parent
-        color: Theme.panel
-        radius: Theme.radiusLg
-        border.width: 1
-        border.color: Theme.border
 
         ColumnLayout {
             id: body
@@ -150,6 +146,7 @@ PopupWindow {
                         Layout.fillWidth: true
                         text: root.player?.trackTitle ?? ""
                         weight: 650
+                        color: Theme.bright
                         elide: Text.ElideRight
                     }
 
@@ -159,7 +156,7 @@ PopupWindow {
                         text: root.player?.trackArtist ?? ""
                         elide: Text.ElideRight
                         font.pixelSize: Theme.size - 2
-                        color: Theme.fgDim
+                        color: Theme.dim
                     }
 
                     BarText {
@@ -168,7 +165,7 @@ PopupWindow {
                         text: root.player?.trackAlbum ?? ""
                         elide: Text.ElideRight
                         font.pixelSize: Theme.size - 3
-                        color: Theme.fgMuted
+                        color: Theme.dim
                     }
                 }
             }
@@ -196,13 +193,13 @@ PopupWindow {
                         Layout.fillWidth: true
                         text: root.mmss(root.player?.position ?? 0)
                         font.pixelSize: Theme.size - 4
-                        color: Theme.fgDim
+                        color: Theme.dim
                     }
 
                     BarText {
                         text: root.mmss(root.length)
                         font.pixelSize: Theme.size - 4
-                        color: Theme.fgDim
+                        color: Theme.dim
                     }
                 }
             }

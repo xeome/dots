@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+# settings.json belongs to vicinae: its GUI rewrites the whole file on every
+# change made there. So chezmoi doesn't own it, it only makes sure the file
+# imports chezmoi.json, and passes everything else through as vicinae wrote it.
+import re
+import sys
+
+text = sys.stdin.read()
+# The file is JSONC, so it is edited as text, matched loosely enough for any
+# spacing the GUI writes. An empty list gets no trailing comma.
+imports = re.search(r'"imports"\s*:\s*\[(\s*\])?', text)
+if '"chezmoi.json"' in text:
+    sys.stdout.write(text)
+elif not text.strip():
+    sys.stdout.write('{\n   "imports": ["chezmoi.json"]\n}\n')
+elif imports:
+    entry = '"imports": ["chezmoi.json"]' if imports[1] else imports[0] + '"chezmoi.json", '
+    sys.stdout.write(text[: imports.start()] + entry + text[imports.end() :])
+else:
+    # The first line that opens the object; the header above it is comments.
+    lines = text.splitlines(keepends=True)
+    i = next(n for n, line in enumerate(lines) if line.lstrip().startswith("{"))
+    lines.insert(i + 1, '   "imports": ["chezmoi.json"],\n')
+    sys.stdout.write("".join(lines))

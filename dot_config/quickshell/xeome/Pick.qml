@@ -19,9 +19,9 @@ Rectangle {
     Layout.fillWidth: true
     implicitHeight: 30
     radius: Theme.radius
-    color: root.current ? Theme.accent : ma.containsMouse ? Theme.surfaceHover : "transparent"
+    color: root.current ? Theme.sel : ma.containsMouse ? Theme.hover : "transparent"
     border.width: 1
-    border.color: root.current ? Theme.accent : ma.containsMouse ? Theme.borderHover : Theme.border
+    border.color: Theme.line
 
     Behavior on color {
         ColorAnimation {
@@ -42,14 +42,14 @@ Rectangle {
             text: root.label
             elide: Text.ElideRight
             font.pixelSize: Theme.size - 2
-            color: root.current ? Theme.fgOnAccent : Theme.fg
+            color: root.current ? Theme.bright : Theme.text
         }
 
         BarText {
             visible: root.suffix !== ""
             text: root.suffix
             font.pixelSize: Theme.size - 2
-            color: root.current ? Theme.fgOnAccent : Theme.fgDim
+            color: root.current ? Theme.text : Theme.dim
         }
     }
 

@@ -1,0 +1,154 @@
+/* graphite for GTK4 and libadwaita. libadwaita ignores gtk-theme, so this
+ * one file carries both modes and follows the color-scheme setting through the
+ * media query, live, in running apps. Values are graphite-ui's tokens;
+ * check-palette.py holds them to Quickshell's Theme.qml. */
+@define-color window_bg_color #0a0a0c;
+@define-color window_fg_color #e6e7ea;
+@define-color view_bg_color #0e0e10;
+@define-color view_fg_color #e6e7ea;
+@define-color headerbar_bg_color #0a0a0c;
+@define-color headerbar_fg_color #e6e7ea;
+@define-color headerbar_border_color rgba(255, 255, 255, 0.08);
+@define-color headerbar_backdrop_color #0a0a0c;
+@define-color headerbar_shade_color rgba(0, 0, 0, 0.3);
+@define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.3);
+@define-color sidebar_bg_color #0a0a0c;
+@define-color sidebar_fg_color #e6e7ea;
+@define-color sidebar_backdrop_color #0a0a0c;
+@define-color sidebar_border_color rgba(255, 255, 255, 0.08);
+@define-color sidebar_shade_color rgba(0, 0, 0, 0.3);
+@define-color secondary_sidebar_bg_color #0a0a0c;
+@define-color secondary_sidebar_fg_color #e6e7ea;
+@define-color secondary_sidebar_backdrop_color #0a0a0c;
+@define-color secondary_sidebar_border_color rgba(255, 255, 255, 0.08);
+@define-color secondary_sidebar_shade_color rgba(0, 0, 0, 0.3);
+@define-color card_bg_color rgba(255, 255, 255, 0.02);
+@define-color card_fg_color #e6e7ea;
+@define-color card_shade_color rgba(0, 0, 0, 0.3);
+@define-color dialog_bg_color #151618;
+@define-color dialog_fg_color #e6e7ea;
+@define-color popover_bg_color #151618;
+@define-color popover_fg_color #e6e7ea;
+@define-color popover_shade_color rgba(0, 0, 0, 0.3);
+@define-color thumbnail_bg_color #151618;
+@define-color thumbnail_fg_color #e6e7ea;
+@define-color shade_color rgba(0, 0, 0, 0.3);
+@define-color scrollbar_outline_color rgba(0, 0, 0, 0.3);
+@define-color borders rgba(255, 255, 255, 0.08);
+@define-color unfocused_borders rgba(255, 255, 255, 0.08);
+/* Colour on meaning only: selection is the text colour inverted, and the
+   only hues are status. */
+@define-color accent_bg_color #e6e7ea;
+@define-color accent_fg_color #0a0a0c;
+@define-color accent_color #e6e7ea;
+@define-color destructive_bg_color #e2715a;
+@define-color destructive_fg_color #0a0a0c;
+@define-color destructive_color #e2715a;
+@define-color error_bg_color #e2715a;
+@define-color error_fg_color #0a0a0c;
+@define-color error_color #e2715a;
+@define-color warning_bg_color #e5ae52;
+@define-color warning_fg_color #0a0a0c;
+@define-color warning_color #e5ae52;
+@define-color success_bg_color #62a6b0;
+@define-color success_fg_color #0a0a0c;
+@define-color success_color #62a6b0;
+
+@media (prefers-color-scheme: light) {
+  @define-color window_bg_color #ededef;
+  @define-color window_fg_color #26272b;
+  @define-color view_bg_color #f8f8f9;
+  @define-color view_fg_color #26272b;
+  @define-color headerbar_bg_color #ededef;
+  @define-color headerbar_fg_color #26272b;
+  @define-color headerbar_border_color rgba(0, 0, 0, 0.09);
+  @define-color headerbar_backdrop_color #ededef;
+  @define-color headerbar_shade_color rgba(0, 0, 0, 0.04);
+  @define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.04);
+  @define-color sidebar_bg_color #ededef;
+  @define-color sidebar_fg_color #26272b;
+  @define-color sidebar_backdrop_color #ededef;
+  @define-color sidebar_border_color rgba(0, 0, 0, 0.09);
+  @define-color sidebar_shade_color rgba(0, 0, 0, 0.04);
+  @define-color secondary_sidebar_bg_color #ededef;
+  @define-color secondary_sidebar_fg_color #26272b;
+  @define-color secondary_sidebar_backdrop_color #ededef;
+  @define-color secondary_sidebar_border_color rgba(0, 0, 0, 0.09);
+  @define-color secondary_sidebar_shade_color rgba(0, 0, 0, 0.04);
+  @define-color card_bg_color rgba(255, 255, 255, 0.5);
+  @define-color card_fg_color #26272b;
+  @define-color card_shade_color rgba(0, 0, 0, 0.04);
+  @define-color dialog_bg_color #ffffff;
+  @define-color dialog_fg_color #26272b;
+  @define-color popover_bg_color #ffffff;
+  @define-color popover_fg_color #26272b;
+  @define-color popover_shade_color rgba(0, 0, 0, 0.04);
+  @define-color thumbnail_bg_color #ffffff;
+  @define-color thumbnail_fg_color #26272b;
+  @define-color shade_color rgba(0, 0, 0, 0.04);
+  @define-color scrollbar_outline_color rgba(0, 0, 0, 0.04);
+  @define-color borders rgba(0, 0, 0, 0.09);
+  @define-color unfocused_borders rgba(0, 0, 0, 0.09);
+  /* Colour on meaning only: selection is the text colour inverted, and the
+     only hues are status. */
+  @define-color accent_bg_color #26272b;
+  @define-color accent_fg_color #ededef;
+  @define-color accent_color #26272b;
+  @define-color destructive_bg_color #af3a1e;
+  @define-color destructive_fg_color #ededef;
+  @define-color destructive_color #af3a1e;
+  @define-color error_bg_color #af3a1e;
+  @define-color error_fg_color #ededef;
+  @define-color error_color #af3a1e;
+  @define-color warning_bg_color #885b0c;
+  @define-color warning_fg_color #ededef;
+  @define-color warning_color #885b0c;
+  @define-color success_bg_color #276d77;
+  @define-color success_fg_color #ededef;
+  @define-color success_color #276d77;
+}
+
+/* --- Shape, not colour. Selectors are GTK's documented CSS node names. This
+ * file loads at GTK's user priority, which ranks above libadwaita whatever
+ * the specificity. --- */
+
+:root {
+  /* libadwaita's floating windows draw 15px corners; Hyprland clips tiled
+   * windows to 10. */
+  --window-radius: 10px;
+}
+
+/* The accent is the text colour, and libadwaita's switch knob is white, so an
+ * "on" switch was a white knob on a near-white track. The knob takes the ground
+ * instead, like calendar's today. */
+switch:checked > slider {
+  background-color: @accent_fg_color;
+}
+
+/* For the same reason a selected tab would be a solid light block. Graphite
+ * selects with 7% of the text tone, and hovers with 5%. */
+tabbar tab:selected,
+tabbar tab:selected:hover,
+tabbar tab:selected:active {
+  background-color: alpha(@window_fg_color, 0.07);
+  color: @window_fg_color;
+}
+
+tabbar tab:hover {
+  background-color: alpha(@window_fg_color, 0.05);
+}
+
+toolbarview > .top-bar tabbar .box {
+  box-shadow: none;
+  border-bottom: 1px solid @borders;
+}
+
+/* Menus, dialogs and toasts get graphite's edge: the translucent line, with a
+ * dark ring outside it. */
+popover > contents,
+floating-sheet > sheet,
+toast {
+  border: 1px solid @borders;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px @shade_color;
+}

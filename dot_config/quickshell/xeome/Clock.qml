@@ -29,14 +29,14 @@ BarModule {
 
     BarText {
         text: Qt.formatDateTime(clock.date, root.precise ? "HH:mm:ss" : "HH:mm")
-        color: Theme.accent
+        color: Theme.bright
         font.pixelSize: Theme.size + 2
         weight: 650
     }
 
     BarText {
         text: Qt.formatDateTime(clock.date, root.precise ? "dd/MM/yyyy" : "ddd dd MMM")
-        color: Theme.fgDim
+        color: Theme.dim
     }
 
     // A PopupWindow isn't an Item, so the RowLayout that BarModule's default

@@ -33,13 +33,6 @@ hl.layer_rule({
   ignore_alpha = 0,
 })
 
-hl.layer_rule({
-  name = "vicinae-blur",
-  match = { namespace = "vicinae" },
-  blur = true,
-  ignore_alpha = 0,
-})
-
 -- =============================================================================
 -- SHARED WINDOW RULES
 -- =============================================================================

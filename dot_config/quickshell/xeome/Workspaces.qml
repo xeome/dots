@@ -1,7 +1,7 @@
 import QtQuick
 
 // One grouped box, hairline-divided buttons, the focused one filled with the
-// accent. Per-output, so each monitor shows only its own workspaces.
+// selection white. Per-output, so each monitor shows only its own workspaces.
 Rectangle {
     id: root
 
@@ -14,10 +14,12 @@ Rectangle {
 
     implicitWidth: row.implicitWidth + 2
     implicitHeight: Theme.barHeight - Theme.gap * 2
-    color: Theme.surface
+    color: Theme.card
     radius: Theme.radius
     border.width: 1
-    border.color: Theme.border
+    border.color: Theme.line
+
+    CardEdges {}
 
     Row {
         id: row
@@ -37,7 +39,7 @@ Rectangle {
 
                 width: Math.max(44, label.implicitWidth + 26)
                 height: row.height
-                color: active ? (ma.containsMouse ? Theme.accentHover : Theme.accent) : ma.containsMouse ? Theme.surfaceHover : "transparent"
+                color: active ? Theme.sel : ma.containsMouse ? Theme.hover : "transparent"
 
                 // The ends round themselves rather than being masked by the
                 // parent: Qt's `clip` is a rectangular scissor and would put
@@ -58,10 +60,10 @@ Rectangle {
                     id: label
                     anchors.centerIn: parent
                     // Workspace numbers are what you navigate by, so the
-                    // inactive ones stay legible (fgDim) rather than dropping
-                    // to the muted tier labels use.
+                    // inactive ones stay text rather than dropping to the dim
+                    // tier labels use.
                     text: btn.modelData.name
-                    color: btn.active ? Theme.fgOnAccent : Theme.fgDim
+                    color: btn.active ? Theme.bright : Theme.text
                     weight: btn.active ? 700 : Theme.weight
                 }
 
@@ -71,7 +73,7 @@ Rectangle {
                 // animation on `color` would.
                 Rectangle {
                     anchors.fill: parent
-                    color: Theme.warn
+                    color: Theme.hot
                     radius: parent.radius
                     topLeftRadius: btn.topLeftRadius
                     bottomLeftRadius: btn.bottomLeftRadius
@@ -106,7 +108,7 @@ Rectangle {
                     }
                     width: 1
                     visible: btn.index < root.list.length - 1
-                    color: Theme.divider
+                    color: Theme.line
                 }
 
                 MouseArea {

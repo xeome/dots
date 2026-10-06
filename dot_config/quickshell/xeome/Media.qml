@@ -47,7 +47,7 @@ BarModule {
         readonly property string label: root.clip([p?.trackArtist ?? "", p?.trackTitle ?? ""].filter(s => s !== "").join(" - "), 28)
 
         text: `${p?.isPlaying ? "󰐊" : "󰏤"} ${label}`
-        color: p?.isPlaying ? Theme.fg : Theme.fgMuted
+        color: p?.isPlaying ? Theme.text : Theme.dim
         font.italic: !(p?.isPlaying ?? false)
     }
 

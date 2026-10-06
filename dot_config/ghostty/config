@@ -20,8 +20,8 @@ font-style-bold-italic = Bold Italic
 window-padding-x = 15
 window-padding-y = 15
 
-# Every colour lives in themes/caffeine{,-light} — the Caffeine scheme, also
-# carried by quickshell's Theme.qml. Nothing colour-related belongs here: anything
+# Every colour lives in themes/caffeine{,-light}: Caffeine's ANSI ramp on
+# graphite's panel background. Nothing colour-related belongs here: anything
 # set here would silently override the theme rather than sit alongside it.
 #
 # The pair form follows the desktop colour scheme live, so SUPER+T (which flips
@@ -35,9 +35,7 @@ theme = light:caffeine-light,dark:caffeine
 # right-click menu and keybinds.
 gtk-titlebar = false
 gtk-wide-tabs = false
-window-title-font-family = JetBrainsMono Nerd Font
-# Square, flat, monospace chrome; see the file header for how it beats Colloid.
-gtk-custom-css = brutal.css
+window-title-font-family = Inter
 
 keybind = ctrl+shift+plus=increase_font_size:1
 keybind = ctrl+shift+minus=decrease_font_size:1

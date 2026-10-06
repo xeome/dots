@@ -15,7 +15,6 @@
 #
 # Every entry below can be dropped once each machine has applied once.
 .config/matugen
-.config/rofi/themes/spotlight-dark-matugen.rasi
 .config/ghostty/themes/matugen
 .config/kitty/slurp.sh
 .config/gtk-3.0/colors.css
@@ -34,3 +33,21 @@
 # Manual captive-portal toggle, replaced by the NetworkManager dispatcher hook
 # that run_after_configure-dns.sh installs.
 .local/bin/portal
+
+# graphite replaced Caffeine. rofi and gtklock had no callers (vicinae and
+# hyprlock do their jobs); the Colloid GTK theme, its orange icons and cursors
+# gave way to adw-gtk3 + graphite css and grey icons, and Bibata is the cursor.
+.config/rofi
+.local/share/rofi
+.config/gtklock
+.local/share/themes/Colloid-Orange-*
+.local/share/icons/Colloid-Orange*
+.local/share/icons/Colloid-cursors
+.local/share/icons/Colloid-dark-cursors
+.config/gtk-4.0/colloid-*.css
+.config/gtk-4.0/assets
+.local/share/vicinae/themes/caffeine.toml
+.config/ghostty/brutal.css
+# vicinae has read settings.json, not vicinae.json, since v0.17.
+.config/vicinae/vicinae.json
+.config/ghostty/graphite.css

@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+# Turns on themes/graphite.theme.css in Vencord's settings, and changes nothing
+# else. settings.json is Vencord's own file: its GUI rewrites it and its cloud
+# sync replaces it, so chezmoi only makes sure the theme is in enabledThemes.
+import json
+import sys
+
+THEME = "graphite.theme.css"
+
+text = sys.stdin.read()
+settings = json.loads(text) if text.strip() else {}
+themes = settings.setdefault("enabledThemes", [])
+if THEME in themes:
+    sys.stdout.write(text)
+else:
+    themes.append(THEME)
+    json.dump(settings, sys.stdout, indent=4)

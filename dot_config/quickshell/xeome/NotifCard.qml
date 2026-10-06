@@ -2,13 +2,13 @@ import QtQuick
 import Quickshell.Services.Notifications
 import Quickshell.Widgets
 
-// One notification, shared by the popup stack and the history list. The 2px
-// left edge is the urgency: warn red for critical, a quiet accent for
-// everything else.
+// One notification, shared by the popup stack and the history list. A 2px hot
+// left edge marks a critical one; everything else has no mark, since graphite
+// spends colour on meaning only.
 //
 // ponytail: no inline replies — that needs state the Notification object
 // doesn't carry; add it if you miss it.
-Rectangle {
+Surface {
     id: root
 
     required property var notif
@@ -30,12 +30,9 @@ Rectangle {
 
     implicitWidth: 400
     implicitHeight: Math.max(64, col.implicitHeight + 28)
-    color: ma.containsMouse ? Theme.cardHover : Theme.card
-    radius: Theme.radiusLg
-    border.width: 1
-    border.color: Theme.border
+    fill: ma.containsMouse ? Qt.tint(Theme.raised, Theme.hover) : Theme.raised
 
-    Behavior on color {
+    Behavior on fill {
         ColorAnimation {
             duration: Theme.anim
         }
@@ -43,17 +40,19 @@ Rectangle {
 
     // Follows the card's corners rather than being clipped by them: Qt's `clip`
     // is a rectangular scissor and would square this strip's ends back off.
+    // Inset by the card's ring, which is its outermost pixel.
     Rectangle {
+        visible: root.critical
         anchors {
             left: parent.left
             top: parent.top
             bottom: parent.bottom
+            margins: 1
         }
         width: 2
-        topLeftRadius: root.radius
-        bottomLeftRadius: root.radius
-        color: root.critical ? Theme.warn : Theme.accent
-        opacity: root.critical ? 1 : 0.4
+        topLeftRadius: root.radius - 1
+        bottomLeftRadius: root.radius - 1
+        color: Theme.hot
     }
 
     MouseArea {
@@ -89,7 +88,7 @@ Rectangle {
 
         BarText {
             text: (root.notif?.appName ?? "") + (root.age === "" ? "" : `  ·  ${root.age}`)
-            color: Theme.fgDim
+            color: Theme.dim
             font.pixelSize: Theme.size - 3
         }
 
@@ -98,6 +97,7 @@ Rectangle {
             text: root.notif?.summary ?? ""
             font.pixelSize: Theme.size + 3
             weight: 650
+            color: Theme.bright
             elide: Text.ElideRight
         }
 
@@ -105,7 +105,7 @@ Rectangle {
             width: parent.width
             visible: text !== ""
             text: root.notif?.body ?? ""
-            color: Theme.fgDim
+            color: Theme.text
             weight: 450
             textFormat: Text.StyledText   // swaync advertised body markup
             wrapMode: Text.Wrap
@@ -129,9 +129,9 @@ Rectangle {
                     implicitWidth: actionLabel.implicitWidth + 20
                     implicitHeight: 28
                     radius: Theme.radius
-                    color: actionMa.containsMouse ? Theme.surfaceHover : "transparent"
+                    color: actionMa.containsMouse ? Theme.hover : "transparent"
                     border.width: 1
-                    border.color: actionMa.containsMouse ? Theme.borderHover : Theme.border
+                    border.color: Theme.line
 
                     BarText {
                         id: actionLabel
@@ -165,13 +165,13 @@ Rectangle {
         implicitWidth: 22
         implicitHeight: 22
         radius: Theme.radius - 2
-        color: closeMa.containsMouse ? Theme.surfaceHover : "transparent"
+        color: closeMa.containsMouse ? Theme.hover : "transparent"
 
         BarText {
             anchors.centerIn: parent
             text: "✕"
             font.pixelSize: Theme.size - 2
-            color: closeMa.containsMouse ? Theme.fg : Theme.fgMuted
+            color: closeMa.containsMouse ? Theme.text : Theme.dim
         }
 
         MouseArea {

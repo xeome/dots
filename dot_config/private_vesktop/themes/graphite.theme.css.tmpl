@@ -1,0 +1,169 @@
+/**
+ * @name graphite
+ * @description graphite-ui's tokens on Discord's own colour variables
+ * @author xeome
+ * @version 1.0.0
+ */
+
+/* Discord's design tokens only, no class selectors. Discord hashes its class
+ * names and reshuffles them often; the tokens have outlived the 2025 visual
+ * refresh. A renamed token falls back to Discord's own dark colour instead of
+ * breaking the layout. The token list and the selector are the ones
+ * midnight-discord (refact0r) maintains, so its changelog is the place to look
+ * when Discord renames one.
+ *
+ * Dark only: Discord picks its theme itself rather than following the desktop.
+ * Values are graphite-ui's tokens; check-palette.py holds them to Quickshell's
+ * Theme.qml. A chezmoi template only to embed the grain tiles. */
+
+body,
+.theme-dark:not(.custom-user-profile-theme) {
+    --font-primary: 'Inter', sans-serif;
+    --font-display: 'Inter', sans-serif;
+    --font-headline: 'Inter', sans-serif;
+
+    /* Grounds: the server and channel lists are the ground, the chat is the
+     * inset panel, popouts and modals are raised. Discord paints the chat
+     * with base-lower (.chatContent), not chat-background-default. */
+    --app-frame-background: #0a0a0c;
+    --background-base-lowest: #0a0a0c;
+    --background-base-lower: #0e0e10;
+    --background-base-low: #0a0a0c;
+    --background-secondary-alt: #0a0a0c;
+    --home-background: #0a0a0c;
+    --chat-background-default: #0e0e10;
+    --background-surface-high: #151618;
+    --background-surface-higher: #151618;
+    --background-surface-highest: #151618;
+    --bg-surface-raised: #151618;
+    --modal-background: #151618;
+    --modal-footer-background: #151618;
+    --card-background-default: #151618;
+    --background-code: #151618;
+    --channeltextarea-background: #151618;
+    --input-background-default: rgba(255, 255, 255, 0.02);
+
+    /* Glow and grain, through the variables Discord paints its Nitro gradient
+     * themes with: app-frame is the title bar and the app behind the server
+     * list, high is the channel and DM sidebar, chat is the chat, its header
+     * and the member list. The other gradient variables are left unset,
+     * because Discord also reads them for hover states and inputs.
+     *
+     * Every layer is `fixed`, so all surfaces of one ground share one light
+     * field and one grain, with no seam where two elements meet. The ground
+     * is lit from the window's top-left corner. The panel is lit from its own
+     * top-left, which is where the sidebar ends, and from the window's
+     * top-right. Discord's sidebar width variable ignores a drag-resized
+     * sidebar, which moves that glow by the drag distance and nothing else.
+     *
+     * Grain is grain.py's tile per ground: Chromium has blend modes, but a
+     * variable only reaches the `background` shorthand, which has no blend
+     * mode, so overlay is baked into a normal-blend tile as Quickshell does. */
+    --background-gradient-app-frame:
+        url(data:image/png;base64,{{ include "dot_config/quickshell/xeome/grain-ground.png" | b64enc }}) fixed,
+        radial-gradient(600px 300px at 0 0, rgba(255, 255, 255, 0.05), transparent 75%) fixed,
+        #0a0a0c;
+    --background-gradient-high: var(--background-gradient-app-frame);
+    --background-gradient-chat:
+        url(data:image/png;base64,{{ include "dot_config/quickshell/xeome/grain-panel.png" | b64enc }}) fixed,
+        radial-gradient(480px 250px at var(--custom-app-sidebar-target-width, 340px) var(--custom-app-top-bar-height, 32px), rgba(255, 255, 255, 0.065), transparent 75%) fixed,
+        radial-gradient(400px 200px at 100% 0, rgba(255, 255, 255, 0.03), transparent 75%) fixed,
+        #0e0e10;
+
+    /* Translucent states: hover, selection, the faint message hover. */
+    --background-mod-subtle: rgba(255, 255, 255, 0.05);
+    --background-mod-muted: rgba(255, 255, 255, 0.05);
+    --background-mod-normal: rgba(255, 255, 255, 0.07);
+    --interactive-background-hover: rgba(255, 255, 255, 0.05);
+    --interactive-background-active: rgba(255, 255, 255, 0.07);
+    --interactive-background-selected: rgba(255, 255, 255, 0.07);
+    --message-background-hover: rgba(255, 255, 255, 0.02);
+    --mention-background: rgba(255, 255, 255, 0.07);
+
+    /* Edges: the translucent line. Focus is graphite's one non-status colour. */
+    --app-frame-border: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-normal: rgba(255, 255, 255, 0.08);
+    --input-border-default: rgba(255, 255, 255, 0.08);
+    --input-border-active: #e5ae52;
+    --border-focus: #e5ae52;
+    --scrollbar-auto-thumb: #232427;
+    --scrollbar-thin-thumb: #232427;
+    --scrollbar-auto-track: transparent;
+    --scrollbar-thin-track: transparent;
+
+    /* Text: two tones carry hierarchy, bright for names, dim for labels. */
+    --text-default: #e6e7ea;
+    --text-strong: #f7f8f8;
+    --text-muted: #8a8f98;
+    --text-subtle: #8a8f98;
+    --channels-default: #8a8f98;
+    --channel-icon: #8a8f98;
+    --interactive-text-default: #8a8f98;
+    --interactive-text-hover: #e6e7ea;
+    --interactive-text-active: #f7f8f8;
+    --interactive-icon-default: #8a8f98;
+    --interactive-icon-hover: #e6e7ea;
+    --interactive-icon-active: #f7f8f8;
+    --icon-default: #8a8f98;
+    --icon-subtle: #8a8f98;
+    --icon-strong: #e6e7ea;
+    --mention-foreground: #f7f8f8;
+    --text-brand: #e6e7ea;
+    /* A link is something you can act on, so it keeps a colour: graphite's cool. */
+    --text-link: #62a6b0;
+
+    /* No brand accent: primary controls are the text tone inverted, the way
+     * GTK and Quickshell draw their accent. */
+    --control-primary-background-default: #e6e7ea;
+    --control-primary-background-hover: #f7f8f8;
+    --control-primary-background-active: #f7f8f8;
+    --control-primary-text-default: #0a0a0c;
+    --control-primary-text-hover: #0a0a0c;
+    --control-primary-text-active: #0a0a0c;
+    --control-primary-icon-default: #0a0a0c;
+    --control-primary-icon-hover: #0a0a0c;
+    --control-primary-icon-active: #0a0a0c;
+    --control-primary-border-default: rgba(255, 255, 255, 0.08);
+    --control-primary-border-hover: rgba(255, 255, 255, 0.08);
+    --control-primary-border-active: rgba(255, 255, 255, 0.08);
+    --control-secondary-background-default: rgba(255, 255, 255, 0.07);
+    --control-secondary-background-hover: rgba(255, 255, 255, 0.1);
+    --control-secondary-background-active: rgba(255, 255, 255, 0.1);
+    --control-secondary-text-default: #e6e7ea;
+    --control-secondary-text-hover: #f7f8f8;
+    --control-secondary-text-active: #f7f8f8;
+    --control-secondary-border-default: rgba(255, 255, 255, 0.08);
+    --control-secondary-border-hover: rgba(255, 255, 255, 0.08);
+    --control-secondary-border-active: rgba(255, 255, 255, 0.08);
+    --switch-background-selected-default: #e6e7ea;
+    --switch-background-selected-hover: #f7f8f8;
+    --switch-thumb-background-selected-default: #0a0a0c;
+    --checkbox-background-selected-default: #e6e7ea;
+    --checkbox-background-selected-hover: #f7f8f8;
+    --checkbox-icon-active: #0a0a0c;
+    --radio-background-selected-default: #e6e7ea;
+    --radio-background-selected-hover: #f7f8f8;
+    --radio-thumb-background-active: #0a0a0c;
+    /* Discord's brand colour sits under white text (the new-messages bar, role
+     * checkmarks) as often as it is drawn on the ground (progress bars, active
+     * outlines). Graphite's light-mode dim works both ways: white on it is
+     * 5.7:1, and it is 3.4:1 on the ground. The text tone here made white text
+     * unreadable. */
+    --brand-500: #62666d;
+    --blurple-50: #62666d;
+}
+
+/* Discord paints the member list's scroller and every member row, the DM
+ * list's scroller, and image placeholders with the same variable as the
+ * surface they sit on. Under a `fixed` background that made Chromium repaint
+ * the whole list on every scroll frame: in a 600-row mock, 102 of 400 frames
+ * dropped against 1 with the rows transparent. Emptying the variable below
+ * the surface that already paints it draws the same pixels once. Class
+ * prefixes, not full names, because Discord changes the hash after the _. */
+[class*="membersWrap_"],
+[class*="privateChannels_"] > *,
+[class*="imagePlaceholder_"] {
+    --background-gradient-chat: transparent;
+    --background-gradient-high: transparent;
+}

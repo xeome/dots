@@ -39,7 +39,7 @@ BarModule {
         readonly property var icons: ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
 
         text: icons[Math.min(4, Math.floor((root.network?.signalStrength ?? 0) * 5))]
-        color: Theme.fg
+        color: Theme.text
     }
 
     // A PopupWindow isn't an Item, so the RowLayout that BarModule's default

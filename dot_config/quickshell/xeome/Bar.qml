@@ -19,13 +19,28 @@ PanelWindow {
     implicitHeight: Theme.barHeight
     color: "transparent"
 
-    Rectangle {
+    Surface {
         anchors.fill: parent
-        color: Theme.bar
+        fill: Theme.ground
+        radius: 0
+        edged: false
+        glow: Theme.glow
+        glowFar: "transparent"
+        glowSize: 600
+        grain: "grain-ground.png"
 
-        // The bar's only edge. Full-strength border rather than the dimmer
-        // divider: this one separates the shell from arbitrary window content,
-        // not two rows of the same panel.
+        // The bar's only edge, as graphite draws every edge: the translucent
+        // line, with the dark ring as the outermost pixel below it.
+        Rectangle {
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+                bottomMargin: 1
+            }
+            height: 1
+            color: Theme.line
+        }
         Rectangle {
             anchors {
                 left: parent.left
@@ -33,7 +48,7 @@ PanelWindow {
                 bottom: parent.bottom
             }
             height: 1
-            color: Theme.border
+            color: Theme.ring
         }
     }
 
@@ -110,7 +125,9 @@ PanelWindow {
                 color: "transparent"
                 radius: Theme.radius
                 border.width: 1
-                border.color: Theme.border
+                border.color: Theme.line
+
+                CardEdges {}
             }
         }
 

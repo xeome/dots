@@ -6,58 +6,60 @@
 # │                                      │
 # └──────────────────────────────────────┘
 #
-# The Caffeine colour scheme, same values as quickshell's Theme.qml.
+# Graphite, same values as quickshell's Theme.qml.
 #
 # This used to be a committed snapshot of matugen's output, with matugen also
 # generating it live from the wallpaper — two owners writing the same file. The
 # [templates.zathura] entry is gone from matugen's config now that the palette
 # is pinned rather than derived.
 
-# Chrome. `default` is Theme.bar, the rest Theme.panel, so zathura's surfaces
-# line up with the shell's.
-set default-bg                  "#111111"
-set default-fg                  "#eeeeee"
-set statusbar-bg                "#191919"
-set statusbar-fg                "#eeeeee"
-set inputbar-bg                 "#191919"
-set inputbar-fg                 "#eeeeee"
-set notification-bg             "#191919"
-set notification-fg             "#eeeeee"
+# Chrome. `default` is graphite's panel, the same black as the terminals; the
+# bars are `raised`, so zathura's surfaces line up with the shell's.
+set default-bg                  "#0e0e10"
+set default-fg                  "#e6e7ea"
+set statusbar-bg                "#151618"
+set statusbar-fg                "#e6e7ea"
+set inputbar-bg                 "#151618"
+set inputbar-fg                 "#e6e7ea"
+set notification-bg             "#151618"
+set notification-fg             "#e6e7ea"
 
-# Caffeine's `destructive` and its ANSI yellow, both carrying primaryForeground.
-set notification-error-bg       "#e54d2e"
-set notification-error-fg       "#081a1b"
-set notification-warning-bg     "#ffd9a0"
-set notification-warning-fg     "#081a1b"
+# graphite's `hot` and `warm`, both carrying ground-coloured text.
+set notification-error-bg       "#e2715a"
+set notification-error-fg       "#0a0a0c"
+set notification-warning-bg     "#e5ae52"
+set notification-warning-fg     "#0a0a0c"
 
-set completion-bg               "#191919"
-set completion-fg               "#eeeeee"
-set completion-group-bg         "#222222"
-set completion-group-fg         "#b4b4b4"
-set completion-highlight-bg     "#ffe0c2"
-set completion-highlight-fg     "#081a1b"
+# No accent: a selected row is one neutral step up with bright text.
+set completion-bg               "#151618"
+set completion-fg               "#e6e7ea"
+set completion-group-bg         "#232427"
+set completion-group-fg         "#8a8f98"
+set completion-highlight-bg     "#232427"
+set completion-highlight-fg     "#f7f8f8"
 
-set index-bg                    "#111111"
-set index-fg                    "#eeeeee"
-set index-active-bg             "#ffe0c2"
-set index-active-fg             "#081a1b"
+set index-bg                    "#0e0e10"
+set index-fg                    "#e6e7ea"
+set index-active-bg             "#232427"
+set index-active-fg             "#f7f8f8"
 
-# Search hits. Two different colours on purpose: every match wears the accent
-# and only the one you are on wears the yellow, so n/N is readable on a page
-# with twenty hits. Alpha because these composite over the page itself.
-set highlight-color             rgba(255,224,194,0.35)
-set highlight-active-color      rgba(255,217,160,0.60)
-set highlight-fg                "#081a1b"
+# Search hits. Two different colours on purpose: every match wears a neutral
+# wash and only the one you are on wears warm, graphite's focus colour, so n/N
+# is readable on a page with twenty hits. Alpha because these composite over
+# the page itself.
+set highlight-color             rgba(230,231,234,0.25)
+set highlight-active-color      rgba(229,174,82,0.60)
+set highlight-fg                "#0a0a0c"
 
 set render-loading              true
-set render-loading-bg           "#111111"
-set render-loading-fg           "#eeeeee"
+set render-loading-bg           "#0e0e10"
+set render-loading-fg           "#e6e7ea"
 
 # Recolor mode settings — the two ends a document's black-on-white is remapped
-# onto, so a PDF reads as Theme.bar / Theme.fg like everything else.
+# onto, so a PDF reads as panel / text like everything else.
 set recolor                     true
-set recolor-lightcolor          "#111111"
-set recolor-darkcolor           "#eeeeee"
+set recolor-lightcolor          "#0e0e10"
+set recolor-darkcolor           "#e6e7ea"
 
 # Custom settings
 set window-title-home-tilde true

@@ -1,6 +1,8 @@
 README.md
 LICENSE
 pkgs
+# Baked for the Discord theme, which embeds it from the source; Quickshell never loads it.
+.config/quickshell/xeome/grain-panel.png
 
 {{- $m := index .machines .chezmoi.hostname }}
 {{- if eq $m.wm "sway" }}

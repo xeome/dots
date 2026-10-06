@@ -5,13 +5,19 @@
 -- Monitor configurations are in the main hyprland.lua.tmpl
 -- =============================================================================
 
-local colors = require("lua_modules.colors")
+-- Graphite edges: a translucent white line on every window, brighter on the
+-- focused one, and a sharp 1px dark shadow outside both. Focus is told by
+-- lightness alone; the warm focus colour read as orange around a whole window,
+-- and 22% white was too faint to find the focused window at a glance.
+local focus = "rgba(ffffff80)"
+local line = "rgba(ffffff14)"
+local ring = "rgba(0000004d)"
 
 hl.config({
   group = {
     groupbar = {
       enabled = true,
-      font_family = "Adwaita Sans",
+      font_family = "Inter",
       font_size = 8,
     },
   },
@@ -19,7 +25,7 @@ hl.config({
 
 hl.config({
   decoration = {
-    rounding = 0,
+    rounding = 10,
     rounding_power = 2.0,
     blur = {
       enabled = true,
@@ -31,7 +37,12 @@ hl.config({
       xray = true,
     },
     shadow = {
-      enabled = false,
+      enabled = true,
+      sharp = true,
+      range = 1,
+      render_power = 1,
+      color = ring,
+      color_inactive = ring,
     },
   },
 })
@@ -39,10 +50,10 @@ hl.config({
 hl.config({
   general = {
     allow_tearing = true,
-    border_size = 2,
+    border_size = 1,
     col = {
-      active_border = { colors = { colors.secondary, colors.primary } },
-      inactive_border = colors.surface,
+      active_border = focus,
+      inactive_border = line,
     },
     gaps_in = 5,
     gaps_out = 5,

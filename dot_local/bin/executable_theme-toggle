@@ -15,13 +15,19 @@ light=$(qs -c xeome ipc call theme toggle)
 # from foot.ini, SIGUSR2 [colors-light]. `|| true` because no foot running is
 # the normal case.
 if [[ "$light" == "true" ]]; then
+    mode=light
     pkill -USR2 -x foot || true
-    gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
-    gsettings set org.gnome.desktop.interface gtk-theme 'graphite-light'
-    gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Grey-Light'
 else
+    mode=dark
     pkill -USR1 -x foot || true
-    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-    gsettings set org.gnome.desktop.interface gtk-theme 'graphite-dark'
-    gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Grey-Dark'
+fi
+gsettings set org.gnome.desktop.interface color-scheme "prefer-$mode"
+gsettings set org.gnome.desktop.interface gtk-theme "graphite-$mode"
+gsettings set org.gnome.desktop.interface icon-theme "Colloid-Grey-${mode^}"
+
+# XWayland GTK3 apps don't read gsettings: they take theme and icons from
+# settings.ini when they start, so it follows too.
+if [[ -f ~/.config/gtk-3.0/settings.ini ]]; then
+    sed -i -E "s/^(gtk-theme-name=).*/\1graphite-$mode/; s/^(gtk-icon-theme-name=).*/\1Colloid-Grey-${mode^}/" \
+        ~/.config/gtk-3.0/settings.ini
 fi

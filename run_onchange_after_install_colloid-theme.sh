@@ -31,6 +31,12 @@ fi
 if [[ "$(gsettings get org.gnome.desktop.interface cursor-theme)" == *Colloid* ]]; then
     gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
 fi
+# XWayland apps don't read gsettings: they take the cursor from the files
+# nwg-look wrote, which still name Colloid and so fall back to the X default.
+for f in ~/.icons/default/index.theme ~/.config/xsettingsd/xsettingsd.conf \
+         ~/.gtkrc-2.0 ~/.config/gtk-3.0/settings.ini; do
+    [[ -f "$f" ]] && sed -i 's/Colloid-cursors/Bibata-Modern-Classic/' "$f"
+done
 if [[ "$(gsettings get org.gnome.desktop.interface icon-theme)" == *Colloid-Orange* ]]; then
     gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
 fi
@@ -59,4 +65,13 @@ if [[ "$icons" != *Colloid-Grey* ]]; then
     else
         gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Grey-Dark'
     fi
+fi
+
+# XWayland GTK3 apps read settings.ini, not gsettings, and nwg-look left it on
+# the removed Colloid-Orange themes. theme-toggle keeps it in step after this.
+if [[ -f ~/.config/gtk-3.0/settings.ini ]]; then
+    gtk="$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")"
+    icons="$(gsettings get org.gnome.desktop.interface icon-theme | tr -d "'")"
+    sed -i -E "s/^(gtk-theme-name=).*/\1$gtk/; s/^(gtk-icon-theme-name=).*/\1$icons/" \
+        ~/.config/gtk-3.0/settings.ini
 fi

@@ -11,7 +11,7 @@ normal-blend tile: black where overlay darkens, white where it lightens.
 One tile per ground, because overlay depends on the colour underneath. A tile
 built for #0A0A0C is off by up to 3.4 levels on #151618.
 
-Needs rsvg-convert, numpy and pillow. It runs on demand, not at apply time;
+Needs rsvg-convert, numpy, scipy and pillow. It runs on demand, not at apply time;
 rerun it after changing `ground`, `panel` or `raised` in Theme.qml, then
 apply the quickshell and Discord themes:
 
@@ -24,6 +24,7 @@ import subprocess
 
 import numpy as np
 from PIL import Image
+from scipy.ndimage import gaussian_filter, zoom
 
 # graphite's --grain, verbatim.
 SVG = b"""<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='.33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(#n)' opacity='.3'/></svg>"""
@@ -67,22 +68,35 @@ def bake(base, g, a):
     return tile
 
 
-def lock(g, a, w=1920, h=1200):
-    """hyprlock's background: graphite's shell ground with its corner glow,
-    radial-gradient(600px 300px at 0 0, --glow, transparent 75%), and the grain
-    overlaid exactly, pixel by pixel, since the glow means no flat base. 1920x1200
-    in logical pixels: hyprlock draws it at 2x on a scale-2 monitor, which is
-    where graphite's CSS grain would land too."""
+def smooth_noise(h, w, cell, seed):
+    """Unit-variance noise with features about `cell` pixels across."""
+    r = np.random.default_rng(seed).standard_normal((h // cell + 3, w // cell + 3))
+    n = gaussian_filter(zoom(r, cell, order=3)[:h, :w], cell / 4)
+    return (n - n.mean()) / n.std()
+
+
+def lock(g, a, w=2560, h=1440):
+    """hyprlock's background: graphite's shell ground under faint topographic
+    lines, every fifth one brighter, fading towards the edges, with the grain
+    overlaid exactly, pixel by pixel. A corner glow alone read as a monitor's
+    light leak once it filled a whole screen. Lines cover the screen evenly and
+    line up with nothing, so hyprlock can scale it to any monitor. Sized for
+    the largest one, 2560x1440; the seeds keep the map the same on each run."""
     ys, xs = np.mgrid[0:h, 0:w] + 0.5
-    glow = 0.05 * np.clip(1 - np.hypot(xs / 600, ys / 300) / 0.75, 0, 1)[..., None]
+    n = 9 * (smooth_noise(h, w, 420, 3) + 0.4 * smooth_noise(h, w, 160, 4))
+    f = n % 1
+    line = np.clip(1 - np.minimum(f, 1 - f) / 0.045, 0, 1)
+    major = np.floor(n) % 5 == 0
+    edge = np.hypot((xs - w / 2) / (w / 2), (ys - h / 2) / (h / 2))
+    fade = np.clip(1 - 1.1 * (edge / 1.4) ** 2, 0, 1)
+    lum = (line * np.where(major, 0.095, 0.045) * fade)[..., None]
     ground = np.array([int(GROUNDS["ground"][i : i + 2], 16) / 255 for i in (1, 3, 5)])
-    base = ground * (1 - glow) + glow
+    base = ground * (1 - lum) + lum
     reps = (h // g.shape[0] + 1, w // g.shape[1] + 1)
     gg = np.tile(g, reps)[:h, :w, None]
     aa = np.tile(a, reps)[:h, :w, None]
     over = np.where(base < 0.5, 2 * base * gg, 1 - 2 * (1 - base) * (1 - gg))
     return base + aa * (over - base)
-
 
 if __name__ == "__main__":
     g, a = render()

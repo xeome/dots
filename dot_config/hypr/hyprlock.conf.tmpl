@@ -30,6 +30,9 @@ background {
 # =============================================================================
 # CLOCK
 # =============================================================================
+# Every widget shown on all monitors anchors to the centre, so the stack keeps
+# its spacing on any height. The offsets are the 1080p layout's: a 150pt label
+# is 243px tall, so its centre sits 121px below where its top used to be.
 
 # Hours
 label {
@@ -37,9 +40,9 @@ label {
     color = rgba(247, 248, 248, 1)
     font_size = 150
     font_family = Inter SemiBold
-    position = 0, -250
+    position = 0, 168
     halign = center
-    valign = top
+    valign = center
 }
 
 # Minutes
@@ -48,9 +51,9 @@ label {
     color = rgba(247, 248, 248, 1)
     font_size = 150
     font_family = Inter SemiBold
-    position = 0, -420
+    position = 0, -2
     halign = center
-    valign = top
+    valign = center
 }
 
 # Date

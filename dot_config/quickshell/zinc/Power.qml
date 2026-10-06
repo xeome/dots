@@ -153,6 +153,8 @@ PopupWindow {
                         spacing: 10
 
                         BarText {
+                            Layout.preferredWidth: 24
+                            horizontalAlignment: Text.AlignHCenter
                             text: root.glyph(row.modelData.profile)
                             font.pixelSize: Theme.size + 5
                             color: row.current ? Theme.fgInverted : Theme.fg

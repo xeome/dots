@@ -165,11 +165,13 @@ PopupWindow {
                             spacing: 0
 
                             BarText {
+                                Layout.fillWidth: true
                                 text: row.modelData.name
                                 color: row.current ? Theme.fgInverted : Theme.fg
                             }
 
                             BarText {
+                                Layout.fillWidth: true
                                 text: row.modelData.detail
                                 font.pixelSize: Theme.size - 4
                                 font.weight: 450

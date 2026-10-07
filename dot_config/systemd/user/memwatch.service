@@ -1,0 +1,11 @@
+[Unit]
+Description=Memory pressure warnings ahead of systemd-oomd
+
+[Service]
+ExecStart=%h/.local/bin/memwatch
+Restart=on-failure
+
+[Install]
+# Not graphical-session.target: Hyprland is started outside systemd here, so
+# that target never activates.
+WantedBy=default.target

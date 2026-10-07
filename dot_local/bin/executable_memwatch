@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+# Early warning ahead of systemd-oomd, and word after it acts.
+#
+# oomd kills an app once user@.service sits at 50% memory stall for 20s, or
+# once swap passes 90% (see run_onchange_after_configure-oom.sh). This warns
+# well below both, so there is time to close something by hand.
+#
+# The stall warning is a kernel PSI trigger: poll() wakes only when the stall
+# threshold is crossed, so nothing is sampled while memory is fine. Swap has no
+# such event, so it is checked on the poll timeout instead.
+import os
+import select
+import subprocess
+import sys
+import time
+
+STALL_US = 200_000  # 10% of every task stalled, in a 2s window
+WINDOW_US = 2_000_000  # unprivileged triggers need a multiple of 2s
+SWAP_WARN = 0.75
+QUIET_S = 60  # per warning, so a long squeeze is one toast, not thirty
+
+
+def notify(urgency, title, body):
+    subprocess.run(["notify-send", "-a", "Memory", "-u", urgency, title, body])
+
+
+def swap_used():
+    m = {k: int(v.split()[0]) for k, v in (line.split(":") for line in open("/proc/meminfo"))}
+    return 1 - m["SwapFree"] / m["SwapTotal"] if m["SwapTotal"] else 0
+
+
+psi = os.open("/proc/pressure/memory", os.O_RDWR | os.O_NONBLOCK)
+os.write(psi, f"full {STALL_US} {WINDOW_US}\0".encode())
+
+journal = subprocess.Popen(
+    ["journalctl", "-f", "-n0", "-o", "cat", "-u", "systemd-oomd"],
+    stdout=subprocess.PIPE,
+    text=True,
+)
+
+poller = select.poll()
+poller.register(psi, select.POLLPRI)
+poller.register(journal.stdout, select.POLLIN)
+
+last = {"stall": float("-inf"), "swap": float("-inf")}
+
+
+def warn(key, title, body):
+    now = time.monotonic()
+    if now - last[key] >= QUIET_S:
+        last[key] = now
+        notify("normal", title, body)
+
+
+while True:
+    for fd, _ in poller.poll(10_000):
+        if fd == psi:
+            warn("stall", "Memory pressure", "Apps are stalling on memory. oomd kills the worst app if stall holds at 50% for 20s.")
+            continue
+        line = journal.stdout.readline()
+        if not line:
+            sys.exit("journalctl exited")  # systemd restarts us
+        # "Killed /user.slice/…/app-foo.scope due to memory pressure for …"
+        if line.startswith("Killed "):
+            unit = line.split()[1].rsplit("/", 1)[-1]
+            notify("critical", "Out of memory", f"oomd killed {unit}")
+    if swap_used() > SWAP_WARN:
+        warn("swap", "Swap almost full", f"{swap_used():.0%} used. oomd kills the biggest swap user at 90%.")

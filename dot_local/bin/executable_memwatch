@@ -5,32 +5,36 @@
 # once swap passes 90% (see run_onchange_after_configure-oom.sh). This warns
 # well below both, so there is time to close something by hand.
 #
-# The stall warning is a kernel PSI trigger: poll() wakes only when the stall
-# threshold is crossed, so nothing is sampled while memory is fine. Swap has no
-# such event, so it is checked on the poll timeout instead.
+# Both warnings sample on the poll timeout. The stall one reads the exact
+# number oomd acts on: full avg10 of user@.service. A PSI trigger on
+# /proc/pressure/memory looked cheaper, but it fired on 1us of system-wide stall.
 import os
 import select
 import subprocess
 import sys
 import time
 
-STALL_US = 200_000  # 10% of every task stalled, in a 2s window
-WINDOW_US = 2_000_000  # unprivileged triggers need a multiple of 2s
+uid = os.getuid()
+PRESSURE = f"/sys/fs/cgroup/user.slice/user-{uid}.slice/user@{uid}.service/memory.pressure"
+STALL_WARN = 20.0  # % full avg10; oomd kills at 50
 SWAP_WARN = 0.75
 QUIET_S = 60  # per warning, so a long squeeze is one toast, not thirty
 
 
 def notify(urgency, title, body):
+    print(f"{title}: {body}", flush=True)  # journal, for "when did that fire?"
     subprocess.run(["notify-send", "-a", "Memory", "-u", urgency, title, body])
+
+
+def stall():
+    # second line: "full avg10=1.23 avg60=… avg300=… total=…"
+    return float(open(PRESSURE).read().splitlines()[1].split()[1].split("=")[1])
 
 
 def swap_used():
     m = {k: int(v.split()[0]) for k, v in (line.split(":") for line in open("/proc/meminfo"))}
     return 1 - m["SwapFree"] / m["SwapTotal"] if m["SwapTotal"] else 0
 
-
-psi = os.open("/proc/pressure/memory", os.O_RDWR | os.O_NONBLOCK)
-os.write(psi, f"full {STALL_US} {WINDOW_US}\0".encode())
 
 journal = subprocess.Popen(
     ["journalctl", "-f", "-n0", "-o", "cat", "-u", "systemd-oomd"],
@@ -39,7 +43,6 @@ journal = subprocess.Popen(
 )
 
 poller = select.poll()
-poller.register(psi, select.POLLPRI)
 poller.register(journal.stdout, select.POLLIN)
 
 last = {"stall": float("-inf"), "swap": float("-inf")}
@@ -53,10 +56,7 @@ def warn(key, title, body):
 
 
 while True:
-    for fd, _ in poller.poll(10_000):
-        if fd == psi:
-            warn("stall", "Memory pressure", "Apps are stalling on memory. oomd kills the worst app if stall holds at 50% for 20s.")
-            continue
+    for _ in poller.poll(2_000):
         line = journal.stdout.readline()
         if not line:
             sys.exit("journalctl exited")  # systemd restarts us
@@ -64,5 +64,7 @@ while True:
         if line.startswith("Killed "):
             unit = line.split()[1].rsplit("/", 1)[-1]
             notify("critical", "Out of memory", f"oomd killed {unit}")
-    if swap_used() > SWAP_WARN:
-        warn("swap", "Swap almost full", f"{swap_used():.0%} used. oomd kills the biggest swap user at 90%.")
+    if (s := stall()) >= STALL_WARN:
+        warn("stall", "Memory pressure", f"Apps stalled {s:.0f}% of the last 10s. oomd kills the worst app at 50% for 20s.")
+    if (u := swap_used()) > SWAP_WARN:
+        warn("swap", "Swap almost full", f"{u:.0%} used. oomd kills the biggest swap user at 90%.")

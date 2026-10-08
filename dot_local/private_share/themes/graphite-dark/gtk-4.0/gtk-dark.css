@@ -1,0 +1,3 @@
+/* GTK 4.24+ loads gtk-dark.css when color-scheme is prefer-dark (gtksettings.c
+ * get_theme_name), and falls back to its built-in Default without it. */
+@import url("gtk.css");

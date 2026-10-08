@@ -9,6 +9,8 @@
 2. That the configs which repeat a palette value still say it. The whole point
    of one palette is that #0A0A0C is #0A0A0C everywhere; a dozen files in six
    syntaxes is exactly where that silently stops being true.
+3. That kvantum.py can still build the Qt theme: it stops on any upstream
+   colour it has no Theme.qml token for.
 
 Run it after touching any palette:  ~/.config/quickshell/check-palette.py
 """
@@ -16,6 +18,7 @@ import pathlib
 import re
 import subprocess
 import sys
+import tempfile
 
 # The chezmoi source tree, not the deployed targets. Machine-specific
 # .chezmoiignore rules mean the sway palette is absent on a hyprland box and
@@ -129,6 +132,8 @@ if not any("lacks" in f for f in fails):
     D = {k: hexrgb(v) for k, v in dark.items()}
     L = {k: hexrgb(v) for k, v in light.items()}
     rgb = lambda h: ", ".join(str(int(h[i : i + 2], 16)) for i in (1, 3, 5))
+    # A translucent token as GTK CSS writes it: rgba(255, 255, 255, 0.05).
+    rgba = lambda t: f"rgba({rgb(hexrgb(t))}, {round(t[3], 2):g})"
     SHARED = {
         "dot_config/ghostty/themes/caffeine": (f"background = {D['panel']}",),
         "dot_config/alacritty/caffeine.toml": (f'background = "{D["panel"]}"',),
@@ -166,21 +171,32 @@ if not any("lacks" in f for f in fails):
             f"--text-default: {D['text']};",
             f"--text-muted: {D['dim']};",
         ),
+        # The twin check below holds gtk-4.0/gtk.css to these, define by
+        # define, so pinning the per-mode GTK3 files pins both. Light mode is
+        # flat by choice, so it has no glow.
         "dot_local/private_share/themes/graphite-dark/gtk-3.0/gtk.css": (
             f"@define-color window_bg_color {D['ground']};",
             f"@define-color view_bg_color {D['panel']};",
             f"@define-color accent_bg_color {D['text']};",
+            f"@define-color graphite_glow {rgba(dark['glow'])};",
+            f"@define-color graphite_lift {rgba(dark['lift'])};",
+            f"@define-color graphite_glow_panel_far {rgba(dark['glowPanelFar'])};",
+            'url("grain-ground.png")',
+            'url("grain-panel.png")',
         ),
         "dot_local/private_share/themes/graphite-light/gtk-3.0/gtk.css": (
             f"@define-color window_bg_color {L['ground']};",
             f"@define-color view_bg_color {L['panel']};",
             f"@define-color accent_bg_color {L['text']};",
+            f"@define-color graphite_lift {rgba(light['lift'])};",
         ),
         "dot_config/gtk-4.0/gtk.css": (
             f"@define-color window_bg_color {D['ground']};",
             f"@define-color window_bg_color {L['ground']};",
             f"@define-color accent_bg_color {D['text']};",
             f"@define-color accent_bg_color {L['text']};",
+            'url("grain-ground.png")',
+            'url("grain-panel.png")',
         ),
     }
 
@@ -215,6 +231,15 @@ if not any("lacks" in f for f in fails):
         rel = f"dot_local/private_share/themes/graphite-{mode}/gtk-3.0/gtk.css"
         if defines((SRC / rel).read_text()) != defines(block):
             fails.append(f"{rel} and gtk-4.0/gtk.css ({mode}) define different colours")
+
+# The Qt theme is generated from Theme.qml, so it cannot drift; what can go
+# wrong is an upstream colour kvantum.py has no token for, which it refuses.
+# It runs here into a scratch folder so that shows up before an apply does.
+with tempfile.TemporaryDirectory() as tmp:
+    kv = subprocess.run([sys.executable, "-I", str(SRC / "dot_config/quickshell/executable_kvantum.py"), tmp],
+                        capture_output=True, text=True)
+    if kv.returncode:
+        fails.append(f"kvantum.py failed:\n{kv.stderr.strip()}")
 
 if fails:
     print("\n".join(fails), file=sys.stderr)

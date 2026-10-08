@@ -25,6 +25,12 @@ gsettings set org.gnome.desktop.interface color-scheme "prefer-$mode"
 gsettings set org.gnome.desktop.interface gtk-theme "graphite-$mode"
 gsettings set org.gnome.desktop.interface icon-theme "Colloid-Grey-${mode^}"
 
+# Qt takes font and icons from those gsettings (QT_QPA_PLATFORMTHEME=gtk3),
+# and its widgets from Kvantum, which reads its theme once per app: running
+# Qt apps switch at their next start. Same line modify_kvantum.kvconfig writes.
+if [[ "$mode" == light ]]; then kvantum=graphite; else kvantum=graphiteDark; fi
+printf '[General]\ntheme=%s\n' "$kvantum" >~/.config/Kvantum/kvantum.kvconfig
+
 # XWayland GTK3 apps don't read gsettings: they take theme and icons from
 # settings.ini when they start, so it follows too.
 if [[ -f ~/.config/gtk-3.0/settings.ini ]]; then

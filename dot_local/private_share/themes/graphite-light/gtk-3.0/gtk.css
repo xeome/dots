@@ -56,6 +56,7 @@
 @define-color success_bg_color #276d77;
 @define-color success_fg_color #ededef;
 @define-color success_color #276d77;
+@define-color graphite_lift rgba(255, 255, 255, 0.8);
 
 /* The accent is the text colour, and adw-gtk3's switch knob is white, so an
  * "on" switch was a white knob on a near-white track. The knob takes the
@@ -78,3 +79,27 @@ headerbar switch:backdrop:checked:not(:disabled) > slider,
 @define-color theme_selected_fg_color @window_fg_color;
 @define-color theme_unfocused_selected_bg_color mix(@view_bg_color, @accent_bg_color, 0.25);
 @define-color theme_unfocused_selected_fg_color @window_fg_color;
+
+/* Every edge is two lines: the translucent line, then a dark ring outside it,
+ * without changing any control's size. A button's line is the 1px border
+ * adw-gtk3 already gives it, transparent: flat buttons (header bars, toolbars,
+ * .flat) reset its colour, and no state touches it. Its ring is a shadow,
+ * which adw-gtk3 drops while a button is hovered, pressed or checked. */
+button {
+  border-color: @borders;
+  box-shadow: 0 0 0 1px @shade_color;
+}
+
+entry,
+spinbutton:not(.vertical) {
+  box-shadow: inset 0 0 0 1px @borders, 0 0 0 1px @shade_color;
+}
+
+frame > border {
+  box-shadow: 0 0 0 1px @shade_color;
+}
+
+popover.background {
+  border-color: @borders;
+  box-shadow: 0 0 0 1px @shade_color;
+}

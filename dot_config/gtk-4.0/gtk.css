@@ -53,6 +53,10 @@
 @define-color success_bg_color #62a6b0;
 @define-color success_fg_color #0a0a0c;
 @define-color success_color #62a6b0;
+/* graphite's corner glow and a card's lit top edge. */
+@define-color graphite_glow rgba(255, 255, 255, 0.05);
+@define-color graphite_lift rgba(255, 255, 255, 0.05);
+@define-color graphite_glow_panel_far rgba(255, 255, 255, 0.03);
 
 @media (prefers-color-scheme: light) {
   @define-color window_bg_color #ededef;
@@ -106,6 +110,7 @@
   @define-color success_bg_color #276d77;
   @define-color success_fg_color #ededef;
   @define-color success_color #276d77;
+  @define-color graphite_lift rgba(255, 255, 255, 0.8);
 }
 
 /* --- Shape, not colour. Selectors are GTK's documented CSS node names. This
@@ -150,5 +155,53 @@ floating-sheet > sheet,
 toast {
   border: 1px solid @borders;
   border-radius: 10px;
+  box-shadow: 0 0 0 1px @shade_color;
+}
+
+/* Graphite's surface, dark mode only: a colourless glow from the window's
+ * top-left corner under a grain (grain.py bakes one tile per ground). Split
+ * views cover the window's corner with an opaque sidebar, so it carries the
+ * same. The tiles sit beside this file: url() is relative to it. */
+@media (prefers-color-scheme: dark) {
+  window.background,
+  .sidebar-pane {
+    background-image: url("grain-ground.png"),
+      radial-gradient(circle 360px at 0 0, @graphite_glow, alpha(@graphite_glow, 0));
+    background-repeat: repeat, no-repeat;
+  }
+
+  /* Views are graphite's inset panel: two glows, the ground's top-left and a
+   * fainter one top-right, as in the shell's Surface.qml. The old tree view paints
+   * every cell again with the view's style plus a `cell` class, so cells drop
+   * the images: each would draw its own glow from its own corner. */
+  .view {
+    background-image: url("grain-panel.png"),
+      radial-gradient(circle 360px at 0 0, @graphite_glow, alpha(@graphite_glow, 0)),
+      radial-gradient(circle 300px at 100% 0, @graphite_glow_panel_far, alpha(@graphite_glow_panel_far, 0));
+    background-repeat: repeat, no-repeat, no-repeat;
+  }
+
+  .view.cell,
+  iconview.cell {
+    background-image: none;
+  }
+}
+
+/* Every edge is two lines: the translucent line, then a dark ring outside it,
+ * drawn as shadows so no control changes size. libadwaita's own buttons keep
+ * their shape: it marks which are flat with dozens of private selectors, and
+ * this file outranks all of them. */
+entry:not(.flat),
+spinbutton:not(.flat),
+dropdown:not(.flat) > button {
+  box-shadow: inset 0 0 0 1px @borders, 0 0 0 1px @shade_color;
+}
+
+.card,
+list.boxed-list {
+  box-shadow: inset 0 1px @graphite_lift, inset 0 0 0 1px @borders, 0 0 0 1px @shade_color;
+}
+
+frame {
   box-shadow: 0 0 0 1px @shade_color;
 }

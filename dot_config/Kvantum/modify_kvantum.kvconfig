@@ -1,0 +1,14 @@
+#!/bin/sh
+# Kvantum's theme, in step with the GTK colour scheme: graphite (light) or
+# graphiteDark, which kvantum.py writes into ~/.config/Kvantum/graphite. A
+# modify_ script rather than a plain file because theme-toggle rewrites this
+# line on SUPER+T, and Kvantum keeps no other state worth preserving here.
+#
+# Anything but an explicit light scheme is dark, as in the colloid install
+# script: chezmoi applies this before the scripts that set the scheme, and a
+# fresh profile reports 'default'.
+case "$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)" in
+    *prefer-light*) theme=graphite ;;
+    *) theme=graphiteDark ;;
+esac
+printf '[General]\ntheme=%s\n' "$theme"

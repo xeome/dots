@@ -1,0 +1,12 @@
+#!/bin/bash
+# Builds graphite's Kvantum theme, the Qt side of the GTK themes, into
+# ~/.config/Kvantum/graphite. dot_config/quickshell/kvantum.py says how; it
+# fetches its pinned KvLibadwaita into ~/.cache the first time, so that run
+# needs the network, like the colloid icon build.
+#
+# Generated rather than committed, so it re-runs whenever its inputs change:
+# Theme.qml {{ include "dot_config/quickshell/xeome/Theme.qml" | sha256sum }}
+# kvantum.py {{ include "dot_config/quickshell/executable_kvantum.py" | sha256sum }}
+# grain {{ include "dot_config/quickshell/xeome/grain-ground.png" | sha256sum }}
+set -euo pipefail
+exec python3 -I "$CHEZMOI_SOURCE_DIR/dot_config/quickshell/executable_kvantum.py"

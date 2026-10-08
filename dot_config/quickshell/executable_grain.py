@@ -13,7 +13,7 @@ built for #0A0A0C is off by up to 3.4 levels on #151618.
 
 Needs rsvg-convert, numpy, scipy and pillow. It runs on demand, not at apply time;
 rerun it after changing `ground`, `panel` or `raised` in Theme.qml, then
-apply the quickshell and Discord themes:
+apply the quickshell, Discord and GTK themes (the Qt theme rebuilds itself):
 
     ~/.local/share/chezmoi/dot_config/quickshell/executable_grain.py
 """
@@ -131,6 +131,12 @@ if __name__ == "__main__":
             OUT / f"grain-{name}.png", optimize=True
         )
         print(f"grain-{name}.png  max alpha {tile[..., 3].max():.3f}")
+    # The GTK stylesheets name their tiles relative to themselves, so the
+    # ground and panel tiles are copied beside each dark one.
+    for folder in ("dot_config/gtk-4.0", "dot_local/private_share/themes/graphite-dark/gtk-3.0"):
+        for name in ("ground", "panel"):
+            (SRC / folder / f"grain-{name}.png").write_bytes((OUT / f"grain-{name}.png").read_bytes())
+    print("GTK tile copies")
     Image.fromarray(np.round(lock(g, a) * 255).astype(np.uint8), "RGB").save(
         SRC / "dot_config/hypr/graphite-lock.png", optimize=True
     )

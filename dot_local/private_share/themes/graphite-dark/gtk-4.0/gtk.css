@@ -1,0 +1,5 @@
+/* graphite dark for plain GTK4 apps (pavucontrol): GTK4 loads a theme folder's
+ * gtk-4.0 by gtk-theme name, and without one it falls back to its built-in
+ * Default. adw-gtk3's libadwaita look is the base; the colours and shapes
+ * come from ~/.config/gtk-4.0/gtk.css, which GTK4 loads for every app. */
+@import url("file:///usr/share/themes/adw-gtk3-dark/gtk-4.0/gtk.css");

@@ -8,6 +8,8 @@ import Quickshell.Io
 // desktop: hypr's borders, hyprlock, vicinae, the GTK themes, yazi, zathura and
 // the terminals' background repeat the values below in their own config.
 // check-palette.py holds most of them to it; yazi and zathura it does not.
+// The Qt theme is generated from them by kvantum.py on every chezmoi apply
+// that changes this file.
 Singleton {
     id: root
 

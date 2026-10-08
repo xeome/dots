@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Bakes graphite's grain into the tiles xeome/Surface.qml draws, and into
-hyprlock's background.
+"""Bakes graphite's grain into the tiles xeome/Surface.qml draws, into
+hyprlock's background, and into the office wallpaper.
 
 Graphite blends its noise as `overlay` at 30% (graphite-ui components.md), so
 the grain darkens and lightens a near-black ground without lifting it. QML has
@@ -23,7 +23,7 @@ import re
 import subprocess
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 from scipy.ndimage import gaussian_filter, zoom
 
 # graphite's --grain, verbatim.
@@ -90,8 +90,32 @@ def lock(g, a, w=2560, h=1440):
     edge = np.hypot((xs - w / 2) / (w / 2), (ys - h / 2) / (h / 2))
     fade = np.clip(1 - 1.1 * (edge / 1.4) ** 2, 0, 1)
     lum = (line * np.where(major, 0.095, 0.045) * fade)[..., None]
+    return grained(on_ground(lum), g, a)
+
+
+def office(g, a, w=2560, h=1440):
+    """The office photo in graphite: its blue cast dropped to grey, its black
+    lifted to the shell ground, and the grain overlaid. Cropped to the largest
+    monitor so the grain lands 1:1 on its pixels."""
+    im = ImageOps.fit(Image.open(SRC / "dot_config/wallpapers/office.jpg"), (w, h), Image.LANCZOS)
+    x = np.asarray(im.convert("L"), float)[..., None] / 255
+    # An S-curve through 0 and 1: shadows sink, the window brightens. Raise
+    # `c` for harder contrast; `p` is the grey where it turns from darkening to
+    # brightening. Tuned by eye; 2.4 reads moodier.
+    c, p = 2.0, 0.45
+    lum = x**c * (1 + p**c) / (x**c + p**c)
+    return grained(on_ground(lum), g, a)
+
+
+def on_ground(lum):
+    """Greys from lum, with black at graphite's shell ground instead of #000."""
     ground = np.array([int(GROUNDS["ground"][i : i + 2], 16) / 255 for i in (1, 3, 5)])
-    base = ground * (1 - lum) + lum
+    return ground * (1 - lum) + lum
+
+
+def grained(base, g, a):
+    """base with the grain overlaid exactly, pixel by pixel."""
+    h, w = base.shape[:2]
     reps = (h // g.shape[0] + 1, w // g.shape[1] + 1)
     gg = np.tile(g, reps)[:h, :w, None]
     aa = np.tile(a, reps)[:h, :w, None]
@@ -111,3 +135,7 @@ if __name__ == "__main__":
         SRC / "dot_config/hypr/graphite-lock.png", optimize=True
     )
     print("hypr/graphite-lock.png")
+    Image.fromarray(np.round(office(g, a) * 255).astype(np.uint8), "RGB").save(
+        SRC / "dot_config/wallpapers/office-graphite.jpg", quality=95
+    )
+    print("wallpapers/office-graphite.jpg")

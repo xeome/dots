@@ -23,17 +23,18 @@ else
 fi
 gsettings set org.gnome.desktop.interface color-scheme "prefer-$mode"
 gsettings set org.gnome.desktop.interface gtk-theme "graphite-$mode"
-gsettings set org.gnome.desktop.interface icon-theme "Colloid-Grey-${mode^}"
+gsettings set org.gnome.desktop.interface icon-theme "ZorinGrey-${mode^}"
 
-# Qt takes font and icons from those gsettings (QT_QPA_PLATFORMTHEME=gtk3),
-# and its widgets from Kvantum, which reads its theme once per app: running
-# Qt apps switch at their next start. Same line modify_kvantum.kvconfig writes.
+# Qt takes font and icons from qt5ct/qt6ct, written from those gsettings, and
+# its widgets from Kvantum. Both are read once per app: running Qt apps
+# switch at their next start. Same files the modify_ scripts write.
+for v in 5 6; do ~/.local/bin/qtct-conf "$v" >~/.config/qt${v}ct/qt${v}ct.conf; done
 if [[ "$mode" == light ]]; then kvantum=graphite; else kvantum=graphiteDark; fi
 printf '[General]\ntheme=%s\n' "$kvantum" >~/.config/Kvantum/kvantum.kvconfig
 
 # XWayland GTK3 apps don't read gsettings: they take theme and icons from
 # settings.ini when they start, so it follows too.
 if [[ -f ~/.config/gtk-3.0/settings.ini ]]; then
-    sed -i -E "s/^(gtk-theme-name=).*/\1graphite-$mode/; s/^(gtk-icon-theme-name=).*/\1Colloid-Grey-${mode^}/" \
+    sed -i -E "s/^(gtk-theme-name=).*/\1graphite-$mode/; s/^(gtk-icon-theme-name=).*/\1ZorinGrey-${mode^}/" \
         ~/.config/gtk-3.0/settings.ini
 fi

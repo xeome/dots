@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+"""Print qt5ct.conf (arg 5) or qt6ct.conf (arg 6) from the GTK gsettings.
+
+Qt reads its font and icons through qt5ct/qt6ct, because the gtk3 platform
+theme hands tooltips Qt's built-in black-on-yellow palette and Kvantum cannot
+override it. gsettings stays the one source: chezmoi's modify_qt*ct.conf and
+theme-toggle both write these files from here. Kvantum draws the widgets and
+its own palette (custom_palette=false).
+"""
+import sys
+
+import gi
+
+gi.require_version("Pango", "1.0")
+from gi.repository import Gio, Pango
+
+# Qt5 weights run 0-99; Qt6 and Pango use the CSS scale.
+QT5_WEIGHT = {100: 0, 200: 12, 300: 25, 400: 50, 500: 57, 600: 63, 700: 75, 800: 81, 900: 87}
+
+
+def qfont(pango, qt):
+    d = Pango.FontDescription.from_string(pango)
+    weight = int(d.get_weight())
+    italic = int(d.get_style() != Pango.Style.NORMAL)
+    size = f"{d.get_size() / Pango.SCALE:g}"
+    if qt == 5:
+        return f"{d.get_family()},{size},-1,5,{QT5_WEIGHT[round(weight, -2)]},{italic},0,0,0,0"
+    return f"{d.get_family()},{size},-1,5,{weight},{italic},0,0,0,0,0,0,0,0,0,1"
+
+
+def main():
+    qt = int(sys.argv[1])
+    s = Gio.Settings.new("org.gnome.desktop.interface")
+    print(f"""[Appearance]
+custom_palette=false
+icon_theme={s.get_string("icon-theme")}
+standard_dialogs=xdgdesktopportal
+style=kvantum
+
+[Fonts]
+fixed="{qfont(s.get_string("monospace-font-name"), qt)}"
+general="{qfont(s.get_string("font-name"), qt)}"
+""")
+
+
+main()

@@ -44,6 +44,8 @@
 .local/share/icons/Colloid-Orange*
 .local/share/icons/Colloid-cursors
 .local/share/icons/Colloid-dark-cursors
+# The grey Colloid icons the set-theme script used to build gave way to ZorinGrey.
+.local/share/icons/Colloid-Grey*
 .config/gtk-4.0/colloid-*.css
 .config/gtk-4.0/assets
 .local/share/vicinae/themes/caffeine.toml

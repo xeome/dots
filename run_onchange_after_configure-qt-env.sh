@@ -1,7 +1,8 @@
 #!/bin/bash
 # Qt's half of the graphite theme, for every session:
-#   QT_QPA_PLATFORMTHEME=gtk3  font and icons from the same gsettings GTK uses,
-#                              which theme-toggle already flips
+#   QT_QPA_PLATFORMTHEME=qt5ct font and icons from qt5ct/qt6ct (qt6ct answers
+#                              to qt5ct too), written from the gsettings GTK
+#                              uses. Not gtk3: it forces black tooltip text.
 #   QT_STYLE_OVERRIDE=kvantum  widgets drawn by the Kvantum theme that
 #                              build-kvantum writes, in Qt5 and Qt6 alike
 # /etc/environment because pam_env hands it to every login, ly's and a tty's,
@@ -18,7 +19,7 @@ trap 'rm -rf "$STAGE"' EXIT
 
 {
     grep -vE '^(QT_QPA_PLATFORMTHEME|QT_STYLE_OVERRIDE)=' /etc/environment || true
-    printf 'QT_QPA_PLATFORMTHEME=gtk3\nQT_STYLE_OVERRIDE=kvantum\n'
+    printf 'QT_QPA_PLATFORMTHEME=qt5ct\nQT_STYLE_OVERRIDE=kvantum\n'
 } >"$STAGE/environment"
 
 cmp -s "$STAGE/environment" /etc/environment && exit 0

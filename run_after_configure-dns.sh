@@ -1,5 +1,5 @@
 #!/bin/bash
-# DoT to Cloudflare/Quad9 as the machine's only system resolvers.
+# DoT to Cloudflare/Quad9 as the machine's only resolvers.
 #
 # What this buys is privacy from passive observers — the ISP, the AP you happen
 # to be sitting on. Not integrity: DNSOverTLS=opportunistic is documented as
@@ -8,8 +8,12 @@
 # portal. Networks that block outside DNS are handled by the dispatcher hook
 # below, which falls back to the network's resolver on that link.
 #
+# The servers live on each link, set by the hook, not in the global DNS=.
 # Global servers race per-link ones ("in parallel to suitable per-link DNS
-# servers"), they do not wait for them — so dns=none below is load-bearing.
+# servers"), and resolved only short-circuits on a positive answer: an NXDOMAIN
+# from the link waits for the global side. When DoT is blocked that side never
+# answers, so every nonexistent name hung for 120s. Same race is why dns=none
+# below is load-bearing.
 #
 # DNSSEC=no is deliberate. Against an active attacker it buys nothing that
 # opportunistic DoT hasn't already conceded — allow-downgrade is strippable by
@@ -31,9 +35,8 @@ cat > "$STAGE/10-dot.conf" <<'RESOLVED'
 # Managed by chezmoi — edit: ~/.local/share/chezmoi/run_after_configure-dns.sh
 [Resolve]
 DNS=
-DNS=1.0.0.1#cloudflare-dns.com 9.9.9.9#dns.quad9.net
+FallbackDNS=1.0.0.1#cloudflare-dns.com 9.9.9.9#dns.quad9.net
 Domains=
-Domains=~.
 DNSOverTLS=opportunistic
 DNSSEC=no
 MulticastDNS=no
@@ -48,11 +51,14 @@ dns=none
 systemd-resolved=false
 NMCONF
 
-# Runs as root. Gives every wifi/ethernet link its DHCP resolver, but only for
-# the network's own search domains (office zones like tbtk.gov.tr), never as a
-# default route — unless pinned DoT cannot leave through that link (captive
-# portals, office LANs that block outside DNS). Then the link's resolver takes
-# every lookup on it, cleartext.
+# FallbackDNS covers the window before the hook has run (it is only used while
+# no link has servers), so it names the same two.
+
+# Runs as root. Gives every wifi/ethernet link exactly one set of servers for
+# every lookup: pinned DoT if it can leave through that link, otherwise the
+# network's DHCP resolver in cleartext (captive portals, office LANs that block
+# outside DNS). Never both — see the race above. The cost: on a DoT link, the
+# network's own names (a router's .lan) go to Cloudflare and fail.
 #
 # Probed per interface, not via NM's connectivity state: that is global (a
 # working hotspot keeps it "full" while ethernet is dead), and NM's own check
@@ -77,43 +83,40 @@ esac
 # nmcli -g joins values with " | " and escapes colons.
 field() { nmcli -g "$1" device show "$2" | sed 's/ | /\n/g; s/\\:/:/g' | grep .; }
 
-# Real TLS handshake to :853 through this interface only, certificate checked.
-# A bare TCP connect is not enough: office firewalls accept any SYN and then
-# stall the handshake. :53 is not worth probing — cleartext to Cloudflare is no
-# better than cleartext to the network.
+DOT=(1.0.0.1#cloudflare-dns.com 9.9.9.9#dns.quad9.net)
+
+# Puts the link on DoT and has resolved itself look a name up through that link
+# only — the exact path real lookups take. Handshake probes lie: the office DPI
+# passes curl's HTTPS-looking handshake to 1.0.0.1:853 and stalls resolved's
+# (SNI cloudflare-dns.com). A slow network fails this and gets its own resolver,
+# which errs toward working DNS. Re-probing a network link puts it on DoT for up
+# to 5s; leases here run days, so that is rare.
 dot_ok() {
-    local ip t
-    for ip in 1.0.0.1 9.9.9.9; do
-        t=$(curl -s -o /dev/null --interface "$1" --connect-timeout 2 -m 3 \
-                 -w '%{time_appconnect}' "https://$ip:853/" </dev/null)
-        [[ $t && $t != 0.000000 ]] && return 0
-    done
-    return 1
+    resolvectl dns "$1" "${DOT[@]}"
+    resolvectl dnsovertls "$1" opportunistic
+    timeout 5 resolvectl query -i "$1" --cache=no example.com >/dev/null 2>&1
 }
 
 for dev in $(nmcli -g DEVICE,TYPE,STATE device |
              awk -F: '$3 == "connected" && ($2 == "wifi" || $2 == "ethernet") { print $1 }'); do
-    mapfile -t dns < <(field IP4.DNS "$dev"; field IP6.DNS "$dev")
-    [[ ${#dns[@]} -gt 0 ]] || continue
     mapfile -t domains < <({ field IP4.DOMAIN "$dev"; field IP6.DOMAIN "$dev"; } | sort -u)
+    mapfile -t dns < <(field IP4.DNS "$dev"; field IP6.DNS "$dev")
 
-    was=search; [[ $(resolvectl domain "$dev") == *'~.'* ]] && was=all
-    if dot_ok "$dev"; then
-        now=search
-    else
-        now=all
-        domains+=('~.')
-    fi
-    [[ ${#domains[@]} -gt 0 ]] || domains=('')  # '' clears; no args would just print
-
-    resolvectl dns "$dev" "${dns[@]}"
-    resolvectl domain "$dev" "${domains[@]}"
-    resolvectl default-route "$dev" "$([[ $now == all ]] && echo yes || echo no)"
-    resolvectl dnsovertls "$dev" no
+    was=network; [[ $(resolvectl dnsovertls "$dev") == *opportunistic ]] && was=dot
+    resolvectl domain "$dev" "${domains[@]}" '~.'
+    resolvectl default-route "$dev" yes
     resolvectl dnssec "$dev" no
+    if dot_ok "$dev" || [[ ${#dns[@]} -eq 0 ]]; then
+        now=dot
+        dns=("${DOT[@]}")
+    else
+        now=network
+        resolvectl dns "$dev" "${dns[@]}"
+        resolvectl dnsovertls "$dev" no
+    fi
     if [[ $now != "$was" ]]; then
         resolvectl flush-caches  # or failures from the other mode stay cached
-        logger -t portal-dns "$dev: $now -> ${dns[*]} (DoT $([[ $now == all ]] && echo blocked || echo ok))"
+        logger -t portal-dns "$dev: $now -> ${dns[*]}"
     fi
 done
 DISPATCH
@@ -146,6 +149,11 @@ if ! cmp -s "$STAGE/dns.conf" /etc/NetworkManager/conf.d/dns.conf; then
         /etc/NetworkManager/conf.d/dns.conf
     systemctl restart NetworkManager
 fi
+
+# Re-derive every link now: resolved keeps bus-set link settings across a
+# restart, so links configured by an older hook would otherwise stay stale
+# until the next NM event.
+/etc/NetworkManager/dispatcher.d/50-portal-dns '' up
 INSTALL
 
 # Runs on every apply, so hand edits under /etc get reverted — but only asks for

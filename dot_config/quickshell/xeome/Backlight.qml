@@ -53,12 +53,17 @@ Singleton {
     }
 
     FileView {
+        id: reader
+
         path: root.device ? `/sys/class/backlight/${root.device}/brightness` : ""
         watchChanges: true
         onFileChanged: reload()
         // Also how the optimistic value set by dragging gets corrected, if the
-        // driver rounds it or refuses it.
-        onLoaded: root.raw = parseInt(text()) || 0
+        // driver rounds it or refuses it. Skipped while a write is pending: the
+        // event from the previous write would otherwise overwrite the newer
+        // drag, and the pending write would then send the stale value.
+        onLoaded: if (!debounce.running)
+            root.raw = parseInt(text()) || 0
     }
 
     // A drag emits a move per pixel and only the last one matters; without this
@@ -75,5 +80,9 @@ Singleton {
 
     Process {
         id: setter
+
+        // A refused write raises no inotify event, so without this the slider
+        // would keep showing a value the panel never took.
+        onExited: reader.reload()
     }
 }

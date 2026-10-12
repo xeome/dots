@@ -228,6 +228,45 @@ PopupWindow {
 
             Rule {
                 Layout.topMargin: 4
+                visible: perf.visible
+            }
+
+            ColumnLayout {
+                id: perf
+
+                Layout.fillWidth: true
+                spacing: 2
+                visible: CpuPerf.available
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 10
+
+                    BarText {
+                        Layout.preferredWidth: 24
+                        horizontalAlignment: Text.AlignHCenter
+                        text: "󰈐"
+                        font.pixelSize: Theme.size + 5
+                    }
+
+                    BarText {
+                        Layout.fillWidth: true
+                        text: "CPU limit"
+                    }
+
+                    BarText {
+                        text: `${CpuPerf.pct}%`
+                    }
+                }
+
+                Track {
+                    value: CpuPerf.pct / 100
+                    onMoved: fraction => CpuPerf.set(fraction)
+                }
+            }
+
+            Rule {
+                Layout.topMargin: 4
                 visible: footer.visible
             }
 

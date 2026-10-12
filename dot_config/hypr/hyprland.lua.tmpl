@@ -15,6 +15,13 @@
 -- Change this to use a different terminal, e.g. "alacritty" or "kitty".
 terminal = {{ $m.terminal | quote }}
 
+-- Run a heavy app in its own scope under app.slice. Anything Hyprland spawns
+-- otherwise shares its session scope, and systemd-oomd kills whole cgroups:
+-- a swap kill aimed at Zen took the compositor down with it.
+function app(cmd)
+  return "systemd-run --user --scope --quiet -- " .. cmd
+end
+
 -- =============================================================================
 -- ENVIRONMENT VARIABLES
 -- =============================================================================
@@ -89,7 +96,7 @@ end
 -- DEVICE-SPECIFIC KEYBINDS
 -- =============================================================================
 
-hl.bind("SUPER + d", hl.dsp.exec_cmd({{ $m.discord_cmd | quote }}))
+hl.bind("SUPER + d", hl.dsp.exec_cmd(app({{ $m.discord_cmd | quote }})))
 hl.bind("Print", hl.dsp.exec_cmd("~/.config/hypr/bin/satty-screenshot.sh"))
 {{ if $m.is_laptop }}
 -- Lock the screen when the laptop lid closes

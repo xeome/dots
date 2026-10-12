@@ -20,10 +20,10 @@ hl.bind(mod .. " + SHIFT + r", hl.dsp.exec_cmd("hyprctl reload"))
 
 -- ~~~ user applications (device-agnostic)
 hl.bind(mod .. " + return", hl.dsp.exec_cmd(terminal or "alacritty"))
-hl.bind(mod .. " + q", hl.dsp.exec_cmd("zen-browser"))
-hl.bind(mod .. " + e", hl.dsp.exec_cmd("thunar"))
+hl.bind(mod .. " + q", hl.dsp.exec_cmd(app("zen-browser")))
+hl.bind(mod .. " + e", hl.dsp.exec_cmd(app("thunar")))
 hl.bind(mod .. " + r", hl.dsp.exec_cmd("vicinae toggle"))
-hl.bind(mod .. " + v", hl.dsp.exec_cmd("code --ozone-platform=wayland"))
+hl.bind(mod .. " + v", hl.dsp.exec_cmd(app("code --ozone-platform=wayland")))
 -- Dropped: SUPER+j exec'd a literal `quickshell:toggle-llm-overlay`, which is
 -- not a binary and never was — same dead bind as the two ags ones above.
 

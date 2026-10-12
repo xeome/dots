@@ -27,11 +27,11 @@ hl.on("hyprland.start", function()
 
   -- Applications
   hl.exec_cmd("systemctl start --user app-com.mitchellh.ghostty.service")
-  hl.exec_cmd("thunar --daemon &")
+  hl.exec_cmd(app("thunar --daemon"))
   hl.exec_cmd("nm-applet &")
 
-  hl.exec_cmd("bitwarden-desktop &")
+  hl.exec_cmd(app("bitwarden-desktop"))
 
   -- Launch zen-browser on workspace 2
-  hl.exec_cmd("[workspace 2 silent] zen-browser")
+  hl.exec_cmd("[workspace 2 silent] " .. app("zen-browser"))
 end)

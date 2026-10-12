@@ -1,5 +1,10 @@
 #!/bin/bash
+# Piped, never written out: age -o creates its output 0644, which left the
+# private key world-readable in /tmp on every apply. Skipped once the signing
+# key is in the keyring, so a normal apply never decrypts at all.
 set -euo pipefail
-age -d -i "$HOME/.config/sops/age/keys.txt" -o /tmp/gpg_import.asc "$HOME/.local/share/gpg-key.asc.age"
-gpg --import /tmp/gpg_import.asc
-rm -f /tmp/gpg_import.asc
+# Assigned first so set -e stops on a missing key: an empty one would match
+# any secret key and skip the import.
+key="$(git config --global --get user.signingkey)"
+gpg --list-secret-keys "$key" >/dev/null 2>&1 && exit 0
+age -d -i "$HOME/.config/sops/age/keys.txt" "$HOME/.local/share/gpg-key.asc.age" | gpg --import

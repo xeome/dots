@@ -1,0 +1,28 @@
+# Power profiles for the quickshell bar's battery module. The profile
+# definitions themselves are in dots-power-laptop and dots-power-desktop.
+#
+# Two halves behind one three-way choice:
+#   - tlp-pd answers org.freedesktop.UPower.PowerProfiles, which quickshell
+#     binds natively. TLP applies the profile; polkit allows an active session
+#     without a password.
+#   - On a hybrid Intel CPU, power-saver also pins user.slice to the E-cores
+#     via `systemctl set-property --runtime`. The polkit rule is what stops
+#     that from popping a password dialog.
+#
+# Plus the menu's CPU limit slider, which writes intel_pstate/max_perf_pct
+# directly, or every CPU's scaling_max_freq where there is no intel_pstate.
+# The tmpfiles lines hand those files to wheel.
+pkgname=dots-power
+pkgver=${DOTS_PKGVER:?set by run_before_install-packages.sh}
+pkgrel=1
+pkgdesc='TLP power profiles, E-core pinning and the CPU limit slider'
+arch=(any)
+depends=(tlp tlp-pd polkit systemd)
+
+package() {
+    cd "$startdir"
+    install -Dm644 49-dots-ecore-pin.rules "$pkgdir/usr/share/polkit-1/rules.d/49-dots-ecore-pin.rules"
+    install -Dm644 dots-cpu-perf.conf "$pkgdir/usr/lib/tmpfiles.d/dots-cpu-perf.conf"
+    install -Dm644 tlp-cpu-perf.conf "$pkgdir/usr/lib/systemd/system/tlp.service.d/50-dots-cpu-perf.conf"
+    install -Dm644 -t "$pkgdir/usr/share/libalpm/hooks" dots-power.hook dots-power-profile.hook
+}

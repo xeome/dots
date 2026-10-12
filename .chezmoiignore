@@ -1,6 +1,6 @@
 README.md
 LICENSE
-pkgs
+pkg
 # Baked for the Discord theme, which embeds it from the source; Quickshell never loads it.
 .config/quickshell/xeome/grain-panel.png
 

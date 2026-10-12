@@ -1,0 +1,12 @@
+# The TLP profiles for a desktop. dots-power-profile.hook, in dots-power, applies them.
+pkgname=dots-power-desktop
+pkgver=${DOTS_PKGVER:?set by run_before_install-packages.sh}
+pkgrel=1
+pkgdesc='TLP profile definitions for a desktop'
+arch=(any)
+
+package() {
+    # TLP reads drop-ins from /etc/tlp.d only. Both profile packages own this
+    # path, so pacman refuses to install the two together.
+    install -Dm644 "$startdir/50-dots-profiles.conf" "$pkgdir/etc/tlp.d/50-dots-profiles.conf"
+}

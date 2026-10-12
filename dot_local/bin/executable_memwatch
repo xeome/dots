@@ -2,7 +2,7 @@
 # Early warning ahead of systemd-oomd, and word after it acts.
 #
 # oomd kills an app once user@.service sits at 50% memory stall for 20s, or
-# once swap passes 90% (see run_onchange_after_configure-oom.sh). This warns
+# once swap passes 90% (see pkg/dots-oom). This warns
 # well below both, so there is time to close something by hand.
 #
 # Both warnings sample on the poll timeout. The stall one reads the exact

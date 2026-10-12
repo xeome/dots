@@ -16,7 +16,7 @@ import Quickshell.Io
 // This is the cap's only writer. The TLP drop-in leaves CPU_MAX_PERF_* and
 // CPU_SCALING_MAX_FREQ_* unset, so a profile click or a resume never moves it,
 // and boot starts at the kernel's 100. The files are root-owned; the tmpfiles
-// lines from configure-power give wheel write on them, so the write is a plain
+// lines from pkg/dots-power give wheel write on them, so the write is a plain
 // shell redirect.
 //
 // ponytail: cpu0 stands in for every core when reading. True on both machines

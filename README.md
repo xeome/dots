@@ -23,8 +23,12 @@ waybar, swaync and swayosd are all retired. It runs on both compositors:
 backend from the machine's `wm`, and nothing else in the shell knows which
 compositor it's on.
 
-You can also use `yay -S --needed - < pkgs` to install all dependencies, though
-`chezmoi apply` does that for you and adds the compositor-specific ones on top.
+The packages, and everything this repo puts under `/etc`, are pacman packages
+built from `pkg/`: `dots-desktop` on every machine, `dots-hyprland` or
+`dots-sway` by the machine's `wm`, and `dots-dns`, `dots-oom` and `dots-power`
+with a laptop or desktop TLP profile. `chezmoi apply` builds and installs the
+ones whose files changed, so it needs `yay` and `base-devel` first. Orphans
+left by a name dropped from a PKGBUILD show in `pacman -Qdt`.
 
 # Installation
 

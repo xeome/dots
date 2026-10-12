@@ -1,0 +1,10 @@
+# Hyprland machines. hyprlock is in dots-desktop: every machine locks with it.
+pkgname=dots-hyprland
+pkgver=${DOTS_PKGVER:?set by run_before_install-packages.sh}
+pkgrel=1
+pkgdesc='Hyprland and its screenshot tools'
+arch=(any)
+# satty-screenshot.sh captures with grimblast and pipes into satty.
+depends=(hyprland satty grimblast-git)
+
+package() { :; }

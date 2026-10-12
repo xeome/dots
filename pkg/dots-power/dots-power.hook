@@ -1,0 +1,12 @@
+# tlp.service is not enabled by the package on Arch, and without it nothing
+# applies a profile at boot — tlp-pd alone only covers switching at runtime.
+[Trigger]
+Type = Path
+Operation = Install
+Operation = Upgrade
+Target = usr/lib/systemd/system/tlp.service.d/50-dots-cpu-perf.conf
+
+[Action]
+Description = Enabling TLP...
+When = PostTransaction
+Exec = /usr/bin/systemctl enable --now tlp.service tlp-pd.service

@@ -31,7 +31,7 @@
 .config/hypr/modules/colors.conf
 
 # Manual captive-portal toggle, replaced by the NetworkManager dispatcher hook
-# that run_after_configure-dns.sh installs.
+# that pkg/dots-dns installs.
 .local/bin/portal
 
 # graphite replaced Caffeine. rofi and gtklock had no callers (vicinae and

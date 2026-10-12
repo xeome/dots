@@ -12,13 +12,13 @@ import Quickshell.Services.UPower
 // binds, with polkit allow_active, so there is no script and no prompt. Each
 // profile is the matching TLP parameter set — performance is *_ON_AC,
 // balanced *_ON_BAT, power-saver *_ON_SAV — which is why the row subtitles
-// stay vague: the specifics live in /etc/tlp.d/50-profiles.conf and differ
+// stay vague: the specifics live in /etc/tlp.d/50-dots-profiles.conf and differ
 // per machine.
 //
 // The E-core half: on a hybrid Intel CPU, power-saver pins user.slice (your
 // session and every app in it) to the E-cores with a runtime cpuset. It
 // follows the profile rather than the click, so a profile set from anywhere
-// else pins too. 49-ecore-pin.rules lets a wheel user do it unprompted.
+// else pins too. 49-dots-ecore-pin.rules lets a wheel user do it unprompted.
 PopupWindow {
     id: root
 

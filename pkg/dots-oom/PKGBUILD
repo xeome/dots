@@ -1,0 +1,28 @@
+# systemd-oomd: kill one app under real memory pressure instead of freezing.
+#
+# Arch ships oomd with no policy, so enabling the service alone does nothing.
+# These are Fedora's defaults:
+#   - an app scope under user@.service is killed after 20s at 50% memory stall
+#   - the biggest swap user anywhere is killed once swap passes 90%
+# oomd kills whole cgroups. Hyprland runs in session-N.scope, outside
+# user@.service, so the pressure kill never picks it. The swap kill covers
+# every cgroup, so session scopes are omitted: a swap kill once picked the
+# session scope for Zen's swap and took the compositor with it. Heavy apps
+# launch into their own scopes (app() in hypr/hyprland.lua.tmpl), so they
+# stay killable. ~/.local/bin/memwatch warns before either kill.
+pkgname=dots-oom
+pkgver=${DOTS_PKGVER:?set by run_before_install-packages.sh}
+pkgrel=1
+pkgdesc='systemd-oomd policy'
+arch=(any)
+depends=(systemd)
+
+package() {
+    cd "$startdir"
+    local d="$pkgdir/usr/lib/systemd"
+    install -Dm644 slice.conf "$d/system/-.slice.d/50-dots-oomd.conf"
+    install -Dm644 session.conf "$d/system/session-.scope.d/50-dots-oomd.conf"
+    install -Dm644 user.conf "$d/system/user@.service.d/50-dots-oomd.conf"
+    install -Dm644 oomd.conf "$d/oomd.conf.d/50-dots-oomd.conf"
+    install -Dm644 dots-oom.hook "$pkgdir/usr/share/libalpm/hooks/dots-oom.hook"
+}

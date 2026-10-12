@@ -1,0 +1,17 @@
+// From dots-power — edit: ~/.local/share/chezmoi/pkg/dots-power/
+//
+// Let the power menu pin user.slice to the E-cores without an auth prompt.
+// Scoped to set-property on user.slice alone: manage-units at large would let
+// any wheel process start and stop system services unprompted.
+//
+// set-property still takes any property, not just AllowedCPUs. That is not
+// privilege escalation, but it is a self-DoS vector: CPUQuota=1% on
+// user.slice would stall your own session.
+polkit.addRule(function (action, subject) {
+    if (action.id == "org.freedesktop.systemd1.manage-units" &&
+        action.lookup("unit") == "user.slice" &&
+        action.lookup("verb") == "set-property" &&
+        subject.active && subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+    }
+});

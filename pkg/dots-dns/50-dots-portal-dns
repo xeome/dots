@@ -1,0 +1,65 @@
+#!/bin/bash
+# From dots-dns — edit: ~/.local/share/chezmoi/pkg/dots-dns/
+#
+# Runs as root. Gives every wifi/ethernet link exactly one set of servers for
+# every lookup: pinned DoT if it can leave through that link, otherwise the
+# network's DHCP resolver in cleartext (captive portals, office LANs that block
+# outside DNS). Never both — see the race in the PKGBUILD. The cost: on a DoT
+# link, the network's own names (a router's .lan) go to Cloudflare and fail.
+#
+# Probed per interface, not via NM's connectivity state: that is global (a
+# working hotspot keeps it "full" while ethernet is dead), and NM's own check
+# resolves through the global servers over whichever link still works — it once
+# passed ethernet, promoted it to default route, and took DNS down with it.
+#
+# Stateless: NM publishes no per-link DNS under dns=none, so any link DNS on a
+# wifi/ethernet device is ours. Cleared on down: resolved only forgets per-link
+# settings when the interface vanishes, and a built-in NIC never does.
+case $2 in
+    up|dhcp4-change|dhcp6-change|connectivity-change) ;;  # last one: portal sign-in
+    down)
+        [[ $DEVICE_IFACE && $(nmcli -g GENERAL.TYPE device show "$DEVICE_IFACE") == @(wifi|ethernet) ]] &&
+            resolvectl revert "$DEVICE_IFACE"
+        exit 0 ;;
+    *) exit 0 ;;
+esac
+
+# nmcli -g joins values with " | " and escapes colons.
+field() { nmcli -g "$1" device show "$2" | sed 's/ | /\n/g; s/\\:/:/g' | grep .; }
+
+DOT=(1.0.0.1#cloudflare-dns.com 9.9.9.9#dns.quad9.net)
+
+# Puts the link on DoT and has resolved itself look a name up through that link
+# only — the exact path real lookups take. Handshake probes lie: the office DPI
+# passes curl's HTTPS-looking handshake to 1.0.0.1:853 and stalls resolved's
+# (SNI cloudflare-dns.com). A slow network fails this and gets its own resolver,
+# which errs toward working DNS. Re-probing a network link puts it on DoT for up
+# to 5s; leases here run days, so that is rare.
+dot_ok() {
+    resolvectl dns "$1" "${DOT[@]}"
+    resolvectl dnsovertls "$1" opportunistic
+    timeout 5 resolvectl query -i "$1" --cache=no example.com >/dev/null 2>&1
+}
+
+for dev in $(nmcli -g DEVICE,TYPE,STATE device |
+             awk -F: '$3 == "connected" && ($2 == "wifi" || $2 == "ethernet") { print $1 }'); do
+    mapfile -t domains < <({ field IP4.DOMAIN "$dev"; field IP6.DOMAIN "$dev"; } | sort -u)
+    mapfile -t dns < <(field IP4.DNS "$dev"; field IP6.DNS "$dev")
+
+    was=network; [[ $(resolvectl dnsovertls "$dev") == *opportunistic ]] && was=dot
+    resolvectl domain "$dev" "${domains[@]}" '~.'
+    resolvectl default-route "$dev" yes
+    resolvectl dnssec "$dev" no
+    if dot_ok "$dev" || [[ ${#dns[@]} -eq 0 ]]; then
+        now=dot
+        dns=("${DOT[@]}")
+    else
+        now=network
+        resolvectl dns "$dev" "${dns[@]}"
+        resolvectl dnsovertls "$dev" no
+    fi
+    if [[ $now != "$was" ]]; then
+        resolvectl flush-caches  # or failures from the other mode stay cached
+        logger -t portal-dns "$dev: $now -> ${dns[*]}"
+    fi
+done

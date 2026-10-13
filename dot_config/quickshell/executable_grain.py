@@ -36,7 +36,7 @@ SRC = pathlib.Path(
         ["chezmoi", "source-path"], capture_output=True, text=True, check=True
     ).stdout.strip()
 )
-OUT = SRC / "dot_config/quickshell/xeome"
+OUT = SRC / "dot_config/quickshell/exact_xeome"
 THEME = OUT / "Theme.qml"
 
 # The dark grounds, read from Theme.qml so a retuned ground can't leave a tile
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         print(f"grain-{name}.png  max alpha {tile[..., 3].max():.3f}")
     # The GTK stylesheets name their tiles relative to themselves, so the
     # ground and panel tiles are copied beside each dark one.
-    for folder in ("dot_config/gtk-4.0", "dot_local/private_share/themes/graphite-dark/gtk-3.0"):
+    for folder in ("dot_config/exact_gtk-4.0", "dot_local/private_share/exact_themes/exact_graphite-dark/gtk-3.0"):
         for name in ("ground", "panel"):
             (SRC / folder / f"grain-{name}.png").write_bytes((OUT / f"grain-{name}.png").read_bytes())
     print("GTK tile copies")

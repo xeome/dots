@@ -24,8 +24,11 @@ REPO = "https://github.com/GabePoel/KvLibadwaita.git"
 PIN = "1f4e0bec44b13dabfa1fe4047aa8eeaccf2f3557"
 CACHE = pathlib.Path.home() / ".cache/kvlibadwaita-src"
 HERE = pathlib.Path(__file__).resolve().parent
-THEME = HERE / "xeome/Theme.qml"
-GRAIN = HERE / "xeome/grain-ground.png"
+# exact_xeome in the chezmoi source, where the build script and check-palette
+# run this; xeome once deployed.
+XEOME = next(d for d in (HERE / "exact_xeome", HERE / "xeome") if d.is_dir())
+THEME = XEOME / "Theme.qml"
+GRAIN = XEOME / "grain-ground.png"
 
 SVG_NS = "http://www.w3.org/2000/svg"
 XLINK = "{http://www.w3.org/1999/xlink}href"

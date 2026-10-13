@@ -1,6 +1,6 @@
 # The light counterpart to caffeine — Caffeine's own `variants.light`.
 #
-# Managed by chezmoi — edit dot_config/ghostty/themes/caffeine-light
+# Managed by chezmoi — edit dot_config/ghostty/exact_themes/caffeine-light
 #
 # Selected by `theme = light:caffeine-light,dark:caffeine` in the config:
 # ghostty follows the desktop colour scheme through the settings portal, and

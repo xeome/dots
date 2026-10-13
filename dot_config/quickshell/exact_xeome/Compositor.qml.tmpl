@@ -13,7 +13,7 @@ import Quickshell
 // connects to a socket that isn't there and logs about it forever, and chezmoi
 // already knows which compositor each machine runs.
 //
-// Managed by chezmoi — edit dot_config/quickshell/xeome/Compositor.qml.tmpl
+// Managed by chezmoi — edit dot_config/quickshell/exact_xeome/Compositor.qml.tmpl
 Singleton {
 {{- if eq $m.wm "sway" }}
     readonly property string focusedMonitor: I3.focusedMonitor?.name ?? ""

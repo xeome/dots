@@ -5,8 +5,8 @@
 # needs the network.
 #
 # Generated rather than committed, so it re-runs whenever its inputs change:
-# Theme.qml {{ include "dot_config/quickshell/xeome/Theme.qml" | sha256sum }}
+# Theme.qml {{ include "dot_config/quickshell/exact_xeome/Theme.qml" | sha256sum }}
 # kvantum.py {{ include "dot_config/quickshell/executable_kvantum.py" | sha256sum }}
-# grain {{ include "dot_config/quickshell/xeome/grain-ground.png" | sha256sum }}
+# grain {{ include "dot_config/quickshell/exact_xeome/grain-ground.png" | sha256sum }}
 set -euo pipefail
 exec python3 -I "$CHEZMOI_SOURCE_DIR/dot_config/quickshell/executable_kvantum.py"

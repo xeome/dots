@@ -1,9 +1,6 @@
 # Renamed to their Caffeine equivalents; chezmoi does not delete a target just
 # because its source file went away.
 .config/alacritty/vesper.toml
-.config/ghostty/themes/vesper-shell
-.config/ghostty/themes/vesper-shell-light
-.local/share/vicinae/themes/zinc.toml
 
 # matugen, removed entirely. It derived a Material You palette from the
 # wallpaper, which is the opposite of pinning one scheme — and every file it
@@ -15,11 +12,8 @@
 #
 # Every entry below can be dropped once each machine has applied once.
 .config/matugen
-.config/ghostty/themes/matugen
 .config/kitty/slurp.sh
 .config/gtk-3.0/colors.css
-.config/gtk-4.0/colors.css
-.config/vesktop/themes/axmat.theme.css
 .config/alacritty/colors.toml
 .cache/wal
 
@@ -40,15 +34,11 @@
 .config/rofi
 .local/share/rofi
 .config/gtklock
-.local/share/themes/Colloid-Orange-*
 .local/share/icons/Colloid-Orange*
 .local/share/icons/Colloid-cursors
 .local/share/icons/Colloid-dark-cursors
 # The grey Colloid icons the set-theme script used to build gave way to ZorinGrey.
 .local/share/icons/Colloid-Grey*
-.config/gtk-4.0/colloid-*.css
-.config/gtk-4.0/assets
-.local/share/vicinae/themes/caffeine.toml
 .config/ghostty/brutal.css
 # vicinae has read settings.json, not vicinae.json, since v0.17.
 .config/vicinae/vicinae.json

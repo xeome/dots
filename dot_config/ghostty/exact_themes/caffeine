@@ -1,6 +1,6 @@
 # Caffeine — https://github.com/crynta/terax-ai src/modules/theme/themes/caffeine.ts
 #
-# Managed by chezmoi — edit dot_config/ghostty/themes/caffeine
+# Managed by chezmoi — edit dot_config/ghostty/exact_themes/caffeine
 #
 # Ghostty resolves a bare theme name against ~/.config/ghostty/themes before
 # its own share/ghostty/themes, so `theme = caffeine` in the config finds this

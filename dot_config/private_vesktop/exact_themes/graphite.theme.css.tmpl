@@ -60,12 +60,12 @@ body,
      * variable only reaches the `background` shorthand, which has no blend
      * mode, so overlay is baked into a normal-blend tile as Quickshell does. */
     --background-gradient-app-frame:
-        url(data:image/png;base64,{{ include "dot_config/quickshell/xeome/grain-ground.png" | b64enc }}) fixed,
+        url(data:image/png;base64,{{ include "dot_config/quickshell/exact_xeome/grain-ground.png" | b64enc }}) fixed,
         radial-gradient(600px 300px at 0 0, rgba(255, 255, 255, 0.05), transparent 75%) fixed,
         #0a0a0c;
     --background-gradient-high: var(--background-gradient-app-frame);
     --background-gradient-chat:
-        url(data:image/png;base64,{{ include "dot_config/quickshell/xeome/grain-panel.png" | b64enc }}) fixed,
+        url(data:image/png;base64,{{ include "dot_config/quickshell/exact_xeome/grain-panel.png" | b64enc }}) fixed,
         radial-gradient(480px 250px at var(--custom-app-sidebar-target-width, 340px) var(--custom-app-top-bar-height, 32px), rgba(255, 255, 255, 0.065), transparent 75%) fixed,
         radial-gradient(400px 200px at 100% 0, rgba(255, 255, 255, 0.03), transparent 75%) fixed,
         #0e0e10;

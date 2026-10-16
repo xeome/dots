@@ -1,0 +1,6 @@
+# From dots-desktop — edit: ~/.local/share/chezmoi/pkg/dots-desktop/
+#
+# Let the browser open Keychron hidraw nodes for the web configurator
+# (launcher.keychron.com, WebHID). uaccess grants the logged-in seat user only.
+# Matches the wired keyboard and the Keychron Link 2.4 GHz receiver, not Bluetooth.
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", TAG+="uaccess"

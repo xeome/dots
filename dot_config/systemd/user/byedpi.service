@@ -1,0 +1,13 @@
+[Unit]
+Description=ByeDPI SOCKS proxy for equibop
+Documentation=https://github.com/hufrea/byedpi
+After=network-online.target
+
+[Service]
+# Options from the package's /etc/byedpi.conf, bound to loopback: ciadpi
+# listens on 0.0.0.0 by default.
+ExecStart=/usr/bin/ciadpi --ip 127.0.0.1 --port 1080 --split 1 --disorder 3+s --mod-http=h,d --auto=torst --tlsrec 1+s
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

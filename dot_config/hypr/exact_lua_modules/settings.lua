@@ -55,5 +55,7 @@ hl.config({
   },
 })
 
-hl.curve("fast", { type = "bezier", points = { {0.48, 0}, {0.15, 1} } })
-hl.animation({ leaf = "global", enabled = true, speed = 3, bezier = "fast" })
+-- OutCubic over 200 ms (speed is in tenths of a second): the shell's
+-- Theme.anim and Theme.ease, so a window and a menu move alike.
+hl.curve("ease", { type = "bezier", points = { {0.33, 1}, {0.68, 1} } })
+hl.animation({ leaf = "global", enabled = true, speed = 2, bezier = "ease" })

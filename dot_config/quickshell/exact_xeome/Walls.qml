@@ -290,7 +290,7 @@ Scope {
                 Behavior on width {
                     NumberAnimation {
                         duration: Theme.anim
-                        easing.type: Easing.OutCubic
+                        easing.type: Theme.ease
                     }
                 }
 

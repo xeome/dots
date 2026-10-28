@@ -46,8 +46,8 @@ Rectangle {
 
     Behavior on implicitWidth {
         NumberAnimation {
-            duration: 325
-            easing.type: Easing.OutCubic
+            duration: Theme.anim
+            easing.type: Theme.ease
         }
     }
 

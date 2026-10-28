@@ -46,11 +46,13 @@ Rectangle {
     Behavior on color {
         ColorAnimation {
             duration: Theme.anim
+            easing.type: Theme.ease
         }
     }
     Behavior on border.color {
         ColorAnimation {
             duration: Theme.anim
+            easing.type: Theme.ease
         }
     }
 

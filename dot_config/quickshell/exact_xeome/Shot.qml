@@ -624,7 +624,7 @@ Scope {
                     from: 0
                     to: 1
                     duration: Theme.anim
-                    easing.type: Easing.OutCubic
+                    easing.type: Theme.ease
                 }
             }
             PauseAnimation {

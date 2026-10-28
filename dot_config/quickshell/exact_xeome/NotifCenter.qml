@@ -117,6 +117,7 @@ PanelWindow {
                     Behavior on color {
                         ColorAnimation {
                             duration: Theme.anim
+                            easing.type: Theme.ease
                         }
                     }
 
@@ -131,6 +132,7 @@ PanelWindow {
                         Behavior on x {
                             NumberAnimation {
                                 duration: Theme.anim
+                                easing.type: Theme.ease
                             }
                         }
                     }

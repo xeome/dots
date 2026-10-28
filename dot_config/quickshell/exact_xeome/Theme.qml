@@ -86,7 +86,10 @@ Singleton {
     readonly property int barHeight: 48
     readonly property int gap: 6
     readonly property int pad: 12
+    // Every shell transition: 200 ms, decelerating. Hyprland's `ease` curve in
+    // lua_modules/settings.lua is the same OutCubic, so windows move alike.
     readonly property int anim: 200
+    readonly property int ease: Easing.OutCubic
 
     // Radius marks what you can interact with. Flat chrome — the bar itself,
     // dividers, the bar's bottom edge — stays square, so a rounded corner in

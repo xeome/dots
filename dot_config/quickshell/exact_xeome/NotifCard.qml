@@ -32,6 +32,7 @@ Surface {
     Behavior on fill {
         ColorAnimation {
             duration: Theme.anim
+            easing.type: Theme.ease
         }
     }
 

@@ -54,6 +54,7 @@ Menu {
         Behavior on color {
             ColorAnimation {
                 duration: Theme.anim
+                easing.type: Theme.ease
             }
         }
 

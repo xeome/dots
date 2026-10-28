@@ -7,7 +7,6 @@
 # =============================================================================
 [machines.xeome-desktop]
 wm                 = "hyprland"
-profile            = "xeome-desktop"
 terminal           = "ghostty"
 secondary_monitor  = "DP-3"
 numlock            = true
@@ -73,7 +72,6 @@ monitor   = "DP-3"
 # =============================================================================
 [machines.emin-ultrabook]
 wm                 = "hyprland"
-profile            = "emin-ultrabook"
 terminal           = "ghostty"
 secondary_monitor  = "eDP-1"
 numlock            = true
@@ -137,7 +135,6 @@ monitor   = "eDP-1"
 # is, so this block is the single source of truth for both compositors.
 [machines.emin-probook]
 wm                 = "sway"
-profile            = "emin-probook"
 terminal           = "ghostty"
 secondary_monitor  = "eDP-1"
 numlock            = true

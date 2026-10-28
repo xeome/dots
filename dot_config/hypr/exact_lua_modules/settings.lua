@@ -43,8 +43,11 @@ hl.config({
       active_border = focus,
       inactive_border = line,
     },
-    gaps_in = 5,
-    gaps_out = 5,
+    -- 12 px between windows (gaps_in on each side) and to the screen edge:
+    -- the shell's Theme.pad, so window edges line up with the bar's modules
+    -- and the notification column.
+    gaps_in = 6,
+    gaps_out = 12,
   },
   misc = {
     vrr = 2,

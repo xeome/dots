@@ -18,8 +18,9 @@ PanelWindow {
         right: true
     }
     margins {
-        top: Theme.barHeight + 8
-        right: 10
+        // On the window grid: Hyprland's gaps_out is Theme.pad too.
+        top: Theme.barHeight + Theme.pad
+        right: Theme.pad
     }
     implicitWidth: 400
     implicitHeight: Math.max(1, col.implicitHeight)

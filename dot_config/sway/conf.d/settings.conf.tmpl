@@ -4,8 +4,10 @@
 font pango:Inter SemiBold 8
 
 # ~~~ gaps and borders, matched to hyprland's lua_modules/settings.lua
-gaps inner 5
-gaps outer 5
+# 12 px between windows and to the screen edge: outer is added to inner at the
+# edge, so it stays 0.
+gaps inner 12
+gaps outer 0
 smart_borders off
 smart_gaps off
 default_border pixel 1

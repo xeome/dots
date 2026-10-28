@@ -57,7 +57,7 @@ PanelWindow {
         screen: root.modelData
         anchors {
             left: parent.left
-            leftMargin: 10
+            leftMargin: Theme.pad
             verticalCenter: parent.verticalCenter
         }
     }
@@ -66,14 +66,14 @@ PanelWindow {
         screen: root.modelData
         anchors.centerIn: parent
         // Centred, so clamp to the room left by the wider of the two sides.
-        width: Math.min(implicitWidth, Math.max(0, 2 * (root.width / 2 - 10 - Math.max(workspaces.width, rightRow.width) - 16)))
+        width: Math.min(implicitWidth, Math.max(0, 2 * (root.width / 2 - Theme.pad - Math.max(workspaces.width, rightRow.width) - 16)))
     }
 
     Row {
         id: rightRow
         anchors {
             right: parent.right
-            rightMargin: 10
+            rightMargin: Theme.pad
             verticalCenter: parent.verticalCenter
         }
         spacing: 4

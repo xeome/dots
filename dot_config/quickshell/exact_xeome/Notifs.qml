@@ -4,8 +4,8 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
 
-// Replaces swaync's daemon. swaync must not be running — both want to own
-// org.freedesktop.Notifications and whoever grabs it first wins.
+// The notification daemon. No other daemon (swaync, mako) may run: whoever
+// owns org.freedesktop.Notifications first wins.
 Singleton {
     id: root
 
@@ -19,10 +19,9 @@ Singleton {
     readonly property var history: [...server.trackedNotifications.values].reverse()
 
     // Arrival times, which the Notification object doesn't carry. Keyed by id
-    // rather than by object so a dismissed card can't keep one alive.
+    // so the map holds no destroyed objects.
     //
-    // ponytail: dropped on reload — keepOnReload keeps the notifications but
-    // not this, so anything that survived a reload shows no age at all.
+    // ponytail: lost on reload, so notifications kept across one show no age.
     readonly property var stamps: new Map()
 
     SystemClock {
@@ -30,8 +29,7 @@ Singleton {
         precision: SystemClock.Minutes
     }
 
-    // Reads clock.date, so every label bound to this re-evaluates on the tick
-    // rather than freezing at whatever it said when the centre opened.
+    // Reads clock.date, so labels bound to it update every minute.
     function age(n): string {
         const at = root.stamps.get(n.id);
         if (at === undefined)
@@ -88,7 +86,7 @@ Singleton {
         }
     }
 
-    // Replaces `swaync-client -t` / `-d`.
+    // `qs -c xeome ipc call notifs toggle|dnd|clear`
     IpcHandler {
         target: "notifs"
 

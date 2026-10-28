@@ -1,7 +1,7 @@
 import QtQuick
-import "Calc.mjs" as Calc
 import QtQuick.Layouts
 import Quickshell
+import "Calc.mjs" as Calc
 
 // The clock's calendar. Click-toggled rather than hover-shown: a popup that
 // dies on mouse-leave has no month arrows you can actually reach.
@@ -16,15 +16,12 @@ PopupWindow {
     // Months away from today. The arrows walk it; the title resets it.
     property int offset: 0
 
-    // grabFocus dismisses on any outside click — including the click on the
-    // clock that meant "close". Clock reads this so that click doesn't
-    // immediately reopen what it just closed.
+    // Read by Clock; see Menu.closedAt.
     property double closedAt: 0
 
     readonly property var first: new Date(today.getFullYear(), today.getMonth() + offset, 1)
 
-    // ISO-8601: week 1 is the one holding the year's first Thursday.
-    readonly property int todayWeek: Calc.isoWeek(new Date(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7))
+    readonly property int todayWeek: Calc.isoWeek(today)
 
     // Six Monday-first weeks — enough for any month, including a 31-day one
     // that starts on a Sunday.
@@ -116,8 +113,7 @@ PopupWindow {
                     horizontalAlignment: Text.AlignHCenter
                     text: Qt.formatDateTime(root.first, "MMMM yyyy")
                     font.pixelSize: Theme.size + 1
-                    // Dimmed once you've browsed away, as a hint that it's the
-                    // way back.
+                    // Dimmed once you've browsed away: clicking it comes back.
                     color: root.offset === 0 ? Theme.bright : Theme.text
 
                     MouseArea {
@@ -151,7 +147,6 @@ PopupWindow {
                         model: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
 
                         delegate: BarText {
-                            required property int index
                             required property string modelData
 
                             width: 32

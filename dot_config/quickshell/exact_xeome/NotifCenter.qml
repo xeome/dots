@@ -3,14 +3,10 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 
-// swaync's control centre, cut down to what it was actually for: notification
-// history plus DND. The button grid, mpris widget and per-app volume are gone
-// — two of those buttons pointed at scripts that don't exist, and mpris is
-// already in the bar.
+// The notification centre, opened from Bell: history and Do Not Disturb.
 //
-// A full-screen layer rather than a PopupWindow: the empty area around the
-// panel doubles as the click-to-dismiss target that PopupWindow.grabFocus used
-// to provide.
+// A full-screen layer rather than a PopupWindow, so the empty area around the
+// panel is the click-to-dismiss target.
 PanelWindow {
     id: root
 
@@ -40,9 +36,8 @@ PanelWindow {
         width: 420
         height: 520
 
-        // Swallows clicks on the panel itself so they don't reach the
-        // dismiss area behind it. Declared first, so the controls below
-        // still sit on top of it.
+        // Keeps clicks on the panel from reaching the dismiss area. Declared
+        // first, so the controls below sit on top of it.
         MouseArea {
             anchors.fill: parent
         }
@@ -113,8 +108,7 @@ PanelWindow {
                     }
                     implicitWidth: 40
                     implicitHeight: 20
-                    // A switch is round because a switch is round; the shell's
-                    // 8px is for boxes, not for tracks a knob slides along.
+                    // Fully round: Theme.radius is for boxes, not a knob's track.
                     radius: height / 2
                     color: Notifs.dnd ? Theme.sel : "transparent"
                     border.width: 1

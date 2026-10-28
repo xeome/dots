@@ -3,28 +3,23 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Networking
 
-// The network module's menu: radio toggle, the networks in range, and the IP.
-//
-// Deliberately not a network manager. Connecting to something you've joined
-// before, joining something new with a password, and getting off a bad AP is
-// the whole job — static addresses, 802.1X, VPNs and per-connection routing
-// live in nm-connection-editor, which right-clicking the module opens. Same
-// split as Audio and pavucontrol.
+// Net's menu: the Wi-Fi switch, networks in range with a password field for new
+// ones, and Copy IP. Everything else (static addresses, 802.1X, VPNs) is
+// nm-connection-editor's, on the module's right click.
 Menu {
     id: root
 
-    // The connected wifi device, found once by Net — one lookup, two consumers.
+    // The connected Wi-Fi device, from Net.
     required property var device
 
-    // Only unknown secured networks land here: the row is swapped for a
-    // password field until it connects or you pick something else.
+    // The unknown secured network the password field is for. Picking any
+    // network clears it.
     property var pending: null
 
     // Strongest first, with whatever we're on pinned to the top so the list
     // doesn't reshuffle under the cursor every time a scan lands.
     readonly property var networks: (root.device?.networks.values ?? []).slice().sort((a, b) => (b.connected - a.connected) || (b.signalStrength - a.signalStrength))
-    // A busy street resolves 30+ APs and nobody scrolls a bar popup looking for
-    // the 24th strongest. The count below the list says what was cut.
+    // Rows listed; the line below the list counts the rest.
     readonly property int shown: 8
 
     function bars(strength: real): string {
@@ -46,8 +41,7 @@ Menu {
         root.pending = n;
     }
 
-    // Scanning is a radio duty cycle, not a free query — it only runs while the
-    // list is on screen, which is the only time a fresh result changes anything.
+    // Scanning costs radio time, so it runs only while the list is on screen.
     onVisibleChanged: {
         if (root.device)
             root.device.scannerEnabled = root.visible;
@@ -77,8 +71,7 @@ Menu {
                 required property var modelData
 
                 label: modelData.name
-                // Mid-connect is the one moment the row's own state is worth
-                // more than its signal strength.
+                // Mid-connect, the state replaces the signal bars.
                 suffix: modelData.stateChanging ? "···" : `${modelData.security === WifiSecurityType.Open ? "" : "󰌾 "}${root.bars(modelData.signalStrength)}`
                 current: modelData.connected
                 onClicked: root.activate(modelData)
@@ -103,7 +96,6 @@ Menu {
         }
     }
 
-    // Only rendered for a network we have no saved secret for.
     ColumnLayout {
         id: secret
 
@@ -147,8 +139,6 @@ Menu {
                 selectionColor: Theme.text
                 selectedTextColor: Theme.ground
 
-                // No submit button: this field has exactly one thing to do, and
-                // the row above already names the network it does it to.
                 onAccepted: {
                     root.pending.connectWithPsk(text);
                     text = "";
@@ -166,9 +156,8 @@ Menu {
     Rule {}
 
     Pick {
-        // The address is read off the interface rather than the device object:
-        // this machine also holds tailscale and docker addresses, and the one
-        // worth copying is the first global v4, which is what this picks.
+        // The first global IPv4 from `ip`, not the device object, which also
+        // carries tailscale and docker addresses.
         label: "󰆏  Copy IP address"
         onClicked: {
             Quickshell.execDetached(["sh", "-c", "ip=$(ip -4 -o addr show scope global | awk '{print $4}' | cut -d/ -f1 | head -1); [ -n \"$ip\" ] && printf %s \"$ip\" | wl-copy && notify-send -a Network -t 2000 'IP copied' \"$ip\""]);

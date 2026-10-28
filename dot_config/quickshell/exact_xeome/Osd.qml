@@ -6,21 +6,18 @@ import Quickshell.Io
 import Quickshell.Services.Pipewire
 import Quickshell.Wayland
 
-// Replaces swayosd, restyled into the shell's own panel chrome — this is an
-// overlay you interact with the result of, so it takes the popup radius rather
-// than the bar's square edge. Volume comes from Pipewire's own signals and
-// brightness/caps-lock
-// from sysfs inotify — verified to fire on this machine — so nothing polls and
-// no keybind has to tell the OSD that something changed.
+// The on-screen display for volume, mic mute, brightness and caps lock. Each
+// source is watched (Pipewire signals, Backlight, sysfs inotify), so nothing
+// polls and no keybind has to notify it.
 PanelWindow {
     id: root
 
     property string icon: ""
     property real value: 0
-    property string label: ""   // shown instead of the bar, for caps lock
+    property string label: ""   // replaces the bar when set
 
-    // Every source flashes on *change*, never on the first value it sees, so
-    // startup reads stay silent without a timer racing device discovery.
+    // Each source flashes on a change, never on its first value, so startup
+    // stays silent.
     property real lastVolume: -1
     property bool lastMuted: false
     property int lastBrightness: -1
@@ -62,15 +59,15 @@ PanelWindow {
         target: root.sink?.audio ?? null
 
         function onVolumeChanged(): void {
-            root.onAudioChanged();
+            root.flashVolume();
         }
 
         function onMutedChanged(): void {
-            root.onAudioChanged();
+            root.flashVolume();
         }
     }
 
-    function onAudioChanged(): void {
+    function flashVolume(): void {
         const a = root.sink?.audio;
         if (!a)
             return;
@@ -87,15 +84,12 @@ PanelWindow {
 
     // ---- mic mute ----------------------------------------------------------
     //
-    // Mute only, not level: XF86AudioMicMute is the one bind that changes this
-    // with nothing on screen, and AudioMenu's slider already shows the level
-    // while you drag it.
+    // Mute only: XF86AudioMicMute changes it with nothing on screen, and
+    // AudioMenu already shows the level.
     //
-    // The sink's trick of seeding from the first value it sees doesn't work on
-    // a boolean — a mic that starts unmuted never emits a change to seed from,
-    // and the first real toggle would be swallowed as the initial read. So the
-    // seed is a delay instead: once the node has had a moment to bind, every
-    // change after that is someone pressing the key.
+    // A mic that starts unmuted never emits a first value to seed from, so the
+    // first real toggle would be swallowed. Changes count once the node has had
+    // 500ms to bind instead.
     readonly property var source: Pipewire.defaultAudioSource
     property bool micReady: false
 
@@ -103,8 +97,7 @@ PanelWindow {
 
     Timer {
         interval: 500
-        // Re-arms itself when micReady is cleared, so switching the default
-        // input mid-session seeds again without any of this being imperative.
+        // Re-arms when the default source changes.
         running: root.source !== null && !root.micReady
         onTriggered: root.micReady = true
     }
@@ -123,8 +116,7 @@ PanelWindow {
 
     // ---- brightness --------------------------------------------------------
 
-    // Backlight owns the sysfs watch, since Power's slider needs the same
-    // reading; this end only decides when a change is worth flashing.
+    // Backlight owns the sysfs watch; this only decides when to flash.
     Connections {
         target: Backlight
 
@@ -149,9 +141,8 @@ PanelWindow {
         showDotAndDotDot: false
     }
 
-    // ponytail: if this never fires, the LED is written by a path inotify
-    // doesn't cover — fall back to binding Caps_Lock to an IpcHandler that
-    // reloads this file, the way swayosd-client did.
+    // ponytail: trusts inotify to see the LED write. If it never fires, bind
+    // Caps_Lock to an IpcHandler that reloads this file.
     FileView {
         path: root.capsDir ? root.capsDir + "/brightness" : ""
         watchChanges: true

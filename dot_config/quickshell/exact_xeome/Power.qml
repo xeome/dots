@@ -4,33 +4,28 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.UPower
 
-// The battery module's power-profile menu, hung off it the way Calendar hangs
-// off Clock.
+// Battery's menu: power profiles, brightness, the CPU limit, and whatever is
+// capping or holding the profile. Not a Menu: its width follows its rows.
 //
-// The CPU half is just a property assignment: tlp-pd answers the standard
-// org.freedesktop.UPower.PowerProfiles interface that quickshell already
-// binds, with polkit allow_active, so there is no script and no prompt. Each
-// profile is the matching TLP parameter set — performance is *_ON_AC,
-// balanced *_ON_BAT, power-saver *_ON_SAV — which is why the row subtitles
-// stay vague: the specifics live in /etc/tlp.d/50-dots-profiles.conf and differ
-// per machine.
+// tlp-pd serves org.freedesktop.UPower.PowerProfiles with polkit allow_active,
+// so picking a profile is a property write with no prompt. Each profile is a
+// TLP parameter set (performance *_ON_AC, balanced *_ON_BAT, power-saver
+// *_ON_SAV) in /etc/tlp.d/50-dots-profiles.conf, which differs per machine,
+// so the row subtitles stay vague.
 //
-// The E-core half: on a hybrid Intel CPU, power-saver pins user.slice (your
-// session and every app in it) to the E-cores with a runtime cpuset. It
-// follows the profile rather than the click, so a profile set from anywhere
-// else pins too. 49-dots-ecore-pin.rules lets a wheel user do it unprompted.
+// On a hybrid Intel CPU, power-saver also pins user.slice to the E-cores. The
+// pin follows the profile, not the click, so a profile set elsewhere pins too.
+// 49-dots-ecore-pin.rules lets a wheel user do it without a prompt.
 PopupWindow {
     id: root
 
     required property Item anchorItem
 
-    // grabFocus dismisses on any outside click — including the click on the
-    // battery that meant "close". Battery reads this so that click doesn't
-    // immediately reopen what it just closed.
+    // Read by Battery; see Menu.closedAt.
     property double closedAt: 0
 
-    // The E-core list, e.g. "4-11". Empty on a CPU without E-cores, which is
-    // what turns the pin into a no-op on every other machine.
+    // The E-core list, e.g. "4-11". Empty on a CPU without E-cores, which
+    // makes the pin a no-op.
     property string ecores: ""
 
     readonly property var profiles: [
@@ -61,8 +56,8 @@ PopupWindow {
         root.visible = false;
     }
 
-    // --runtime, so a reboot always comes back unpinned. An empty AllowedCPUs
-    // resets to every CPU.
+    // --runtime, so a reboot comes back unpinned. An empty AllowedCPUs resets
+    // to every CPU.
     function pin(): void {
         if (root.ecores === "")
             return;
@@ -94,9 +89,9 @@ PopupWindow {
     }
 
     Process {
-        // The perf PMU for the E-cores only exists on hybrid Intel. Read once:
-        // the list cannot change while running. Pinning on load also
-        // reconciles the cpuset after a quickshell restart.
+        // The E-core PMU exists only on hybrid Intel, and its CPU list cannot
+        // change while running. Pinning on load also restores the cpuset after
+        // a quickshell restart.
         running: true
         command: ["cat", "/sys/devices/cpu_atom/cpus"]
 
@@ -281,17 +276,15 @@ PopupWindow {
                 BarText {
                     Layout.fillWidth: true
                     visible: PowerProfiles.degradationReason !== PerformanceDegradationReason.None
-                    // Firmware telling us it is capping the CPU regardless of
-                    // what profile is selected.
+                    // Firmware caps the CPU whatever the profile.
                     text: PowerProfiles.degradationReason === PerformanceDegradationReason.HighTemperature ? "󰀦  capped: high temperature" : "󰀦  capped: lap detected"
                     font.pixelSize: Theme.size - 3
                     color: Theme.dim
                 }
 
                 Repeater {
-                    // `tlpctl launch` sets these: an app asking for a profile
-                    // for as long as it runs. Worth showing, since it overrides
-                    // the row highlighted above.
+                    // `tlpctl launch` holds a profile while an app runs,
+                    // overriding the row highlighted above.
                     model: PowerProfiles.holds
 
                     delegate: BarText {

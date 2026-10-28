@@ -2,12 +2,12 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 
-// swaync's notification popups: top-right, 400px, newest first.
+// Notification popups: top-right, newest first, on the focused monitor.
 PanelWindow {
     id: root
 
-    // ponytail: follows the focused monitor live, so a toast can hop screens
-    // if you switch mid-popup. Latch it at spawn time if that annoys you.
+    // ponytail: follows focus live, so a popup hops screens when focus does;
+    // latch the screen at spawn if that matters.
     screen: Quickshell.screens.find(s => s.name === Compositor.focusedMonitor) ?? null
 
     readonly property int maxVisible: 5
@@ -41,10 +41,8 @@ PanelWindow {
                 required property var modelData
                 required property int index
 
-                // A burst of twenty would otherwise build a column taller than
-                // the screen. The rest wait their turn rather than being
-                // dropped — hence the countdown below only running once a card
-                // is actually on screen to be read.
+                // Cards past maxVisible wait hidden, with their countdown
+                // stopped, until earlier ones go.
                 visible: card.index < root.maxVisible
 
                 notif: modelData
@@ -52,18 +50,15 @@ PanelWindow {
 
                 Timer {
                     interval: Notifs.timeout(card.modelData)
-                    // Hovering restarts rather than resumes: leaving the card
-                    // hands back the whole timeout, which is the behaviour you
-                    // want when you moved the mouse there to read it.
+                    // Hover restarts rather than resumes: leaving the card
+                    // grants the whole timeout again.
                     running: interval > 0 && card.visible && !card.hovered
-                    onTriggered: {
-                        card.modelData.expire();
-                        Notifs.drop(card.modelData);
-                    }
+                    // expire() emits closed, which drops the card below.
+                    onTriggered: card.modelData.expire()
                 }
 
-                // The object is destroyed right after this fires, so drop our
-                // reference before it dangles.
+                // The notification is destroyed right after closed, so drop
+                // it before the reference dangles.
                 Connections {
                     target: card.modelData
 
@@ -74,8 +69,7 @@ PanelWindow {
             }
         }
 
-        // Without this the queued ones are simply invisible, and a burst reads
-        // as "five notifications" when it was twenty.
+        // Counts the cards waiting past maxVisible.
         Surface {
             width: parent.width
             implicitHeight: 24

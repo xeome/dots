@@ -3,28 +3,25 @@ import Quickshell.Services.Notifications
 import Quickshell.Widgets
 
 // One notification, shared by the popup stack and the history list. A 2px hot
-// left edge marks a critical one; everything else has no mark, since graphite
-// spends colour on meaning only.
+// left edge marks a critical one.
 //
-// ponytail: no inline replies — that needs state the Notification object
-// doesn't carry; add it if you miss it.
+// ponytail: no inline replies; they need state the Notification object
+// doesn't carry.
 Surface {
     id: root
 
     required property var notif
-    // Only the history list asks for it: a popup is by definition seconds old,
-    // so an age there is a permanent, pointless "now".
+    // Only the history list sets it; a popup's age would always read "now".
     property bool showAge: false
 
     signal dismissed
 
-    // The popup stack stops its expiry countdown while you're on a card, so
-    // reaching for an action button doesn't race it.
+    // The popup stack stops its expiry countdown while this is true.
     readonly property bool hovered: ma.containsMouse
     readonly property bool critical: notif?.urgency === NotificationUrgency.Critical
     readonly property string age: root.showAge && root.notif ? Notifs.age(root.notif) : ""
-    // Spec reserves the "default" action id for click-to-activate on the
-    // notification body itself — it isn't meant to get its own button.
+    // The spec reserves the "default" action for a click on the body, not a
+    // button.
     readonly property var defaultAction: notif?.actions.find(a => a.identifier === "default") ?? null
     readonly property var otherActions: notif?.actions.filter(a => a.identifier !== "default") ?? []
 
@@ -38,9 +35,8 @@ Surface {
         }
     }
 
-    // Follows the card's corners rather than being clipped by them: Qt's `clip`
-    // is a rectangular scissor and would square this strip's ends back off.
-    // Inset by the card's ring, which is its outermost pixel.
+    // Rounded itself because `clip` is a rectangular scissor and would square
+    // the strip's ends. Inset by the card's 1px ring.
     Rectangle {
         visible: root.critical
         anchors {
@@ -59,7 +55,7 @@ Surface {
         id: ma
         anchors.fill: parent
         hoverEnabled: true
-        // No dismiss() after invoke(): see the action buttons' MouseArea below.
+        // Nothing after invoke(): see the action buttons' MouseArea below.
         onClicked: root.defaultAction ? root.defaultAction.invoke() : root.dismissed()
     }
 
@@ -107,7 +103,7 @@ Surface {
             text: root.notif?.body ?? ""
             color: Theme.text
             weight: 450
-            textFormat: Text.StyledText   // swaync advertised body markup
+            textFormat: Text.StyledText   // Notifs advertises bodyMarkupSupported
             wrapMode: Text.Wrap
             maximumLineCount: 6
             elide: Text.ElideRight
@@ -144,9 +140,9 @@ Surface {
                         id: actionMa
                         anchors.fill: parent
                         hoverEnabled: true
-                        // No dismiss() after this: invoking an action closes a
-                        // non-resident notification, which destroys this card
-                        // mid-handler — the next line ran against a dead root.
+                        // Nothing after this: invoking an action closes a
+                        // non-resident notification and destroys this card
+                        // mid-handler. dismiss() on the close button does too.
                         onClicked: action.modelData.invoke()
                     }
                 }

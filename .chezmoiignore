@@ -1,6 +1,9 @@
 README.md
 LICENSE
 pkg
+# Run from the source tree: node dot_config/quickshell/exact_xeome/calc.test.mjs
+.config/quickshell/xeome/calc.test.mjs
+
 # Baked for the Discord theme, which embeds it from the source; Quickshell never loads it.
 .config/quickshell/xeome/grain-panel.png
 
@@ -12,7 +15,6 @@ pkg
 .config/hypr/hyprland.lua
 .config/hypr/user.local.lua
 .config/hypr/lua_modules
-.config/hypr/bin/satty-screenshot.sh
 {{- end }}
 {{- if eq $m.wm "hyprland" }}
 .config/sway

@@ -97,7 +97,7 @@ end
 -- =============================================================================
 
 hl.bind("SUPER + d", hl.dsp.exec_cmd(app({{ $m.discord_cmd | quote }})))
-hl.bind("Print", hl.dsp.exec_cmd("~/.config/hypr/bin/satty-screenshot.sh"))
+hl.bind("Print", hl.dsp.exec_cmd("qs -c xeome ipc call shot open"))
 {{ if $m.is_laptop }}
 -- Lock the screen when the laptop lid closes
 hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd("hyprlock"), { locked = true })

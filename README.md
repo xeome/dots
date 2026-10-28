@@ -12,7 +12,7 @@ This is my personal repo for my Arch linux configurations.
 | Wallpaper                  | `waypaper`                                           |
 | Lock screen                | `hyprlock`                                           |
 | File manager               | `thunar`                                             |
-| Screenshot tool            | `satty` on hyprland, `flameshot` on sway             |
+| Screenshot tool            | quickshell `Shot` on hyprland, `flameshot` on sway   |
 | Polkit manager             | `mate-polkit`                                        |
 | Fonts                      | `ttf-iosevka-nerd ttf-jetbrains-mono monaspace Neon` |
 | Editor                     | `neovim`                                             |

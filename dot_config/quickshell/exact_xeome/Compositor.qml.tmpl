@@ -4,10 +4,12 @@ pragma Singleton
 import Quickshell
 {{ if eq $m.wm "sway" }}import Quickshell.I3{{ else }}import Quickshell.Hyprland{{ end }}
 
-// The only two things this shell needs from the compositor: which monitor has
-// focus, and the workspace list. Hyprland and sway hand both back through
-// near-identical objects — name, active, urgent, monitor, activate() — so every
-// other file stays compositor-agnostic and this is the single seam.
+// What this shell needs from the compositor: which monitor has focus, the
+// workspace list, and for Shot the windows on a monitor's workspace.
+// Hyprland and sway hand the first two back through near-identical objects —
+// name, active, urgent, monitor, activate() — so every other file stays
+// compositor-agnostic and this is the single seam. The window parts are
+// Hyprland-only: sway gets no window snapping.
 //
 // Templated rather than detected at runtime: importing the wrong backend
 // connects to a socket that isn't there and logs about it forever, and chezmoi
@@ -23,10 +25,38 @@ Singleton {
     // stable nor the order you want to read. Named workspaces and the
     // scratchpad carry num -1, which is what the filter drops.
     readonly property var workspaces: [...I3.workspaces.values].filter(w => w.num > 0).sort((a, b) => a.num - b.num)
+
+    function refreshWindows(): void {}
+
+    function windows(screen: var): var {
+        return [];
+    }
 {{- else }}
     readonly property string focusedMonitor: Hyprland.focusedMonitor?.name ?? ""
 
     // Negative ids are Hyprland's special workspaces (scratchpads).
     readonly property var workspaces: [...Hyprland.workspaces.values].filter(w => w.id > 0).sort((a, b) => a.id - b.id)
+
+    // lastIpcObject (where a window's position lives) is only as fresh as the
+    // last refresh, and the refresh is asynchronous: call this, then read
+    // windows() a moment later. Shot reads it once grim has frozen the screen.
+    function refreshWindows(): void {
+        Hyprland.refreshToplevels();
+    }
+
+    // The windows on the screen's active workspace, in the screen's logical
+    // pixels, topmost first: fullscreen, then floating, then tiled, and within
+    // those the most recently focused (focusHistoryID 0), which for floating
+    // windows is the one raised on top. Windows with no position yet (opened
+    // since the last refresh) are left out. ponytail: a special workspace
+    // (scratchpad) shown over this one is not included.
+    function windows(screen: var): var {
+        const ws = Hyprland.monitorFor(screen)?.activeWorkspace;
+        return [...Hyprland.toplevels.values]
+            .map(t => t.lastIpcObject)
+            .filter(o => o?.size && o.workspace?.id === ws?.id)
+            .sort((a, b) => (b.fullscreen ? 2 : b.floating ? 1 : 0) - (a.fullscreen ? 2 : a.floating ? 1 : 0) || a.focusHistoryID - b.focusHistoryID)
+            .map(o => Qt.rect(o.at[0] - screen.x, o.at[1] - screen.y, o.size[0], o.size[1]));
+    }
 {{- end }}
 }

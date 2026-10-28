@@ -13,4 +13,5 @@ ShellRoot {
 
     Osd {}
     NotifPopups {}
+    Shot {}
 }

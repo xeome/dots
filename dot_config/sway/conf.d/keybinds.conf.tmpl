@@ -28,7 +28,8 @@ bindsym $mod+e exec thunar
 bindsym $mod+r exec vicinae toggle
 bindsym $mod+v exec code --ozone-platform=wayland
 bindsym $mod+d exec {{ $m.discord_cmd }}
-# Diverges from hyprland, which uses grimblast + satty. Neither is installed
+# Diverges from hyprland, whose Print opens the quickshell overlay (Shot.qml)
+# over grim and libvips. Neither is installed
 # here and flameshot is, so sway keeps flameshot.
 bindsym Print exec flameshot gui -r | wl-copy
 

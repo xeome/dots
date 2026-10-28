@@ -47,12 +47,11 @@ Singleton {
         return `${Math.floor(mins / 1440)}d`;
     }
 
-    // The sending app's hint wins. Spec: a positive timeout is a request in
-    // seconds, 0 means never expire, and -1 hands the decision back to us —
-    // which is where swaync's 5s low / 10s normal / never-for-critical come in.
+    // The sender's hint wins: milliseconds, 0 for never, -1 to leave it to us.
+    // Quickshell's docs say seconds, but 0.3.2 passes the D-Bus value through.
     function timeout(n): int {
         if (n.expireTimeout >= 0)
-            return n.expireTimeout * 1000;
+            return n.expireTimeout;
         if (n.urgency === NotificationUrgency.Critical)
             return 0;
         return n.urgency === NotificationUrgency.Low ? 5000 : 10000;

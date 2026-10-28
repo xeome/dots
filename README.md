@@ -14,14 +14,13 @@ This is my personal repo for my Arch linux configurations.
 | File manager               | `thunar`                                             |
 | Screenshot tool            | quickshell `Shot` on hyprland, `flameshot` on sway   |
 | Polkit manager             | `mate-polkit`                                        |
-| Fonts                      | `ttf-iosevka-nerd ttf-jetbrains-mono monaspace Neon` |
+| Fonts                      | `inter-font ttf-jetbrains-mono-nerd`                 |
 | Editor                     | `neovim`                                             |
 
-One `quickshell` process draws the bar, the notification centre and the OSD —
-waybar, swaync and swayosd are all retired. It runs on both compositors:
-`Compositor.qml.tmpl` picks the `Quickshell.Hyprland` or `Quickshell.I3`
-backend from the machine's `wm`, and nothing else in the shell knows which
-compositor it's on.
+One `quickshell` process draws the bar, the notification centre and the OSD.
+It runs on both compositors: `Compositor.qml.tmpl` picks the
+`Quickshell.Hyprland` or `Quickshell.I3` backend from the machine's `wm`, and
+nothing else in the shell knows which compositor it's on.
 
 The packages, and everything this repo puts under `/etc`, are pacman packages
 built from `pkg/`: `dots-desktop` on every machine, `dots-hyprland` or
@@ -37,11 +36,6 @@ Incomplete but should get you most things.
 ```bash
 chezmoi init https://github.com/xeome/dots
 chezmoi apply -v
-# Optional: install Monaspace font
-mkdir -p ~/.fonts
-wget https://github.com/githubnext/monaspace/releases/download/v1.000/monaspace-v1.000.zip && unzip monaspace-v1.000.zip -d ~/.fonts
-fc-cache -frv
-rm -f monaspace-v1.000.zip
 ```
 
 # Some shortcuts
@@ -57,6 +51,7 @@ Kept identical on both compositors, so muscle memory carries between machines.
 | Super + P         | Project sessionizer                |
 | Super + L         | Lock screen (`hyprlock`)           |
 | Super + K         | Toggle notification centre         |
+| Super + T         | Toggle light and dark theme        |
 | Super + Shift + C | Close focused window               |
 | Super + Shift + R | Reload compositor config           |
 | Super + arrows    | Focus window in that direction     |

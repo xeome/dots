@@ -25,6 +25,7 @@ Item {
     property color glowFar: Theme.glowPanelFar
     property real glowSize: 480
     // grain.py bakes one tile per ground, so this has to name the fill's ground.
+    // Empty for none: Desk's flat tiles.
     property string grain: "grain-raised.png"
 
     readonly property int inset: edged ? 1 : 0
@@ -101,7 +102,7 @@ Item {
         ShapePath {
             strokeWidth: -1
             fillColor: "transparent"
-            fillItem: Theme.light ? null : tile
+            fillItem: Theme.light || !root.grain ? null : tile
             PathRectangle {
                 width: shape.width
                 height: shape.height

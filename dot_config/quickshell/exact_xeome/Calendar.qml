@@ -1,4 +1,5 @@
 import QtQuick
+import "Calc.mjs" as Calc
 import QtQuick.Layouts
 import Quickshell
 
@@ -23,15 +24,7 @@ PopupWindow {
     readonly property var first: new Date(today.getFullYear(), today.getMonth() + offset, 1)
 
     // ISO-8601: week 1 is the one holding the year's first Thursday.
-    function isoWeek(monday: var): int {
-        const thu = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 3);
-        const jan1 = new Date(thu.getFullYear(), 0, 1);
-        // Round before dividing: a DST boundary in between leaves the raw
-        // millisecond gap an hour short of a whole number of days.
-        return Math.floor(Math.round((thu - jan1) / 86400000) / 7) + 1;
-    }
-
-    readonly property int todayWeek: isoWeek(new Date(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7))
+    readonly property int todayWeek: Calc.isoWeek(new Date(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7))
 
     // Six Monday-first weeks — enough for any month, including a 31-day one
     // that starts on a Sunday.
@@ -51,7 +44,7 @@ PopupWindow {
                 });
             }
             out.push({
-                week: isoWeek(monday),
+                week: Calc.isoWeek(monday),
                 days: days
             });
         }

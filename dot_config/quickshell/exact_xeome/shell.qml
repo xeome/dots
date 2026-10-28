@@ -11,6 +11,11 @@ ShellRoot {
         delegate: Bar {}
     }
 
+    Variants {
+        model: Quickshell.screens
+        delegate: Desk {}
+    }
+
     Osd {}
     NotifPopups {}
     Shot {}

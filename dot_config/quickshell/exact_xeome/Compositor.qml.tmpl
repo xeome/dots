@@ -5,11 +5,11 @@ import Quickshell
 {{ if eq $m.wm "sway" }}import Quickshell.I3{{ else }}import Quickshell.Hyprland{{ end }}
 
 // What this shell needs from the compositor: which monitor has focus, the
-// workspace list, and for Shot the windows on a monitor's workspace.
+// workspace list, and for Shot and Desk the windows on a monitor's workspace.
 // Hyprland and sway hand the first two back through near-identical objects —
 // name, active, urgent, monitor, activate() — so every other file stays
 // compositor-agnostic and this is the single seam. The window parts are
-// Hyprland-only: sway gets no window snapping.
+// Hyprland-only: sway gets no window snapping and no Desk.
 //
 // Templated rather than detected at runtime: importing the wrong backend
 // connects to a socket that isn't there and logs about it forever, and chezmoi
@@ -30,6 +30,10 @@ Singleton {
 
     function windows(screen: var): var {
         return [];
+    }
+
+    function empty(screen: var): bool {
+        return false;
     }
 {{- else }}
     readonly property string focusedMonitor: Hyprland.focusedMonitor?.name ?? ""
@@ -57,6 +61,10 @@ Singleton {
             .filter(o => o?.size && o.workspace?.id === ws?.id)
             .sort((a, b) => (b.fullscreen ? 2 : b.floating ? 1 : 0) - (a.fullscreen ? 2 : a.floating ? 1 : 0) || a.focusHistoryID - b.focusHistoryID)
             .map(o => Qt.rect(o.at[0] - screen.x, o.at[1] - screen.y, o.size[0], o.size[1]));
+    }
+
+    function empty(screen: var): bool {
+        return (Hyprland.monitorFor(screen)?.activeWorkspace?.toplevels.values.length ?? 0) === 0;
     }
 {{- end }}
 }

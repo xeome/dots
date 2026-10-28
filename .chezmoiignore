@@ -3,6 +3,8 @@ LICENSE
 pkg
 # Run from the source tree: node dot_config/quickshell/exact_xeome/calc.test.mjs
 .config/quickshell/xeome/calc.test.mjs
+# python3 -I dot_config/quickshell/dots.test.py
+.config/quickshell/dots.test.py
 
 # Baked for the Discord theme, which embeds it from the source; Quickshell never loads it.
 .config/quickshell/xeome/grain-panel.png

@@ -69,7 +69,7 @@ PanelWindow {
         // (workspace count, tray items, wifi visibility...); centerIn alone
         // doesn't know that, so a long title can slide under either one.
         // Clamp to whichever side is currently closer to center.
-        width: Math.min(implicitWidth, Math.max(0, 2 * (Math.min(root.width / 2 - 10 - workspaces.width, root.width / 2 - 10 - rightRow.width) - 16)))
+        width: Math.min(implicitWidth, Math.max(0, 2 * (root.width / 2 - 10 - Math.max(workspaces.width, rightRow.width) - 16)))
     }
 
     Row {

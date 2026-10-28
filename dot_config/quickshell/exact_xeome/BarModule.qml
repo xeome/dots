@@ -23,13 +23,19 @@ Rectangle {
     property bool bordered: true
     property string tooltipText: ""
     default property alias content: layout.data
-    property alias spacing: layout.spacing
 
     signal clicked(int button)
 
     readonly property bool hovered: ma.containsMouse
     // Modules bind their labels/icons to this so a fill takes its text with it.
     readonly property color fg: tone === "warn" ? Theme.ground : tone === "sel" ? Theme.bright : Theme.text
+
+    // The menu's grabFocus already closed it on the click that lands here, so a
+    // click right after closing must not reopen it.
+    function openMenu(menu: var): void {
+        if (!menu.visible && Date.now() - menu.closedAt > 200)
+            menu.visible = true;
+    }
 
     implicitWidth: Math.max(minWidth, layout.implicitWidth + Theme.pad * 2)
     implicitHeight: Theme.barHeight - Theme.gap * 2

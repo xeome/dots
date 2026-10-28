@@ -54,8 +54,7 @@ BarModule {
 
     onClicked: button => {
         if (button === Qt.RightButton) {
-            if (!menu.visible && Date.now() - menu.closedAt > 200)
-                menu.visible = true;
+            root.openMenu(menu);
         } else {
             root.set(root.active ? root.span : 0);
         }

@@ -32,8 +32,8 @@ BarModule {
     onClicked: button => {
         if (button === Qt.MiddleButton)
             root.player?.togglePlaying();
-        else if (!menu.visible && Date.now() - menu.closedAt > 200)
-            menu.visible = true;
+        else
+            root.openMenu(menu);
     }
 
     // A popup anchored to a hidden module has nothing left to hang off.

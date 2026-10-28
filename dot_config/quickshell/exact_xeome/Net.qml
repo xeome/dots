@@ -23,8 +23,8 @@ BarModule {
     onClicked: button => {
         if (button === Qt.RightButton)
             Quickshell.execDetached(["nm-connection-editor"]);
-        else if (!menu.visible && Date.now() - menu.closedAt > 200)
-            menu.visible = true;
+        else
+            root.openMenu(menu);
     }
 
     BarText {

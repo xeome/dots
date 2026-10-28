@@ -74,7 +74,6 @@ Rectangle {
                 Rectangle {
                     anchors.fill: parent
                     color: Theme.hot
-                    radius: parent.radius
                     topLeftRadius: btn.topLeftRadius
                     bottomLeftRadius: btn.bottomLeftRadius
                     topRightRadius: btn.topRightRadius

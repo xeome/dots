@@ -8,10 +8,9 @@ PopupWindow {
     id: root
 
     required property Item anchorItem
-    property int delay: 400
     default property alias content: body.data
 
-    // `hovered` is the caller's intent; `visible` lags it by `delay`.
+    // `hovered` is the caller's intent; `visible` follows it after a delay.
     property bool hovered: false
 
     anchor.item: anchorItem
@@ -25,7 +24,7 @@ PopupWindow {
     visible: false
 
     Timer {
-        interval: root.delay
+        interval: 400
         running: root.hovered
         onTriggered: root.visible = true
     }

@@ -13,13 +13,11 @@ BarModule {
     // a full numeric date, for when you need to read a timestamp off the bar.
     property bool precise: false
 
-    // Left click only ever has to open. If the calendar was up, its own
-    // grabFocus already dismissed it on this very click — see Calendar.closedAt.
     onClicked: button => {
         if (button === Qt.RightButton)
             root.precise = !root.precise;
-        else if (!cal.visible && Date.now() - cal.closedAt > 200)
-            cal.visible = true;
+        else
+            root.openMenu(cal);
     }
 
     SystemClock {

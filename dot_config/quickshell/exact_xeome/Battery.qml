@@ -31,8 +31,7 @@ BarModule {
     // otherwise they stack on top of each other.
     tooltipText: menu.visible ? "" : [hasBattery ? `Time: ${hm(plugged ? bat?.timeToFull ?? 0 : bat?.timeToEmpty ?? 0)} left` : "", hasBattery && bat?.healthSupported ? `Capacity: ${Math.round(bat.healthPercentage)}%` : "", hasBattery ? `${Math.abs(bat?.changeRate ?? 0).toFixed(1)} watts` : "", `Profile: ${PowerProfile.toString(PowerProfiles.profile)}`].filter(l => l !== "").join("\n")
 
-    onClicked: if (!menu.visible && Date.now() - menu.closedAt > 200)
-        menu.visible = true
+    onClicked: root.openMenu(menu)
 
     BarText {
         readonly property var icons: ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]

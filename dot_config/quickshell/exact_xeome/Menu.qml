@@ -17,8 +17,6 @@ PopupWindow {
     // click — including the click on the module that meant "close" — so that
     // click must not immediately reopen what it just closed.
     property double closedAt: 0
-    property int pad: 12
-    property alias spacing: body.spacing
 
     default property alias content: body.data
 
@@ -28,7 +26,7 @@ PopupWindow {
     anchor.margins.top: 6
 
     implicitWidth: 324
-    implicitHeight: body.implicitHeight + pad * 2
+    implicitHeight: body.implicitHeight + Theme.pad * 2
     color: "transparent"
     visible: false
     grabFocus: true
@@ -46,8 +44,8 @@ PopupWindow {
                 left: parent.left
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                leftMargin: root.pad
-                rightMargin: root.pad
+                leftMargin: Theme.pad
+                rightMargin: Theme.pad
             }
             spacing: 8
         }

@@ -13,10 +13,6 @@ Item {
     property real value: 0
     signal moved(real fraction)
 
-    function clamp(v: real): real {
-        return Math.max(0, Math.min(1, v));
-    }
-
     Layout.fillWidth: true
     implicitHeight: 18
 
@@ -31,7 +27,7 @@ Item {
         color: Theme.rule
 
         Rectangle {
-            width: parent.width * root.clamp(root.value)
+            width: parent.width * Math.max(0, Math.min(1, root.value))
             height: parent.height
             radius: height / 2
             color: ma.containsMouse ? Theme.bright : Theme.text

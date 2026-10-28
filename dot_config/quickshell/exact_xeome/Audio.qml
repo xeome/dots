@@ -37,8 +37,8 @@ BarModule {
     onClicked: button => {
         if (button === Qt.RightButton)
             Quickshell.execDetached(["pavucontrol"]);
-        else if (!menu.visible && Date.now() - menu.closedAt > 200)
-            menu.visible = true;
+        else
+            root.openMenu(menu);
     }
 
     // Volume/muted are unreadable until the node is bound.

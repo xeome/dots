@@ -37,7 +37,7 @@ hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set 5%+"))
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"))
 
 -- ~~~ misc utilities
-hl.bind(mod .. " + o", hl.dsp.exec_cmd("xset dpms force off"))
+hl.bind(mod .. " + o", hl.dsp.dpms({ action = "toggle" }))
 hl.bind(mod .. " + l", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mod .. " + b", hl.dsp.exec_cmd("sh ~/.config/emoji/emoji.sh"))
 hl.bind(mod .. " + k", hl.dsp.exec_cmd("qs -c xeome ipc call notifs toggle"))

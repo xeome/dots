@@ -1,13 +1,17 @@
 import QtQuick
 import QtQuick.Layouts
 
-// A slider: an 8px bar in an 18px hit area. Drag, click and scroll report an
-// unclamped fraction through moved(); the owner decides whether `value` follows.
+// A slider: an 8px bar in an 18px hit area. Drag, click and scroll report a
+// fraction in 0..1 through moved(); the owner decides whether `value` follows.
 Item {
     id: root
 
     property real value: 0
     signal moved(real fraction)
+
+    function report(f: real): void {
+        root.moved(Math.max(0, Math.min(1, f)));
+    }
 
     Layout.fillWidth: true
     implicitHeight: 18
@@ -34,11 +38,11 @@ Item {
         id: ma
         anchors.fill: parent
         hoverEnabled: true
-        onPressed: e => root.moved(e.x / root.width)
+        onPressed: e => root.report(e.x / root.width)
         onPositionChanged: e => {
             if (pressed)
-                root.moved(e.x / root.width);
+                root.report(e.x / root.width);
         }
-        onWheel: e => root.moved(root.value + (e.angleDelta.y > 0 ? 0.05 : -0.05))
+        onWheel: e => root.report(root.value + (e.angleDelta.y > 0 ? 0.05 : -0.05))
     }
 }

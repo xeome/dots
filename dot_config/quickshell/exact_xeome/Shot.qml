@@ -464,7 +464,7 @@ Scope {
                             }
                         }
 
-                        ShotEditor.Sep {}
+                        Sep {}
 
                         Chip {
                             text: root.delay ? `${root.delays[root.delay]} s` : "timer"

@@ -22,9 +22,7 @@ BarModule {
     }
 
     BarText {
-        readonly property var icons: ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
-
-        text: icons[Math.min(4, Math.floor((root.network?.signalStrength ?? 0) * 5))]
+        text: menu.bars(root.network?.signalStrength ?? 0)
         color: Theme.text
     }
 

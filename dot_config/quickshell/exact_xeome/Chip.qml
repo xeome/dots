@@ -1,6 +1,7 @@
 import QtQuick
 
-// A mode or tool in Shot's and ShotEditor's pills. Selected is `sel`, never a colour.
+// A mode or tool in a toolbar pill (Shot, ShotEditor, Walls). Selected is
+// `sel`, never a colour.
 Rectangle {
     id: chip
 

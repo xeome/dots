@@ -112,7 +112,7 @@ Menu {
                 if (!dev.audio)
                     return;
                 dev.audio.muted = false;
-                dev.audio.volume = Math.max(0, Math.min(1, fraction));
+                dev.audio.volume = fraction;
             }
         }
 

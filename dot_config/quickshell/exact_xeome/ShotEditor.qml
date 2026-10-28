@@ -367,14 +367,6 @@ Scope {
         }
     }
 
-    component Sep: Rectangle {
-        Layout.leftMargin: 4
-        Layout.rightMargin: 4
-        implicitWidth: 1
-        implicitHeight: 18
-        color: Theme.rule
-    }
-
     // One mark, in the image's pixels.
     component Mark: Item {
         id: mk

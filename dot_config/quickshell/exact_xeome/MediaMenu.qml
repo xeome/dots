@@ -134,7 +134,7 @@ Menu {
             // A player that cannot seek keeps the bar as a readout.
             onMoved: fraction => {
                 if (root.player?.canSeek)
-                    root.player.position = Math.max(0, Math.min(1, fraction)) * root.length;
+                    root.player.position = fraction * root.length;
             }
         }
 

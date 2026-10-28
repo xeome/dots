@@ -24,7 +24,7 @@ Scope {
     property var files: []        // the originals, by name, bakes left out
     property bool dots: false
     property string pending: ""   // an original to apply once its bake lands
-    property int rev: 0           // bumped whenever the store may have changed
+    property int rev: 0           // bumped when a bake exits
 
     // The store's bakes, by name. Reads `rev` as well as `count`, because an
     // overwritten bake leaves `count` alone.
@@ -371,13 +371,7 @@ Scope {
                         weight: 650
                     }
 
-                    Rectangle {
-                        Layout.leftMargin: 4
-                        Layout.rightMargin: 4
-                        implicitWidth: 1
-                        implicitHeight: 18
-                        color: Theme.rule
-                    }
+                    Sep {}
 
                     Chip {
                         text: "dots"

@@ -74,6 +74,7 @@ case "$1" in
 		if [ -n "$art_path" ]; then
 			# Only relink if changed
 			if [ "$(readlink "$latest_link")" != "$art_path" ]; then
+				mkdir -p "${latest_link%/*}"
 				ln -sf "$art_path" "$latest_link"
 			fi
 			echo "$art_path"

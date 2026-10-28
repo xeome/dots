@@ -1,17 +1,13 @@
 format = """$hostname$directory$git_branch$git_state$git_status$cmd_duration$python$fill$memory_usage$line_break$status$character"""
 
 [hostname]
-ssh_only = true
 format = '[ $hostname ](inverted bold)'
-disabled = false
 
 [directory]
 style = "inverted bold"
 format = '[ $path ]($style)'
 truncation_length = 4
 truncation_symbol = '…/'
-truncate_to_repo = true
-home_symbol = '~'
 
 [git_branch]
 format = ' [$branch]($style)'
@@ -65,10 +61,6 @@ style = 'dimmed'
 [status]
 style = 'dimmed'
 symbol = ''
-success_symbol = ''
 format = '[$common_meaning$signal_name$maybe_int]($style) '
 map_symbol = true
 disabled = false
-
-[username]
-disabled = true

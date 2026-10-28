@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""Guards the two claims the graphite palette makes that a human can't eyeball.
+"""Checks what the graphite palette promises that a human can't eyeball.
 
-1. The contrast floors below, in both modes. The smallest text on this desktop
-   is 10px, so a token drifting to 3:1 is a legibility bug that only shows up on
-   the one label nobody looks at. Translucent tokens (line, sel, hover, card)
-   are measured composited over the surface they actually sit on: a check that
-   ignored alpha would read #14FFFFFF as opaque white and pass everything.
-2. That the configs which repeat a palette value still say it. The whole point
-   of one palette is that #0A0A0C is #0A0A0C everywhere; a dozen files in six
-   syntaxes is exactly where that silently stops being true.
+1. The contrast floors below, in both modes. Translucent tokens (line, sel,
+   hover, card) are measured composited over the surface they sit on.
+2. That the configs which repeat a palette value still match Theme.qml.
 3. That kvantum.py can still build the Qt theme: it stops on any upstream
    colour it has no Theme.qml token for.
 
@@ -20,11 +15,8 @@ import subprocess
 import sys
 import tempfile
 
-# The chezmoi source tree, not the deployed targets. Machine-specific
-# .chezmoiignore rules mean the sway palette is absent on a hyprland box and
-# vice versa, and a stale unmanaged leftover at the target path would be
-# reported as drift in a file chezmoi does not own. Checking the source
-# instead covers every machine's palette from any one of them.
+# The chezmoi source, not the deployed targets: .chezmoiignore leaves out the
+# sway files on a Hyprland machine and vice versa.
 SRC = pathlib.Path(
     subprocess.run(
         ["chezmoi", "source-path"], capture_output=True, text=True, check=True
@@ -105,6 +97,7 @@ def resolve(t, spec):
 
 
 fails = []
+complete = True
 
 for mode in ("light", "dark"):
     t = tokens(mode)
@@ -112,6 +105,7 @@ for mode in ("light", "dark"):
                | {"ground", "panel", "raised", "text", "warm", "line"}) - set(t)
     if missing:
         fails.append(f"{mode}: Theme.qml lacks {sorted(missing)}")
+        complete = False
         continue
     for fg, ground, floor in PAIRS:
         ratio = contrast(resolve(t, fg), resolve(t, ground))
@@ -122,13 +116,11 @@ for mode in ("light", "dark"):
         if ratio < 1.12:
             fails.append(f"{mode}: {edge} is invisible on {ground} ({ratio:.3f}:1)")
 
-# Every source file that hardcodes a palette value, and what it must say,
-# built from Theme.qml so a token changed there alone shows up as drift here.
-# Matched as plain text with runs of whitespace collapsed: six syntaxes, and a
-# parser for each would be more code than the thing it checks — but the
-# alignment padding inside them is nobody's business.
-dark, light = tokens("dark"), tokens("light")
-if not any("lacks" in f for f in fails):
+# Every source file that hardcodes a palette value, and what it must say.
+# Matched as plain text with runs of whitespace collapsed rather than parsed:
+# the files are in six syntaxes.
+if complete:
+    dark, light = tokens("dark"), tokens("light")
     D = {k: hexrgb(v) for k, v in dark.items()}
     L = {k: hexrgb(v) for k, v in light.items()}
     rgb = lambda h: ", ".join(str(int(h[i : i + 2], 16)) for i in (1, 3, 5))
@@ -171,9 +163,8 @@ if not any("lacks" in f for f in fails):
             f"--text-default: {D['text']};",
             f"--text-muted: {D['dim']};",
         ),
-        # The twin check below holds gtk-4.0/gtk.css to these, define by
-        # define, so pinning the per-mode GTK3 files pins both. Light mode is
-        # flat by choice, so it has no glow.
+        # The twin check below holds gtk-4.0/gtk.css to these GTK3 files define
+        # by define. Light mode is flat, so it has no glow.
         "dot_local/private_share/exact_themes/exact_graphite-dark/gtk-3.0/gtk.css": (
             f"@define-color window_bg_color {D['ground']};",
             f"@define-color view_bg_color {D['panel']};",
@@ -217,11 +208,10 @@ if not any("lacks" in f for f in fails):
         fails.append(f"focus border alpha differs: hypr {hypr and hypr[1]}, sway {sway and sway[1]}")
 
     # The GTK palette is written out three times (GTK3 has no media queries,
-    # and its theme folders can't import from ~). The needles above pin a few
-    # lines; this holds the rest of each block equal to its twin.
+    # and its theme folders can't import from ~). This holds each GTK3 file's
+    # defines equal to its mode's block in gtk-4.0/gtk.css.
     def defines(text):
-        # theme_* are GTK3's legacy aliases, derived from the palette, and
-        # libadwaita has none.
+        # theme_* are GTK3-only aliases, so libadwaita has none.
         return [l.strip() for l in text.splitlines()
                 if l.strip().startswith("@define-color") and not l.strip().startswith("@define-color theme_")]
 
@@ -232,9 +222,8 @@ if not any("lacks" in f for f in fails):
         if defines((SRC / rel).read_text()) != defines(block):
             fails.append(f"{rel} and gtk-4.0/gtk.css ({mode}) define different colours")
 
-# The Qt theme is generated from Theme.qml, so it cannot drift; what can go
-# wrong is an upstream colour kvantum.py has no token for, which it refuses.
-# It runs here into a scratch folder so that shows up before an apply does.
+# Built into a scratch folder, so an unmapped upstream colour shows up here
+# before an apply does.
 with tempfile.TemporaryDirectory() as tmp:
     kv = subprocess.run([sys.executable, "-I", str(SRC / "dot_config/quickshell/executable_kvantum.py"), tmp],
                         capture_output=True, text=True)

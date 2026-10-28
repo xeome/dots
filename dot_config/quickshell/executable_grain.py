@@ -2,18 +2,15 @@
 """Bakes graphite's grain into the tiles xeome/Surface.qml draws, into
 hyprlock's background, and into the office wallpaper.
 
-Graphite blends its noise as `overlay` at 30% (graphite-ui components.md), so
-the grain darkens and lightens a near-black ground without lifting it. QML has
-no blend modes. But every surface here is one flat, known colour, so the
-overlay result can be worked out ahead of time and stored as a plain
-normal-blend tile: black where overlay darkens, white where it lightens.
+Graphite blends its noise as `overlay` at 30% (graphite-ui components.md).
+QML has no blend modes, but every surface here is one flat, known colour. So
+the overlay result is precomputed into a normal-blend tile: black where
+overlay darkens, white where it lightens. Overlay depends on the colour
+underneath, so each ground gets its own tile.
 
-One tile per ground, because overlay depends on the colour underneath. A tile
-built for #0A0A0C is off by up to 3.4 levels on #151618.
-
-Needs rsvg-convert, numpy, scipy and pillow. It runs on demand, not at apply time;
-rerun it after changing `ground`, `panel` or `raised` in Theme.qml, then
-apply the quickshell, Discord and GTK themes (the Qt theme rebuilds itself):
+Needs rsvg-convert, numpy, scipy and pillow. Run it by hand after changing
+`ground`, `panel` or `raised` in Theme.qml, then apply (the Qt theme rebuilds
+itself):
 
     ~/.local/share/chezmoi/dot_config/quickshell/executable_grain.py
 """
@@ -29,8 +26,8 @@ from scipy.ndimage import gaussian_filter, zoom
 # graphite's --grain, verbatim.
 SVG = b"""<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='.33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(#n)' opacity='.3'/></svg>"""
 
-# The chezmoi source, not this file's folder: run from ~/.config/quickshell, the
-# tiles would land in the target, and the next apply would put the old ones back.
+# The chezmoi source, not this file's folder: tiles written into the deployed
+# ~/.config/quickshell would be reverted by the next apply.
 SRC = pathlib.Path(
     subprocess.run(
         ["chezmoi", "source-path"], capture_output=True, text=True, check=True
@@ -39,9 +36,8 @@ SRC = pathlib.Path(
 OUT = SRC / "dot_config/quickshell/exact_xeome"
 THEME = OUT / "Theme.qml"
 
-# The dark grounds, read from Theme.qml so a retuned ground can't leave a tile
-# baked for the old one. panel is not drawn by Quickshell: the Discord theme
-# embeds it under its chat (private_vesktop/themes/graphite.theme.css.tmpl).
+# The dark grounds, read from Theme.qml. Quickshell never draws panel; the GTK
+# and Discord themes put it under their views.
 GROUNDS = {
     m[1]: "#" + m[2][2:]
     for m in re.finditer(r'property color (ground|panel|raised): light \? "#\w{8}" : "#(\w{8})"', THEME.read_text())
@@ -56,10 +52,13 @@ def render():
     return rgba[..., 0], rgba[..., 3]  # grey value, layer alpha (.3)
 
 
+def overlay(base, g):
+    return np.where(base < 0.5, 2 * base * g, 1 - 2 * (1 - base) * (1 - g))
+
+
 def bake(base, g, a):
     """Normal-blend RGBA tile that reproduces `overlay` of (g, a) over base."""
-    over = np.where(base < 0.5, 2 * base * g, 1 - 2 * (1 - base) * (1 - g))
-    d = a * (over - base)  # what overlay adds to each pixel
+    d = a * (overlay(base, g) - base)  # what overlay adds to each pixel
     white = np.where(d > 0, d / (1 - base), 0)
     black = np.where(d < 0, -d / base, 0)
     tile = np.zeros(g.shape + (4,))
@@ -76,12 +75,11 @@ def smooth_noise(h, w, cell, seed):
 
 
 def lock(g, a, w=2560, h=1440):
-    """hyprlock's background: graphite's shell ground under faint topographic
-    lines, every fifth one brighter, fading towards the edges, with the grain
-    overlaid exactly, pixel by pixel. A corner glow alone read as a monitor's
-    light leak once it filled a whole screen. Lines cover the screen evenly and
-    line up with nothing, so hyprlock can scale it to any monitor. Sized for
-    the largest one, 2560x1440; the seeds keep the map the same on each run."""
+    """hyprlock's background: faint contour lines over the shell ground, fading
+    towards the edges. Lines rather than a corner glow, which reads as a light
+    leak at full screen, and they line up with nothing, so hyprlock can scale
+    the image to any monitor. Sized for the largest one; the fixed seeds keep
+    the map the same on each run."""
     ys, xs = np.mgrid[0:h, 0:w] + 0.5
     n = 9 * (smooth_noise(h, w, 420, 3) + 0.4 * smooth_noise(h, w, 160, 4))
     f = n % 1
@@ -94,14 +92,12 @@ def lock(g, a, w=2560, h=1440):
 
 
 def office(g, a, w=2560, h=1440):
-    """The office photo in graphite: its blue cast dropped to grey, its black
-    lifted to the shell ground, and the grain overlaid. Cropped to the largest
-    monitor so the grain lands 1:1 on its pixels."""
+    """The office photo in grey, its black lifted to the shell ground, with the
+    grain. Cropped to the largest monitor so the grain lands 1:1 on its pixels."""
     im = ImageOps.fit(Image.open(SRC / "dot_config/wallpapers/office.jpg"), (w, h), Image.LANCZOS)
     x = np.asarray(im.convert("L"), float)[..., None] / 255
-    # An S-curve through 0 and 1: shadows sink, the window brightens. Raise
-    # `c` for harder contrast; `p` is the grey where it turns from darkening to
-    # brightening. Tuned by eye; 2.4 reads moodier.
+    # An S-curve through 0 and 1. `c` is the contrast; `p` is the grey where it
+    # turns from darkening to brightening. Tuned by eye.
     c, p = 2.0, 0.45
     lum = x**c * (1 + p**c) / (x**c + p**c)
     return grained(on_ground(lum), g, a)
@@ -119,8 +115,8 @@ def grained(base, g, a):
     reps = (h // g.shape[0] + 1, w // g.shape[1] + 1)
     gg = np.tile(g, reps)[:h, :w, None]
     aa = np.tile(a, reps)[:h, :w, None]
-    over = np.where(base < 0.5, 2 * base * gg, 1 - 2 * (1 - base) * (1 - gg))
-    return base + aa * (over - base)
+    return base + aa * (overlay(base, gg) - base)
+
 
 if __name__ == "__main__":
     g, a = render()
@@ -131,8 +127,7 @@ if __name__ == "__main__":
             OUT / f"grain-{name}.png", optimize=True
         )
         print(f"grain-{name}.png  max alpha {tile[..., 3].max():.3f}")
-    # The GTK stylesheets name their tiles relative to themselves, so the
-    # ground and panel tiles are copied beside each dark one.
+    # GTK's url() is relative to the stylesheet, so each dark one gets copies.
     for folder in ("dot_config/exact_gtk-4.0", "dot_local/private_share/exact_themes/exact_graphite-dark/gtk-3.0"):
         for name in ("ground", "panel"):
             (SRC / folder / f"grain-{name}.png").write_bytes((OUT / f"grain-{name}.png").read_bytes())

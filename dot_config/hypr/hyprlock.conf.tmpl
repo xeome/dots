@@ -1,9 +1,7 @@
-# =============================================================================
-# HYPRLOCK CONFIGURATION
-# Managed by chezmoi — edit: ~/.local/share/chezmoi/dot_config/hypr/hyprlock.conf.tmpl
-# =============================================================================
+# Lock screen for every machine, sway ones included. Managed by chezmoi: edit
+# dot_config/hypr/hyprlock.conf.tmpl.
 
-# $scr2: monitor for device-specific widgets (input field, player, info)
+# $scr2 holds the input field, player and system info.
 {{- $m := index .machines .chezmoi.hostname }}
 $scr2 = {{ $m.secondary_monitor }}
 
@@ -19,9 +17,7 @@ general {
 # =============================================================================
 # BACKGROUND
 # =============================================================================
-# graphite's ground with faint contour lines and grain, baked by
-# quickshell/grain.py; hyprlock can't draw a gradient. No screenshot and no
-# blur: the lock screen is a surface of its own, not a frosted desktop.
+# Baked by quickshell/grain.py, because hyprlock can't draw a gradient.
 background {
     path = ~/.config/hypr/graphite-lock.png
     color = rgba(10, 10, 12, 1)
@@ -30,9 +26,8 @@ background {
 # =============================================================================
 # CLOCK
 # =============================================================================
-# Every widget shown on all monitors anchors to the centre, so the stack keeps
-# its spacing on any height. The offsets are the 1080p layout's: a 150pt label
-# is 243px tall, so its centre sits 121px below where its top used to be.
+# Widgets on every monitor anchor to the centre, so the stack keeps its spacing
+# at any height. Offsets are tuned at 1080p.
 
 # Hours
 label {
@@ -175,8 +170,7 @@ label {
 # =============================================================================
 # INPUT
 # =============================================================================
-# graphite's edge is two lines: the field's own translucent line, and this dark
-# ring one pixel outside it.
+# A dark ring one pixel outside the field's own translucent outline.
 shape {
     monitor = $scr2
     size = 252, 62
@@ -196,8 +190,6 @@ input-field {
     rounding = 10
     outline_thickness = 1
     outer_color = rgba(255, 255, 255, 0.08)
-    # Checking brightens the line, as focus does on windows; colour only for
-    # meaning: hot for a wrong password, warm for caps lock.
     check_color = rgba(255, 255, 255, 0.5)
     fail_color = rgba(226, 113, 90, 1)
     capslock_color = rgba(229, 174, 82, 1)

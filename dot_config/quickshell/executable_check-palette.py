@@ -129,9 +129,9 @@ if complete:
     # The terminals keep Caffeine's hues; their neutrals are graphite's. A
     # needle starting "\n" matches at a line start only, so `foreground` can't
     # pass inside `selection-foreground`. Alacritty repeats keys across
-    # sections, so its needles carry the section header.
-    sel = hexrgb(over(dark["sel"], dark["panel"]))
-    T = {k: D[k] for k in ("panel", "rule", "text", "dim", "bright")}
+    # sections, so its needles carry the section header. Selected text is
+    # inverted, text on ground, as vicinae selects it.
+    T = {k: D[k] for k in ("ground", "panel", "rule", "text", "dim", "bright")}
     SHARED = {
         "dot_config/ghostty/exact_themes/caffeine": (
             f"\nbackground = {T['panel']}",
@@ -142,15 +142,15 @@ if complete:
             f"\npalette = 15={T['bright']}",
             f"\ncursor-color = {T['bright']}",
             f"\ncursor-text = {T['panel']}",
-            f"\nselection-background = {sel}",
-            f"\nselection-foreground = {T['bright']}",
+            f"\nselection-background = {T['text']}",
+            f"\nselection-foreground = {T['ground']}",
         ),
         "dot_config/alacritty/caffeine.toml": tuple(
             f"[colors.{sec}]\n" + "\n".join(f'{k} = "{v}"' for k, v in kv)
             for sec, kv in (
                 ("primary", (("foreground", T["text"]), ("background", T["panel"]))),
                 ("cursor", (("text", T["panel"]), ("cursor", T["bright"]))),
-                ("selection", (("text", T["bright"]), ("background", sel))),
+                ("selection", (("text", T["ground"]), ("background", T["text"]))),
                 ("normal", (("black", T["rule"]), ("white", T["text"]))),
                 ("bright", (("black", T["dim"]), ("white", T["bright"]))),
             )
@@ -161,8 +161,8 @@ if complete:
                 ("background", T["panel"]),
                 ("foreground", T["text"]),
                 ("cursor", f"{T['panel'][1:]} {T['bright'][1:]}"),
-                ("selection-foreground", T["bright"]),
-                ("selection-background", sel),
+                ("selection-foreground", T["ground"]),
+                ("selection-background", T["text"]),
                 ("regular0", T["rule"]),
                 ("regular7", T["text"]),
                 ("bright0", T["dim"]),

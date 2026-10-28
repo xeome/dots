@@ -14,11 +14,11 @@ background = "#0e0e10"
 text = "#0e0e10"
 cursor = "#f7f8f8"
 
-# Theme.qml's `sel` flattened over the panel, since alacritty has no alpha
-# here, with bright text.
+# Selected text is inverted, text on ground, as vicinae selects it: a `sel`
+# wash is too faint to show a range in a terminal.
 [colors.selection]
-text = "#f7f8f8"
-background = "#1f1f21"
+text = "#0a0a0c"
+background = "#e6e7ea"
 
 # Caffeine's `terminal.ansi` hues on graphite's neutrals: black and white are
 # Theme.qml's rule/dim and text/bright. Black is `rule`, not a true black,

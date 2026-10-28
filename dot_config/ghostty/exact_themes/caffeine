@@ -36,7 +36,7 @@ foreground = #e6e7ea
 cursor-color = #f7f8f8
 cursor-text = #0e0e10
 
-# Theme.qml's `sel` flattened over the panel, since ghostty has no alpha here,
-# with bright text: the shell's selected-row pair.
-selection-background = #1f1f21
-selection-foreground = #f7f8f8
+# Selected text is inverted, text on ground, as vicinae selects it: a `sel`
+# wash is too faint to show a range in a terminal.
+selection-background = #e6e7ea
+selection-foreground = #0a0a0c

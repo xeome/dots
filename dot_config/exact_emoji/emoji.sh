@@ -16,7 +16,7 @@ EXT=$(echo "$CHOICE" | cut -d'.' -f2)
 TYPE="$WAYLAND_DISPLAY"
 if [ -z "${TYPE}" ];
 then
-    cat $LOC/"$CHOICE" - | xclip -selection clipboard -t image/"$EXT"
+    cat $LOC/"$CHOICE" | xclip -selection clipboard -t image/"$EXT"
 else
-    cat $LOC/"$CHOICE" - | wl-copy --type image/"$EXT"
+    cat $LOC/"$CHOICE" | wl-copy --type image/"$EXT"
 fi

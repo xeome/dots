@@ -9,16 +9,16 @@ SCAN_DIRS=("$HOME/Sync" "$HOME/.config" "$HOME/work")
 add_to_recent() {
     local dir="$1"
     [[ -z "$dir" || ! -d "$dir" ]] && return 1
-    if [[ -f "$RECENT_FILE" ]]; then
-        grep -q "^${dir}$" "$RECENT_FILE" && return 0
-    fi
+    grep -qxF -- "$dir" "$RECENT_FILE" 2>/dev/null && return 0
     echo "$dir" >> "$RECENT_FILE"
 }
 
 remove_from_recent() {
     local dir="$1"
     [[ -z "$dir" ]] && return 1
-    grep -v "^${dir}$" "$RECENT_FILE" > /tmp/sess_tmp && mv /tmp/sess_tmp "$RECENT_FILE"
+    # grep -v exits 1 when it removes the last line, so mv must not depend on it.
+    grep -vxF -- "$dir" "$RECENT_FILE" > "$RECENT_FILE.tmp"
+    mv "$RECENT_FILE.tmp" "$RECENT_FILE"
 }
 
 search_to_add() {

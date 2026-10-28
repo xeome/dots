@@ -1,7 +1,6 @@
 [Unit]
 Description=ByeDPI SOCKS proxy for equibop
 Documentation=https://github.com/hufrea/byedpi
-After=network-online.target
 
 [Service]
 # Options from the package's /etc/byedpi.conf, bound to loopback: ciadpi

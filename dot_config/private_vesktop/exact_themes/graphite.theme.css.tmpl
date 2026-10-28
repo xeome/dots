@@ -5,12 +5,10 @@
  * @version 1.0.0
  */
 
-/* Discord's design tokens only, no class selectors. Discord hashes its class
- * names and reshuffles them often; the tokens have outlived the 2025 visual
- * refresh. A renamed token falls back to Discord's own dark colour instead of
- * breaking the layout. The token list and the selector are the ones
- * midnight-discord (refact0r) maintains, so its changelog is the place to look
- * when Discord renames one.
+/* Discord's design tokens, not its class names, which Discord hashes and
+ * reshuffles. A renamed token falls back to Discord's own dark colour instead
+ * of breaking the layout. The token list and the selector follow
+ * midnight-discord (refact0r): its changelog says when Discord renames one.
  *
  * Dark only: Discord picks its theme itself rather than following the desktop.
  * Values are graphite-ui's tokens; check-palette.py holds them to Quickshell's
@@ -146,21 +144,18 @@ body,
     --radio-background-selected-hover: #f7f8f8;
     --radio-thumb-background-active: #0a0a0c;
     /* Discord's brand colour sits under white text (the new-messages bar, role
-     * checkmarks) as often as it is drawn on the ground (progress bars, active
-     * outlines). Graphite's light-mode dim works both ways: white on it is
-     * 5.7:1, and it is 3.4:1 on the ground. The text tone here made white text
-     * unreadable. */
+     * checkmarks) as often as on the ground (progress bars, active outlines).
+     * Graphite's light-mode dim reads both ways: white on it is 5.7:1, and it
+     * is 3.4:1 on the ground. */
     --brand-500: #62666d;
     --blurple-50: #62666d;
 }
 
-/* Discord paints the member list's scroller and every member row, the DM
- * list's scroller, and image placeholders with the same variable as the
- * surface they sit on. Under a `fixed` background that made Chromium repaint
- * the whole list on every scroll frame: in a 600-row mock, 102 of 400 frames
- * dropped against 1 with the rows transparent. Emptying the variable below
- * the surface that already paints it draws the same pixels once. Class
- * prefixes, not full names, because Discord changes the hash after the _. */
+/* Discord paints the member and DM list scrollers, every member row and image
+ * placeholders with the same variable as the surface under them. Under a
+ * `fixed` background, Chromium then repaints the whole list on every scroll
+ * frame and drops frames. Emptying the variable there draws the same pixels
+ * once. Class prefixes, because Discord changes the hash after the _. */
 [class*="membersWrap_"],
 [class*="privateChannels_"] > *,
 [class*="imagePlaceholder_"] {

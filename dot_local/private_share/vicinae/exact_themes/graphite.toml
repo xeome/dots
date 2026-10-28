@@ -5,11 +5,9 @@ description = "Graphite, same values as quickshell's Theme.qml"
 variant = "dark"
 inherits = "vicinae-dark"
 
-# Every colour is opaque. Graphite's translucent tokens (line, sel, hover) are
-# written pre-flattened over the ground they sit on: vicinae read the 8-digit
-# and { opacity } forms as solid, so a faint edge came out bright and the
-# selected row as a light bar under light text. check-palette.py recomputes the
-# flattened border and selection from Theme.qml.
+# Every colour is opaque, because vicinae draws the 8-digit and { opacity }
+# forms as solid. So graphite's translucent tokens (line, sel, hover) are
+# flattened over the ground; check-palette.py recomputes border and selection.
 
 [colors.core]
 background = "#0a0a0c"

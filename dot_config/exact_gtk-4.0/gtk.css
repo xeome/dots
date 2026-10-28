@@ -123,9 +123,9 @@
   --window-radius: 10px;
 }
 
-/* The accent is the text colour, and libadwaita's switch knob is white, so an
- * "on" switch was a white knob on a near-white track. The knob takes the ground
- * instead, like calendar's today. */
+/* The accent is the text colour and libadwaita's switch knob is white, so an
+ * "on" switch would be a white knob on a near-white track. The knob takes the
+ * ground instead, like calendar's today. */
 switch:checked > slider {
   background-color: @accent_fg_color;
 }
@@ -160,8 +160,8 @@ toast {
 
 /* Graphite's surface, dark mode only: a colourless glow from the window's
  * top-left corner under a grain (grain.py bakes one tile per ground). Split
- * views cover the window's corner with an opaque sidebar, so it carries the
- * same. The tiles sit beside this file: url() is relative to it. */
+ * views cover that corner with an opaque sidebar, so it carries the same.
+ * url() is relative to this file, so the tiles sit beside it. */
 @media (prefers-color-scheme: dark) {
   window.background,
   .sidebar-pane {
@@ -171,7 +171,7 @@ toast {
   }
 
   /* Views are graphite's inset panel: two glows, the ground's top-left and a
-   * fainter one top-right, as in the shell's Surface.qml. The old tree view paints
+   * fainter one top-right, as in the shell's Surface.qml. GtkTreeView paints
    * every cell again with the view's style plus a `cell` class, so cells drop
    * the images: each would draw its own glow from its own corner. */
   .view {

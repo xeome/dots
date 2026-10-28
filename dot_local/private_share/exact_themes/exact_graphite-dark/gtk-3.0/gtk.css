@@ -61,23 +61,22 @@
 @define-color graphite_lift rgba(255, 255, 255, 0.05);
 @define-color graphite_glow_panel_far rgba(255, 255, 255, 0.03);
 
-/* The accent is the text colour, and adw-gtk3's switch knob is white, so an
- * "on" switch was a white knob on a near-white track. The knob takes the
- * ground instead. gtk-4.0/gtk.css does the same for libadwaita. The headerbar
- * lines out-rank adw-gtk3's unfocused-window knob, which is grey on a
- * half-strength track; a disabled switch keeps adw-gtk3's faded knob. */
+/* The accent is the text colour and adw-gtk3's switch knob is white, so an
+ * "on" switch would be a white knob on a near-white track. The knob takes the
+ * ground instead, as in gtk-4.0/gtk.css. The headerbar selectors out-rank
+ * adw-gtk3's unfocused-window knob; a disabled switch keeps its faded knob. */
 switch:checked:not(:disabled) slider,
 headerbar switch:backdrop:checked:not(:disabled) > slider,
 .titlebar switch:backdrop:checked:not(:disabled) > slider {
   background-color: @accent_fg_color;
 }
 
-/* Thunar, and other GTK3 apps that draw their own rows, fill a selected row
- * with the solid theme_selected_bg_color (thunar-util.c), which adw-gtk3
- * aliases to the accent, and keep the row's text in the window's text colour.
- * The accent is the text colour, so the label vanished. These are the colour
- * adw-gtk3's own lists draw, a quarter of the accent over the view, made
- * opaque because those apps paint it without blending. */
+/* Thunar and other GTK3 apps that draw their own rows fill a selected row with
+ * theme_selected_bg_color (thunar-util.c), which adw-gtk3 aliases to the
+ * accent, under text in the window's text colour. The accent is the text
+ * colour, so the label would vanish. These use the colour adw-gtk3's own lists
+ * draw, a quarter of the accent over the view, opaque because those apps
+ * paint it without blending. */
 @define-color theme_selected_bg_color mix(@view_bg_color, @accent_bg_color, 0.25);
 @define-color theme_selected_fg_color @window_fg_color;
 @define-color theme_unfocused_selected_bg_color mix(@view_bg_color, @accent_bg_color, 0.25);

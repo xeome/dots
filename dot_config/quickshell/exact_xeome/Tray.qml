@@ -8,26 +8,18 @@ import Quickshell.Widgets
 Rectangle {
     id: root
 
-    // The open menu is a grabbing popup, so the compositor takes the pointer
-    // away from this surface and `hover` goes false. Without the second term
-    // the drawer would collapse, destroy the delegate, and take the menu down
-    // with it the instant it appeared.
+    // An open menu grabs the pointer and `hover` goes false; without menuOpen
+    // the drawer would collapse and destroy the delegate holding the menu.
     readonly property bool expanded: hover.containsMouse || menuOpen
     property bool menuOpen: false
 
-    // Bound eagerly: quickshell's service singletons only start syncing when
-    // something references them, and reading this first inside the Repeater
-    // would leave the drawer empty for seconds after the first open.
+    // Bound eagerly: the tray service only starts syncing once referenced, so
+    // a first read inside the Repeater leaves the drawer empty for seconds.
     readonly property var items: SystemTray.items.values
 
-    // Which icon the cursor is over, worked out from the drawer's own hover
-    // area rather than a hover area per icon.
-    //
-    // Anything that reports hover per icon — a MouseArea with hoverEnabled, a
-    // HoverHandler — competes with `hover` below for the same events. When it
-    // wins, the drawer collapses, which destroys the icon, which hands hover
-    // back to the drawer, which reopens: the whole thing oscillates under the
-    // cursor. Reading a coordinate off the one area that already exists can't.
+    // Which icon the cursor is over, read off the drawer's own hover area. A
+    // per-icon hover area or HoverHandler steals hover from it, and the drawer
+    // then collapses and reopens in a loop under the cursor.
     readonly property var hoveredItem: {
         if (!hover.containsMouse)
             return null;
@@ -37,12 +29,10 @@ Rectangle {
         return layout.childAt(p.x, p.y)?.modelData ?? null;
     }
 
-    // Ayatana indicators publish no Activate method at all — their whole UI is
-    // the menu — so a left click on one is a D-Bus call into nothing. They
-    // still report onlyMenu=false, so there is no flag to key off; waybar hid
-    // this by falling back to the menu whenever Activate returned an error.
-    // ponytail: an id list, since quickshell surfaces neither the flag nor the
-    // failed call. Append ids as they turn up (blueman, print-applet, …).
+    // Ayatana indicators have no Activate method but still report
+    // onlyMenu=false, so a left click on one does nothing.
+    // ponytail: an id list, since quickshell exposes neither a flag nor the
+    // failed call. Add ids as they turn up (blueman, print-applet).
     readonly property var menuOnlyIds: ["nm-applet"]
 
     implicitWidth: layout.implicitWidth + Theme.pad * 2
@@ -56,15 +46,13 @@ Rectangle {
 
     Behavior on implicitWidth {
         NumberAnimation {
-            duration: 325   // waybar's drawer transition-duration
+            duration: 325
             easing.type: Easing.OutCubic
         }
     }
 
-    // Covers the whole drawer so it stays open as you move onto the icons.
-    // Declared first so the per-icon areas below sit on top for clicks; those
-    // deliberately leave hoverEnabled off, or they'd steal the hover here and
-    // collapse the drawer the moment you reached for an icon.
+    // Covers the whole drawer so it stays open over the icons. Declared first
+    // so the per-icon click areas sit on top; those keep hoverEnabled off.
     MouseArea {
         id: hover
         anchors.fill: parent
@@ -94,7 +82,6 @@ Rectangle {
                 IconImage {
                     anchors.fill: parent
                     source: item.modelData.icon
-                    // waybar dimmed passive items via -gtk-icon-effect
                     opacity: item.modelData.status === Status.Passive ? 0.5 : 1
                 }
 
@@ -123,9 +110,8 @@ Rectangle {
         }
     }
 
-    // Bare 18px icons, with nothing to say which is which. Anchored to the
-    // whole module rather than the icon, the way every other tooltip in the bar
-    // is; only the text changes as you move along the row.
+    // Anchored to the whole module like every bar tooltip; only the text
+    // follows the icon under the cursor.
     Tooltip {
         anchorItem: root
         hovered: root.hoveredItem !== null

@@ -1,16 +1,12 @@
 import QtQuick
 import Quickshell
 
-// The bar's anchor. It used to earn that by being permanently filled white,
-// which spent the shell's one loud treatment on the module that never changes
-// state — and made a battery at 25% look identical to a working clock. It
-// anchors typographically now: larger, heavier, accent-coloured text on the
-// same resting surface as everything else. Click opens the calendar.
+// Time and date, the bar's anchor through larger, heavier text rather than a
+// fill. Left click opens the calendar; right click toggles seconds and a
+// numeric date.
 BarModule {
     id: root
 
-    // Right click swaps the glanceable form for the precise one — seconds and
-    // a full numeric date, for when you need to read a timestamp off the bar.
     property bool precise: false
 
     onClicked: button => {
@@ -37,8 +33,6 @@ BarModule {
         color: Theme.dim
     }
 
-    // A PopupWindow isn't an Item, so the RowLayout that BarModule's default
-    // property points at stores it without trying to lay it out.
     Calendar {
         id: cal
         anchorItem: root

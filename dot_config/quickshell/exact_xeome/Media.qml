@@ -1,22 +1,13 @@
 import Quickshell.Services.Mpris
 
-// waybar `mpris`: "{status_icon} {artist} - {title}", italic when paused,
-// hidden entirely when no player exists.
-//
-// waybar clipped artist and title to 20 chars each, so a track with both could
-// take 43 characters — wider than the whole network/audio/battery strip, on the
-// one module whose text changes every few minutes. The budget is on the joined
-// label now; the full text is a hover away and already in the menu.
-//
-// Left-click opens MediaMenu, the way Audio and Battery open theirs; the
-// one-click play/pause that used to be on the left button moves to the middle
-// one, since XF86AudioPlay is the bind that actually gets used for it.
+// The current track as "artist - title", dim and italic while paused, hidden
+// when no player exists. Left click opens MediaMenu; middle click toggles
+// playback.
 BarModule {
     id: root
 
     // A player picked in the menu wins, then whatever is playing, then whatever
-    // exists. The lookup falls through on its own once that player quits, so
-    // nothing has to notice and reset it.
+    // exists. Once the picked player quits the lookup falls through by itself.
     property int selectedId: -1
     readonly property var player: Mpris.players.values.find(p => p.uniqueId === root.selectedId) ?? Mpris.players.values.find(p => p.isPlaying) ?? Mpris.players.values[0] ?? null
 
@@ -25,8 +16,6 @@ BarModule {
     }
 
     visible: player !== null
-    // Suppressed while the menu is open: both anchor below this module, so
-    // otherwise they stack on top of each other.
     tooltipText: menu.visible || !player ? "" : `${player.identity}: ${player.trackArtist} - ${player.trackTitle}`
 
     onClicked: button => {
@@ -42,8 +31,8 @@ BarModule {
 
     BarText {
         readonly property var p: root.player
-        // Artist is empty often enough — podcasts, streams, browser tabs — that
-        // the separator has to earn its place rather than dangle off the front.
+        // Artist is often empty (podcasts, streams), so the separator only
+        // joins two non-empty parts.
         readonly property string label: root.clip([p?.trackArtist ?? "", p?.trackTitle ?? ""].filter(s => s !== "").join(" - "), 28)
 
         text: `${p?.isPlaying ? "󰐊" : "󰏤"} ${label}`
@@ -51,8 +40,6 @@ BarModule {
         font.italic: !(p?.isPlaying ?? false)
     }
 
-    // A PopupWindow isn't an Item, so the RowLayout that BarModule's default
-    // property points at stores it without trying to lay it out.
     MediaMenu {
         id: menu
         anchorItem: root

@@ -1,15 +1,14 @@
 import QtQuick
 
-// One grouped box, hairline-divided buttons, the focused one filled with the
-// selection white. Per-output, so each monitor shows only its own workspaces.
+// One box of hairline-divided workspace buttons, the focused one filled with
+// `sel`. Each monitor shows only its own workspaces.
 Rectangle {
     id: root
 
     required property var screen
 
-    // ponytail: re-filters when workspaces are created/destroyed, not when an
-    // existing one is dragged to another monitor. Swap to a Connections on the
-    // backend's moveworkspace event if that turns out to bite.
+    // ponytail: re-filters when workspaces are created or destroyed, not when
+    // one moves to another monitor. Listen for moveworkspace if that bites.
     readonly property var list: Compositor.workspaces.filter(w => w.monitor?.name === root.screen.name)
 
     implicitWidth: row.implicitWidth + 2
@@ -41,10 +40,8 @@ Rectangle {
                 height: row.height
                 color: active ? Theme.sel : ma.containsMouse ? Theme.hover : "transparent"
 
-                // The ends round themselves rather than being masked by the
-                // parent: Qt's `clip` is a rectangular scissor and would put
-                // the square corners straight back. One less than the parent's
-                // radius, to nest inside its 1px inset.
+                // The ends round themselves because `clip` is a rectangular
+                // scissor. One less than the box's radius, inside its 1px inset.
                 topLeftRadius: index === 0 ? Theme.radius - 1 : 0
                 bottomLeftRadius: index === 0 ? Theme.radius - 1 : 0
                 topRightRadius: index === root.list.length - 1 ? Theme.radius - 1 : 0
@@ -59,18 +56,15 @@ Rectangle {
                 BarText {
                     id: label
                     anchors.centerIn: parent
-                    // Workspace numbers are what you navigate by, so the
-                    // inactive ones stay text rather than dropping to the dim
-                    // tier labels use.
+                    // Inactive numbers stay `text`, not `dim`: you navigate
+                    // by them.
                     text: btn.modelData.name
                     color: btn.active ? Theme.bright : Theme.text
                     weight: btn.active ? 700 : Theme.weight
                 }
 
-                // Urgent pulses in the warn colour, not the accent — an urgent
-                // workspace is not the one you're on. Kept on a separate layer
-                // so it can't clobber the colour binding above the way an
-                // animation on `color` would.
+                // Urgent pulses on its own layer, so the animation cannot
+                // clobber the colour binding above.
                 Rectangle {
                     anchors.fill: parent
                     color: Theme.hot
@@ -98,7 +92,6 @@ Rectangle {
                     }
                 }
 
-                // A divider on every button but the last
                 Rectangle {
                     anchors {
                         right: parent.right

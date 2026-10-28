@@ -1,12 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 
-// 8px of bar in 18px of hit area: the visual weight the OSD uses, with a target
-// you can actually hit. Drag, click-to-seek and scroll all report a fraction;
-// whoever placed it decides what that means and whether it sticks.
-//
-// Fully rounded rather than the shell's 8px: at 8px tall a radius that isn't
-// half the height reads as a mistake rather than a choice.
+// A slider: an 8px bar in an 18px hit area. Drag, click and scroll report an
+// unclamped fraction through moved(); the owner decides whether `value` follows.
 Item {
     id: root
 

@@ -1,33 +1,30 @@
 import QtQuick
 import QtQuick.Layouts
 
-// The rounded box every right-side bar module sits in, including its 0.2s hover
-// transition. A graphite card: a nearly clear fill, a translucent line, a dark
-// ring outside it and a lit top edge (CardEdges).
+// The rounded box every right-side bar module sits in: a graphite card with a
+// nearly clear fill, a translucent line and CardEdges' ring and lit top edge.
 Rectangle {
     id: root
 
-    // The signal split. "" is the resting state; the two other tones each mean
-    // one thing shell-wide:
-    //   "sel"   you switched something on      (DND, idle inhibitor): the
-    //           same 7% white as a selected menu row, no colour
-    //   "warn"  something wants your attention (low battery): hot
+    // "" at rest, "sel" for something you switched on (DND, idle inhibitor),
+    // "warn" for something that wants your attention (low battery).
     property string tone: ""
-    // Stops a module resizing the whole row every time its text changes width —
-    // a muted Audio collapsing to one glyph, a Battery crossing 100%. Modules
-    // that only ever draw a single glyph can't jitter, so they set this to 0
-    // and come out square instead of padded out to a box two thirds empty.
+    // Keeps the row from resizing when a label changes width. Single-glyph
+    // modules set 0 so they come out square.
     property int minWidth: 60
-    // False for modules inside a connected strip, which is bordered and rounded
-    // as a group — otherwise every junction draws a seam.
+    // False inside a connected strip, which is bordered as a group.
     property bool bordered: true
+    // Modules blank this while their menu is open, since both hang below the
+    // module and would stack.
     property string tooltipText: ""
+    // A menu (a PopupWindow, not an Item) declared in a module lands here too,
+    // and the RowLayout stores it without laying it out.
     default property alias content: layout.data
 
     signal clicked(int button)
 
     readonly property bool hovered: ma.containsMouse
-    // Modules bind their labels/icons to this so a fill takes its text with it.
+    // Modules bind their labels to this so a fill takes its text with it.
     readonly property color fg: tone === "warn" ? Theme.ground : tone === "sel" ? Theme.bright : Theme.text
 
     // The menu's grabFocus already closed it on the click that lands here, so a
@@ -43,8 +40,7 @@ Rectangle {
     radius: bordered ? Theme.radius : 0
     color: tone === "warn" ? (hovered ? Qt.lighter(Theme.hot, 1.1) : Theme.hot) : tone === "sel" ? (hovered ? Theme.line : Theme.sel) : hovered ? Theme.hover : Theme.card
     border.width: bordered ? 1 : 0
-    // The hot fill draws its own edge; a line on top of it only muddies the one
-    // thing on the bar that is meant to be unambiguous.
+    // No line over the hot fill: it would muddy the bar's one loud signal.
     border.color: tone === "warn" ? "transparent" : Theme.line
 
     Behavior on color {

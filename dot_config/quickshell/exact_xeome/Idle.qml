@@ -1,19 +1,15 @@
 import QtQuick
 import Quickshell.Wayland
 
-// waybar `idle_inhibitor`, plus an expiry waybar didn't have.
-//
-// Left-click is still the plain toggle. Right-click picks a duration, after
-// which this switches itself back off — the thing you turn on for a film and
-// find still on two days later.
+// Idle inhibitor. Left click toggles it; right click picks a duration after
+// which it switches itself off.
 BarModule {
     id: root
 
     required property var window
 
-    // -1 off, 0 indefinite, otherwise the minutes originally asked for. Kept
-    // rather than derived from `until` so the menu can tick the row you picked
-    // instead of guessing it back out of a deadline.
+    // -1 off, 0 indefinite, otherwise the minutes picked. Stored rather than
+    // derived from `until` so the menu can mark the picked row.
     property int span: -1
     // Epoch ms the inhibit lapses at; 0 while off or indefinite.
     property double until: 0
@@ -23,21 +19,16 @@ BarModule {
 
     readonly property bool active: span >= 0
 
-    // Compact on purpose: this sits in a bar that already fights the window
-    // title for width, and "1h23" is legible at a glance where "1h 23m" costs
-    // another 30px. The tooltip spells it out.
-    //
-    // Not called `left()`: Item already has a `left` anchor line, and the
-    // property wins silently — every call site throws at runtime while the
-    // label just renders without its countdown.
+    // "1h23" rather than "1h 23m": the bar is short of width.
+    // Not called `left()`: Item's `left` anchor line shadows it and every call
+    // throws at runtime.
     function countdown(): string {
         const m = Math.ceil(Math.max(0, root.until - root.now) / 60000);
         return m >= 60 ? `${Math.floor(m / 60)}h${String(m % 60).padStart(2, "0")}` : `${m}m`;
     }
 
     function set(minutes: int): void {
-        // Re-picking what's already running means "stop" — the same gesture as
-        // clicking a connected bluetooth device in AudioMenu.
+        // Re-picking the running duration turns it off.
         if (minutes === root.span) {
             root.span = -1;
             root.until = 0;
@@ -65,8 +56,6 @@ BarModule {
         enabled: root.active
     }
 
-    // Only runs while something is actually counting down — an idle inhibitor
-    // that wakes the CPU every second to do nothing would be its own joke.
     Timer {
         running: root.until > 0
         interval: 1000
@@ -83,13 +72,11 @@ BarModule {
     BarText {
         text: `${root.active ? "󰅶" : "󰾪"}${root.until > 0 ? ` ${root.countdown()}` : ""}`
         color: root.fg
-        font.pixelSize: Theme.size + 3   // waybar: font-size 1.25em
+        font.pixelSize: Theme.size + 3
         // The only space here is the one before the countdown.
         font.wordSpacing: Theme.glyphGap
     }
 
-    // A PopupWindow isn't an Item, so the RowLayout that BarModule's default
-    // property points at stores it without trying to lay it out.
     IdleMenu {
         id: menu
 

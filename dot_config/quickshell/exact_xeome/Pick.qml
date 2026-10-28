@@ -1,11 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
 
-// A row you press to choose something. The thing you're on and the things you
-// could switch to are the same control, so they're the same component —
-// stacked, they read the way a select reads when it drops open.
-//
-// AudioMenu picks sinks and sources with it; MediaMenu picks players.
+// A menu row you press to choose something; the current choice and the
+// alternatives are the same control, so a stack of them reads like an open
+// select.
 Rectangle {
     id: root
 
@@ -58,8 +56,7 @@ Rectangle {
 
         anchors.fill: parent
         hoverEnabled: true
-        // One option is still worth showing, but nothing about it should light
-        // up under the cursor — there's nowhere to go.
+        // Off when there is nothing else to pick, so the row shows no hover.
         enabled: root.selectable
         onClicked: root.clicked()
     }

@@ -4,23 +4,16 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// The CPU's ceiling as a percentage of max turbo, across every core. The power
-// menu's slider for keeping the machine quiet — lower ceiling, less heat,
-// slower fan.
+// The CPU's performance ceiling as a percentage of max turbo, for the power
+// menu's slider. intel_pstate keeps it in max_perf_pct; other drivers
+// (amd-pstate) in every CPU's scaling_max_freq, in kHz of cpuinfo_max_freq.
 //
-// Where the ceiling lives depends on the driver:
-//   - intel_pstate: max_perf_pct, already a percentage, one file.
-//   - anything else (amd-pstate on the desktop): every CPU's scaling_max_freq,
-//     in kHz, so the percentage is converted against cpuinfo_max_freq.
+// The only writer of the cap: the TLP drop-in leaves CPU_MAX_PERF_* and
+// CPU_SCALING_MAX_FREQ_* unset, so boot starts at 100. pkg/dots-power's
+// tmpfiles lines give wheel write access, so a shell redirect writes it.
 //
-// This is the cap's only writer. The TLP drop-in leaves CPU_MAX_PERF_* and
-// CPU_SCALING_MAX_FREQ_* unset, so a profile click or a resume never moves it,
-// and boot starts at the kernel's 100. The files are root-owned; the tmpfiles
-// lines from pkg/dots-power give wheel write on them, so the write is a plain
-// shell redirect.
-//
-// ponytail: cpu0 stands in for every core when reading. True on both machines
-// today; a CPU with per-core max frequencies would show cpu0's cap only.
+// ponytail: reads cpu0 for every core; a CPU with per-core max frequencies
+// would show cpu0's cap only.
 Singleton {
     id: root
 
@@ -80,9 +73,7 @@ Singleton {
         path: root.full === 0 ? "" : root.path
         watchChanges: true
         onFileChanged: reload()
-        // Skipped while a write is pending: the reload that follows the
-        // previous write would otherwise overwrite the newer drag, and the
-        // pending write would then send the stale value.
+        // Skipped while a write is pending, as in Backlight.
         onLoaded: if (!debounce.running)
             root.pct = Math.round((parseInt(text()) || 0) * 100 / root.full)
     }
@@ -102,8 +93,7 @@ Singleton {
     Process {
         id: setter
 
-        // A refused write raises no inotify event, so without this the slider
-        // would keep showing a value the kernel never took.
+        // A refused write raises no inotify event.
         onExited: reader.reload()
     }
 }

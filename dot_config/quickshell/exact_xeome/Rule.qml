@@ -1,8 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 
-// The hairline every menu divides itself with. Was the same four lines pasted
-// into five of them. Graphite's translucent line, the same one panel edges use.
+// The hairline that divides a menu's sections.
 Rectangle {
     Layout.fillWidth: true
     implicitHeight: 1

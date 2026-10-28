@@ -2,14 +2,9 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
 
-// waybar `pulseaudio` plus the audio-in half of `privacy`, merged into one
-// module — the recording indicator was its own box until it grew a menu worth
-// sharing. While something holds the mic the mic glyph turns warm: a live
-// microphone is a status, and status is the one thing graphite spends colour
-// on. The module's fill stays at rest; it is not asking you to act.
-//
-// Left-click opens AudioMenu; right-click still goes to pavucontrol, which is
-// the escape hatch for per-app volume the menu deliberately doesn't do.
+// Output volume, plus a warm mic glyph while something records. Left click
+// opens AudioMenu; right click opens pavucontrol for the per-app volume the
+// menu does not do.
 BarModule {
     id: root
 
@@ -17,21 +12,15 @@ BarModule {
     readonly property int volume: Math.round((sink?.audio?.volume ?? 0) * 100)
     readonly property bool muted: sink?.audio?.muted ?? false
 
-    // Read off the node name rather than `device.api`, which would be the more
-    // precise test but lives in `properties` and so only exists for nodes bound
-    // through a tracker. pipewire's bluez5 module names every sink it creates
-    // `bluez_output.<mac>.<profile>`, and the name is free on any node.
+    // The node name, not `device.api`: `properties` is only filled for nodes
+    // bound through a tracker, and bluez5 names every sink
+    // `bluez_output.<mac>.<profile>`.
     readonly property bool overBluetooth: sink?.name.startsWith("bluez_output.") ?? false
 
-    // PwNode.properties is empty unless the node is bound through a
-    // PwObjectTracker; `type` and `name` are available on every node for free.
-    // Filter-chain based noise suppression (e.g. rnnoise) keeps an internal
-    // "capture.*" stream open at all times to feed the filter — that's not
-    // someone recording, so it's excluded rather than showing this lit 24/7.
+    // A noise-suppression filter chain (rnnoise) holds a `capture.*` stream
+    // open permanently; that is not someone recording.
     readonly property var recorders: Pipewire.nodes.values.filter(n => n.type === PwNodeType.AudioInStream && !n.name.startsWith("capture."))
 
-    // Suppressed while the menu is open: both anchor below this module, so
-    // otherwise they stack on top of each other.
     tooltipText: menu.visible ? "" : [`Volume: ${volume}%`].concat(recorders.map(n => `󰍬 ${n.description || n.name}`)).join("\n")
 
     onClicked: button => {
@@ -54,9 +43,8 @@ BarModule {
     }
 
     BarText {
-        // Over bluetooth the headset glyph replaces the volume ramp rather than
-        // riding alongside it — which speaker you're on is worth more than which
-        // third of the range you're in, and the bar has no width for both.
+        // Over bluetooth the headset glyph replaces the volume ramp; the bar
+        // has no width for both.
         text: root.muted ? "󰖁" : `${root.overBluetooth ? "󰂰" : root.volume > 66 ? "󰕾" : root.volume > 33 ? "󰖀" : "󰕿"} ${root.volume}%`
         color: root.muted ? Theme.dim : root.fg
         // md-volume_medium/_low are drawn smaller than neighboring glyphs
@@ -66,8 +54,6 @@ BarModule {
         font.wordSpacing: Theme.glyphGap
     }
 
-    // A PopupWindow isn't an Item, so the RowLayout that BarModule's default
-    // property points at stores it without trying to lay it out.
     AudioMenu {
         id: menu
         anchorItem: root

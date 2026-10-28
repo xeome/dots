@@ -1,8 +1,7 @@
 import QtQuick
 
-// Not a waybar module. swaync was toggled by a keybind with nothing on screen;
-// the centre needs something to hang off, and DND needs somewhere to be
-// visible. Left click toggles the centre, right click toggles DND.
+// The notification centre's button and the do-not-disturb indicator. Left
+// click toggles the centre, right click toggles DND.
 BarModule {
     id: root
 
@@ -29,9 +28,8 @@ BarModule {
         screen: root.screen
     }
 
-    // `qs ipc call notifs toggle` opens the centre on whichever monitor has
-    // focus. Kept imperative so PopupWindow.grabFocus can close it without
-    // fighting a binding on `visible`.
+    // `qs ipc call notifs toggle` toggles the centre on the focused monitor.
+    // Imperative so grabFocus can close it without fighting a binding.
     Connections {
         target: Notifs
 

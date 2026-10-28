@@ -4,14 +4,12 @@ import QtQuick.Shapes
 // Every panel in the shell: the bar, menus, tooltips, the OSD, notifications.
 // Children go on top of it like on a Rectangle.
 //
-// Painted outside in: a dark ring as the outermost pixel, then the fill with a
-// colourless corner glow and baked grain, then a translucent light line one
-// pixel in, then a highlight along the top. The ring sits inside the item
-// rather than around it because hosts fill their window, and the window edge
-// would clip anything drawn outside.
+// Painted outside in: a dark ring, the fill with corner glow and grain, a
+// translucent line one pixel in, a highlight along the top. The ring sits
+// inside the item because hosts fill their window, which clips anything outside.
 //
-// The fill is a Shape and not a Rectangle because a Rectangle's gradient is
-// linear only. CurveRenderer, because the default renderer steps the corners.
+// A Shape because a Rectangle's gradient is linear only; CurveRenderer because
+// the default renderer steps the corners.
 Item {
     id: root
 
@@ -134,8 +132,7 @@ Item {
         border.color: Theme.line
     }
 
-    // An inset 1px highlight under the top line, like a card's top edge
-    // catching light. A rounded ring cut to its top part, so it bends with the
+    // A rounded ring cut to its top part, so the highlight bends with the
     // corners and stops before the sides.
     Item {
         visible: root.edged && root.lifted

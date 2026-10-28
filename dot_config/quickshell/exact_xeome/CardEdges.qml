@@ -1,12 +1,11 @@
 import QtQuick
 
 // The rest of a graphite card's edge, for a Rectangle that already draws its
-// fill and a 1px Theme.line border: a dark ring one pixel outside it, and a
-// highlight along the inside of its top edge. The ring is what keeps the
-// translucent line reading as an edge over a ground as dark as the line is faint.
+// fill and a 1px Theme.line border: a dark ring one pixel outside it and a
+// highlight inside its top edge.
 //
-// Only for things sitting inside the bar, where there is room outside them.
-// A whole panel draws its ring inside itself instead (Surface.qml).
+// Only for things inside the bar, where there is room outside them. A panel
+// draws its ring inside itself instead (Surface.qml).
 Item {
     id: root
 

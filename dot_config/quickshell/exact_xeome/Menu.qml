@@ -2,20 +2,15 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 
-// The chrome every bar popup shares: hung under its module, opaque panel,
-// hairline border, one radius, one width, one padding. Children go straight
-// into the column — a menu is its rows and nothing else.
-//
-// A menu that needs to do more on open or close declares its own
-// `onVisibleChanged` and both run; a handler here isn't replaced by one in a
-// derived menu.
+// The chrome a bar popup shares: hung under its module on a Surface, one
+// width and padding. Children go straight into the column. A derived menu's
+// own onVisibleChanged runs alongside the one here.
 PopupWindow {
     id: root
 
     required property Item anchorItem
-    // Read by the module that owns this menu: grabFocus dismisses on any outside
-    // click — including the click on the module that meant "close" — so that
-    // click must not immediately reopen what it just closed.
+    // Read by BarModule.openMenu: grabFocus dismisses on any outside click,
+    // including the module click that meant "close".
     property double closedAt: 0
 
     default property alias content: body.data

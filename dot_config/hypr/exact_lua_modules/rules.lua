@@ -2,9 +2,10 @@
 -- SHARED LAYER RULES
 -- =============================================================================
 
--- The xeome shell draws every surface opaque, so it needs no blur. Only the
--- translucent zinc theme is blurred, through namespaces of its own, so blur
--- never runs behind the opaque bar.
+-- The xeome shell draws every surface opaque (its hairlines rely on a known
+-- surface lightness), so it needs no blur. Only the translucent zinc theme is
+-- blurred, through namespaces of its own, so blur never runs behind the
+-- opaque bar.
 
 -- Shot shows a frozen frame of the screen; fading that in reads as a flicker.
 hl.layer_rule({

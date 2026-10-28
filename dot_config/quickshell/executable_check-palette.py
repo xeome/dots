@@ -118,7 +118,7 @@ for mode in ("light", "dark"):
 
 # Every source file that hardcodes a palette value, and what it must say.
 # Matched as plain text with runs of whitespace collapsed rather than parsed:
-# the files are in six syntaxes.
+# the files are in six syntaxes. Collapsed so alignment padding is not drift.
 if complete:
     dark, light = tokens("dark"), tokens("light")
     D = {k: hexrgb(v) for k, v in dark.items()}
@@ -163,8 +163,8 @@ if complete:
             f"--text-default: {D['text']};",
             f"--text-muted: {D['dim']};",
         ),
-        # The twin check below holds gtk-4.0/gtk.css to these GTK3 files define
-        # by define. Light mode is flat, so it has no glow.
+        # The twin check below holds gtk-4.0/gtk.css to these, define by define,
+        # so pinning the GTK3 files pins both. Light mode is flat: no glow.
         "dot_local/private_share/exact_themes/exact_graphite-dark/gtk-3.0/gtk.css": (
             f"@define-color window_bg_color {D['ground']};",
             f"@define-color view_bg_color {D['panel']};",

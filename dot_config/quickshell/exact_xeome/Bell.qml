@@ -29,7 +29,8 @@ BarModule {
     }
 
     // `qs ipc call notifs toggle` toggles the centre on the focused monitor.
-    // Imperative so grabFocus can close it without fighting a binding.
+    // Imperative so the centre's click-outside MouseArea can close it without
+    // fighting a binding.
     Connections {
         target: Notifs
 

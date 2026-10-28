@@ -19,8 +19,8 @@
         "bar": {
             "char": { "elapsed": "━", "total": "─" },
             "width": 12,
-            // The unfilled run is dim so it does not outshout the filled one.
             "border": { "left": "", "right": "" },
+            // The unfilled run is dim so it does not outshout the filled one.
             "color": { "total": "light_black" }
         },
         // type 2 = bar only, no number.

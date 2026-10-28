@@ -1,7 +1,8 @@
 #!/bin/sh
 # Kvantum's theme, in step with the GTK colour scheme: graphite (light) or
 # graphiteDark, both built by kvantum.py. A modify_ script because theme-toggle
-# rewrites this file, so its contents depend on gsettings at apply time.
+# rewrites this file. It ignores the current contents: Kvantum keeps nothing
+# else here.
 #
 # Anything but an explicit light scheme is dark, as in the set-theme script,
 # since a fresh profile reports 'default'.

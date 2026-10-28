@@ -24,6 +24,7 @@ gsettings set org.gnome.desktop.interface icon-theme "ZorinGrey-${mode^}"
 # qtct-conf reads the gsettings just written, so it has to run after them. Qt
 # apps read these files at start, so running ones switch on their next start.
 for v in 5 6; do ~/.local/bin/qtct-conf "$v" >~/.config/qt${v}ct/qt${v}ct.conf; done
+# Same output as dot_config/Kvantum/modify_kvantum.kvconfig.
 if [[ "$mode" == light ]]; then kvantum=graphite; else kvantum=graphiteDark; fi
 printf '[General]\ntheme=%s\n' "$kvantum" >~/.config/Kvantum/kvantum.kvconfig
 

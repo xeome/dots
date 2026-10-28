@@ -1,6 +1,7 @@
 #!/bin/bash
 # Imports the git signing key unless the keyring has it. Piped from age to gpg
-# because age -o writes its output 0644.
+# because age -o writes its output 0644, which leaves the private key
+# world-readable.
 set -euo pipefail
 # Assigned first so set -e stops on a missing key: an empty one would match
 # any secret key and skip the import.

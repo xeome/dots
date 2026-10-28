@@ -17,7 +17,8 @@ general {
 # =============================================================================
 # BACKGROUND
 # =============================================================================
-# Baked by quickshell/grain.py, because hyprlock can't draw a gradient.
+# Baked by quickshell/grain.py, because hyprlock can't draw a gradient. No
+# screenshot or blur: the lock screen is its own surface.
 background {
     path = ~/.config/hypr/graphite-lock.png
     color = rgba(10, 10, 12, 1)
@@ -190,6 +191,7 @@ input-field {
     rounding = 10
     outline_thickness = 1
     outer_color = rgba(255, 255, 255, 0.08)
+    # Colour only for meaning: fail and caps lock. Checking just brightens.
     check_color = rgba(255, 255, 255, 0.5)
     fail_color = rgba(226, 113, 90, 1)
     capslock_color = rgba(229, 174, 82, 1)

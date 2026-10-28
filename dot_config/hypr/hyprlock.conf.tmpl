@@ -29,13 +29,17 @@ background {
 # =============================================================================
 # Widgets on every monitor anchor to the centre, so the stack keeps its spacing
 # at any height. Offsets are tuned at 1080p.
+#
+# The clock is the desk's Doto (Desk.qml's Num) with round dots. hyprlock hands
+# font_family to pango_font_description_from_string, which reads the axes
+# after the @.
 
 # Hours
 label {
     text = cmd[update:1000] echo "$(date +'%H')"
     color = rgba(247, 248, 248, 1)
     font_size = 150
-    font_family = Inter SemiBold
+    font_family = Doto @ROND=100,wght=900
     position = 0, 168
     halign = center
     valign = center
@@ -46,7 +50,7 @@ label {
     text = cmd[update:1000] echo "$(date +'%M')"
     color = rgba(247, 248, 248, 1)
     font_size = 150
-    font_family = Inter SemiBold
+    font_family = Doto @ROND=100,wght=900
     position = 0, -2
     halign = center
     valign = center

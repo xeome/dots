@@ -34,3 +34,6 @@
 # vicinae reads settings.json since v0.17.
 .config/vicinae/vicinae.json
 .config/ghostty/graphite.css
+# No callers: water.py was a waybar module, and libinput-gestures is not installed.
+.local/bin/water.py
+.config/libinput-gestures.conf

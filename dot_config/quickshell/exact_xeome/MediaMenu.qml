@@ -1,29 +1,16 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import Quickshell.Services.Mpris
 
-// The media module's menu, hung off it the way AudioMenu hangs off Audio: art,
-// a seek bar, transport buttons, and a player picker when more than one thing
-// is playing.
-//
-// The picker is collapsed until pressed and hidden entirely with one player,
-// because the common case is a single browser tab and the menu shouldn't open
-// three rows deep to say so.
-PopupWindow {
+// Media's menu: art, a seek bar, transport buttons, and a collapsed player
+// picker that only appears with more than one player.
+Menu {
     id: root
 
-    required property Item anchorItem
-    // Chosen by Media, which owns the selection so the bar label agrees with
-    // whatever this menu is showing.
+    // Chosen by Media, so the bar label and this menu show the same player.
     required property var player
 
     signal picked(int id)
-
-    // grabFocus dismisses on any outside click — including the click on the
-    // module that meant "close". Media reads this so that click doesn't
-    // immediately reopen what it just closed.
-    property double closedAt: 0
 
     readonly property var players: Mpris.players.values
     readonly property real length: root.player?.lengthSupported ? root.player.length : 0
@@ -35,29 +22,12 @@ PopupWindow {
         return `${Math.floor(s / 60)}:${`0${s % 60}`.slice(-2)}`;
     }
 
-    anchor.item: anchorItem
-    anchor.edges: Edges.Bottom
-    anchor.gravity: Edges.Bottom
-    anchor.margins.top: 6
+    // Reopening shouldn't reopen a picker left open.
+    onVisibleChanged: if (!visible)
+        list.expanded = false
 
-    implicitWidth: 324
-    implicitHeight: body.implicitHeight + 24
-    color: "transparent"
-    visible: false
-    grabFocus: true
-
-    onVisibleChanged: {
-        if (root.visible)
-            return;
-
-        root.closedAt = Date.now();
-        // Reopening shouldn't reopen whatever picker was left open.
-        list.expanded = false;
-    }
-
-    // position doesn't update on its own — players only report it when it jumps
-    // — so the bar has to ask. Only while open and only while playing: a paused
-    // track's position isn't moving, and a closed menu isn't showing it.
+    // Players only report position when it jumps, so ask once a second while
+    // it is both moving and on screen.
     Timer {
         interval: 1000
         repeat: true
@@ -78,8 +48,7 @@ PopupWindow {
         color: btnMa.containsMouse ? Theme.hover : "transparent"
         border.width: 1
         border.color: Theme.line
-        // `enabled` is inherited by the MouseArea below, so a player that can't
-        // skip gets a dead button rather than one that lies.
+        // The MouseArea inherits `enabled`, so a disabled button is dead too.
         opacity: btn.enabled ? 1 : 0.3
 
         Behavior on color {
@@ -103,169 +72,150 @@ PopupWindow {
         }
     }
 
-    Surface {
-        anchors.fill: parent
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: 12
+
+        Image {
+            id: art
+
+            // Collapses when the player publishes no art.
+            Layout.preferredWidth: art.status === Image.Ready ? 64 : 0
+            Layout.preferredHeight: 64
+            visible: art.status === Image.Ready
+            source: root.player?.trackArtUrl ?? ""
+            fillMode: Image.PreserveAspectCrop
+            // Decode at 2x the drawn size, not the art's full resolution.
+            sourceSize.width: 128
+            sourceSize.height: 128
+            asynchronous: true
+        }
 
         ColumnLayout {
-            id: body
+            Layout.fillWidth: true
+            spacing: 1
 
-            anchors {
-                left: parent.left
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-                leftMargin: 12
-                rightMargin: 12
-            }
-            spacing: 8
-
-            RowLayout {
+            BarText {
                 Layout.fillWidth: true
-                spacing: 12
-
-                Image {
-                    id: art
-
-                    // Collapses rather than reserving a grey hole: plenty of
-                    // players publish no art at all.
-                    Layout.preferredWidth: art.status === Image.Ready ? 64 : 0
-                    Layout.preferredHeight: 64
-                    visible: art.status === Image.Ready
-                    source: root.player?.trackArtUrl ?? ""
-                    fillMode: Image.PreserveAspectCrop
-                    // Album art is routinely 1000px square and this is 64.
-                    sourceSize.width: 128
-                    sourceSize.height: 128
-                    asynchronous: true
-                }
-
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 1
-
-                    BarText {
-                        Layout.fillWidth: true
-                        text: root.player?.trackTitle ?? ""
-                        weight: 650
-                        color: Theme.bright
-                        elide: Text.ElideRight
-                    }
-
-                    BarText {
-                        Layout.fillWidth: true
-                        visible: text !== ""
-                        text: root.player?.trackArtist ?? ""
-                        elide: Text.ElideRight
-                        font.pixelSize: Theme.size - 2
-                        color: Theme.dim
-                    }
-
-                    BarText {
-                        Layout.fillWidth: true
-                        visible: text !== ""
-                        text: root.player?.trackAlbum ?? ""
-                        elide: Text.ElideRight
-                        font.pixelSize: Theme.size - 3
-                        color: Theme.dim
-                    }
-                }
+                text: root.player?.trackTitle ?? ""
+                weight: 650
+                color: Theme.bright
+                elide: Text.ElideRight
             }
 
-            ColumnLayout {
+            BarText {
                 Layout.fillWidth: true
-                Layout.topMargin: 2
-                spacing: 0
-                visible: root.seekable
-
-                Track {
-                    value: root.length > 0 ? (root.player?.position ?? 0) / root.length : 0
-                    // Players that report a position but refuse to take one
-                    // still get the bar, as a progress readout.
-                    onMoved: fraction => {
-                        if (root.player?.canSeek)
-                            root.player.position = Math.max(0, Math.min(1, fraction)) * root.length;
-                    }
-                }
-
-                RowLayout {
-                    Layout.fillWidth: true
-
-                    BarText {
-                        Layout.fillWidth: true
-                        text: root.mmss(root.player?.position ?? 0)
-                        font.pixelSize: Theme.size - 4
-                        color: Theme.dim
-                    }
-
-                    BarText {
-                        text: root.mmss(root.length)
-                        font.pixelSize: Theme.size - 4
-                        color: Theme.dim
-                    }
-                }
+                visible: text !== ""
+                text: root.player?.trackArtist ?? ""
+                elide: Text.ElideRight
+                font.pixelSize: Theme.size - 2
+                color: Theme.dim
             }
 
-            RowLayout {
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 6
-
-                Button {
-                    glyph: "󰒮"
-                    enabled: root.player?.canGoPrevious ?? false
-                    onActivated: root.player.previous()
-                }
-
-                Button {
-                    glyph: root.player?.isPlaying ? "󰏤" : "󰐊"
-                    enabled: root.player?.canTogglePlaying ?? false
-                    onActivated: root.player.togglePlaying()
-                }
-
-                Button {
-                    glyph: "󰒭"
-                    enabled: root.player?.canGoNext ?? false
-                    onActivated: root.player.next()
-                }
-            }
-
-            Rule {
-                Layout.topMargin: 2
-                visible: list.visible
-            }
-
-            ColumnLayout {
-                id: list
-
-                property bool expanded: false
-
+            BarText {
                 Layout.fillWidth: true
-                spacing: 2
-                visible: root.players.length > 1
+                visible: text !== ""
+                text: root.player?.trackAlbum ?? ""
+                elide: Text.ElideRight
+                font.pixelSize: Theme.size - 3
+                color: Theme.dim
+            }
+        }
+    }
 
-                Pick {
-                    label: root.player?.identity ?? ""
-                    suffix: list.expanded ? "󰅃" : "󰅀"
-                    onClicked: list.expanded = !list.expanded
-                }
+    ColumnLayout {
+        Layout.fillWidth: true
+        Layout.topMargin: 2
+        spacing: 0
+        visible: root.seekable
 
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 2
-                    visible: list.expanded
+        Track {
+            value: root.length > 0 ? (root.player?.position ?? 0) / root.length : 0
+            // A player that cannot seek keeps the bar as a readout.
+            onMoved: fraction => {
+                if (root.player?.canSeek)
+                    root.player.position = Math.max(0, Math.min(1, fraction)) * root.length;
+            }
+        }
 
-                    Repeater {
-                        model: root.players
+        RowLayout {
+            Layout.fillWidth: true
 
-                        delegate: Pick {
-                            required property var modelData
+            BarText {
+                Layout.fillWidth: true
+                text: root.mmss(root.player?.position ?? 0)
+                font.pixelSize: Theme.size - 4
+                color: Theme.dim
+            }
 
-                            label: modelData.identity
-                            suffix: modelData.isPlaying ? "󰐊" : ""
-                            current: root.player?.uniqueId === modelData.uniqueId
-                            onClicked: {
-                                root.picked(modelData.uniqueId);
-                                list.expanded = false;
-                            }
-                        }
+            BarText {
+                text: root.mmss(root.length)
+                font.pixelSize: Theme.size - 4
+                color: Theme.dim
+            }
+        }
+    }
+
+    RowLayout {
+        Layout.alignment: Qt.AlignHCenter
+        spacing: 6
+
+        Button {
+            glyph: "󰒮"
+            enabled: root.player?.canGoPrevious ?? false
+            onActivated: root.player.previous()
+        }
+
+        Button {
+            glyph: root.player?.isPlaying ? "󰏤" : "󰐊"
+            enabled: root.player?.canTogglePlaying ?? false
+            onActivated: root.player.togglePlaying()
+        }
+
+        Button {
+            glyph: "󰒭"
+            enabled: root.player?.canGoNext ?? false
+            onActivated: root.player.next()
+        }
+    }
+
+    Rule {
+        Layout.topMargin: 2
+        visible: list.visible
+    }
+
+    ColumnLayout {
+        id: list
+
+        property bool expanded: false
+
+        Layout.fillWidth: true
+        spacing: 2
+        visible: root.players.length > 1
+
+        Pick {
+            label: root.player?.identity ?? ""
+            suffix: list.expanded ? "󰅃" : "󰅀"
+            onClicked: list.expanded = !list.expanded
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 2
+            visible: list.expanded
+
+            Repeater {
+                model: root.players
+
+                delegate: Pick {
+                    required property var modelData
+
+                    label: modelData.identity
+                    suffix: modelData.isPlaying ? "󰐊" : ""
+                    current: root.player?.uniqueId === modelData.uniqueId
+                    onClicked: {
+                        root.picked(modelData.uniqueId);
+                        list.expanded = false;
                     }
                 }
             }

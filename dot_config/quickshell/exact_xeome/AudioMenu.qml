@@ -1,28 +1,16 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Services.Pipewire
 
-// The audio module's menu, hung off it the way Power hangs off Battery:
-// default sink and source, each with a mute toggle, a drag/scroll bar and a
-// device picker, plus the list of whoever is holding the mic open.
-//
-// The picker is collapsed until the device button is pressed, because the
-// common case is "set the volume" and a machine with three sinks would
-// otherwise open six rows deep. Per-app volume still isn't here — right-clicking
-// the module lands in pavucontrol, which already does it.
-PopupWindow {
+// Audio's menu: default sink and source, each with a mute toggle, a volume bar
+// and a collapsed device picker, then Bluetooth headsets and the apps holding
+// the mic. Per-app volume is pavucontrol's, on the module's right click.
+Menu {
     id: root
 
-    required property Item anchorItem
-    // Recording streams, filtered by Audio — one definition, two consumers.
+    // Recording streams, filtered by Audio.
     required property var recorders
-
-    // grabFocus dismisses on any outside click — including the click on the
-    // module that meant "close". Audio reads this so that click doesn't
-    // immediately reopen what it just closed.
-    property double closedAt: 0
 
     readonly property var sink: Pipewire.defaultAudioSink
     readonly property var source: Pipewire.defaultAudioSource
@@ -33,12 +21,9 @@ PopupWindow {
     readonly property var sources: Pipewire.nodes.values.filter(n => !n.isStream && (n.type & PwNodeType.AudioSource) === PwNodeType.AudioSource)
 
     readonly property var adapter: Bluetooth.defaultAdapter
-    // Paired audio devices only. Bluez classifies by icon — "audio-headset",
-    // "audio-card" — which is what keeps the mouse out of the audio menu, and
-    // the mouse battery out of the bar where it used to sit reading 100% at
-    // nobody. Unpaired devices need a scan and a pairing flow that live in
-    // blueman; this list is the ones you already own.
-    readonly property var headsets: (root.adapter ? Bluetooth.devices.values.filter(d => d.paired && d.icon.startsWith("audio")) : []).slice().sort((a, b) => b.connected - a.connected)
+    // Paired audio devices, connected first. Bluez classifies by icon
+    // ("audio-headset", "audio-card"); pairing new ones is blueman's job.
+    readonly property var headsets: root.adapter ? Bluetooth.devices.values.filter(d => d.paired && d.icon.startsWith("audio")).sort((a, b) => b.connected - a.connected) : []
 
     function btLabel(d: var): string {
         return d.deviceName || d.name || d.address;
@@ -52,47 +37,25 @@ PopupWindow {
         return d.connected ? "connected" : "";
     }
 
-    function clamp(v: real): real {
-        return Math.max(0, Math.min(1, v));
-    }
-
-    // application.name is what pavucontrol shows ("Firefox", "OBS Studio");
-    // the node description is a fallback for streams that don't set it.
+    // application.name is what pavucontrol shows; not every stream sets it.
     function appName(n: var): string {
         return n.properties["application.name"] || n.description || n.name;
     }
 
-    anchor.item: anchorItem
-    anchor.edges: Edges.Bottom
-    anchor.gravity: Edges.Bottom
-    anchor.margins.top: 6
-
-    implicitWidth: 324
-    implicitHeight: body.implicitHeight + 24
-    color: "transparent"
-    visible: false
-    grabFocus: true
-
-    onVisibleChanged: {
-        if (root.visible)
-            return;
-
-        root.closedAt = Date.now();
-        // Reopening the menu shouldn't reopen whatever picker was left open.
+    // Reopening shouldn't reopen a picker left open.
+    onVisibleChanged: if (!visible) {
         out.expanded = false;
         mic.expanded = false;
     }
 
-    // Volume and muted are unreadable until the node is bound, and
-    // `properties` — where the recorder app names live — stays empty without
-    // this. The picker rows need only `description`, which every node carries.
+    // Volume, mute and `properties` (the recorders' app names) stay empty until
+    // a node is bound. The picker rows need only `description`, which is free.
     PwObjectTracker {
         objects: [root.sink, root.source].concat(root.recorders)
     }
 
-    // Output and input are the same widgets, so they're one component: click
-    // the glyph to mute, drag or scroll the bar to set volume, press the device
-    // button to switch to another one.
+    // One output or input: the glyph mutes, the bar sets volume, the picker
+    // switches device.
     component Device: ColumnLayout {
         id: dev
 
@@ -144,13 +107,12 @@ PopupWindow {
 
         Track {
             value: dev.muted ? 0 : dev.volume
-            // Touching the bar un-mutes: dragging a dead slider and hearing
-            // nothing is the worse surprise.
+            // Touching the bar un-mutes, so a drag is always heard.
             onMoved: fraction => {
                 if (!dev.audio)
                     return;
                 dev.audio.muted = false;
-                dev.audio.volume = root.clamp(fraction);
+                dev.audio.volume = Math.max(0, Math.min(1, fraction));
             }
         }
 
@@ -174,8 +136,7 @@ PopupWindow {
                     required property var modelData
 
                     label: modelData.description || modelData.name
-                    // By id, not by identity: the default is a separate lookup
-                    // from the node list and doesn't have to be the same wrapper.
+                    // By id: the default node need not be the same wrapper object.
                     current: dev.node?.id === modelData.id
                     onClicked: {
                         dev.picked(modelData);
@@ -186,114 +147,92 @@ PopupWindow {
         }
     }
 
-    Surface {
-        anchors.fill: parent
+    Device {
+        id: out
 
-        ColumnLayout {
-            id: body
+        node: root.sink
+        label: "Output"
+        devices: root.sinks
+        glyph: out.muted ? "󰖁" : out.volume > 0.66 ? "󰕾" : out.volume > 0.33 ? "󰖀" : "󰕿"
+        // Preferred, not default: pipewire remembers it and falls back
+        // from it when the device disappears.
+        onPicked: node => Pipewire.preferredDefaultAudioSink = node
+    }
 
-            anchors {
-                left: parent.left
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-                leftMargin: 12
-                rightMargin: 12
+    Rule {}
+
+    Device {
+        id: mic
+
+        node: root.source
+        label: "Input"
+        devices: root.sources
+        glyph: mic.muted ? "󰍭" : "󰍬"
+        onPicked: node => Pipewire.preferredDefaultAudioSource = node
+    }
+
+    Rule {
+        visible: bt.visible
+    }
+
+    // The shell's only Bluetooth switch, so it shows even with nothing
+    // paired.
+    ColumnLayout {
+        id: bt
+
+        Layout.fillWidth: true
+        spacing: 2
+        visible: !!root.adapter
+
+        Pick {
+            label: "Bluetooth"
+            suffix: root.adapter?.enabled ? "on" : "off"
+            current: root.adapter?.enabled ?? false
+            onClicked: root.adapter.enabled = !root.adapter.enabled
+        }
+
+        Repeater {
+            model: root.headsets
+
+            delegate: Pick {
+                required property var modelData
+
+                label: root.btLabel(modelData)
+                suffix: root.btDetail(modelData)
+                current: modelData.connected
+                // A connected headset shows up in the Output picker.
+                onClicked: if (modelData.connected)
+                    modelData.disconnect();
+                else
+                    modelData.connect()
             }
-            spacing: 8
+        }
+    }
 
-            Device {
-                id: out
+    Rule {}
 
-                node: root.sink
-                label: "Output"
-                devices: root.sinks
-                glyph: out.muted ? "󰖁" : out.volume > 0.66 ? "󰕾" : out.volume > 0.33 ? "󰖀" : "󰕿"
-                // Preferred, not default: this is the one pipewire remembers and
-                // falls back from when the device disappears.
-                onPicked: node => Pipewire.preferredDefaultAudioSink = node
-            }
+    ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 2
 
-            Rule {}
+        BarText {
+            text: root.recorders.length > 0 ? "󰍬  Mic in use by" : "󰍭  Mic not in use"
+            font.pixelSize: Theme.size - 2
+            color: root.recorders.length > 0 ? Theme.text : Theme.dim
+        }
 
-            Device {
-                id: mic
+        Repeater {
+            model: root.recorders
 
-                node: root.source
-                label: "Input"
-                devices: root.sources
-                glyph: mic.muted ? "󰍭" : "󰍬"
-                onPicked: node => Pipewire.preferredDefaultAudioSource = node
-            }
-
-            Rule {
-                visible: bt.visible
-            }
-
-            // Bluetooth lives here rather than in a module of its own: it is an
-            // audio device menu 99% of the time, and a second bar button for it
-            // meant two clicks and a mouse battery nobody asked for. The toggle
-            // is the only switch left now that the module is gone, so it stays
-            // even when nothing is paired.
-            ColumnLayout {
-                id: bt
+            delegate: BarText {
+                required property var modelData
 
                 Layout.fillWidth: true
-                spacing: 2
-                visible: !!root.adapter
-
-                Pick {
-                    label: "Bluetooth"
-                    suffix: root.adapter?.enabled ? "on" : "off"
-                    current: root.adapter?.enabled ?? false
-                    onClicked: root.adapter.enabled = !root.adapter.enabled
-                }
-
-                Repeater {
-                    model: root.headsets
-
-                    delegate: Pick {
-                        required property var modelData
-
-                        label: root.btLabel(modelData)
-                        suffix: root.btDetail(modelData)
-                        current: modelData.connected
-                        // Connecting a headset makes it a pipewire node, so the
-                        // Output picker above grows the entry on its own — no
-                        // sink switching duplicated down here.
-                        onClicked: if (modelData.connected)
-                            modelData.disconnect();
-                        else
-                            modelData.connect()
-                    }
-                }
-            }
-
-            Rule {}
-
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 2
-
-                BarText {
-                    text: root.recorders.length > 0 ? "󰍬  Mic in use by" : "󰍭  Mic not in use"
-                    font.pixelSize: Theme.size - 2
-                    color: root.recorders.length > 0 ? Theme.text : Theme.dim
-                }
-
-                Repeater {
-                    model: root.recorders
-
-                    delegate: BarText {
-                        required property var modelData
-
-                        Layout.fillWidth: true
-                        Layout.leftMargin: 22
-                        text: root.appName(modelData)
-                        elide: Text.ElideRight
-                        font.pixelSize: Theme.size - 3
-                        color: Theme.dim
-                    }
-                }
+                Layout.leftMargin: 22
+                text: root.appName(modelData)
+                elide: Text.ElideRight
+                font.pixelSize: Theme.size - 3
+                color: Theme.dim
             }
         }
     }

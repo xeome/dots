@@ -1,15 +1,11 @@
 /* graphite for Zen. run_after_link-zen-chrome.sh links this into every Zen
  * profile's chrome/ folder.
  *
- * Only Zen's and Firefox's own theme variables, set on two IDs and one class
- * Firefox has had for years. Layout selectors are left alone, because those are
- * what Zen updates break. A renamed variable stops one colour applying; it
- * cannot break the window.
- *
- * light-dark() picks the half that matches Zen's colour scheme, so the theme
- * follows theme-toggle. Values are graphite-ui's tokens; check-palette.py holds
- * them to Quickshell's Theme.qml. userChrome is a user sheet, which ranks below
- * Zen's own styles unless a value is !important, hence every one is. */
+ * Only theme variables, no layout selectors: Zen updates break layout
+ * selectors, while a renamed variable only stops one colour applying.
+ * light-dark() follows theme-toggle. check-palette.py holds the values to
+ * quickshell's Theme.qml. A user sheet ranks below Zen's own styles, so every
+ * value is !important. */
 
 :root {
   /* Zen mixes its whole palette from these two: the primary colour and the

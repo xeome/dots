@@ -1,16 +1,8 @@
 {
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
 
-    // Colours are ANSI names on purpose, not hex. Every terminal here now
-    // carries Caffeine's 16-colour ramp (see ~/.config/ghostty/themes/caffeine),
-    // so `light_yellow` *is* the scheme's cream and `green`/`cyan` its sage and
-    // teal — which means this config needs no palette of its own and follows
-    // the terminal if the scheme ever changes. light_yellow is the accent.
-    //
-    // Nerd Font glyphs are \u escapes so the file stays ASCII; the cat in
-    // ~/.config/fastfetch/cat is the only non-ASCII here. Note that fastfetch's
-    // JSON parser rejects  even escaped, so colour goes through the
-    // `color` / `outputColor` / `keyColor` options and never inline SGR.
+    // Colours are ANSI names, not hex, so they follow the terminal's Caffeine
+    // ramp (~/.config/ghostty/themes/caffeine). light_yellow is the accent.
     "logo": {
         "type": "file",
         "source": "~/.config/fastfetch/cat",
@@ -20,27 +12,18 @@
 
     "display": {
         "separator": "  ",
-        // 12, not the 9 that just fits " kernel": fastfetch aligns values
-        // with an absolute-column escape, so a key that overruns the column
-        // loses its separator entirely rather than pushing the value right —
-        // and a Nerd glyph is two cells wide in some fonts, which is exactly
-        // enough to tip the longest key over.
+        // Wider than the longest key needs: a key that overruns the column
+        // loses its separator, and a Nerd glyph is two cells wide in some fonts.
         "key": { "width": 12 },
         "color": { "separator": "light_black" },
-        // Bars rather than bare percentages for memory and disk: the number is
-        // noise at a glance, the fill is the signal.
         "bar": {
             "char": { "elapsed": "━", "total": "─" },
             "width": 12,
-            // No brackets around the bar, and the unfilled run in Theme.border
-            // rather than fastfetch's default bright white — otherwise the
-            // empty part of the bar shouts louder than the full part.
+            // The unfilled run is dim so it does not outshout the filled one.
             "border": { "left": "", "right": "" },
             "color": { "total": "light_black" }
         },
-        // type 2 = bar only, no number. The three states keep fastfetch's
-        // green/yellow/red thresholds, which are Caffeine's ANSI 2/3/1 now, so
-        // a disk at 90% still reads as a warning without leaving the scheme.
+        // type 2 = bar only, no number.
         "percent": {
             "type": 2,
             "color": { "green": "green", "yellow": "yellow", "red": "red" }
@@ -48,8 +31,7 @@
     },
 
     "modules": [
-        // No `format` on the title — a custom one loses the per-part colouring
-        // that this `color` object drives.
+        // No `format` on the title: a custom one loses this per-part colouring.
         {
             "type": "title",
             "color": { "user": "light_yellow", "at": "light_black", "host": "light_yellow" }

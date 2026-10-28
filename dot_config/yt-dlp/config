@@ -1,4 +1,3 @@
-# Downloads land in ~/Videos/downloads instead of the current directory, so
-# ~/Videos stays split by source: inbox/ (recorders), clips/, projects/,
-# downloads/. An explicit -P on the command line still wins.
+# Downloads go to ~/Videos/downloads, not the current directory. -P on the
+# command line still wins.
 -P ~/Videos/downloads

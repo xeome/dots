@@ -7,11 +7,6 @@
 # └──────────────────────────────────────┘
 #
 # Graphite, same values as quickshell's Theme.qml.
-#
-# This used to be a committed snapshot of matugen's output, with matugen also
-# generating it live from the wallpaper — two owners writing the same file. The
-# [templates.zathura] entry is gone from matugen's config now that the palette
-# is pinned rather than derived.
 
 # Chrome. `default` is graphite's panel, the same black as the terminals; the
 # bars are `raised`, so zathura's surfaces line up with the shell's.
@@ -43,10 +38,9 @@ set index-fg                    "#e6e7ea"
 set index-active-bg             "#232427"
 set index-active-fg             "#f7f8f8"
 
-# Search hits. Two different colours on purpose: every match wears a neutral
-# wash and only the one you are on wears warm, graphite's focus colour, so n/N
-# is readable on a page with twenty hits. Alpha because these composite over
-# the page itself.
+# Every search hit wears a neutral wash and only the current one wears warm,
+# graphite's focus colour, so n/N stays readable. Alpha because these
+# composite over the page.
 set highlight-color             rgba(230,231,234,0.25)
 set highlight-active-color      rgba(229,174,82,0.60)
 set highlight-fg                "#0a0a0c"
@@ -55,13 +49,11 @@ set render-loading              true
 set render-loading-bg           "#0e0e10"
 set render-loading-fg           "#e6e7ea"
 
-# Recolor mode settings — the two ends a document's black-on-white is remapped
-# onto, so a PDF reads as panel / text like everything else.
+# Recolor maps a document's white and black onto panel and text.
 set recolor                     true
 set recolor-lightcolor          "#0e0e10"
 set recolor-darkcolor           "#e6e7ea"
 
-# Custom settings
 set window-title-home-tilde true
 set statusbar-basename true
 set selection-clipboard clipboard

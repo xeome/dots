@@ -48,6 +48,8 @@ Kept identical on both compositors, so muscle memory carries between machines.
 | Super + E         | Launch file manager (`thunar`)     |
 | Super + Q         | Launch web browser (`zen-browser`) |
 | Super + R         | Launch app launcher (`vicinae`)    |
+| Super + B         | Copy a reaction image              |
+| Super + Shift + V | Clipboard history                  |
 | Super + P         | Project sessionizer                |
 | Super + L         | Lock screen (`hyprlock`)           |
 | Super + K         | Toggle notification centre         |

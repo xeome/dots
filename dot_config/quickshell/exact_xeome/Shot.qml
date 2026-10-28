@@ -425,7 +425,7 @@ Scope {
                     root.my = clampY(e.y);
                     if (root.mode !== 0)
                         return root.fire();
-                    from = Qt.point(clampX(e.x), clampY(e.y));
+                    from = Qt.point(root.mx, root.my);
                     root.drag = Qt.rect(from.x, from.y, 0, 0);
                 }
                 // Region captures on release, like slurp did.
@@ -471,13 +471,7 @@ Scope {
                             }
                         }
 
-                        Rectangle {
-                            Layout.leftMargin: 4
-                            Layout.rightMargin: 4
-                            implicitWidth: 1
-                            implicitHeight: 18
-                            color: Theme.rule
-                        }
+                        ShotEditor.Sep {}
 
                         Chip {
                             text: root.delay ? `${root.delays[root.delay]} s` : "timer"

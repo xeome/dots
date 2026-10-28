@@ -146,7 +146,6 @@ Scope {
 
         nameFilters: ["*-dots.png"]
         showDirs: false
-        onCountChanged: root.rev++
     }
 
     Timer {

@@ -126,10 +126,49 @@ if complete:
     rgb = lambda h: ", ".join(str(int(h[i : i + 2], 16)) for i in (1, 3, 5))
     # A translucent token as GTK CSS writes it: rgba(255, 255, 255, 0.05).
     rgba = lambda t: f"rgba({rgb(hexrgb(t))}, {round(t[3], 2):g})"
+    # The terminals keep Caffeine's hues; their neutrals are graphite's. A
+    # needle starting "\n" matches at a line start only, so `foreground` can't
+    # pass inside `selection-foreground`. Alacritty repeats keys across
+    # sections, so its needles carry the section header.
+    sel = hexrgb(over(dark["sel"], dark["panel"]))
+    T = {k: D[k] for k in ("panel", "rule", "text", "dim", "bright")}
     SHARED = {
-        "dot_config/ghostty/exact_themes/caffeine": (f"background = {D['panel']}",),
-        "dot_config/alacritty/caffeine.toml": (f'background = "{D["panel"]}"',),
-        "dot_config/foot/foot.ini": (f"background={D['panel'][1:]}",),
+        "dot_config/ghostty/exact_themes/caffeine": (
+            f"\nbackground = {T['panel']}",
+            f"\nforeground = {T['text']}",
+            f"\npalette = 0={T['rule']}",
+            f"\npalette = 7={T['text']}",
+            f"\npalette = 8={T['dim']}",
+            f"\npalette = 15={T['bright']}",
+            f"\ncursor-color = {T['bright']}",
+            f"\ncursor-text = {T['panel']}",
+            f"\nselection-background = {sel}",
+            f"\nselection-foreground = {T['bright']}",
+        ),
+        "dot_config/alacritty/caffeine.toml": tuple(
+            f"[colors.{sec}]\n" + "\n".join(f'{k} = "{v}"' for k, v in kv)
+            for sec, kv in (
+                ("primary", (("foreground", T["text"]), ("background", T["panel"]))),
+                ("cursor", (("text", T["panel"]), ("cursor", T["bright"]))),
+                ("selection", (("text", T["bright"]), ("background", sel))),
+                ("normal", (("black", T["rule"]), ("white", T["text"]))),
+                ("bright", (("black", T["dim"]), ("white", T["bright"]))),
+            )
+        ),
+        "dot_config/foot/foot.ini": tuple(
+            f"\n{k}={v.lstrip('#')}"
+            for k, v in (
+                ("background", T["panel"]),
+                ("foreground", T["text"]),
+                ("cursor", f"{T['panel'][1:]} {T['bright'][1:]}"),
+                ("selection-foreground", T["bright"]),
+                ("selection-background", sel),
+                ("regular0", T["rule"]),
+                ("regular7", T["text"]),
+                ("bright0", T["dim"]),
+                ("bright7", T["bright"]),
+            )
+        ),
         "dot_config/hypr/exact_lua_modules/settings.lua": (
             f'local line = "rgba(ffffff{round(dark["line"][3] * 255):02x})"',
         ),

@@ -84,7 +84,7 @@ sep_left  = { open = "", close = "" }
 sep_right = { open = "", close = "" }
 
 # Permission bits, from the terminal ANSI ramp.
-perm_sep   = { fg = "#5c5046" }
+perm_sep   = { fg = "#8a8f98" }
 perm_type  = { fg = "#b5c98f" }
 perm_read  = { fg = "#ffd9a0" }
 perm_write = { fg = "#e2715a" }
@@ -221,7 +221,7 @@ rules = [
 	# Document
 	{ mime = "**/application/{pdf,doc,rtf}", fg = "#e06c75" },
 	# Virtual file system
-	{ mime = "vfs/{absent,stale}", fg = "#5c5046" },
+	{ mime = "vfs/{absent,stale}", fg = "#8a8f98" },
 	# Special file
 	{ url = "*", is = "orphan", bg = "#e2715a" },
 	{ url = "*", is = "exec"  , fg = "#b5c98f" },

@@ -7,37 +7,36 @@
 # and quickshell's Theme.qml, so a change here wants the same change there.
 
 # --- ANSI 16 -------------------------------------------------------------
-# Caffeine's `terminal.ansi`, verbatim. Slot 0 is the scheme's `secondary`
-# (#393028, espresso) rather than a true black: the background is already
-# near-black, so a black "black" would be invisible.
-palette = 0=#393028
+# Caffeine's `terminal.ansi` hues on graphite's neutrals: slots 0/8 and 7/15
+# are Theme.qml's rule/dim and text/bright. Slot 0 is `rule`, not a true
+# black, because the background is already near-black.
+palette = 0=#232427
 palette = 1=#e06c75
 palette = 2=#b5c98f
 palette = 3=#ffd9a0
 palette = 4=#8fb0d9
 palette = 5=#cba6c9
 palette = 6=#88c0c8
-palette = 7=#d8cbb8
-palette = 8=#5c5046
+palette = 7=#e6e7ea
+palette = 8=#8a8f98
 palette = 9=#ff8a93
 palette = 10=#c9dba8
 palette = 11=#ffe6c4
 palette = 12=#a9c3e0
 palette = 13=#ddc0db
 palette = 14=#a4d4da
-palette = 15=#f0e6d6
+palette = 15=#f7f8f8
 
 # --- Surfaces ------------------------------------------------------------
-# The background is graphite's panel (quickshell's Theme.panel); the
-# foreground is Caffeine's.
+# Theme.qml's panel and text.
 background = #0e0e10
-foreground = #eeeeee
+foreground = #e6e7ea
 
-# Caffeine's `primary`, its cursor and ring colour.
-cursor-color = #ffe0c2
-cursor-text = #081a1b
+# A bright block with the panel showing through the glyph.
+cursor-color = #f7f8f8
+cursor-text = #0e0e10
 
-# Caffeine's selection is the primary as a 20% wash. Ghostty has no alpha
-# here, so the wash is flattened to a solid colour.
-selection-background = #413a34
-selection-foreground = #eeeeee
+# Theme.qml's `sel` flattened over the panel, since ghostty has no alpha here,
+# with bright text: the shell's selected-row pair.
+selection-background = #1f1f21
+selection-foreground = #f7f8f8

@@ -1,22 +1,17 @@
 #!/bin/bash
+# Country and city of the public IP, for the lock screen. Cached for a day.
 
 cache_file="$HOME/.cache/ip_cache.txt"
 
-if [ ! -f "$cache_file" ]; then
-	mkdir -p "$(dirname "$cache_file")" # Create .cache directory if it doesn't exist
-	touch "$cache_file"
+if [ -f "$cache_file" ]; then
+	age=$(($(date +%s) - $(stat -c %Y "$cache_file")))
+	cached=$(<"$cache_file")
+	if [ "$age" -lt 86400 ] && [ -n "$cached" ]; then
+		echo "$cached"
+		exit
+	fi
 fi
 
-last_modified=$(stat -c %Y "$cache_file")
-current_date=$(date +%s)
-time_diff=$((current_date - last_modified))
-expiry_time=86400
-cached_data=$(<"$cache_file")
-
-if [ $time_diff -lt $expiry_time ] && [ -n "$cached_data" ]; then
-	echo "$cached_data"
-	exit
-fi
-
-response=$(curl -s ipinfo.io 2>/dev/null | jq -r '.country + ", " + .city' 2>/dev/null)
+mkdir -p "${cache_file%/*}"
+response=$(curl -s ipinfo.io | jq -r '.country + ", " + .city' 2>/dev/null)
 echo "$response" | tee "$cache_file"

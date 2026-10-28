@@ -1,22 +1,17 @@
 #!/bin/bash
+# Current weather from wttr.in, for the lock screen. Cached for a day.
 
 cache_file="$HOME/.cache/wttr_cache.txt"
 
-if [ ! -f "$cache_file" ]; then
-	mkdir -p "$(dirname "$cache_file")" # Create .cache directory if it doesn't exist
-	touch "$cache_file"
+if [ -f "$cache_file" ]; then
+	age=$(($(date +%s) - $(stat -c %Y "$cache_file")))
+	cached=$(<"$cache_file")
+	if [ "$age" -lt 86400 ] && [ -n "$cached" ]; then
+		echo "$cached"
+		exit
+	fi
 fi
 
-last_modified=$(stat -c %Y "$cache_file")
-current_date=$(date +%s)
-time_diff=$((current_date - last_modified))
-expiry_time=86400
-cached_data=$(<"$cache_file")
-
-if [ $time_diff -lt $expiry_time ] && [ -n "$cached_data" ]; then
-	echo "$cached_data"
-	exit
-fi
-
-response=$(curl -s wttr.in?format=%c+%C+%t 2>/dev/null)
+mkdir -p "${cache_file%/*}"
+response=$(curl -s 'wttr.in?format=%c+%C+%t')
 echo "$response" | tee "$cache_file"

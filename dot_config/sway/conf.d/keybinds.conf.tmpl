@@ -39,6 +39,7 @@ bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 # ~~~ misc utilities
 bindsym $mod+l exec hyprlock
 bindsym $mod+b exec sh ~/.config/emoji/emoji.sh
+bindsym $mod+Shift+v exec vicinae cmd launch clipboard:history
 bindsym $mod+k exec qs -c xeome ipc call notifs toggle
 bindsym $mod+t exec bash ~/.local/bin/theme-toggle
 bindsym $mod+p exec {{ $m.terminal }} --class=com.sessionizer.fzf -e ~/.local/bin/sessionizer

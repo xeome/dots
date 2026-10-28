@@ -19,7 +19,7 @@ border = "#1d1d1f"
 accent = "#e6e7ea"
 accent_foreground = "#0a0a0c"
 
-# Graphite's three data hues fill the slots they match; the rest keep the
+# Graphite's warm and hot fill the slots they match; the rest keep the
 # terminal ANSI hues, which are the only other hues on this desktop.
 [colors.accents]
 blue = "#8fb0d9"
@@ -29,7 +29,7 @@ orange = "#e5ae52"
 purple = "#ddc0db"
 red = "#e2715a"
 yellow = "#e5ae52"
-cyan = "#62a6b0"
+cyan = "#88c0c8"
 
 [colors.main_window]
 border = "colors.core.border"
@@ -43,7 +43,7 @@ default = "colors.core.foreground"
 muted = "#8a8f98"
 placeholder = "#8a8f98"
 danger = "#e2715a"
-success = "#62a6b0"
+success = "#b5c98f"
 selection = { background = "#e6e7ea", foreground = "#0a0a0c" }
 
 # Focus is graphite's one non-status colour.

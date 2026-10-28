@@ -1,11 +1,5 @@
-#################################
-#             Binds             #
-#################################
-# Managed by chezmoi — edit dot_config/sway/conf.d/keybinds.conf.tmpl
-#
-# Kept 1:1 with hyprland lua_modules/keybinds.lua wherever sway has an
-# equivalent, so muscle memory carries between machines. Divergences are
-# commented where they exist.
+# Keybinds, kept 1:1 with hyprland's lua_modules/keybinds.lua wherever sway has
+# an equivalent. Managed by chezmoi.
 {{- $m := index .machines .chezmoi.hostname }}
 
 set $mod Mod4
@@ -13,13 +7,6 @@ floating_modifier $mod
 
 # ~~~ general
 bindsym $mod+Shift+r reload
-# Dropped: $mod+Shift+q and $mod+m ran `ags -t powermenu` / `-t quicksettings`.
-# ags was never installed here, so both have been dead binds for as long as this
-# file has existed. quickshell's power menu opens by clicking the battery
-# module in the bar.
-# Dropped: $mod+j sent SIGUSR1 to a `test.py` that is long gone. $mod+t used
-# to send SIGUSR2 to the same script; it's back below, now bound to
-# theme-toggle instead.
 
 # ~~~ user applications
 bindsym $mod+Return exec {{ $m.terminal }}
@@ -28,9 +15,8 @@ bindsym $mod+e exec thunar
 bindsym $mod+r exec vicinae toggle
 bindsym $mod+v exec code --ozone-platform=wayland
 bindsym $mod+d exec {{ $m.discord_cmd }}
-# Diverges from hyprland, whose Print opens the quickshell overlay (Shot.qml)
-# over grim and libvips. Neither is installed
-# here and flameshot is, so sway keeps flameshot.
+# Hyprland's Print opens the quickshell overlay, which needs grim and libvips.
+# Sway machines have flameshot instead.
 bindsym Print exec flameshot gui -r | wl-copy
 
 # ~~~ audio
@@ -40,13 +26,9 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # ~~~ media keys
-# These only change the value. The quickshell OSD watches Pipewire and the
-# backlight sysfs node directly, so nothing has to tell it something happened —
-# which is why swayosd-client is gone from every line here (it was never
-# installed on this machine either, making all six of these dead).
-#
-# Caps Lock is deliberately unbound: its OSD keys off the keyboard LED, and
-# binding the key here would take over the actual toggle.
+# The quickshell OSD watches PipeWire and the backlight itself, so these only
+# change the value. Caps Lock stays unbound: its OSD reads the keyboard LED,
+# and a bind here would take over the toggle.
 bindsym XF86AudioRaiseVolume exec pamixer -i 5
 bindsym XF86AudioLowerVolume exec pamixer -d 5
 bindsym XF86AudioMute exec pamixer -t
@@ -60,8 +42,6 @@ bindsym $mod+b exec sh ~/.config/emoji/emoji.sh
 bindsym $mod+k exec qs -c xeome ipc call notifs toggle
 bindsym $mod+t exec bash ~/.local/bin/theme-toggle
 bindsym $mod+p exec {{ $m.terminal }} --class=com.sessionizer.fzf -e ~/.local/bin/sessionizer
-# Dropped: $mod+o ran `xset dpms force off`, an X11 command with no effect on
-# wayland outputs. swayidle blanks the screen on its own after 15 minutes.
 
 # ~~~ window management
 bindsym $mod+Escape workspace back_and_forth
@@ -72,8 +52,7 @@ bindsym $mod+Up focus up
 bindsym $mod+Down focus down
 bindsym $mod+f fullscreen toggle
 bindsym $mod+Control+space floating toggle
-# Kept beyond hyprland parity: hyprland's scrolling layout doesn't need these,
-# sway's tiling does, and they collide with nothing.
+# Sway only: its tiling needs explicit moves.
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up

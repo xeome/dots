@@ -1,35 +1,30 @@
-#################################
-#            Options            #
-#################################
-# Managed by chezmoi — edit dot_config/sway/conf.d/settings.conf.tmpl
+# Options and outputs. Managed by chezmoi.
 {{- $m := index .machines .chezmoi.hostname }}
 
 font pango:Inter SemiBold 8
 
-#~~~ gaps and borders — matched to hyprland lua_modules/settings.lua
-gaps inner                                       5
-gaps outer                                       5
+# ~~~ gaps and borders, matched to hyprland's lua_modules/settings.lua
+gaps inner 5
+gaps outer 5
 smart_borders off
 smart_gaps off
-default_border                                   pixel 1
-default_floating_border                          none
-floating_modifier                                $mod
-hide_edge_borders --i3                           none
+default_border pixel 1
+default_floating_border none
+floating_modifier $mod
+hide_edge_borders --i3 none
 workspace_layout default
 
-seat seat0 xcursor_theme                         Bibata-Modern-Classic 24
+seat seat0 xcursor_theme Bibata-Modern-Classic 24
 
-# No `bar {}` block: swaybar/waybar are gone, quickshell draws the bar. Adding
-# one back here would stack a second bar over it.
+# No `bar {}` block: quickshell draws the bar, and one here would stack a
+# second bar over it.
 
-#~~~ outputs
-# Generated from [[machines.<hostname>.monitors]]. Directives for an output
-# that isn't plugged in are simply stored, so undocking is safe.
-#
-# The `Hz` suffix and the space-separated position are sway's spelling of the
-# same data; hyprland takes "1920x1080@60" and "1920x0" verbatim.
+# ~~~ outputs
+# From [[machines.<hostname>.monitors]]. Directives for an unplugged output are
+# stored, so undocking is safe. Sway spells the same data with a `Hz` suffix
+# and a space-separated position.
 {{ range $m.monitors -}}
 output {{ .output }} mode {{ .mode }}Hz pos {{ .position | replace "x" " " }} scale {{ .scale }}
 {{ end -}}
-output *     adaptive_sync off
-output *     subpixel      rgb
+output * adaptive_sync off
+output * subpixel rgb

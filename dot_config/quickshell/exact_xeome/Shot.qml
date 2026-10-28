@@ -286,8 +286,10 @@ Scope {
             Item {
                 id: loupe
 
-                readonly property int px: Math.floor(root.mx * root.k)
-                readonly property int py: Math.floor(root.my * root.k)
+                // The cursor reaches the screen's far edge, x == width, which
+                // is one pixel past the frame's last.
+                readonly property int px: Math.max(0, Math.min(frozenImg.sourceSize.width - 1, Math.floor(root.mx * root.k)))
+                readonly property int py: Math.max(0, Math.min(frozenImg.sourceSize.height - 1, Math.floor(root.my * root.k)))
                 readonly property int zoom: 12
                 readonly property int cells: 13   // odd, so one pixel sits in the middle
 

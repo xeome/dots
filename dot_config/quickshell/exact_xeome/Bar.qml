@@ -102,12 +102,15 @@ PanelWindow {
                 spacing: 0
 
                 Net {
+                    id: net
                     bordered: false
                     topLeftRadius: Theme.radius
                     bottomLeftRadius: Theme.radius
                 }
                 Audio {
                     bordered: false
+                    topLeftRadius: net.visible ? 0 : Theme.radius
+                    bottomLeftRadius: net.visible ? 0 : Theme.radius
                 }
                 Battery {
                     bordered: false

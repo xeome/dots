@@ -1,4 +1,2 @@
-time=$(date  +"%H:%M")
-date=$(date +%d/%m/%Y)
-volume=$(echo $(pamixer --get-volume))
-notify-send "Vol: $volume  $time  $date"
+#!/bin/bash
+notify-send "Vol: $(pamixer --get-volume)  $(date +%H:%M)  $(date +%d/%m/%Y)"

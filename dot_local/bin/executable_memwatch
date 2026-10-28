@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# Early warning ahead of systemd-oomd, and word after it acts.
+# Warns ahead of systemd-oomd and reports its kills. Run by memwatch.service.
 #
 # oomd kills an app once user@.service sits at 50% memory stall for 20s, or
-# once swap passes 90% (see pkg/dots-oom). This warns
-# well below both, so there is time to close something by hand.
+# once swap passes 90% (see pkg/dots-oom). This warns well below both, so
+# there is time to close something by hand.
 #
-# Both warnings sample on the poll timeout. The stall one reads the exact
-# number oomd acts on: full avg10 of user@.service. A PSI trigger on
-# /proc/pressure/memory looked cheaper, but it fired on 1us of system-wide stall.
+# The stall warning polls the number oomd acts on: full avg10 of user@.service.
+# Not a PSI trigger on /proc/pressure/memory: that fires on 1us of system-wide stall.
 import os
 import select
 import subprocess

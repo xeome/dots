@@ -1,4 +1,4 @@
-// The arithmetic Shot and Desk depend on, kept out of QML so node can check it:
+// The arithmetic Shot, Desk and Walls depend on, kept out of QML so node can check it:
 // node dot_config/quickshell/exact_xeome/calc.test.mjs
 
 // The crop box in frame pixels for a selection in the screen's logical pixels,
@@ -36,4 +36,26 @@ export function cpuBusy(prev, cur) {
     const total = b.reduce((s, v) => s + v, 0) - a.reduce((s, v) => s + v, 0);
     const idle = b[3] + b[4] - a[3] - a[4];
     return total > 0 ? Math.round(100 * (total - idle) / total) : 0;
+}
+
+// The dot-matrix bake of a wallpaper file, as dots.py names it: the last
+// extension swapped for -dots.png.
+export function dotsName(file) {
+    return file.replace(/\.[^.]*$/, "") + "-dots.png";
+}
+
+export function isDots(file) {
+    return file.endsWith("-dots.png");
+}
+
+// Where waypaper's current wallpaper (`~/…` as it writes it) sits in the
+// picker's list of originals, and whether it is a bake: from Walls' store, or
+// one baked into the repo beside its original. index -1 for anything else.
+export function sourceOf(current, files) {
+    const name = current.slice(current.lastIndexOf("/") + 1);
+    const plain = files.indexOf(name);
+    if (plain >= 0)
+        return { index: plain, dots: false };
+    const baked = files.findIndex(f => dotsName(f) === name);
+    return { index: baked, dots: baked >= 0 };
 }

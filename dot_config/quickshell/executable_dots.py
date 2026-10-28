@@ -6,10 +6,11 @@ Black and not the shell's `ground`, as glyph does: the desk's tiles sit on
 `panel` just above it, so the screen reads AMOLED-black and the tiles lift
 off it, where a grey ground made the whole desk read grey.
 
-    ~/.local/share/chezmoi/dot_config/quickshell/executable_dots.py IMAGE...
+    ~/.local/share/chezmoi/dot_config/quickshell/executable_dots.py [--out DIR] IMAGE...
 
-writes IMAGE's name + "-dots.png" beside each. Run it on the chezmoi source
-copy (dot_config/wallpapers/) to keep the result; then pick it in waypaper.
+writes IMAGE's name + "-dots.png" beside each, or into DIR. Run it on the
+chezmoi source copy (dot_config/wallpapers/) to keep the result. Walls.qml,
+the Super+Shift+W picker, runs it with --out ~/.local/share/xeome-dots.
 
 One size for every monitor, 3840x2160 (256 x 144 cells): the 4K draws it 1:1,
 1440p and 1080p scale it down, so dots stay round and sharp everywhere.
@@ -17,10 +18,11 @@ ponytail: bake per resolution if a monitor ever shows them soft.
 
 Checked by dots.test.py (source only).
 """
+import argparse
+import os
 import pathlib
 import re
 import subprocess
-import sys
 
 import numpy as np
 from PIL import Image, ImageOps
@@ -59,11 +61,20 @@ def text_grey():
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        sys.exit(__doc__)
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--out", type=pathlib.Path)
+    ap.add_argument("images", nargs="+", type=pathlib.Path)
+    args = ap.parse_args()
+    if args.out:
+        args.out.mkdir(parents=True, exist_ok=True)
     hi = text_grey()
-    for arg in sys.argv[1:]:
-        path = pathlib.Path(arg)
-        out = path.with_name(f"{path.stem}-dots.png")
-        dots(Image.open(path), hi).save(out, optimize=True)
+    for path in args.images:
+        out = (args.out or path.parent) / f"{path.stem}-dots.png"
+        # Under a hidden name first, then renamed: whoever lists the folder
+        # (the picker) only ever sees finished bakes. .png last, since Pillow
+        # picks the format from the extension. No optimize=True: 0.4 s of a
+        # 0.7 s bake for under 1% of the size.
+        tmp = out.with_name(f".{out.stem}.tmp.png")
+        dots(Image.open(path), hi).save(tmp)
+        os.replace(tmp, out)
         print(out)

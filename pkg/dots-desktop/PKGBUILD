@@ -10,7 +10,7 @@ depends=(
     brightnessctl chezmoi equibop evince fd fzf ghostty git-delta gnome-keyring grc
     gsettings-desktop-schemas gtk-update-icon-cache htop hyprlock inter-font jq
     kdeconnect kvantum kvantum-qt5 libnotify mate-polkit most neovim
-    network-manager-applet pamixer pavucontrol playerctl python-gobject qt5ct qt6ct
+    network-manager-applet pamixer pavucontrol playerctl python-gobject python-numpy python-pillow qt5ct qt6ct
     quickshell seahorse starship swayidle thunar ttf-jetbrains-mono-nerd vicinae-bin
     vim waypaper wl-clipboard xorg-xprop xorg-xwayland yazi yt-dlp zathura zellij
     zen-browser-bin zorin-icon-themes zoxide zsh zsh-completions

@@ -19,4 +19,5 @@ ShellRoot {
     Osd {}
     NotifPopups {}
     Shot {}
+    Walls {}
 }

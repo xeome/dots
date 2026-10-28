@@ -1,7 +1,7 @@
 // node dot_config/quickshell/exact_xeome/calc.test.mjs — checks Calc.mjs.
 // Source-only (.chezmoiignore): Quickshell never loads it.
 import assert from "node:assert/strict";
-import { crop, cpuBusy, isoWeek, greeting } from "./Calc.mjs";
+import { crop, cpuBusy, isoWeek, greeting, dotsName, isDots, sourceOf } from "./Calc.mjs";
 
 const rect = (x, y, width, height) => ({ x, y, width, height });
 
@@ -25,5 +25,20 @@ assert.equal(isoWeek(new Date(2026, 9, 28)), 44);
 // Each boundary hour and the one before it.
 assert.deepEqual([0, 4, 5, 11, 12, 17, 18, 23].map(greeting),
     ["night", "night", "morning", "morning", "afternoon", "afternoon", "evening", "evening"]);
+
+// Bake names: the last extension goes, whatever its case.
+assert.equal(dotsName("office.jpg"), "office-dots.png");
+assert.equal(dotsName("a.b.jpg"), "a.b-dots.png");
+assert.equal(dotsName("x.PNG"), "x-dots.png");
+assert.equal(isDots("office-dots.png"), true);
+assert.equal(isDots("dots.png"), false);
+
+// waypaper's current wallpaper, in the ~ form it writes, back to the picker's
+// list: an original, a bake from Walls' store, the repo's bake beside the original.
+const files = ["abandoned.png", "office.jpg", "snow.jpg"];
+assert.deepEqual(sourceOf("~/.config/wallpapers/snow.jpg", files), { index: 2, dots: false });
+assert.deepEqual(sourceOf("~/.local/share/xeome-dots/office-dots.png", files), { index: 1, dots: true });
+assert.deepEqual(sourceOf("~/.config/wallpapers/office-dots.png", files), { index: 1, dots: true });
+assert.deepEqual(sourceOf("~/elsewhere/cat.png", files), { index: -1, dots: false });
 
 console.log("calc OK");

@@ -5,9 +5,4 @@ LOC="$HOME/.config/emoji"
 
 CHOICE=$(find "$LOC" -type f ! -name '*.sh' -printf '%f\n' | vicinae dmenu -p "Pick")
 [ -n "$CHOICE" ] || exit 0
-EXT=${CHOICE##*.}
-if [ -z "$WAYLAND_DISPLAY" ]; then
-    xclip -selection clipboard -t image/"$EXT" <"$LOC/$CHOICE"
-else
-    wl-copy --type image/"$EXT" <"$LOC/$CHOICE"
-fi
+wl-copy --type image/"${CHOICE##*.}" <"$LOC/$CHOICE"

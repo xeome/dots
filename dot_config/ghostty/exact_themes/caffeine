@@ -1,22 +1,15 @@
 # Caffeine — https://github.com/crynta/terax-ai src/modules/theme/themes/caffeine.ts
 #
-# Managed by chezmoi — edit dot_config/ghostty/exact_themes/caffeine
+# Managed by chezmoi: edit dot_config/ghostty/exact_themes/caffeine
 #
-# Ghostty resolves a bare theme name against ~/.config/ghostty/themes before
-# its own share/ghostty/themes, so `theme = caffeine` in the config finds this
-# file.
-#
-# Colours only. A theme file may set any config option, but the built-in themes
-# are audited to stay colour-only and this follows that: opacity, padding and
-# fonts stay in the config where they can be read alongside each other.
-#
-# Mirrors ~/.config/alacritty/caffeine.toml, ~/.config/foot/foot.ini and
-# quickshell's Theme.qml — a change here wants the same change there.
+# Colours only, like ghostty's built-in themes; everything else stays in the
+# config. Mirrors ~/.config/alacritty/caffeine.toml, ~/.config/foot/foot.ini
+# and quickshell's Theme.qml, so a change here wants the same change there.
 
 # --- ANSI 16 -------------------------------------------------------------
-# Caffeine's `terminal.ansi`, verbatim and in order. Slot 0 is the scheme's
-# `secondary` (#393028, espresso) rather than a true black: the background
-# below is already near-black, so a black "black" would be invisible.
+# Caffeine's `terminal.ansi`, verbatim. Slot 0 is the scheme's `secondary`
+# (#393028, espresso) rather than a true black: the background is already
+# near-black, so a black "black" would be invisible.
 palette = 0=#393028
 palette = 1=#e06c75
 palette = 2=#b5c98f
@@ -35,9 +28,8 @@ palette = 14=#a4d4da
 palette = 15=#f0e6d6
 
 # --- Surfaces ------------------------------------------------------------
-# The background is graphite's panel (quickshell's Theme.panel), one step above
-# the bar's ground, so a terminal reads as a window on the desktop. The
-# foreground is still Caffeine's.
+# The background is graphite's panel (quickshell's Theme.panel); the
+# foreground is Caffeine's.
 background = #0e0e10
 foreground = #eeeeee
 
@@ -45,9 +37,7 @@ foreground = #eeeeee
 cursor-color = #ffe0c2
 cursor-text = #081a1b
 
-# Caffeine's selection is `rgba(255,224,194,0.20)` — the primary as a 20% wash,
-# not a fill. Ghostty has no alpha here, so it is flattened over the background
-# (0.2*#ffe0c2 + 0.8*#111111) and the ordinary foreground stays on top. A solid
-# accent fill would be the shell's selection style, not this scheme's.
+# Caffeine's selection is the primary as a 20% wash. Ghostty has no alpha
+# here, so the wash is flattened to a solid colour.
 selection-background = #413a34
 selection-foreground = #eeeeee

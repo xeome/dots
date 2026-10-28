@@ -4,9 +4,7 @@ shell-integration-features = ssh-env
 # --- Fonts ---
 font-size = 10
 
-# One family for all four styles. Medium, not Bold: extra weight only buys
-# legibility at small visual angles (Beier & Oderkerk 2019). Fixed at 10pt,
-# not scaled by text_scale: larger read as too big in a terminal.
+# Fixed at 10pt rather than scaled by text_scale, which read too large here.
 font-family = JetBrainsMono Nerd Font
 font-style = Medium
 font-style-bold = Bold
@@ -14,24 +12,19 @@ font-style-italic = Medium Italic
 font-style-bold-italic = Bold Italic
 
 # --- Window ---
-# Opaque — no background-opacity line, whose default is 1. The whole point of
-# pinning a scheme is that #111111 is #111111 everywhere; at 0.85 every
-# contrast ratio was a function of the wallpaper.
+# Opaque (background-opacity defaults to 1), so contrast does not depend on
+# the wallpaper.
 window-padding-x = 15
 window-padding-y = 15
 
-# Every colour lives in themes/caffeine{,-light}: Caffeine's ANSI ramp on
-# graphite's panel background. Nothing colour-related belongs here: anything
-# set here would silently override the theme rather than sit alongside it.
-#
-# The pair form follows the desktop colour scheme live, so SUPER+T (which flips
-# gsettings color-scheme) switches the terminal too, with no ghostty-specific
-# step in theme-toggle.
+# Every colour lives in themes/caffeine{,-light}; one set here would override
+# the theme. The pair follows the desktop colour scheme, which theme-toggle
+# flips through gsettings.
 theme = light:caffeine-light,dark:caffeine
 
 # --- Chrome ---
-# Hyprland tiles, so the headerbar's window buttons do nothing. Without it
-# the tab bar appears only at 2+ tabs; new tab and the menu live in the
+# The compositor tiles, so the headerbar's window buttons do nothing. Without
+# it the tab bar shows only from two tabs; new tab and the menu move to the
 # right-click menu and keybinds.
 gtk-titlebar = false
 gtk-wide-tabs = false

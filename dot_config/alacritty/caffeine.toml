@@ -1,14 +1,11 @@
 # Caffeine — https://github.com/crynta/terax-ai src/modules/theme/themes/caffeine.ts
 #
-# Mirrors ~/.config/ghostty/themes/caffeine and ~/.config/foot/foot.ini — the
-# terminals are meant to be indistinguishable, so a change here wants the same
-# change there. The dark background is graphite's panel, from quickshell's
-# Theme.qml; the rest is Caffeine.
+# Mirrors ~/.config/ghostty/themes/caffeine and ~/.config/foot/foot.ini, so a
+# change here wants the same change there. The background is graphite's panel
+# from quickshell's Theme.qml; the rest is Caffeine.
 
 [colors.primary]
 foreground = "#eeeeee"
-# graphite's panel, one step above the bar's ground: a terminal reads as
-# a window sitting on the desktop, not as part of the bar.
 background = "#0e0e10"
 
 # Caffeine's `primary`, its cursor and ring colour.
@@ -16,9 +13,8 @@ background = "#0e0e10"
 text = "#081a1b"
 cursor = "#ffe0c2"
 
-# Caffeine's selection is `rgba(255,224,194,0.20)` — the primary as a 20% wash,
-# not a fill. Alacritty has no alpha here, so it is flattened over the
-# background and the ordinary foreground stays on top.
+# Caffeine's selection is the primary as a 20% wash. Alacritty has no alpha
+# here, so the wash is flattened to a solid colour.
 [colors.selection]
 text = "#eeeeee"
 background = "#413a34"

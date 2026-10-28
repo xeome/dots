@@ -1,45 +1,36 @@
-# Renamed to their Caffeine equivalents; chezmoi does not delete a target just
-# because its source file went away.
+# Targets whose source is gone. chezmoi does not delete a target when its
+# source file goes away, so each one is listed here. An entry can be dropped
+# once every machine has applied it.
+
+# Renamed to their Caffeine equivalents.
 .config/alacritty/vesper.toml
 
-# matugen, removed entirely. It derived a Material You palette from the
-# wallpaper, which is the opposite of pinning one scheme — and every file it
-# generated was already dead: nvim never read its base46, Colloid's gtk.css
-# never imported its colors.css, hypr loads only lua_modules/, vesktop had a
-# different theme enabled, nothing called slurp.sh, and rofi, alacritty and
-# ghostty all select themes of their own. zathura and yazi were the only live
-# consumers, and they are pinned to Caffeine now.
-#
-# Every entry below can be dropped once each machine has applied once.
+# matugen, removed, and the files it generated.
 .config/matugen
 .config/kitty/slurp.sh
 .config/gtk-3.0/colors.css
 .config/alacritty/colors.toml
 .cache/wal
 
-# Only colors.conf here was matugen's. The other four modules/*.conf are
-# hand-written, and belong to the .conf config that predates the Lua one —
-# `hyprctl systeminfo` reports `configProvider: lua`, so hyprland.conf,
-# shared.conf and modules/ are all dead, but pruning that is its own cleanup
-# and not matugen's doing.
+# matugen's file in the old .conf Hyprland config. The rest of that config is
+# hand-written and dead too, since Hyprland loads the Lua one, but it is not
+# listed here.
 .config/hypr/modules/colors.conf
 
-# Manual captive-portal toggle, replaced by the NetworkManager dispatcher hook
-# that pkg/dots-dns installs.
+# Replaced by the NetworkManager dispatcher hook in pkg/dots-dns.
 .local/bin/portal
 
-# graphite replaced Caffeine. rofi and gtklock had no callers (vicinae and
-# hyprlock do their jobs); the Colloid GTK theme, its orange icons and cursors
-# gave way to adw-gtk3 + graphite css and grey icons, and Bibata is the cursor.
+# Left behind when graphite replaced Caffeine: rofi and gtklock (vicinae and
+# hyprlock do their jobs), the Colloid GTK theme, icons and cursors.
 .config/rofi
 .local/share/rofi
 .config/gtklock
 .local/share/icons/Colloid-Orange*
 .local/share/icons/Colloid-cursors
 .local/share/icons/Colloid-dark-cursors
-# The grey Colloid icons the set-theme script used to build gave way to ZorinGrey.
+# Built by an older set-theme script; ZorinGrey replaced them.
 .local/share/icons/Colloid-Grey*
 .config/ghostty/brutal.css
-# vicinae has read settings.json, not vicinae.json, since v0.17.
+# vicinae reads settings.json since v0.17.
 .config/vicinae/vicinae.json
 .config/ghostty/graphite.css

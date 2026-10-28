@@ -1,7 +1,6 @@
 #!/bin/bash
-# Piped, never written out: age -o creates its output 0644, which left the
-# private key world-readable in /tmp on every apply. Skipped once the signing
-# key is in the keyring, so a normal apply never decrypts at all.
+# Imports the git signing key unless the keyring has it. Piped from age to gpg
+# because age -o writes its output 0644.
 set -euo pipefail
 # Assigned first so set -e stops on a missing key: an empty one would match
 # any secret key and skip the import.

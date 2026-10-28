@@ -48,11 +48,11 @@ Singleton {
     }
 
     // The sending app's hint wins. Spec: a positive timeout is a request in
-    // seconds, 0 means never expire, and -1 hands the decision back to us —
+    // milliseconds, 0 means never expire, and -1 hands the decision back to us —
     // which is where swaync's 5s low / 10s normal / never-for-critical come in.
     function timeout(n): int {
         if (n.expireTimeout >= 0)
-            return n.expireTimeout * 1000;
+            return n.expireTimeout;
         if (n.urgency === NotificationUrgency.Critical)
             return 0;
         return n.urgency === NotificationUrgency.Low ? 5000 : 10000;

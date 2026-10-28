@@ -1,23 +1,15 @@
--- =============================================================================
--- HYPRLAND MAIN CONFIGURATION (LUA)
--- =============================================================================
--- This is the main entry point for Hyprland configuration.
---
--- Device profiles are driven by chezmoi data in .chezmoidata.toml.
--- To add a new machine: add an entry under [machines.<hostname>] in that file.
--- =============================================================================
+-- Hyprland entry point. Per-machine values come from [machines.<hostname>] in
+-- .chezmoidata.toml; the shared config is in lua_modules/.
 {{- $m := index .machines .chezmoi.hostname }}
 
 -- =============================================================================
 -- USER PREFERENCES
 -- =============================================================================
--- Terminal launch command (bound to SUPER + Return in lua_modules/keybinds.lua).
--- Change this to use a different terminal, e.g. "alacritty" or "kitty".
+-- Globals read by lua_modules/keybinds.lua and startup.lua.
 terminal = {{ $m.terminal | quote }}
 
--- Run a heavy app in its own scope under app.slice. Anything Hyprland spawns
--- otherwise shares its session scope, and systemd-oomd kills whole cgroups:
--- a swap kill aimed at Zen took the compositor down with it.
+-- Run a heavy app in its own scope. Otherwise it shares Hyprland's session
+-- scope, and systemd-oomd killing that cgroup takes the compositor down too.
 function app(cmd)
   return "systemd-run --user --scope --quiet -- " .. cmd
 end
@@ -75,9 +67,8 @@ hl.config({
 -- =============================================================================
 -- MOUSE
 -- =============================================================================
--- ponytail: the wireless dongle enumerates two pointer interfaces, so both get
--- the same settings. Device blocks for absent devices are ignored, so this is
--- unconditional — no per-machine flag needed.
+-- ponytail: device names are hardcoded, not per-machine; blocks for absent
+-- devices are ignored. The wireless dongle exposes two pointer interfaces.
 for _, name in ipairs({
   "razer-razer-basilisk-v3-x-hyperspeed",
   "razer-razer-basilisk-v3-x-hyperspeed-2",
@@ -86,7 +77,7 @@ for _, name in ipairs({
     name = name,
     natural_scroll = false,
     accel_profile = "flat",
-    -- flat profile speed is a 1+x multiplier: 0.4 -> 1.4x, twice the old -0.3.
+    -- With the flat profile, speed is 1 + sensitivity: 1.4x.
     sensitivity = 0.4,
     scroll_factor = 0.8,
   })
@@ -99,7 +90,6 @@ end
 hl.bind("SUPER + d", hl.dsp.exec_cmd(app({{ $m.discord_cmd | quote }})))
 hl.bind("Print", hl.dsp.exec_cmd("qs -c xeome ipc call shot open"))
 {{ if $m.is_laptop }}
--- Lock the screen when the laptop lid closes
 hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd("hyprlock"), { locked = true })
 {{ end }}
 
@@ -115,6 +105,6 @@ require("lua_modules.startup")
 -- =============================================================================
 -- OPTIONAL OVERRIDES
 -- =============================================================================
--- Absolute path: dofile() resolves relative to Hyprland's CWD, not this dir.
+-- Absolute path: dofile() resolves against Hyprland's CWD, not this directory.
 
 pcall(dofile, os.getenv("HOME") .. "/.config/hypr/user.local.lua")

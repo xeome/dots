@@ -1,15 +1,5 @@
--- =============================================================================
--- USER LOCAL OVERRIDES (LUA)
--- =============================================================================
--- This file is managed by chezmoi with the create_ prefix: it is created once
--- and never overwritten. Safe to edit freely — chezmoi will not touch it again.
---
--- Use this file for per-machine customizations:
--- - Personal keybind modifications
--- - User-specific application launches
--- - Temporary testing configurations
--- - Local path overrides
--- =============================================================================
+-- Per-machine overrides, loaded last by hyprland.lua. chezmoi creates this
+-- file once (create_ prefix) and never overwrites it.
 
 -- Example: Add personal keybinds
 -- hl.bind("SUPER + SHIFT + t", hl.dsp.exec_cmd("your-personal-app"))

@@ -1,8 +1,5 @@
--- =============================================================================
--- SHARED KEYBINDINGS
--- =============================================================================
--- Device-agnostic keybindings. GPU-specific app launches are in the main config
--- =============================================================================
+-- Keybinds shared by every Hyprland machine. Machine-specific ones are in
+-- hyprland.lua.tmpl, which also defines `terminal` and `app`.
 
 local mod = "SUPER"
 
@@ -14,18 +11,13 @@ hl.config({
 
 -- ~~~ general
 hl.bind(mod .. " + SHIFT + r", hl.dsp.exec_cmd("hyprctl reload"))
--- Dropped: SUPER+SHIFT+q and SUPER+m ran `ags -t powermenu` / `-t quicksettings`.
--- ags isn't installed, so both have been dead binds; quickshell has no
--- equivalent yet.
 
--- ~~~ user applications (device-agnostic)
-hl.bind(mod .. " + return", hl.dsp.exec_cmd(terminal or "alacritty"))
+-- ~~~ user applications
+hl.bind(mod .. " + return", hl.dsp.exec_cmd(terminal))
 hl.bind(mod .. " + q", hl.dsp.exec_cmd(app("zen-browser")))
 hl.bind(mod .. " + e", hl.dsp.exec_cmd(app("thunar")))
 hl.bind(mod .. " + r", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind(mod .. " + v", hl.dsp.exec_cmd(app("code --ozone-platform=wayland")))
--- Dropped: SUPER+j exec'd a literal `quickshell:toggle-llm-overlay`, which is
--- not a binary and never was — same dead bind as the two ags ones above.
 
 -- ~~~ audio
 hl.bind(mod .. " + a", hl.dsp.exec_cmd("bash ~/.local/bin/status"))
@@ -34,10 +26,9 @@ hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"))
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"))
 
 -- ~~~ media keys
--- These only change the value; the quickshell OSD watches Pipewire and the
--- backlight sysfs node directly, so nothing has to tell it something happened.
--- Caps Lock is deliberately unbound for the same reason: its OSD keys off the
--- keyboard LED, and binding the key here would take over the actual toggle.
+-- The quickshell OSD watches PipeWire and the backlight itself, so these only
+-- change the value. Caps Lock stays unbound: its OSD reads the keyboard LED,
+-- and a bind here would take over the toggle.
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 5"))
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 5"))
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t"))
@@ -48,7 +39,7 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"))
 -- ~~~ misc utilities
 hl.bind(mod .. " + o", hl.dsp.exec_cmd("xset dpms force off"))
 hl.bind(mod .. " + l", hl.dsp.exec_cmd("hyprlock"))
-hl.bind(mod .. " + b", hl.dsp.exec_cmd("sh ~/.config/emoji/emoji.sh &"))
+hl.bind(mod .. " + b", hl.dsp.exec_cmd("sh ~/.config/emoji/emoji.sh"))
 hl.bind(mod .. " + k", hl.dsp.exec_cmd("qs -c xeome ipc call notifs toggle"))
 hl.bind(mod .. " + SHIFT + w", hl.dsp.exec_cmd("qs -c xeome ipc call walls toggle"))
 hl.bind(mod .. " + t", hl.dsp.exec_cmd("bash ~/.local/bin/theme-toggle"))
@@ -68,7 +59,7 @@ hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- ~~~ workspace switching
 for i = 1, 10 do
-  local key = i % 10 -- 10 maps to key 0
+  local key = i % 10 -- workspace 10 is on key 0
   hl.bind(mod .. " + " .. key, hl.dsp.focus({ workspace = i }))
   hl.bind(mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end

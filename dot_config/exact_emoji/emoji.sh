@@ -11,7 +11,8 @@ else
     exit
 fi
 
-CHOICE=$(find $LOC -name "*" -type f -printf '%f\n'| $MENU -l 10 -p "Pick" )
+CHOICE=$(find $LOC -type f ! -name '*.sh' -printf '%f\n'| $MENU -l 10 -p "Pick" )
+[ -n "$CHOICE" ] || exit 0
 EXT=$(echo "$CHOICE" | cut -d'.' -f2)
 TYPE="$WAYLAND_DISPLAY"
 if [ -z "${TYPE}" ];

@@ -21,7 +21,7 @@ export GHCUP_USE_XDG_DIRS="true"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export CMAKE_CXX_COMPILER_LAUNCHER="ccache"
 
-# PATH Configuration
+# PATH
 typeset -U path PATH
 path=(
     "$HOME/.local/bin"
@@ -33,11 +33,8 @@ path=(
     "${path[@]}"
 )
 
-# Dynamic Paths
 command -v go &>/dev/null && path+=("$(go env GOPATH)/bin")
 [[ -d "$HOME/.local/share/junest/bin" ]] && path+=("$HOME/.local/share/junest/bin")
-
-export PATH
 
 # Data Dirs
 export XDG_DATA_DIRS="/var/home/$USER/.local/share/flatpak/exports/share:/home/$USER/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/home/$USER/.local/share"

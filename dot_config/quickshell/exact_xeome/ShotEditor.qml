@@ -4,14 +4,12 @@ import QtQuick.Shapes
 import Quickshell
 import Quickshell.Wayland
 
-// Opened from Shot's thumbnail card. Ported from glyph-rice's Editor: pen,
-// arrow, rectangle, pixelate and text over the shot, kept in the image's own
-// pixels. Ctrl+S (or Enter) bakes them into the file at full size, over the
-// original, and copies the result; Esc discards.
+// Opened from Shot's thumbnail card: pen, arrow, rectangle, pixelate and text
+// marks over the shot, kept in the image's own pixels. Ctrl+S or Enter writes
+// them over the file at full size and copies it; Esc discards.
 //
-// The inks are literals rather than Theme tokens: they end up in a PNG, which
-// does not flip with light mode. They are the dark set's hot and warm plus
-// white and black.
+// The inks are the dark set's hot and warm plus white and black, as literals
+// rather than Theme tokens, because a PNG does not flip with light mode.
 Scope {
     id: root
 
@@ -466,7 +464,7 @@ Scope {
             }
         }
 
-        // Pixelate: the area resampled into blocks, for passwords, faces, addresses.
+        // Pixelate, not a true blur: the area resampled into blocks.
         Component {
             id: blur
 

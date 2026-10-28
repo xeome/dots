@@ -7,19 +7,16 @@ import Quickshell.Wayland
 import Quickshell.Widgets
 import "Calc.mjs" as Calc
 
-// Desktop widgets, after glyph-rice's home screen: a dot-matrix clock, the
-// date and a greeting on the left, a 3×3 grid of square tiles on the right.
-// One square module sizes everything, so the tiles read as one piece, and the
-// dots of the clock, the rings and the CPU history repeat the dot wallpaper
-// (dots.py).
+// Desktop widgets: a dot-matrix clock, the date and a greeting on the left, a
+// 3×3 grid of square tiles on the right. One square module sizes every tile,
+// and the dots repeat the dot wallpaper (dots.py).
 //
 // One per screen, on the layer under windows, and only while that screen's
-// workspace is empty: tiled windows leave gaps, and a tile showing through
-// them reads as a glitch. Hidden means unmapped, so nothing polls behind a
-// window either.
+// workspace is empty: a tile showing through the gaps between tiled windows
+// reads as a glitch. Hidden means unmapped, so nothing polls behind a window.
 //
-// What sits on the wallpaper rather than a tile uses the dark set's literals:
-// the wallpaper does not flip with light mode.
+// What sits on the wallpaper rather than a tile uses the dark set's literals,
+// because the wallpaper does not flip with light mode.
 PanelWindow {
     id: root
 
@@ -29,7 +26,7 @@ PanelWindow {
     // 60% of the screen tall, under the bar, on 1080p and 1440p alike.
     readonly property int m: Math.round(height * 0.19)
     readonly property int gap: 16
-    // Unlit dots: glyph's one step above its tiles, on our panel-black tiles.
+    // Unlit dots: one step above the tiles' `panel`.
     readonly property color off: Theme.light ? Theme.rule : "#1A1A1C"
 
     readonly property var player: Mpris.players.values.find(p => p.isPlaying) ?? Mpris.players.values[0] ?? null
@@ -51,7 +48,6 @@ PanelWindow {
         root.cpu = -1;
     }
 
-    // ponytail: every Desk polls on its own; one singleton if more screens ever show at once.
     screen: modelData
     // Hyprland only; sway's Compositor says never.
     visible: Compositor.empty(modelData)
@@ -108,6 +104,7 @@ PanelWindow {
         blockAllReads: true
     }
 
+    // ponytail: every Desk polls on its own; one shared poller if several screens ever show at once.
     Timer {
         interval: 2000
         repeat: true
@@ -436,8 +433,8 @@ PanelWindow {
     }
 
     // A grid cell: `span` modules wide, one tall. Flat `panel` with only the
-    // hairline edge, glyph's barely-lifted tile on the black wallpaper: the
-    // shell's raised grey with its glow and grain read grey over black.
+    // hairline edge, because the shell's raised fill, glow and grain read grey
+    // on the black wallpaper.
     component Tile: Surface {
         property int col
         property int row
@@ -455,7 +452,7 @@ PanelWindow {
     }
 
     // A ring of dots lit clockwise from 12 by `fraction`, the value in Doto
-    // in the middle. After glyph's Ring.
+    // in the middle.
     component RingTile: Tile {
         id: rt
 

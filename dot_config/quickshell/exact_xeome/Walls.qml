@@ -7,13 +7,12 @@ import Quickshell.Wayland
 import "Calc.mjs" as Calc
 
 // Super+Shift+W, through `qs -c xeome ipc call walls toggle`. A wallpaper
-// picker after skwd-wall's Slices: every image in ~/.config/wallpapers as a
-// parallelogram slice, the focused one wide. D turns on Dots, which shows and
-// applies each wallpaper's dot-matrix bake (dots.py) instead, baked on demand
-// into ~/.local/share/xeome-dots and kept there: not ~/.cache, since an
-// applied bake is what waypaper restores at login, and a cache cleaner
-// deleting it would leave the desktop bare. waypaper still does the applying,
-// so the choice survives a restart and its own picker keeps working.
+// picker: every image in ~/.config/wallpapers as a parallelogram slice, the
+// focused one wide. D turns on Dots, which shows and applies each wallpaper's
+// dot-matrix bake (dots.py) instead, baked on demand into
+// ~/.local/share/xeome-dots. Not ~/.cache: waypaper restores the applied bake
+// at login, so a cache cleaner would leave the desktop bare. waypaper does the
+// applying, so the choice survives a restart and its own picker keeps working.
 Scope {
     id: root
 
@@ -27,8 +26,8 @@ Scope {
     property string pending: ""   // an original to apply once its bake lands
     property int rev: 0           // bumped whenever the store may have changed
 
-    // The store's bakes, by name. Reads `rev` so every binding that asks
-    // re-runs when a bake lands: an overwritten bake leaves `count` alone.
+    // The store's bakes, by name. Reads `rev` as well as `count`, because an
+    // overwritten bake leaves `count` alone.
     readonly property var bakes: {
         root.rev;
         const out = [];
@@ -53,8 +52,8 @@ Scope {
         list.currentIndex = Math.max(0, at.index);
         list.recenter();
         list.forceActiveFocus();
-        // Neither index nor Dots may change on reopening, so nothing else
-        // would start a bake for the slice it opens on.
+        // Reopening may change neither index nor Dots, so nothing else would
+        // start a bake for the slice it opens on.
         root.check();
     }
 
@@ -65,7 +64,7 @@ Scope {
 
     function set(path: string): void {
         // Detached, not a Process: swaybg inherits waypaper's stdio, and a
-        // Process closes its pipe once waypaper exits, which kills swaybg with
+        // Process closes that pipe when waypaper exits, so swaybg dies of
         // SIGPIPE the next time it logs.
         Quickshell.execDetached(["waypaper", "--wallpaper", path]);
     }
@@ -255,12 +254,11 @@ Scope {
                 Qt.callLater(list.recenter);
             }
 
-            // The focused slice in the middle, re-done on every width step
-            // of every slice: the one shrinking beside it moves it too.
-            // Layout first, or the position read is a frame old (37 px off
-            // after each step right). No highlight range: StrictlyEnforceRange
-            // re-picks the current item as widths animate, and stepping left
-            // ran on to the first slice.
+            // The focused slice in the middle, re-done on every width step of
+            // every slice, because the one shrinking beside it moves it too.
+            // forceLayout() first, or the position read is a frame old. No
+            // highlight range: StrictlyEnforceRange re-picks the current item
+            // as widths animate, and stepping left runs on to the first slice.
             function recenter(): void {
                 forceLayout();
                 positionViewAtIndex(currentIndex, ListView.Center);

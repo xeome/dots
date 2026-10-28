@@ -6,17 +6,15 @@ import Quickshell.Wayland
 import Quickshell.Widgets
 import "Calc.mjs" as Calc
 
-// Print, through `qs -c xeome ipc call shot open`. Ported from glyph-rice's
-// Shot and restyled: the focused monitor freezes (grim to a file shown under
-// the overlay), you pick a region, a window or the whole screen, and the shot
-// lands in ~/Pictures/Screenshots and on the clipboard. A thumbnail card
-// slides in afterwards; clicking it opens ShotEditor.
+// Print, through `qs -c xeome ipc call shot open`. Freezes the focused
+// monitor (grim to a file shown under the overlay), takes a region, a window
+// or the whole screen into ~/Pictures/Screenshots and the clipboard, then
+// slides in a card that opens ShotEditor.
 //
 // Everything here is in the screen's logical pixels. The frozen frame is in
 // device pixels, `k` per logical one, and only Calc.crop crosses between them.
-// What is drawn over the frame (the dimming, the selection, the crosshair) is
-// fixed black and white rather than themed: it sits on a screenshot, not on a
-// shell surface, so light mode has nothing to flip there.
+// What is drawn over the frame is fixed black and white, not themed, because
+// it sits on a screenshot.
 Scope {
     id: root
 
@@ -28,8 +26,7 @@ Scope {
     property int delay: 0
     property string frozen: ""
     property var scr: null
-    // Bound, not read once: lastIpcObject notifies, so the positions the
-    // refresh in open() brings back land here whenever they arrive.
+    // A binding, so the positions refreshWindows() fetches land whenever they arrive.
     readonly property var wins: aim.visible ? Compositor.windows(root.scr) : []
     property rect drag: Qt.rect(0, 0, 0, 0)   // width 0: nothing dragged yet
     property real mx: 0
@@ -48,18 +45,15 @@ Scope {
         if (aim.visible)
             return;
         root.scr = Quickshell.screens.find(s => s.name === Compositor.focusedMonitor) ?? Quickshell.screens[0];
-        // Asynchronous: `wins` picks the positions up when they arrive.
         Compositor.refreshWindows();
         // ppm, not png: grim writes it in a fraction of the time, and the
-        // screen stays frozen-looking for exactly that long.
+        // overlay cannot show before it is done.
         freeze.next = `${root.run}/xeome-shot-${Date.now()}.ppm`;
         freeze.exec(["sh", "-c", 'rm -f "$3"/xeome-shot-*.ppm; grim -t ppm -o "$1" "$2" && echo ok', "sh", root.scr.name, freeze.next, root.run]);
     }
 
-    // The frame is a whole screen in tmpfs and decoded in memory (the picker's
-    // Canvas keeps its own copy until told): let go of it as soon as the
-    // overlay closes. A capture's script has its own path to the file and
-    // deletes it once vips is done.
+    // Frees the decoded frame, which the picker's Canvas holds until told.
+    // The capture script deletes the file itself once vips is done.
     function close(): void {
         aim.visible = false;
         picker.unloadImage(frozenImg.source);
@@ -418,9 +412,8 @@ Scope {
                         root.drag = Qt.rect(Math.min(from.x, root.mx), Math.min(from.y, root.my), Math.abs(root.mx - from.x), Math.abs(root.my - from.y));
                 }
                 onPressed: e => {
-                    // The overlay only learns where the cursor is when it
-                    // moves; a click without moving must not use the last
-                    // capture's position.
+                    // The position only updates on move, so a click without
+                    // moving would otherwise use the last capture's.
                     root.mx = clampX(e.x);
                     root.my = clampY(e.y);
                     if (root.mode !== 0)
@@ -428,7 +421,7 @@ Scope {
                     from = Qt.point(root.mx, root.my);
                     root.drag = Qt.rect(from.x, from.y, 0, 0);
                 }
-                // Region captures on release, like slurp did.
+                // Region captures on release.
                 onReleased: if (root.mode === 0 && root.drag.width > 2 && root.drag.height > 2)
                     root.fire()
             }

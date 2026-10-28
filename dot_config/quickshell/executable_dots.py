@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-"""Bakes wallpapers into a dot matrix, after glyph-rice's wallpaper shader:
-the image is cut into 15 px cells and each cell becomes one round dot, its
-brightness the cell's grey, from true black up to Theme.qml's `text`.
-Black and not the shell's `ground`, as glyph does: the desk's tiles sit on
-`panel` just above it, so the screen reads AMOLED-black and the tiles lift
-off it, where a grey ground made the whole desk read grey.
+"""Bakes wallpapers into a dot matrix: the image is cut into 15 px cells and
+each cell becomes one round dot, its brightness the cell's grey, from true
+black up to Theme.qml's `text`. True black, not the shell's `ground`, because
+the desk's tiles sit on `panel` just above it and must lift off the screen.
 
     ~/.local/share/chezmoi/dot_config/quickshell/executable_dots.py [--out DIR] IMAGE...
 
 writes IMAGE's name + "-dots.png" beside each, or into DIR. Run it on the
-chezmoi source copy (dot_config/wallpapers/) to keep the result. Walls.qml,
-the Super+Shift+W picker, runs it with --out ~/.local/share/xeome-dots.
+chezmoi source copy (dot_config/wallpapers/) to keep the result. Walls.qml
+runs it with --out ~/.local/share/xeome-dots.
 
 One size for every monitor, 3840x2160 (256 x 144 cells): the 4K draws it 1:1,
 1440p and 1080p scale it down, so dots stay round and sharp everywhere.

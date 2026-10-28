@@ -428,7 +428,7 @@ def kvcolour(c, a):
     return c if a >= 1 else f"{c}{round(a * 255):02x}"
 
 
-def patch_kvconfig(text, mode, t, recolour):
+def patch_kvconfig(text, mode, recolour):
     """Recolour every colour key and apply SECTIONS (and the window keys)."""
     sections = {k: dict(v) for k, v in SECTIONS.items()}
     if mode == "dark":
@@ -484,7 +484,11 @@ def build(src, out, mode, name, upstream):
             return key
         tok, alpha = (spec, None) if isinstance(spec, str) else spec
         c, a = t[tok]
-        return c, key[1] if alpha == "keep" else a if alpha is None else alpha
+        if alpha == "keep":
+            a = key[1]
+        elif alpha is not None:
+            a = alpha
+        return c, a
 
     tree = ET.parse(src / f"{upstream}.svg")
     root = tree.getroot()
@@ -512,7 +516,7 @@ def build(src, out, mode, name, upstream):
             return t[spec]
         return lookup(kv_value(value), "kvconfig")
 
-    kv = patch_kvconfig(kv, mode, t, kv_recolour)
+    kv = patch_kvconfig(kv, mode, kv_recolour)
     if misses:
         return [f"{mode}: no TABLE entry for {k} ({fam})" for k, fam in dict.fromkeys(misses)]
     out.mkdir(parents=True, exist_ok=True)

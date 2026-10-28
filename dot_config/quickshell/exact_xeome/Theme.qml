@@ -13,15 +13,11 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    // Toggle with `qs -c xeome ipc call theme toggle`, bound to SUPER+T via
-    // ~/.local/bin/theme-toggle (which also flips the GTK theme so
-    // the shell and GTK apps never drift apart). Persisted to stateDir since
-    // this is flipped rarely and forgetting it on every restart would be
-    // more annoying than a stray state file.
+    // SUPER+T runs ~/.local/bin/theme-toggle, which flips GTK too and calls
+    // `qs -c xeome ipc call theme toggle`. Persisted across restarts.
     property alias light: persisted.light
 
-    // stateDir isn't created just by quickshell running — nothing else here
-    // writes to it — so make sure it exists before FileView tries to.
+    // Quickshell does not create stateDir; FileView needs it to exist.
     Process {
         command: ["mkdir", "-p", Quickshell.stateDir]
         running: true
@@ -52,17 +48,11 @@ Singleton {
         }
     }
 
-    // Graphite's tokens, copied from the skill rather than re-tuned: every dark
-    // value there was settled by eye in small steps. The light set is derived
-    // and has not been looked at yet.
+    // Colours are #AARRGGBB, Qt's order. check-palette.py composites the
+    // translucent ones over their ground before it measures contrast.
     //
-    // Colours are #AARRGGBB, Qt's order. The translucent ones are drawn over
-    // whatever surface they sit on, so check-palette.py composites them over
-    // their ground before it measures contrast.
-    //
-    // Grounds: the bar is `ground`, everything floating is `raised`. Graphite's
-    // inset `panel` is what a window is, so nothing in the shell draws it: it
-    // is here as the one source for the terminals' and GTK views' background.
+    // Grounds: the bar is `ground`, everything floating is `raised`, and
+    // `panel` is a window's background (terminals, GTK views, the desk's tiles).
     readonly property color ground: light ? "#FFEDEDEF" : "#FF0A0A0C"
     readonly property color panel: light ? "#FFF8F8F9" : "#FF0E0E10"
     readonly property color raised: light ? "#FFFFFFFF" : "#FF151618"
@@ -104,40 +94,18 @@ Singleton {
     readonly property int radius: 6
     readonly property int radiusLg: 10
 
-    // Inter, as graphite asks. "Inter Variable" and not "Inter": that name
-    // resolves to the static Inter.ttc, where BarText's wght axis does nothing
-    // and the 450/550/650 weights collapse onto 500 and 700.
-    //
-    // One family, not a list: QML's font value type has `family` (a string) and
-    // no `families`, and a comma-separated string is read as one bogus family
-    // name rather than a fallback chain. So the Nerd glyphs inlined into label
-    // strings all over the shell (`󰐊 ${label}`) ride on fontconfig's own
-    // fallback, which serves them from whichever Nerd Font is installed —
-    // Iosevka Nerd Font on this machine. Correct either way: the Nerd Fonts
-    // standard assigns the same glyph to the same private-use codepoint in
-    // every patched font, so only the advance width varies by machine.
+    // "Inter Variable", not "Inter": that name resolves to the static
+    // Inter.ttc, where the wght axis does nothing and 450/550/650 collapse
+    // onto 500 and 700. One family only, since QML reads a comma list as one
+    // bogus name; the Nerd glyphs in labels come from fontconfig's fallback.
     readonly property string family: "Inter Variable"
 
-    // Added to the space that separates a glyph from its value in the bar's
-    // icon+number labels ("󰂰 35%"). Lives here because it is a property of the
-    // font above, not of any one module: a proportional space is far narrower
-    // than the monospace advance those labels were spaced by, and the glyphs
-    // arrive from a fallback font narrower still, so the two ended up touching.
-    // Brings the gap to roughly BarModule's own 6px row spacing.
+    // Widens the space between a glyph and its value ("󰂰 35%"): Inter's space
+    // is narrow and the fallback glyphs narrower, so the two touched.
     readonly property int glyphGap: 3
-    // 14 rather than a sans-flattering 13: Inter and the JetBrains Mono the
-    // shell once used have all but identical x-heights (0.546 vs 0.550 of em), so
-    // the same pixelSize draws the same letter height and dropping it only made
-    // the bar smaller. What did shrink is horizontal — proportional advances
-    // render the clock's "14:32  Mon 17 Aug" at 122px where mono took 143 — and
-    // that part is the point, not something to compensate for with size.
-    // Scaled per machine by TEXT_SCALE (hyprland.lua, from .chezmoidata.toml);
-    // unset means 1.
+    // Scaled per machine by TEXT_SCALE (hyprland.lua, from .chezmoidata.toml).
     readonly property int size: Math.round(14 * (Number(Quickshell.env("TEXT_SCALE")) || 1))
-    // Every ordinary label inherits this. Eighteen of them used to pin 500
-    // explicitly, which meant "lighter than the old 600" and silently became a
-    // no-op once the default dropped — so raising the token moved almost
-    // nothing. They were deleted rather than rewritten; only the weights that
-    // deliberately differ (450 body, 650 headings, 700 active) are still local.
+    // Every ordinary label inherits this; only 450 body, 650 headings and 700
+    // active are set locally.
     readonly property int weight: 550
 }

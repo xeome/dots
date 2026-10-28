@@ -29,6 +29,9 @@
   --arrowpanel-background: light-dark(#ffffff, #151618) !important;
   --zen-urlbar-background: light-dark(#ffffff, #151618) !important;
   --panel-separator-color: light-dark(rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.08)) !important;
+  /* The Better Find Bar mod fills the find bar with --zen-primary-color, which
+   * is the text tone here, so its labels vanished. */
+  --better-findbar-background-color: light-dark(#ffffff, #151618) !important;
 
   --toolbarbutton-background-color-hover: light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.05)) !important;
   --toolbarbutton-background-color-active: light-dark(rgba(0, 0, 0, 0.055), rgba(255, 255, 255, 0.07)) !important;

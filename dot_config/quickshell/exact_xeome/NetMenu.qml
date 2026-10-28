@@ -32,6 +32,7 @@ Menu {
     }
 
     function activate(n: var): void {
+        root.pending = null;
         if (n.connected) {
             n.disconnect();
             return;

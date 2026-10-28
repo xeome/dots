@@ -86,8 +86,9 @@ Singleton {
     readonly property int barHeight: 48
     readonly property int gap: 6
     readonly property int pad: 12
-    // Every shell transition: 200 ms, decelerating. Hyprland's `ease` curve in
+    // Shell transitions: 200 ms, decelerating. Hyprland's `ease` curve in
     // lua_modules/settings.lua is the same OutCubic, so windows move alike.
+    // The OSD's level bar and Shot's effects keep timings of their own.
     readonly property int anim: 200
     readonly property int ease: Easing.OutCubic
 

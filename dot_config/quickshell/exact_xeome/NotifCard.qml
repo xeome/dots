@@ -178,10 +178,7 @@ Surface {
             id: closeMa
             anchors.fill: parent
             hoverEnabled: true
-            onClicked: {
-                root.notif.dismiss();
-                root.dismissed();
-            }
+            onClicked: root.notif.dismiss()
         }
     }
 }

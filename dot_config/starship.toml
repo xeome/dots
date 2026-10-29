@@ -1,10 +1,10 @@
 format = """$hostname$directory$git_branch$git_state$git_status$cmd_duration$python$fill$memory_usage$line_break$status$character"""
 
 [hostname]
-format = '[ $hostname ](inverted bold)'
+format = '[ $hostname ](bold fg:#f7f8f8 bg:#232427)'
 
 [directory]
-style = "inverted bold"
+style = "bold fg:#f7f8f8 bg:#232427"
 format = '[ $path ]($style)'
 truncation_length = 4
 truncation_symbol = '…/'

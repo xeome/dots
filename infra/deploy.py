@@ -14,19 +14,22 @@ files.file(path=..., present=False) until every machine has applied it.
 from pyinfra import host
 from pyinfra.facts.pacman import PacmanPackages
 from pyinfra.facts.server import OsRelease
-from pyinfra.operations import files, server, systemd
+from pyinfra.operations import files, pacman, server, systemd
 from pyinfra.operations.util import any_changed
 
 # Keyed by OsRelease id or id_like, so another family is one more entry here.
+# Each family names its package op: server.packages would pick the manager by
+# which binary is on PATH, and apt, dnf and brew all install on Arch.
 # `helper` names are outside the family's own repos. Deleting a name leaves it
-# installed: to remove a package, add a
-# server.packages(packages=[...], present=False) op below.
+# installed: to remove a package, call the family's "op" with present=False
+# below.
 #
 # equibop, waypaper, zen-browser-bin and swayfx are repo packages on CachyOS
 # but AUR ones on plain Arch, so they are helper names: yay takes either.
 PACKAGES = {
     "arch": {
         "repo": {
+            "op": pacman.packages,
             "common": [
                 "adw-gtk-theme", "age", "autotiling-rs", "bc", "bitwarden", "brightnessctl",
                 "btop", "chezmoi", "evince", "fd", "fzf", "ghostty", "git-delta",
@@ -75,7 +78,8 @@ def put(src, dest, mode="644"):
 
 
 # --- packages ----------------------------------------------------------------
-server.packages(name="Packages", packages=family["repo"]["common"] + family["repo"][wm])
+repo = family["repo"]
+repo["op"](name="Packages", packages=repo["common"] + repo[wm])
 
 
 # --- desktop -----------------------------------------------------------------

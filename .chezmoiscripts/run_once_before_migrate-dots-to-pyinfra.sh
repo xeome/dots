@@ -10,8 +10,10 @@ set -euo pipefail
 mapfile -t pkgs < <(pacman -Qq | grep '^dots-')
 ((${#pkgs[@]})) || exit 0
 # The removal takes the packages' /etc files with it; only the deploy puts
-# them back, so stop here while it cannot run.
-command -v uvx >/dev/null || { echo 'migrate-dots-to-pyinfra: install uv first' >&2; exit 1; }
+# them back, so stop here while it cannot run. Running it once fetches it, so a
+# machine with uvx but no cached pyinfra and no network stops here too.
+uvx pyinfra@3.10.0 --version >/dev/null ||
+    { echo 'migrate-dots-to-pyinfra: cannot run pyinfra: install uv, or get online' >&2; exit 1; }
 
 # Marked explicit first, or the removal leaves the whole desktop in `pacman -Qdt`.
 # Guarded: the TLP profile packages have no dependencies, and may be all that is left.

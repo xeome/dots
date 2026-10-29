@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Bakes wallpapers into a dot matrix: the image is cut into 15 px cells and
 each cell becomes one round dot, its brightness the cell's grey, from true
-black up to Theme.qml's `text`. True black, not the shell's `ground`, because
-the desk's tiles sit on `panel` just above it and must lift off the screen.
+black up to CAP of Theme.qml's `text`, so the wallpaper never outshines the
+text over it. Each dot keeps SAT of the cell's own colour, so a grey photo
+bakes grey; the cap holds for the grey, while a saturated dot's strongest
+channel can sit a little above it (cyan reaches 209 where white stops at 199). The dots dim towards the corners and carry a little grain. True
+black, not the shell's `ground`, because the desk's tiles sit on `panel` just
+above it and must lift off the screen.
 
     ~/.local/share/chezmoi/dot_config/quickshell/executable_dots.py [--out DIR] IMAGE...
 
@@ -28,8 +32,21 @@ from PIL import Image, ImageOps
 W, H, CELL = 3840, 2160, 15
 RADIUS = 0.3 * CELL  # glyph's dot: 0.3 of the pitch
 # The darkest dot, as a share of the way from black to text. Keeps black areas
-# a faint, even grid instead of a hole; anything brighter is left alone.
+# a faint grid instead of a hole (dimmed towards the corners with the rest);
+# anything brighter is left alone.
 FLOOR = 0.06
+# Each value below was picked by eye from rendered previews; dots.test.py pins
+# them with literals, so a change here wants the same change there.
+# The corners fall to VIGNETTE of the centre, starting INNER of the way out
+# along the half-diagonal; the floor falls half as far, so the grid never goes.
+VIGNETTE, INNER = 0.5, 0.35
+# Brightness above KNEE eases into CAP at white, so the brightest dot sits
+# below the text read over it.
+KNEE, CAP = 0.55, 0.85
+SAT = 0.35  # how much of the photo's own colour a dot keeps
+# Each dot's brightness varies by this much (one sigma), from a fixed seed so a
+# rebake comes out the same.
+GRAIN = 0.10
 
 
 def tone(x, c=2.0, p=0.45):
@@ -38,15 +55,42 @@ def tone(x, c=2.0, p=0.45):
     return x**c * (1 + p**c) / (x**c + p**c)
 
 
+def ease(x):
+    """x below KNEE; above it a curve with slope 1 at KNEE that reaches CAP at 1."""
+    a = (1 - KNEE) / (CAP - KNEE)
+    u = (x - KNEE) / (1 - KNEE)
+    return np.where(x > KNEE, KNEE + (CAP - KNEE) * a * u / (1 + (a - 1) * u), x)
+
+
+def vignette(k):
+    """Per cell: 1 inside INNER, smoothstepping down to 1 - k at the corners."""
+    ys, xs = np.mgrid[0 : H // CELL, 0 : W // CELL] + 0.5
+    r = np.hypot(xs / (W / CELL / 2) - 1, ys / (H / CELL / 2) - 1) / np.sqrt(2)
+    t = np.clip((r - INNER) / (1 - INNER), 0, 1)
+    return 1 - k * t * t * (3 - 2 * t)
+
+
 def dots(im, hi):
-    grey = np.asarray(ImageOps.fit(im.convert("L"), (W, H), Image.LANCZOS), float) / 255
-    lum = np.maximum(tone(grey.reshape(H // CELL, CELL, W // CELL, CELL).mean(axis=(1, 3))), FLOOR)
+    rgb = np.asarray(ImageOps.fit(im.convert("RGB"), (W, H), Image.LANCZOS), float) / 255
+    cell = rgb.reshape(H // CELL, CELL, W // CELL, CELL, 3).mean(axis=(1, 3))
+    grey = cell @ np.array([0.299, 0.587, 0.114])
+    noise = np.random.default_rng(7).normal(0, 1, grey.shape)
+    lum = ease(np.clip(tone(grey) * (1 + GRAIN * noise), 0, 1)) * vignette(VIGNETTE)
+    # The cell's hue as a per-channel ratio to its grey, moved SAT of the way
+    # from 1. Black cells get 1: their lit value is 0 anyway, and 0/0's NaN
+    # would win the max below and erase the floor dot.
+    hue = np.divide(cell, grey[..., None], out=np.ones_like(cell), where=grey[..., None] > 0)
+    lit = hi * (1 + SAT * (hue - 1)) * lum[..., None]
+    # The floor stays text's grey, so near-black noise never shows as colour.
+    v = np.maximum(lit, hi * FLOOR * vignette(VIGNETTE / 2)[..., None])
     # One cell's dot coverage, antialiased by distance from the dot's edge;
     # the centre pixel sits exactly on the cell's centre (CELL is odd).
     off = np.arange(CELL) + 0.5 - CELL / 2
     cover = np.clip(RADIUS + 0.5 - np.hypot(off[:, None], off[None, :]), 0, 1)
-    t = np.repeat(np.repeat(lum, CELL, 0), CELL, 1) * np.tile(cover, (H // CELL, W // CELL))
-    return Image.fromarray(np.round(hi * t[..., None]).astype(np.uint8), "RGB")
+    t = np.repeat(np.repeat(v, CELL, 0), CELL, 1) * np.tile(cover, (H // CELL, W // CELL))[..., None]
+    # Strong grain on a bright saturated cell can pass 255, and uint8 would wrap
+    # it to near black.
+    return Image.fromarray(np.round(np.clip(t, 0, 255)).astype(np.uint8), "RGB")
 
 
 def text_grey():

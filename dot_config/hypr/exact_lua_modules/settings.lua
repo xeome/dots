@@ -8,11 +8,27 @@ local line = "rgba(ffffff14)"
 local ring = "rgba(0000004d)"
 
 hl.config({
+  -- Tab groups wear the same edges, locked or not. Without gradients the
+  -- groupbar's colours are only its 3 px indicator line.
   group = {
+    col = {
+      border_active = focus,
+      border_inactive = line,
+      border_locked_active = focus,
+      border_locked_inactive = line,
+    },
     groupbar = {
       enabled = true,
       font_family = "Inter",
       font_size = 8,
+      text_color = "rgba(e6e7eaff)",
+      text_color_inactive = "rgba(8a8f98ff)",
+      col = {
+        active = focus,
+        inactive = line,
+        locked_active = focus,
+        locked_inactive = line,
+      },
     },
   },
   decoration = {

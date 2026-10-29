@@ -26,9 +26,11 @@ The packages, and everything this repo puts under `/etc`, come from one
 [pyinfra](https://pyinfra.com) deploy, `infra/deploy.py`: the package names for
 the machine's `wm`, and drop-ins for DNS, systemd-oomd, TLP profiles, polkit,
 udev and the Qt environment. `chezmoi apply` runs it through `uvx` whenever a
-file in `infra/` changes, so it needs `uv`, `yay` and `base-devel` first. A
-package name deleted from the deploy stays installed; its package table says
-how to remove one.
+file in `infra/` changes, so it needs `uv`, `yay` and `base-devel` first.
+Remove `power-profiles-daemon` before the first apply: `tlp-pd` conflicts with
+it, and the unattended install answers no. On a machine missing AUR packages,
+`yay` asks for the sudo password a second time. A package name deleted from
+the deploy stays installed; its package table says how to remove one.
 
 # Installation
 

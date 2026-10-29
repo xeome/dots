@@ -18,23 +18,65 @@ PanelWindow {
         right: true
     }
     margins {
-        // On the window grid: Hyprland's gaps_out is Theme.pad too.
+        // On the window grid: Hyprland's gaps_out is Theme.pad too. The right
+        // pad is inside the window instead, as room for a card's drift in.
         top: Theme.barHeight + Theme.pad
-        right: Theme.pad
+        right: 0
     }
-    implicitWidth: 400
+    implicitWidth: 400 + Theme.pad
     implicitHeight: Math.max(1, col.implicitHeight)
     exclusionMode: ExclusionMode.Ignore
     color: "transparent"
     visible: Notifs.popups.length > 0
+    // The pad strip at the screen edge passes clicks through.
+    mask: Region {
+        item: col
+    }
 
     Column {
         id: col
-        width: parent.width
+        width: 400
         spacing: 6
 
+        // A new card drifts in from the right and fades in; the ones below
+        // slide down to make room. Hyprland fades only the layer, so cards
+        // arriving while it is showing would otherwise pop in. `move` also
+        // finishes the opacity of an `add` that a second card interrupts.
+        add: Transition {
+            NumberAnimation {
+                property: "x"
+                from: Theme.pad
+                duration: Theme.anim
+                easing.type: Theme.ease
+            }
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: Theme.anim
+                easing.type: Theme.ease
+            }
+        }
+        move: Transition {
+            NumberAnimation {
+                property: "y"
+                duration: Theme.anim
+                easing.type: Theme.ease
+            }
+            NumberAnimation {
+                property: "opacity"
+                to: 1
+                duration: Theme.anim
+                easing.type: Theme.ease
+            }
+        }
+
         Repeater {
-            model: Notifs.popups
+            // Notifs reassigns the array on every change; ScriptModel diffs
+            // it, so cards already showing are kept rather than rebuilt.
+            model: ScriptModel {
+                values: Notifs.popups
+            }
 
             delegate: NotifCard {
                 id: card

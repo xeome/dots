@@ -23,6 +23,10 @@ PanelWindow {
     property int lastBrightness: -1
     property int lastCaps: -1
 
+    // The window is this much taller than the Surface, which rests at its top
+    // 120 px up: room for the drift up into place as Hyprland fades it in.
+    readonly property int drift: 6
+
     function flash(icon: string, value: real, label: string): void {
         root.icon = icon;
         root.value = value;
@@ -34,12 +38,15 @@ PanelWindow {
     screen: Quickshell.screens.find(s => s.name === Compositor.focusedMonitor) ?? null
     WlrLayershell.namespace: "quickshell-osd"
     anchors.bottom: true
-    margins.bottom: 120
+    margins.bottom: 120 - drift
     implicitWidth: 320
-    implicitHeight: 56
+    implicitHeight: 56 + drift
     exclusionMode: ExclusionMode.Ignore
     color: "transparent"
     visible: false
+
+    onVisibleChanged: if (visible)
+        enter.restart()
 
     Timer {
         id: hide
@@ -159,7 +166,17 @@ PanelWindow {
     // ---- chrome ------------------------------------------------------------
 
     Surface {
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height - root.drift
+
+        NumberAnimation on y {
+            id: enter
+            from: root.drift
+            to: 0
+            duration: Theme.anim
+            easing.type: Theme.ease
+            running: false
+        }
 
         RowLayout {
             anchors.fill: parent

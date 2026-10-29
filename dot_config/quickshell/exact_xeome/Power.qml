@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import Quickshell.Io
 import Quickshell.Services.UPower
 
@@ -16,13 +15,8 @@ import Quickshell.Services.UPower
 // On a hybrid Intel CPU, power-saver also pins user.slice to the E-cores. The
 // pin follows the profile, not the click, so a profile set elsewhere pins too.
 // 49-dots-ecore-pin.rules lets a wheel user do it without a prompt.
-PopupWindow {
+Popup {
     id: root
-
-    required property Item anchorItem
-
-    // Read by Battery; see Menu.closedAt.
-    property double closedAt: 0
 
     // The E-core list, e.g. "4-11". Empty on a CPU without E-cores, which
     // makes the pin a no-op.
@@ -66,19 +60,8 @@ PopupWindow {
         pinner.running = true;
     }
 
-    anchor.item: anchorItem
-    anchor.edges: Edges.Bottom
-    anchor.gravity: Edges.Bottom
-    anchor.margins.top: 6
-
-    implicitWidth: body.implicitWidth + 24
-    implicitHeight: body.implicitHeight + 24
-    color: "transparent"
-    visible: false
-    grabFocus: true
-
-    onVisibleChanged: if (!visible)
-        closedAt = Date.now()
+    contentWidth: body.implicitWidth + 24
+    contentHeight: body.implicitHeight + 24
 
     Connections {
         target: PowerProfiles
@@ -107,195 +90,191 @@ PopupWindow {
         id: pinner
     }
 
-    Surface {
-        anchors.fill: parent
+    ColumnLayout {
+        id: body
+        anchors.centerIn: parent
+        spacing: 4
 
-        ColumnLayout {
-            id: body
-            anchors.centerIn: parent
-            spacing: 4
+        Repeater {
+            model: root.profiles
 
-            Repeater {
-                model: root.profiles
+            delegate: Rectangle {
+                id: row
 
-                delegate: Rectangle {
-                    id: row
+                required property var modelData
+                readonly property bool current: PowerProfiles.profile === modelData.profile
 
-                    required property var modelData
-                    readonly property bool current: PowerProfiles.profile === modelData.profile
+                Layout.fillWidth: true
+                implicitWidth: 272
+                implicitHeight: 46
+                radius: Theme.radius
+                color: row.current ? Theme.sel : rowMa.containsMouse ? Theme.hover : "transparent"
+                border.width: 1
+                border.color: Theme.line
 
-                    Layout.fillWidth: true
-                    implicitWidth: 272
-                    implicitHeight: 46
-                    radius: Theme.radius
-                    color: row.current ? Theme.sel : rowMa.containsMouse ? Theme.hover : "transparent"
-                    border.width: 1
-                    border.color: Theme.line
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Theme.anim
+                        easing.type: Theme.ease
+                    }
+                }
 
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: Theme.anim
-                            easing.type: Theme.ease
-                        }
+                RowLayout {
+                    anchors {
+                        fill: parent
+                        leftMargin: 12
+                        rightMargin: 12
+                    }
+                    spacing: 10
+
+                    BarText {
+                        Layout.preferredWidth: 24
+                        horizontalAlignment: Text.AlignHCenter
+                        text: root.glyph(row.modelData.profile)
+                        font.pixelSize: Theme.size + 5
+                        color: row.current ? Theme.bright : Theme.text
                     }
 
-                    RowLayout {
-                        anchors {
-                            fill: parent
-                            leftMargin: 12
-                            rightMargin: 12
-                        }
-                        spacing: 10
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 0
 
                         BarText {
-                            Layout.preferredWidth: 24
-                            horizontalAlignment: Text.AlignHCenter
-                            text: root.glyph(row.modelData.profile)
-                            font.pixelSize: Theme.size + 5
+                            Layout.fillWidth: true
+                            text: row.modelData.name
                             color: row.current ? Theme.bright : Theme.text
                         }
 
-                        ColumnLayout {
+                        BarText {
                             Layout.fillWidth: true
-                            spacing: 0
-
-                            BarText {
-                                Layout.fillWidth: true
-                                text: row.modelData.name
-                                color: row.current ? Theme.bright : Theme.text
-                            }
-
-                            BarText {
-                                Layout.fillWidth: true
-                                text: row.modelData.detail
-                                font.pixelSize: Theme.size - 4
-                                weight: 450
-                                color: Theme.dim
-                            }
+                            text: row.modelData.detail
+                            font.pixelSize: Theme.size - 4
+                            weight: 450
+                            color: Theme.dim
                         }
                     }
+                }
 
-                    MouseArea {
-                        id: rowMa
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: root.apply(row.modelData)
-                    }
+                MouseArea {
+                    id: rowMa
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onClicked: root.apply(row.modelData)
                 }
             }
+        }
 
-            Rule {
-                Layout.topMargin: 4
-                visible: bri.visible
-            }
+        Rule {
+            Layout.topMargin: 4
+            visible: bri.visible
+        }
 
-            ColumnLayout {
-                id: bri
+        ColumnLayout {
+            id: bri
 
+            Layout.fillWidth: true
+            spacing: 2
+            visible: Backlight.available
+
+            RowLayout {
                 Layout.fillWidth: true
-                spacing: 2
-                visible: Backlight.available
+                spacing: 10
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 10
-
-                    BarText {
-                        Layout.preferredWidth: 24
-                        horizontalAlignment: Text.AlignHCenter
-                        text: Backlight.value > 0.66 ? "󰃠" : Backlight.value > 0.33 ? "󰃟" : "󰃞"
-                        font.pixelSize: Theme.size + 5
-                    }
-
-                    BarText {
-                        Layout.fillWidth: true
-                        text: "Brightness"
-                    }
-
-                    BarText {
-                        text: `${Math.round(Backlight.value * 100)}%`
-                    }
+                BarText {
+                    Layout.preferredWidth: 24
+                    horizontalAlignment: Text.AlignHCenter
+                    text: Backlight.value > 0.66 ? "󰃠" : Backlight.value > 0.33 ? "󰃟" : "󰃞"
+                    font.pixelSize: Theme.size + 5
                 }
-
-                Track {
-                    value: Backlight.value
-                    onMoved: fraction => Backlight.set(fraction)
-                }
-            }
-
-            Rule {
-                Layout.topMargin: 4
-                visible: perf.visible
-            }
-
-            ColumnLayout {
-                id: perf
-
-                Layout.fillWidth: true
-                spacing: 2
-                visible: CpuPerf.available
-
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 10
-
-                    BarText {
-                        Layout.preferredWidth: 24
-                        horizontalAlignment: Text.AlignHCenter
-                        text: "󰈐"
-                        font.pixelSize: Theme.size + 5
-                    }
-
-                    BarText {
-                        Layout.fillWidth: true
-                        text: "CPU limit"
-                    }
-
-                    BarText {
-                        text: `${CpuPerf.pct}%`
-                    }
-                }
-
-                Track {
-                    value: CpuPerf.fraction
-                    onMoved: fraction => CpuPerf.set(fraction)
-                }
-            }
-
-            Rule {
-                Layout.topMargin: 4
-                visible: footer.visible
-            }
-
-            ColumnLayout {
-                id: footer
-
-                Layout.fillWidth: true
-                spacing: 1
-                visible: PowerProfiles.degradationReason !== PerformanceDegradationReason.None || PowerProfiles.holds.length > 0
 
                 BarText {
                     Layout.fillWidth: true
-                    visible: PowerProfiles.degradationReason !== PerformanceDegradationReason.None
-                    // Firmware caps the CPU whatever the profile.
-                    text: PowerProfiles.degradationReason === PerformanceDegradationReason.HighTemperature ? "󰀦  capped: high temperature" : "󰀦  capped: lap detected"
-                    font.pixelSize: Theme.size - 3
-                    color: Theme.dim
+                    text: "Brightness"
                 }
 
-                Repeater {
-                    // `tlpctl launch` holds a profile while an app runs,
-                    // overriding the row highlighted above.
-                    model: PowerProfiles.holds
+                BarText {
+                    text: `${Math.round(Backlight.value * 100)}%`
+                }
+            }
 
-                    delegate: BarText {
-                        required property var modelData
+            Track {
+                value: Backlight.value
+                onMoved: fraction => Backlight.set(fraction)
+            }
+        }
 
-                        Layout.fillWidth: true
-                        text: `󰅢  ${modelData.applicationId} holds ${PowerProfile.toString(modelData.profile)}`
-                        font.pixelSize: Theme.size - 3
-                        color: Theme.dim
-                    }
+        Rule {
+            Layout.topMargin: 4
+            visible: perf.visible
+        }
+
+        ColumnLayout {
+            id: perf
+
+            Layout.fillWidth: true
+            spacing: 2
+            visible: CpuPerf.available
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 10
+
+                BarText {
+                    Layout.preferredWidth: 24
+                    horizontalAlignment: Text.AlignHCenter
+                    text: "󰈐"
+                    font.pixelSize: Theme.size + 5
+                }
+
+                BarText {
+                    Layout.fillWidth: true
+                    text: "CPU limit"
+                }
+
+                BarText {
+                    text: `${CpuPerf.pct}%`
+                }
+            }
+
+            Track {
+                value: CpuPerf.fraction
+                onMoved: fraction => CpuPerf.set(fraction)
+            }
+        }
+
+        Rule {
+            Layout.topMargin: 4
+            visible: footer.visible
+        }
+
+        ColumnLayout {
+            id: footer
+
+            Layout.fillWidth: true
+            spacing: 1
+            visible: PowerProfiles.degradationReason !== PerformanceDegradationReason.None || PowerProfiles.holds.length > 0
+
+            BarText {
+                Layout.fillWidth: true
+                visible: PowerProfiles.degradationReason !== PerformanceDegradationReason.None
+                // Firmware caps the CPU whatever the profile.
+                text: PowerProfiles.degradationReason === PerformanceDegradationReason.HighTemperature ? "󰀦  capped: high temperature" : "󰀦  capped: lap detected"
+                font.pixelSize: Theme.size - 3
+                color: Theme.dim
+            }
+
+            Repeater {
+                // `tlpctl launch` holds a profile while an app runs,
+                // overriding the row highlighted above.
+                model: PowerProfiles.holds
+
+                delegate: BarText {
+                    required property var modelData
+
+                    Layout.fillWidth: true
+                    text: `󰅢  ${modelData.applicationId} holds ${PowerProfile.toString(modelData.profile)}`
+                    font.pixelSize: Theme.size - 3
+                    color: Theme.dim
                 }
             }
         }

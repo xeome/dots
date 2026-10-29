@@ -5,19 +5,15 @@ import "Calc.mjs" as Calc
 
 // The clock's calendar. Click-toggled rather than hover-shown: a popup that
 // dies on mouse-leave has no month arrows you can actually reach.
-PopupWindow {
+Popup {
     id: root
 
-    required property Item anchorItem
     // Today, live from the clock, so both the highlight and the reset target
     // roll over at midnight with the popup open.
     required property var today
 
     // Months away from today. The arrows walk it; the title resets it.
     property int offset: 0
-
-    // Read by Clock; see Menu.closedAt.
-    property double closedAt: 0
 
     readonly property var first: new Date(today.getFullYear(), today.getMonth() + offset, 1)
 
@@ -48,22 +44,12 @@ PopupWindow {
         return out;
     }
 
-    anchor.item: anchorItem
-    anchor.edges: Edges.Bottom
-    anchor.gravity: Edges.Bottom
-    anchor.margins.top: 6
+    contentWidth: body.implicitWidth + 28
+    contentHeight: body.implicitHeight + 28
 
-    implicitWidth: body.implicitWidth + 28
-    implicitHeight: body.implicitHeight + 28
-    color: "transparent"
-    visible: false
-    grabFocus: true
-
-    onVisibleChanged: if (!visible) {
-        closedAt = Date.now();
-        // Reopening should land on the current month, not wherever you browsed to.
-        offset = 0;
-    }
+    // Reopening should land on the current month, not wherever you browsed to.
+    onVisibleChanged: if (!visible)
+        offset = 0
 
     component NavButton: Rectangle {
         id: nav
@@ -91,129 +77,125 @@ PopupWindow {
         }
     }
 
-    Surface {
-        anchors.fill: parent
+    ColumnLayout {
+        id: body
+        anchors.centerIn: parent
+        spacing: 9
 
-        ColumnLayout {
-            id: body
-            anchors.centerIn: parent
-            spacing: 9
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 8
 
-            RowLayout {
+            NavButton {
+                glyph: "󰅁"
+                onActivated: root.offset--
+            }
+
+            BarText {
                 Layout.fillWidth: true
-                spacing: 8
+                horizontalAlignment: Text.AlignHCenter
+                text: Qt.formatDateTime(root.first, "MMMM yyyy")
+                font.pixelSize: Theme.size + 1
+                // Dimmed once you've browsed away: clicking it comes back.
+                color: root.offset === 0 ? Theme.bright : Theme.text
 
-                NavButton {
-                    glyph: "󰅁"
-                    onActivated: root.offset--
-                }
-
-                BarText {
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    text: Qt.formatDateTime(root.first, "MMMM yyyy")
-                    font.pixelSize: Theme.size + 1
-                    // Dimmed once you've browsed away: clicking it comes back.
-                    color: root.offset === 0 ? Theme.bright : Theme.text
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: root.offset = 0
-                    }
-                }
-
-                NavButton {
-                    glyph: "󰅂"
-                    onActivated: root.offset++
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: root.offset = 0
                 }
             }
 
-            Rule {}
+            NavButton {
+                glyph: "󰅂"
+                onActivated: root.offset++
+            }
+        }
 
-            Column {
-                Layout.alignment: Qt.AlignHCenter
+        Rule {}
+
+        Column {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 2
+
+            Row {
                 spacing: 2
 
-                Row {
-                    spacing: 2
-
-                    // Spacer above the week-number column.
-                    Item {
-                        width: 24
-                        height: 20
-                    }
-
-                    Repeater {
-                        model: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
-
-                        delegate: BarText {
-                            required property string modelData
-
-                            width: 32
-                            height: 20
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            text: modelData
-                            font.pixelSize: Theme.size - 3
-                            color: Theme.dim
-                        }
-                    }
+                // Spacer above the week-number column.
+                Item {
+                    width: 24
+                    height: 20
                 }
 
                 Repeater {
-                    model: root.weeks
+                    model: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
 
-                    delegate: Row {
-                        id: weekRow
+                    delegate: BarText {
+                        required property string modelData
 
-                        required property var modelData
+                        width: 32
+                        height: 20
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        text: modelData
+                        font.pixelSize: Theme.size - 3
+                        color: Theme.dim
+                    }
+                }
+            }
 
-                        spacing: 2
+            Repeater {
+                model: root.weeks
 
-                        BarText {
-                            width: 24
+                delegate: Row {
+                    id: weekRow
+
+                    required property var modelData
+
+                    spacing: 2
+
+                    BarText {
+                        width: 24
+                        height: 26
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        text: weekRow.modelData.week
+                        font.pixelSize: Theme.size - 3
+                        color: weekRow.modelData.week === root.todayWeek && root.offset === 0 ? Theme.text : Theme.dim
+                    }
+
+                    Repeater {
+                        model: weekRow.modelData.days
+
+                        delegate: Rectangle {
+                            id: cell
+
+                            required property var modelData
+
+                            width: 32
                             height: 26
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            text: weekRow.modelData.week
-                            font.pixelSize: Theme.size - 3
-                            color: weekRow.modelData.week === root.todayWeek && root.offset === 0 ? Theme.text : Theme.dim
-                        }
+                            radius: Theme.radius - 2
+                            color: cell.modelData.today ? Theme.text : "transparent"
 
-                        Repeater {
-                            model: weekRow.modelData.days
-
-                            delegate: Rectangle {
-                                id: cell
-
-                                required property var modelData
-
-                                width: 32
-                                height: 26
-                                radius: Theme.radius - 2
-                                color: cell.modelData.today ? Theme.text : "transparent"
-
-                                BarText {
-                                    anchors.centerIn: parent
-                                    text: cell.modelData.day
-                                    weight: cell.modelData.today ? 600 : Theme.weight
-                                    color: cell.modelData.today ? Theme.ground : cell.modelData.inMonth ? Theme.text : Theme.dim
-                                }
+                            BarText {
+                                anchors.centerIn: parent
+                                text: cell.modelData.day
+                                weight: cell.modelData.today ? 600 : Theme.weight
+                                color: cell.modelData.today ? Theme.ground : cell.modelData.inMonth ? Theme.text : Theme.dim
                             }
                         }
                     }
                 }
             }
+        }
 
-            Rule {}
+        Rule {}
 
-            BarText {
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                text: Qt.formatDateTime(root.today, "dddd, d MMMM yyyy") + "  ·  week " + root.todayWeek
-                font.pixelSize: Theme.size - 2
-                color: Theme.dim
-            }
+        BarText {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            text: Qt.formatDateTime(root.today, "dddd, d MMMM yyyy") + "  ·  week " + root.todayWeek
+            font.pixelSize: Theme.size - 2
+            color: Theme.dim
         }
     }
 }

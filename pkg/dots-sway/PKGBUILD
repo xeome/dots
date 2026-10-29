@@ -1,9 +1,0 @@
-# sway machines. hyprlock is in dots-desktop: every machine locks with it.
-pkgname=dots-sway
-pkgver=${DOTS_PKGVER:?set by run_before_install-packages.sh}
-pkgrel=1
-pkgdesc='swayfx and its screenshot tool'
-arch=(any)
-depends=(swayfx flameshot)
-
-package() { :; }

@@ -1,0 +1,2 @@
+# Written into the cwd when a pyinfra run fails.
+infra/pyinfra-debug.log

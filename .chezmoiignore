@@ -1,6 +1,6 @@
 README.md
 LICENSE
-pkg
+infra
 # Run from the source tree: node dot_config/quickshell/exact_xeome/calc.test.mjs
 .config/quickshell/xeome/calc.test.mjs
 # python3 -I dot_config/quickshell/dots.test.py

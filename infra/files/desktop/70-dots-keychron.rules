@@ -1,4 +1,4 @@
-# From dots-desktop — edit: ~/.local/share/chezmoi/pkg/dots-desktop/
+# From infra/deploy.py — edit: ~/.local/share/chezmoi/infra/files/desktop/
 #
 # Let the browser open Keychron hidraw nodes for the web configurator
 # (launcher.keychron.com, WebHID). uaccess grants the logged-in seat user only.

@@ -1,0 +1,16 @@
+#!/bin/bash
+# Applies infra/deploy.py. A before_ script, so set-theme and the qt5ct/qt6ct
+# modify_ scripts find their packages in the same apply. run_onchange_, so an
+# apply that changes nothing in infra/ and no wm/is_laptop asks for no password.
+# It re-runs when one of these changes:
+{{- /* files/**, not **: a failed run writes infra/pyinfra-debug.log. */}}
+{{- $m := index .machines .chezmoi.hostname }}
+# {{ include "infra/deploy.py" | sha256sum }}
+{{- range (joinPath .chezmoi.sourceDir "infra/files/**" | glob) }}{{ if not (stat .).isDir }}
+# {{ include . | sha256sum }}
+{{- end }}{{ end }}
+set -euo pipefail
+
+cd "$CHEZMOI_SOURCE_DIR/infra"
+exec uvx pyinfra@3.10.0 -y --sudo @local deploy.py \
+    --data wm={{ $m.wm }} --data is_laptop={{ $m.is_laptop }}

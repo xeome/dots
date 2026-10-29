@@ -1,10 +1,10 @@
 #!/bin/bash
-# From dots-dns — edit: ~/.local/share/chezmoi/pkg/dots-dns/
+# From infra/deploy.py — edit: ~/.local/share/chezmoi/infra/files/dns/
 #
 # Runs as root. Gives every wifi/ethernet link exactly one set of servers for
 # every lookup: pinned DoT if it can leave through that link, otherwise the
 # network's DHCP resolver in cleartext (captive portals, office LANs that block
-# outside DNS). Never both — see the race in the PKGBUILD. The cost: on a DoT
+# outside DNS). Never both — see the race in infra/deploy.py. The cost: on a DoT
 # link, the network's own names (a router's .lan) go to Cloudflare and fail.
 #
 # Probed per interface, not via NM's connectivity state: that is global (a

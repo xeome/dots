@@ -2,7 +2,7 @@
 # Warns ahead of systemd-oomd and reports its kills. Run by memwatch.service.
 #
 # oomd kills an app once user@.service sits at 50% memory stall for 20s, or
-# once swap passes 90% (see pkg/dots-oom). This warns well below both, so
+# once swap passes 90% (see infra/deploy.py). This warns well below both, so
 # there is time to close something by hand.
 #
 # The stall warning polls the number oomd acts on: full avg10 of user@.service.

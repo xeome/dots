@@ -17,7 +17,7 @@
 # listed here.
 .config/hypr/modules/colors.conf
 
-# Replaced by the NetworkManager dispatcher hook in pkg/dots-dns.
+# Replaced by the NetworkManager dispatcher hook in infra/files/dns.
 .local/bin/portal
 
 # Left behind when graphite replaced Caffeine: rofi and gtklock (vicinae and

@@ -9,8 +9,9 @@ import Quickshell.Io
 // (amd-pstate) in every CPU's scaling_max_freq, in kHz of cpuinfo_max_freq.
 //
 // The only writer of the cap: the TLP drop-in leaves CPU_MAX_PERF_* and
-// CPU_SCALING_MAX_FREQ_* unset, so boot starts at 100. pkg/dots-power's
-// tmpfiles lines give wheel write access, so a shell redirect writes it.
+// CPU_SCALING_MAX_FREQ_* unset, so boot starts at 100. The tmpfiles lines in
+// infra/files/power/dots-cpu-perf.conf give wheel write access, so a shell
+// redirect writes it.
 //
 // ponytail: reads cpu0 for every core; a CPU with per-core max frequencies
 // would show cpu0's cap only.

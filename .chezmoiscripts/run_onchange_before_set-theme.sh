@@ -1,9 +1,9 @@
 #!/bin/bash
 # Points gsettings at the themes chezmoi writes: GTK is adw-gtk3 with
 # graphite's colours (~/.local/share/themes/graphite-*, ~/.config/gtk-4.0/gtk.css),
-# icons are ZorinGrey from the zorin-icon-themes package (dots-desktop). Grey because
+# icons are ZorinGrey from the zorin-icon-themes package (infra/deploy.py). Grey because
 # the graphite palette spends colour on meaning only, and a folder is not a
-# meaning. A before_ script, after install-packages, so the qt5ct/qt6ct
+# meaning. A before_ script, after pyinfra, so the qt5ct/qt6ct
 # modify_ scripts already read these gsettings in the same apply.
 set -euo pipefail
 

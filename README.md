@@ -22,12 +22,13 @@ It runs on both compositors: `Compositor.qml.tmpl` picks the
 `Quickshell.Hyprland` or `Quickshell.I3` backend from the machine's `wm`, and
 nothing else in the shell knows which compositor it's on.
 
-The packages, and everything this repo puts under `/etc`, are pacman packages
-built from `pkg/`: `dots-desktop` on every machine, `dots-hyprland` or
-`dots-sway` by the machine's `wm`, and `dots-dns`, `dots-oom` and `dots-power`
-with a laptop or desktop TLP profile. `chezmoi apply` builds and installs the
-ones whose files changed, so it needs `yay` and `base-devel` first. Orphans
-left by a name dropped from a PKGBUILD show in `pacman -Qdt`.
+The packages, and everything this repo puts under `/etc`, come from one
+[pyinfra](https://pyinfra.com) deploy, `infra/deploy.py`: the package names for
+the machine's `wm`, and drop-ins for DNS, systemd-oomd, TLP profiles, polkit,
+udev and the Qt environment. `chezmoi apply` runs it through `uvx` whenever a
+file in `infra/` changes, so it needs `uv`, `yay` and `base-devel` first. A
+package name deleted from the deploy stays installed; its package table says
+how to remove one.
 
 # Installation
 

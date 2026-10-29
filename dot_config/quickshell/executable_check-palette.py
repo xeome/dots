@@ -6,6 +6,8 @@
 2. That the configs which repeat a palette value still match Theme.qml.
 3. That kvantum.py can still build the Qt theme: it stops on any upstream
    colour it has no Theme.qml token for.
+4. That the console palette (infra/files/boot/cmdline) keeps graphite's
+   neutrals and the terminals' brights, and that nmtui stays readable on it.
 
 Run it after touching any palette:  ~/.config/quickshell/check-palette.py
 """
@@ -260,6 +262,37 @@ if complete:
         rel = f"dot_local/private_share/exact_themes/exact_graphite-{mode}/gtk-3.0/gtk.css"
         if defines((SRC / rel).read_text()) != defines(block):
             fails.append(f"{rel} and gtk-4.0/gtk.css ({mode}) define different colours")
+
+    # Slot 0 is true black, the splash's ground, not a Theme.qml token. Slots
+    # 1-6 are Caffeine's hues darkened by hand, so they get floors, not
+    # equality.
+    boot = (SRC / "infra/files/boot/cmdline").read_text()
+    chans = [re.search(rf"vt\.default_{c}=([\d,]+)", boot)[1].split(",") for c in ("red", "grn", "blu")]
+    vt = ["#%02x%02x%02x" % tuple(map(int, s)) for s in zip(*chans)]
+    if [h for _, h in re.findall(r"(\d+) (#\w{6})", boot)] != vt:
+        fails.append("infra/files/boot/cmdline: the hex comment and the vt.default_* lists differ")
+    ghostty = dict(re.findall(r"\npalette = (\d+)=(#\w{6})", (SRC / "dot_config/ghostty/exact_themes/caffeine").read_text()))
+    want = {0: "#000000", 7: D["text"], 8: D["dim"], 15: D["bright"]} | {i: ghostty[str(i)] for i in range(9, 15)}
+    for i, h in want.items():
+        if vt[i] != h:
+            fails.append(f"console slot {i} is {vt[i]}, expected {h}")
+    hexrgba = lambda h: tuple(int(h[i : i + 2], 16) / 255 for i in (1, 3, 5)) + (1.0,)
+    for i in range(1, 7):
+        if (r := contrast(hexrgba(vt[i]), hexrgba(vt[0]))) < 4.5:
+            fails.append(f"console slot {i} on black is {r:.2f}:1, floor 4.5")
+    # newt's default pairs (newt.c:51-73) and nmtui's own (NetworkManager
+    # nmt-newt-utils.c:220-224). ter-v24n has 512 glyphs, which costs the
+    # console its bright backgrounds, hence bg & 7. 3.5:1, not 4.5: a hue under
+    # lightgray text and over black at once tops out near 4:1 each way.
+    slot = {n: i for i, n in enumerate(("black red green brown blue magenta cyan lightgray gray brightred "
+                                        "brightgreen yellow brightblue brightmagenta brightcyan white").split())}
+    NEWT = [("white", "blue"), ("black", "lightgray"), ("white", "black"), ("red", "lightgray"),
+            ("lightgray", "red"), ("lightgray", "blue"), ("blue", "lightgray"), ("black", "brown"),
+            ("black", "white")]
+    for fg, bg in NEWT:
+        r = contrast(hexrgba(vt[slot[fg]]), hexrgba(vt[slot[bg] & 7]))
+        if r < 3.5:
+            fails.append(f"console: nmtui's {fg} on {bg} is {r:.2f}:1, floor 3.5")
 
 # Built into a scratch folder, so an unmapped upstream colour shows up here
 # before an apply does.

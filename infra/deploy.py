@@ -1,21 +1,31 @@
 """
 Everything this repo puts outside $HOME: the machine's packages, and drop-ins
 under /etc. .chezmoiscripts/run_onchange_before_pyinfra.sh.tmpl runs it from
-this directory whenever a file here or the machine's wm/is_laptop changes:
+this directory whenever a file here or the machine's wm/is_laptop/hostname
+changes:
 
-    uvx pyinfra@3.10.0 -y --sudo @local deploy.py --data wm=hyprland --data is_laptop=false
+    uvx pyinfra@3.10.0 -y --sudo @local deploy.py \\
+        --data wm=hyprland --data is_laptop=false --data hostname=xeome-desktop
 
-Every file goes to a drop-in directory, so the distro's own config stays stock.
+Every file goes to a drop-in directory, so the distro's own config stays stock,
+except where a program has none: the boot section names those files.
 /etc, not /usr/lib: /usr/lib belongs to the package manager. Deleting a put
 leaves its file in /etc: to drop one, turn it into
 files.file(path=..., present=False) until every machine has applied it.
 """
 
+import hashlib
+import io
+import pathlib
+
 from pyinfra import host
+from pyinfra.facts.files import File, FileContents
 from pyinfra.facts.pacman import PacmanPackages
-from pyinfra.facts.server import OsRelease
+from pyinfra.facts.server import Command, OsRelease
 from pyinfra.operations import files, pacman, server, systemd
 from pyinfra.operations.util import any_changed
+
+from cmdline import merge, owned
 
 # Keyed by OsRelease id or id_like, so another family is one more entry here.
 # Each family names its package op: server.packages would pick the manager by
@@ -63,7 +73,10 @@ PACKAGES = {
 
 wm = host.data.get("wm")
 is_laptop = host.data.get("is_laptop")
+# Not `host`: pyinfra's host.data already holds the Host object under that name.
+hostname = host.data.get("hostname")
 assert wm in ("hyprland", "sway") and isinstance(is_laptop, bool), (wm, is_laptop)
+assert isinstance(hostname, str) and hostname, hostname
 
 os_release = host.get_fact(OsRelease)
 families = [os_release["id"], *os_release.get("id_like", "").split()]
@@ -167,6 +180,70 @@ tlp = [
     # TLP reads drop-ins from /etc/tlp.d only.
     put(f"power/tlp-{'laptop' if is_laptop else 'desktop'}.conf", "/etc/tlp.d/50-dots-profiles.conf"),
 ]
+
+# --- boot --------------------------------------------------------------------
+# A stack other than the checked one skips the section instead of failing,
+# so a wrong guess costs a splash, not a boot.
+#
+# None of these has a drop-in directory, so they break the docstring's rule:
+# plymouthd.conf and Ly's config.ini are replaced, /etc/kernel/cmdline is
+# merged by key (cmdline.py says how to retire a token), and loader.conf is
+# set key by key.
+stack = {
+    "kernel-install-for-dracut is installed": "kernel-install-for-dracut" in host.get_fact(PacmanPackages),
+    "/etc/kernel/cmdline exists": bool(host.get_fact(File, "/etc/kernel/cmdline")),
+    # || true: a fact command that exits non-zero aborts the whole deploy.
+    "systemd-boot is installed": host.get_fact(Command, "bootctl is-installed 2>/dev/null || true") == "yes",
+    # A machine new to .chezmoidata.toml until infra/plymouth.py has drawn it.
+    f"files/plymouth/watermark-{hostname}.png exists": pathlib.Path(f"files/plymouth/watermark-{hostname}.png").exists(),
+}
+if not all(stack.values()):
+    print("boot section skipped, because it is not true that:", "; ".join(k for k, ok in stack.items() if not ok))
+else:
+    # Inside the gate: Ly's eight colours are the cmdline palette's slots.
+    # Ly reads its config only at start, and restarting ly@tty1 would end the
+    # session running under it, so a change shows at the next login.
+    put("ly/config.ini", "/etc/ly/config.ini")
+
+    # Everything dracut copies into the initramfs, the package included.
+    boot = [repo["op"](name="Plymouth", packages=["plymouth"])]
+    theme = {f"plymouth/{p.name}": p.name for p in pathlib.Path("files/plymouth").iterdir()
+             if not p.name.startswith("watermark-") and p.name != "plymouthd.conf"}
+    theme[f"plymouth/watermark-{hostname}.png"] = "watermark.png"
+    boot += [put(src, f"/etc/plymouth/themes/dots/{dest}") for src, dest in sorted(theme.items())]
+    initramfs = {"plymouth/plymouthd.conf": "/etc/plymouth/plymouthd.conf",
+                 "boot/dracut.conf": "/etc/dracut.conf.d/50-dots-splash.conf"}
+    boot += [put(src, dest) for src, dest in initramfs.items()]
+
+    cmdline = merge("\n".join(host.get_fact(FileContents, "/etc/kernel/cmdline")),
+                    owned(pathlib.Path("files/boot/cmdline").read_text()))
+    boot.append(files.put(name="/etc/kernel/cmdline", src=io.StringIO(cmdline), dest="/etc/kernel/cmdline",
+                          user="root", group="root", mode="644"))
+
+    # loader.conf has no colour settings. The editor is the way back in when
+    # the splash hangs: e, delete `splash`.
+    esp = host.get_fact(Command, "bootctl --print-esp-path")
+    for key, value in (("console-mode", "max"), ("editor", "yes")):
+        files.line(name=f"loader.conf {key}", path=f"{esp}/loader/loader.conf",
+                   line=f"^{key}[[:space:]]", replace=f"{key} {value}")
+
+    # Not reinstall-kernels: it exits 0 when any but the last kernel fails.
+    # The stamp is written only after every kernel succeeds, so a failed
+    # rebuild runs again on the next deploy, when the files above no longer
+    # change.
+    stamp = "/var/lib/dots/boot.sha256"
+    digest = hashlib.sha256(cmdline.encode())
+    for src in sorted(theme) + list(initramfs):
+        digest.update(pathlib.Path("files", src).read_bytes())
+    stale = "\n".join(host.get_fact(FileContents, stamp) or []) != digest.hexdigest()
+    server.shell(
+        name="Rebuild initramfs and loader entries",
+        commands=[
+            'set -e; for v in /usr/lib/modules/*/vmlinuz; do kernel-install add "$(basename "$(dirname "$v")")" "$v"; done',
+            f"mkdir -p {pathlib.Path(stamp).parent} && printf %s {digest.hexdigest()} > {stamp}",
+        ],
+        _if=lambda: stale or any_changed(*boot)(),
+    )
 
 # --- services ----------------------------------------------------------------
 # Before any restart below, so tlp starts with its new drop-in.

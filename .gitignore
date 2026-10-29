@@ -1,2 +1,4 @@
 # Written into the cwd when a pyinfra run fails.
 infra/pyinfra-debug.log
+# Written when deploy.py imports cmdline.py.
+infra/__pycache__/

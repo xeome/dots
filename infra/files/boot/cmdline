@@ -1,0 +1,12 @@
+# From infra/deploy.py — edit: ~/.local/share/chezmoi/infra/files/boot/
+# Tokens deploy.py owns in /etc/kernel/cmdline, merged by key by infra/cmdline.py.
+
+quiet splash loglevel=3 rd.udev.log_level=3
+
+# The console's 16 colours, held to Theme.qml and the ghostty palette by
+# quickshell/check-palette.py.
+#   0 #000000  1 #b8585f  2 #6e7a56  3 #887353  4 #607894  5 #876e86  6 #567c81  7 #e6e7ea
+#   8 #8a8f98  9 #ff8a93 10 #c9dba8 11 #ffe6c4 12 #a9c3e0 13 #ddc0db 14 #a4d4da 15 #f7f8f8
+vt.default_red=0,184,110,136,96,135,86,230,138,255,201,255,169,221,164,247
+vt.default_grn=0,88,122,115,120,110,124,231,143,138,219,230,195,192,212,248
+vt.default_blu=0,95,86,83,148,134,129,234,152,147,168,196,224,219,218,248

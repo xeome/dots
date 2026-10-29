@@ -1,0 +1,27 @@
+# From infra/deploy.py — edit: ~/.local/share/chezmoi/infra/files/plymouth/
+# Images come from infra/plymouth.py.
+[Plymouth Theme]
+Name=dots
+Description=Hostname in Doto over a 24-dot progress row
+ModuleName=two-step
+
+[two-step]
+ImageDir=/etc/plymouth/themes/dots
+# The progress frames carry the drop below the name.
+WatermarkHorizontalAlignment=.5
+WatermarkVerticalAlignment=.5
+HorizontalAlignment=.5
+VerticalAlignment=.5
+Transition=none
+TransitionDuration=0.0
+BackgroundStartColor=0x000000
+BackgroundEndColor=0x000000
+
+[boot-up]
+UseEndAnimation=false
+
+[shutdown]
+UseEndAnimation=false
+
+[reboot]
+UseEndAnimation=false

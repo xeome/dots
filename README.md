@@ -32,6 +32,13 @@ it, and the unattended install answers no. On a machine missing AUR packages,
 `yay` asks for the sudo password a second time. A package name deleted from
 the deploy stays installed; its package table says how to remove one.
 
+The deploy also themes the boot: a `plymouth` splash with the hostname in
+dots, a graphite console palette on the kernel cmdline, and Ly's colours and
+big clock. It only touches the boot on the dracut + kernel-install +
+systemd-boot stack, and skips that section with a printed reason anywhere
+else. If the splash ever hangs, press `e` in the boot menu and delete `splash`.
+After adding a machine, run `infra/plymouth.py` to draw its wordmark.
+
 # Installation
 
 Incomplete but should get you most things.

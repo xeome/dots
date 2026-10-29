@@ -2,7 +2,8 @@
 -- machine. Monitors are in hyprland.lua.tmpl.
 
 -- Graphite edges: a translucent white border, brighter on the focused window,
--- with a sharp 1px dark shadow outside it. Focus is told by lightness alone.
+-- with a sharp 1px dark shadow outside it. Focus is told by lightness alone:
+-- the border's, and unfocused windows dimmed (decoration below).
 local focus = "rgba(ffffff80)"
 local line = "rgba(ffffff14)"
 local ring = "rgba(0000004d)"
@@ -32,6 +33,9 @@ hl.config({
     },
   },
   decoration = {
+    -- Unfocused windows dim a little, so focus reads from across the room.
+    dim_inactive = true,
+    dim_strength = 0.15,
     rounding = 10,
     rounding_power = 2.0,
     blur = {

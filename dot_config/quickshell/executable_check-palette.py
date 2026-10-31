@@ -174,7 +174,7 @@ if complete:
         "dot_config/hypr/exact_lua_modules/settings.lua": (
             f'local line = "rgba(ffffff{round(dark["line"][3] * 255):02x})"',
         ),
-        "dot_config/sway/conf.d/colors.conf": (
+        "dot_config/sway/exact_conf.d/colors.conf": (
             f"set $background {D['ground']}",
             f"set $line #ffffff{round(dark['line'][3] * 255):02x}",
         ),
@@ -244,7 +244,7 @@ if complete:
     # The focused-window border has no Theme.qml token: hyprland and sway each
     # spell its alpha, and only need to agree with each other.
     hypr = re.search(r'local focus = "rgba\(ffffff(\w\w)\)"', (SRC / "dot_config/hypr/exact_lua_modules/settings.lua").read_text())
-    sway = re.search(r"set \$focus\s+#ffffff(\w\w)", (SRC / "dot_config/sway/conf.d/colors.conf").read_text())
+    sway = re.search(r"set \$focus\s+#ffffff(\w\w)", (SRC / "dot_config/sway/exact_conf.d/colors.conf").read_text())
     if not (hypr and sway and hypr[1] == sway[1]):
         fails.append(f"focus border alpha differs: hypr {hypr and hypr[1]}, sway {sway and sway[1]}")
 

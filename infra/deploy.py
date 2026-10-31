@@ -1,11 +1,12 @@
 """
 Everything this repo puts outside $HOME: the machine's packages, and drop-ins
 under /etc. .chezmoiscripts/run_onchange_before_pyinfra.sh.tmpl runs it from
-this directory whenever a file here or the machine's wm/is_laptop/hostname
-changes:
+this directory whenever a file here or the machine's wm or hostname changes:
 
-    uvx pyinfra@3.10.0 -y --sudo @local deploy.py \\
-        --data wm=hyprland --data is_laptop=false --data hostname=xeome-desktop
+    uvx pyinfra@3.10.0 -y --sudo @local deploy.py --data wm=hyprland --data hostname=xeome-desktop
+
+hostname is the .chezmoidata.toml key, so the plymouth watermark always matches
+the machine entry chezmoi rendered. Laptop or desktop the deploy asks for.
 
 Every file goes to a drop-in directory, so the distro's own config stays stock,
 except where a program has none: the boot section names those files.
@@ -72,10 +73,13 @@ PACKAGES = {
 }
 
 wm = host.data.get("wm")
-is_laptop = host.data.get("is_laptop")
+assert wm in ("hyprland", "sway"), wm
+# Picks files/power/tlp-<chassis>.conf. Asserted here, before any op runs: a
+# chassis with no TLP file would otherwise fail midway through the deploy.
+chassis = host.get_fact(Command, "hostnamectl chassis")
+assert chassis in ("laptop", "desktop"), f"hostnamectl chassis: {chassis!r}"
 # Not `host`: pyinfra's host.data already holds the Host object under that name.
 hostname = host.data.get("hostname")
-assert wm in ("hyprland", "sway") and isinstance(is_laptop, bool), (wm, is_laptop)
 assert isinstance(hostname, str) and hostname, hostname
 
 os_release = host.get_fact(OsRelease)
@@ -178,7 +182,7 @@ tlp = [
     tlp_unit,
     put("power/dots-cpu-perf.conf", "/etc/tmpfiles.d/dots-cpu-perf.conf"),
     # TLP reads drop-ins from /etc/tlp.d only.
-    put(f"power/tlp-{'laptop' if is_laptop else 'desktop'}.conf", "/etc/tlp.d/50-dots-profiles.conf"),
+    put(f"power/tlp-{chassis}.conf", "/etc/tlp.d/50-dots-profiles.conf"),
 ]
 
 # --- boot --------------------------------------------------------------------

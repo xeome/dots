@@ -1,194 +1,42 @@
-# Per-machine data for chezmoi templates, read via
+# What differs between machines, read by templates as
 # {{- $m := index .machines .chezmoi.hostname }}. Every machine must be listed:
-# there is no default.
+# there is no default. Laptop or desktop is left out: infra/deploy.py asks
+# hostnamectl.
+#
+#   wm          hyprland or sway: picks the compositor config and its packages.
+#   lock_output the output hyprlock puts its input field, player and system info on.
+#   text_scale  multiplies GTK and quickshell text; terminals stay at 10pt.
+#   monitors    each output, and the workspaces it holds.
 
-# =============================================================================
-# xeome-desktop — Desktop, dual monitor (HDMI-A-1 1440p@75 + DP-3 1080p@144)
-# =============================================================================
 [machines.xeome-desktop]
-wm                 = "hyprland"
-terminal           = "ghostty"
-secondary_monitor  = "DP-3"
-numlock            = true
-natural_scroll     = false
-is_laptop          = false
-# text_scale multiplies GTK and quickshell text; terminals stay at 10pt. 1.1
-# is a compromise for the 27" 1440p at 65 cm: 1.35 reached the 12' x-height
-# reading floor but looked too big. The ultrabook gets there through monitor
-# scale 2, so its text stays at 1.
-text_scale         = 1.1
-discord_cmd        = "equibop --ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations --enable-features=AcceleratedVideoDecodeLinuxGL --enable-features=AcceleratedVideoEncoder --enable-features=VaapiIgnoreDriverChecks --enable-features=CanvasOopRasterization --enable-gpu-rasterization --enable-zero-copy --enable-features=WebRTCPipeWireCapturer"
+wm          = "hyprland"
+lock_output = "DP-3"
+# 1.1 is a compromise for the 27" 1440p at 65 cm: 1.35 reached the 12'
+# x-height reading floor but looked too big. The ultrabook gets there through
+# monitor scale 2, so its text stays at 1.
+text_scale  = 1.1
+monitors = [
+  { output = "HDMI-A-1", mode = "2560x1440@75",  position = "0x0",      scale = 1, workspaces = [1, 4] },
+  { output = "DP-3",     mode = "1920x1080@144", position = "2560x360", scale = 1, workspaces = [2, 3, 5, 6, 7, 8, 9] },
+]
 
-[[machines.xeome-desktop.monitors]]
-output   = "HDMI-A-1"
-mode     = "2560x1440@75"
-position = "0x0"
-scale    = 1
-
-[[machines.xeome-desktop.monitors]]
-output   = "DP-3"
-mode     = "1920x1080@144"
-position = "2560x360"
-scale    = 1
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "1"
-monitor   = "HDMI-A-1"
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "2"
-monitor   = "DP-3"
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "3"
-monitor   = "DP-3"
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "4"
-monitor   = "HDMI-A-1"
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "5"
-monitor   = "DP-3"
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "6"
-monitor   = "DP-3"
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "7"
-monitor   = "DP-3"
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "8"
-monitor   = "DP-3"
-
-[[machines.xeome-desktop.workspaces]]
-workspace = "9"
-monitor   = "DP-3"
-
-# =============================================================================
-# emin-ultrabook — Ultrabook, external 4K@60 (DP-3) + internal 1200p (eDP-1)
-# =============================================================================
 [machines.emin-ultrabook]
-wm                 = "hyprland"
-terminal           = "ghostty"
-secondary_monitor  = "eDP-1"
-numlock            = true
-natural_scroll     = false
-is_laptop          = true
-text_scale         = 1
-discord_cmd        = "equibop --ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations --enable-features=AcceleratedVideoDecodeLinuxGL --enable-features=AcceleratedVideoEncoder --enable-features=VaapiIgnoreDriverChecks --enable-features=CanvasOopRasterization --enable-gpu-rasterization --enable-zero-copy --enable-features=WebRTCPipeWireCapturer"
+wm          = "hyprland"
+lock_output = "eDP-1"
+text_scale  = 1
+monitors = [
+  { output = "DP-3",  mode = "3840x2160@60", position = "0x0",    scale = 2, workspaces = [2, 4, 5, 6] },
+  { output = "eDP-1", mode = "1920x1200@60", position = "0x1080", scale = 1, workspaces = [1, 3, 7, 8, 9] },
+]
 
-[[machines.emin-ultrabook.monitors]]
-output   = "DP-3"
-mode     = "3840x2160@60"
-position = "0x0"
-scale    = 2
-
-[[machines.emin-ultrabook.monitors]]
-output   = "eDP-1"
-mode     = "1920x1200@60"
-position = "0x1080"
-scale    = 1
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "1"
-monitor   = "eDP-1"
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "2"
-monitor   = "DP-3"
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "3"
-monitor   = "eDP-1"
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "4"
-monitor   = "DP-3"
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "5"
-monitor   = "DP-3"
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "6"
-monitor   = "DP-3"
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "7"
-monitor   = "eDP-1"
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "8"
-monitor   = "eDP-1"
-
-[[machines.emin-ultrabook.workspaces]]
-workspace = "9"
-monitor   = "eDP-1"
-
-# =============================================================================
-# emin-probook — HP ProBook laptop running swayfx, docked to an HP E24 G4
-# =============================================================================
-# sway's config is templated from these entries, as hyprland.lua.tmpl is.
+# HP ProBook running swayfx, docked to an HP E24 G4. eDP-1 sits left of the
+# external. Undocking is safe: sway ignores output directives for outputs that
+# aren't connected, and HDMI-A-1's workspaces fall back to the only screen left.
 [machines.emin-probook]
-wm                 = "sway"
-terminal           = "ghostty"
-secondary_monitor  = "eDP-1"
-numlock            = true
-natural_scroll     = false
-is_laptop          = true
-text_scale         = 1
-discord_cmd        = "equibop --ozone-platform=wayland --disable-gpu-driver-bug-workarounds --enable-experimental-web-platform-features --new-canvas-2d-api --enable-features=VaapiVideoDecoder --enable-native-gpu-memory-buffers --canvas-oop-rasterization --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-accelerated-video-decode"
-
-# eDP-1 sits left of the external. Undocking is safe: sway ignores output
-# directives for outputs that aren't connected, and the workspaces assigned to
-# HDMI-A-1 fall back to the only screen left.
-[[machines.emin-probook.monitors]]
-output   = "eDP-1"
-mode     = "1920x1080@60"
-position = "0x0"
-scale    = 1
-
-[[machines.emin-probook.monitors]]
-output   = "HDMI-A-1"
-mode     = "1920x1080@60"
-position = "1920x0"
-scale    = 1
-
-[[machines.emin-probook.workspaces]]
-workspace = "1"
-monitor   = "eDP-1"
-
-[[machines.emin-probook.workspaces]]
-workspace = "2"
-monitor   = "HDMI-A-1"
-
-[[machines.emin-probook.workspaces]]
-workspace = "3"
-monitor   = "eDP-1"
-
-[[machines.emin-probook.workspaces]]
-workspace = "4"
-monitor   = "HDMI-A-1"
-
-[[machines.emin-probook.workspaces]]
-workspace = "5"
-monitor   = "HDMI-A-1"
-
-[[machines.emin-probook.workspaces]]
-workspace = "6"
-monitor   = "HDMI-A-1"
-
-[[machines.emin-probook.workspaces]]
-workspace = "7"
-monitor   = "HDMI-A-1"
-
-[[machines.emin-probook.workspaces]]
-workspace = "8"
-monitor   = "HDMI-A-1"
-
-[[machines.emin-probook.workspaces]]
-workspace = "9"
-monitor   = "HDMI-A-1"
+wm          = "sway"
+lock_output = "eDP-1"
+text_scale  = 1
+monitors = [
+  { output = "eDP-1",    mode = "1920x1080@60", position = "0x0",    scale = 1, workspaces = [1, 3] },
+  { output = "HDMI-A-1", mode = "1920x1080@60", position = "1920x0", scale = 1, workspaces = [2, 4, 5, 6, 7, 8, 9] },
+]

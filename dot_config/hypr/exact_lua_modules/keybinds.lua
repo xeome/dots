@@ -1,5 +1,4 @@
--- Keybinds shared by every Hyprland machine. Machine-specific ones are in
--- hyprland.lua.tmpl, which also defines `terminal` and `app`.
+-- Keybinds for every Hyprland machine. `app` is defined in hyprland.lua.tmpl.
 
 local mod = "SUPER"
 
@@ -13,11 +12,13 @@ hl.config({
 hl.bind(mod .. " + SHIFT + r", hl.dsp.exec_cmd("hyprctl reload"))
 
 -- ~~~ user applications
-hl.bind(mod .. " + return", hl.dsp.exec_cmd(terminal))
+hl.bind(mod .. " + return", hl.dsp.exec_cmd("ghostty"))
 hl.bind(mod .. " + q", hl.dsp.exec_cmd(app("zen-browser")))
 hl.bind(mod .. " + e", hl.dsp.exec_cmd(app("thunar")))
 hl.bind(mod .. " + r", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind(mod .. " + v", hl.dsp.exec_cmd(app("code --ozone-platform=wayland")))
+-- Flags come from ~/.config/equibop-flags.conf, which /usr/bin/equibop reads.
+hl.bind(mod .. " + d", hl.dsp.exec_cmd(app("equibop")))
 
 -- ~~~ audio
 hl.bind(mod .. " + a", hl.dsp.exec_cmd("bash ~/.local/bin/status"))
@@ -39,6 +40,9 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"))
 -- ~~~ misc utilities
 hl.bind(mod .. " + o", hl.dsp.dpms({ action = "toggle" }))
 hl.bind(mod .. " + l", hl.dsp.exec_cmd("hyprlock"))
+-- A machine without a lid never fires it.
+hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd("hyprlock"), { locked = true })
+hl.bind("Print", hl.dsp.exec_cmd("qs -c xeome ipc call shot open"))
 hl.bind(mod .. " + b", hl.dsp.exec_cmd("sh ~/.config/emoji/emoji.sh"))
 hl.bind(mod .. " + SHIFT + v", hl.dsp.exec_cmd("vicinae cmd launch clipboard:history"))
 hl.bind(mod .. " + k", hl.dsp.exec_cmd("qs -c xeome ipc call notifs toggle"))

@@ -1,6 +1,0 @@
-# Workspace outputs, from the same [[machines.<hostname>.workspaces]] table
-# hyprland.lua.tmpl reads. Managed by chezmoi.
-{{- $m := index .machines .chezmoi.hostname }}
-{{ range $m.workspaces }}
-workspace {{ .workspace }} output {{ .monitor }}
-{{- end }}

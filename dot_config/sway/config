@@ -1,10 +1,8 @@
-# Sway entry point. Managed by chezmoi: edit dot_config/sway/config.tmpl.
-# Per-machine values come from the same [machines.<hostname>] entries in
-# .chezmoidata.toml that hyprland.lua.tmpl reads.
+# Sway entry point. Managed by chezmoi: edit dot_config/sway/config. Outputs
+# and workspaces come from .chezmoidata.toml through conf.d/settings.conf.
 #
 # Needs swayfx: blur, corner_radius, shadows and layer_effects are its
 # extensions, not vanilla sway.
-{{- $m := index .machines .chezmoi.hostname }}
 
 include /etc/sway/config.d/*
 include conf.d/*.conf
@@ -35,14 +33,13 @@ layer_effects "quickshell-zinc-osd" blur enable
 
 input "type:keyboard" {
 	xkb_layout  tr
-	xkb_numlock {{ if $m.numlock }}enabled{{ else }}disabled{{ end }}
+	xkb_numlock enabled
 	xkb_options "grp:win_space_toggle"
 }
 
 input "type:touchpad" {
 	dwt enabled
 	tap enabled
-	natural_scroll {{ if $m.natural_scroll }}enabled{{ else }}disabled{{ end }}
 	middle_emulation enabled
 }
 

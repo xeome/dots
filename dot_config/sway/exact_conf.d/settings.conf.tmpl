@@ -20,12 +20,16 @@ seat seat0 xcursor_theme Bibata-Modern-Classic 24
 # No `bar {}` block: quickshell draws the bar, and one here would stack a
 # second bar over it.
 
-# ~~~ outputs
-# From [[machines.<hostname>.monitors]]. Directives for an unplugged output are
+# ~~~ outputs and their workspaces
+# From `monitors` in .chezmoidata.toml. Directives for an unplugged output are
 # stored, so undocking is safe. Sway spells the same data with a `Hz` suffix
 # and a space-separated position.
 {{ range $m.monitors -}}
+{{ $output := .output -}}
 output {{ .output }} mode {{ .mode }}Hz pos {{ .position | replace "x" " " }} scale {{ .scale }}
+{{ range .workspaces -}}
+workspace {{ . }} output {{ $output }}
+{{ end -}}
 {{ end -}}
 output * adaptive_sync off
 output * subpixel rgb

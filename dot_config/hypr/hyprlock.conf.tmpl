@@ -1,9 +1,9 @@
 # Lock screen for every machine, sway ones included. Managed by chezmoi: edit
 # dot_config/hypr/hyprlock.conf.tmpl.
 
-# $scr2 holds the input field, player and system info.
+# $lock_output holds the input field, player and system info.
 {{- $m := index .machines .chezmoi.hostname }}
-$scr2 = {{ $m.secondary_monitor }}
+$lock_output = {{ $m.lock_output }}
 
 # =============================================================================
 # GENERAL
@@ -86,7 +86,7 @@ label {
 
 # Album art
 image {
-    monitor = $scr2
+    monitor = $lock_output
     path = ~/.cache/playerctlock-art/latest.png
     size = 60
     rounding = 6
@@ -102,7 +102,7 @@ image {
 
 # Track title
 label {
-    monitor = $scr2
+    monitor = $lock_output
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --title)"
     color = rgba(247, 248, 248, 1)
     font_size = 12
@@ -114,7 +114,7 @@ label {
 
 # Track length
 label {
-    monitor = $scr2
+    monitor = $lock_output
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --length)"
     color = rgba(138, 143, 152, 1)
     font_size = 11
@@ -126,7 +126,7 @@ label {
 
 # Playback status
 label {
-    monitor = $scr2
+    monitor = $lock_output
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --status)"
     color = rgba(230, 231, 234, 1)
     font_size = 14
@@ -138,7 +138,7 @@ label {
 
 # Player source
 label {
-    monitor = $scr2
+    monitor = $lock_output
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --source)"
     color = rgba(138, 143, 152, 1)
     font_size = 10
@@ -150,7 +150,7 @@ label {
 
 # Album name
 label {
-    monitor = $scr2
+    monitor = $lock_output
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --album)"
     color = rgba(138, 143, 152, 1)
     font_size = 10
@@ -162,7 +162,7 @@ label {
 
 # Artist name
 label {
-    monitor = $scr2
+    monitor = $lock_output
     text = cmd[update:1000] echo "$(~/.config/hypr/bin/playerctlock.sh --artist)"
     color = rgba(230, 231, 234, 1)
     font_size = 10
@@ -177,7 +177,7 @@ label {
 # =============================================================================
 # A dark ring one pixel outside the field's own translucent outline.
 shape {
-    monitor = $scr2
+    monitor = $lock_output
     size = 252, 62
     color = rgba(0, 0, 0, 0)
     rounding = 11
@@ -190,7 +190,7 @@ shape {
 }
 
 input-field {
-    monitor = $scr2
+    monitor = $lock_output
     size = 250, 60
     rounding = 10
     outline_thickness = 1
@@ -218,7 +218,7 @@ input-field {
 # SYSTEM INFO
 # =============================================================================
 label {
-    monitor = $scr2
+    monitor = $lock_output
     text = cmd[update:1000] echo -e "$(~/.config/hypr/bin/infonlock.sh)"
     color = rgba(138, 143, 152, 1)
     font_size = 12

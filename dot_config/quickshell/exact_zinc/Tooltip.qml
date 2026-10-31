@@ -2,8 +2,8 @@ import QtQuick
 import Quickshell
 
 // waybar got tooltips from GTK; quickshell has none, so this is the one
-// implementation the whole bar shares. Clock uses it directly for its
-// calendar; everything else goes through BarModule.tooltipText.
+// implementation the whole bar shares. Tray uses it directly; everything
+// else goes through BarModule.tooltipText.
 PopupWindow {
     id: root
 

@@ -112,7 +112,6 @@ PanelWindow {
             }
         }
 
-        // Counts the cards waiting past maxVisible.
         Surface {
             width: parent.width
             implicitHeight: 24

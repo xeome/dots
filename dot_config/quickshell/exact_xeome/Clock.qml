@@ -2,8 +2,7 @@ import QtQuick
 import Quickshell
 
 // Time and date, the bar's anchor through larger, heavier text rather than a
-// fill. Left click opens the calendar; right click toggles seconds and a
-// numeric date.
+// fill.
 BarModule {
     id: root
 

@@ -1,5 +1,4 @@
--- Appearance, animation and general settings shared by every Hyprland
--- machine. Monitors are in hyprland.lua.tmpl.
+-- Monitors are in hyprland.lua.tmpl.
 
 -- Graphite edges: a translucent white border, brighter on the focused window,
 -- with a sharp 1px dark shadow outside it. Focus is told by lightness alone:

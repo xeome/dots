@@ -1,5 +1,5 @@
 #!/bin/sh
-# Pick an image from this folder and copy it to the clipboard. Bound to mod+b.
+# Bound to mod+b.
 # The list is vicinae's dmenu mode, so it wears the launcher's graphite theme.
 LOC="$HOME/.config/emoji"
 

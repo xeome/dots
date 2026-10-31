@@ -80,7 +80,6 @@ Menu {
         Image {
             id: art
 
-            // Collapses when the player publishes no art.
             Layout.preferredWidth: art.status === Image.Ready ? 64 : 0
             Layout.preferredHeight: 64
             visible: art.status === Image.Ready

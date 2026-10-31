@@ -2,7 +2,7 @@ import QtQuick
 
 // Not a waybar module. swaync was toggled by a keybind with nothing on screen;
 // the centre needs something to hang off, and DND needs somewhere to be
-// visible. Left click toggles the centre, right click toggles DND.
+// visible.
 BarModule {
     id: root
 

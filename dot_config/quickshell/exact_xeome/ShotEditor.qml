@@ -244,7 +244,6 @@ Scope {
                 }
             }
 
-            // Tools, inks and sizes, with the keys under them.
             ColumnLayout {
                 anchors {
                     horizontalCenter: parent.horizontalCenter

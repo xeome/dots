@@ -1,4 +1,4 @@
--- Hyprland entry point. Per-machine values come from [machines.<hostname>] in
+-- Per-machine values come from [machines.<hostname>] in
 -- .chezmoidata.toml; the shared config is in lua_modules/.
 {{- $m := index .machines .chezmoi.hostname }}
 
@@ -7,10 +7,6 @@
 function app(cmd)
   return "systemd-run --user --scope --quiet -- " .. cmd
 end
-
--- =============================================================================
--- ENVIRONMENT VARIABLES
--- =============================================================================
 
 hl.env("XDG_SESSION_TYPE", "wayland")
 hl.env("SDL_VIDEODRIVER", "wayland")
@@ -26,9 +22,6 @@ hl.env("OBSIDIAN_USE_WAYLAND", "1")
 -- Read by quickshell's Theme.qml; see text_scale in .chezmoidata.toml.
 hl.env("TEXT_SCALE", "{{ $m.text_scale }}")
 
--- =============================================================================
--- MONITORS AND THEIR WORKSPACES
--- =============================================================================
 {{- range $m.monitors }}
 {{- $output := .output }}
 
@@ -37,10 +30,6 @@ hl.monitor({ output = {{ .output | quote }}, mode = {{ .mode | quote }}, positio
 hl.workspace_rule({ workspace = {{ . | quote }}, monitor = {{ $output | quote }} })
 {{- end }}
 {{- end }}
-
--- =============================================================================
--- INPUT CONFIGURATION
--- =============================================================================
 
 hl.config({
   input = {
@@ -55,9 +44,6 @@ hl.config({
   },
 })
 
--- =============================================================================
--- MOUSE
--- =============================================================================
 -- ponytail: device names are hardcoded, not per-machine; blocks for absent
 -- devices are ignored. The wireless dongle exposes two pointer interfaces.
 for _, name in ipairs({
@@ -74,18 +60,11 @@ for _, name in ipairs({
   })
 end
 
--- =============================================================================
--- SHARED MODULES
--- =============================================================================
-
 require("lua_modules.settings")
 require("lua_modules.keybinds")
 require("lua_modules.rules")
 require("lua_modules.startup")
 
--- =============================================================================
--- OPTIONAL OVERRIDES
--- =============================================================================
 -- Absolute path: dofile() resolves against Hyprland's CWD, not this directory.
 
 pcall(dofile, os.getenv("HOME") .. "/.config/hypr/user.local.lua")

@@ -1,8 +1,7 @@
 import Quickshell.Services.Mpris
 
 // The current track as "artist - title", dim and italic while paused, hidden
-// when no player exists. Left click opens MediaMenu; middle click toggles
-// playback.
+// when no player exists.
 BarModule {
     id: root
 

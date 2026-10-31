@@ -1,7 +1,6 @@
 import QtQuick
 
-// The notification centre's button and the do-not-disturb indicator. Left
-// click toggles the centre, right click toggles DND.
+// The notification centre's button and the do-not-disturb indicator.
 BarModule {
     id: root
 

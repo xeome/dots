@@ -1,4 +1,3 @@
-# Utils
 0short() { curl -F"shorten=$1" https://envs.sh; }
 0file()  { curl -F"file=@$1" https://envs.sh; }
 

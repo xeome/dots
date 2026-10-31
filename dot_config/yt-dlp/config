@@ -1,3 +1,2 @@
-# Downloads go to ~/Videos/downloads, not the current directory. -P on the
-# command line still wins.
+# -P on the command line still wins.
 -P ~/Videos/downloads

@@ -2,8 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Networking
 
-// Wifi signal ramp, hidden unless connected over wifi. Left click opens
-// NetMenu; right click opens nm-connection-editor.
+// Wifi signal ramp, hidden unless connected over wifi.
 BarModule {
     id: root
 

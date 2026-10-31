@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell.Wayland
 
-// waybar `hyprland/window`: borderless, "Desktop" when empty.
+// waybar `hyprland/window`: borderless.
 //
 // Title comes from the wlr foreign-toplevel protocol rather than the
 // compositor's own IPC: Hyprland.activeToplevel stays null until the first

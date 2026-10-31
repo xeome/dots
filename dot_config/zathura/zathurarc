@@ -1,11 +1,3 @@
-# ┌──────────────────────────────────────┐
-# │                                      │
-# │     ░▀▀█░█▀█░▀█▀░█░█░█░█░█▀▄░█▀█     │
-# │     ░▄▀░░█▀█░░█░░█▀█░█░█░█▀▄░█▀█     │
-# │     ░▀▀▀░▀░▀░░▀░░▀░▀░▀▀▀░▀░▀░▀░▀     │
-# │                                      │
-# └──────────────────────────────────────┘
-#
 # Graphite, same values as quickshell's Theme.qml.
 
 # Chrome. `default` is graphite's panel, the same black as the terminals; the

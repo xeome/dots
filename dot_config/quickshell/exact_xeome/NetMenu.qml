@@ -71,7 +71,6 @@ Menu {
                 required property var modelData
 
                 label: modelData.name
-                // Mid-connect, the state replaces the signal bars.
                 suffix: modelData.stateChanging ? "···" : `${modelData.security === WifiSecurityType.Open ? "" : "󰌾 "}${root.bars(modelData.signalStrength)}`
                 current: modelData.connected
                 onClicked: root.activate(modelData)

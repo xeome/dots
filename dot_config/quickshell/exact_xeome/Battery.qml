@@ -25,7 +25,6 @@ BarModule {
 
     BarText {
         readonly property var icons: ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
-        // Shown beside the ramp only for a profile other than Balanced.
         readonly property string profileGlyph: PowerProfiles.profile === PowerProfile.Balanced ? "" : `${menu.glyph(PowerProfiles.profile)} `
 
         text: root.hasBattery ? `${profileGlyph}${icons[Math.min(10, Math.floor(root.pct / 10))]}${root.charging ? "󱐋" : ""} ${root.pct}%` : menu.glyph(PowerProfiles.profile)

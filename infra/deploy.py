@@ -94,18 +94,15 @@ def put(src, dest, mode="644"):
     return files.put(name=dest, src=f"files/{src}", dest=dest, user="root", group="root", mode=mode)
 
 
-# --- packages ----------------------------------------------------------------
 repo = family["repo"]
 repo["op"](name="Packages", packages=repo["common"] + repo[wm])
 
 
-# --- desktop -----------------------------------------------------------------
 put("desktop/50-dots-qt.conf", "/etc/environment.d/50-dots-qt.conf")
 put("desktop/dots-qt.sh", "/etc/profile.d/dots-qt.sh")
 
 keychron = put("desktop/70-dots-keychron.rules", "/etc/udev/rules.d/70-dots-keychron.rules")
 
-# --- dns ---------------------------------------------------------------------
 # DoT to Cloudflare/Quad9 as the machine's only resolvers.
 #
 # What this buys is privacy from passive observers — the ISP, the AP you happen
@@ -143,7 +140,6 @@ dns = [
                target="/run/systemd/resolve/stub-resolv.conf", force=True),
 ]
 
-# --- oom ---------------------------------------------------------------------
 # systemd-oomd: kill one app under real memory pressure instead of freezing.
 #
 # Arch ships oomd with no policy, so enabling the service alone does nothing.
@@ -163,7 +159,6 @@ oom_units = [
 ]
 oomd_conf = put("oom/oomd.conf", "/etc/systemd/oomd.conf.d/50-dots-oomd.conf")
 
-# --- power -------------------------------------------------------------------
 # Power profiles for the quickshell bar's battery module. Two halves behind one
 # three-way choice:
 #   - tlp-pd answers org.freedesktop.UPower.PowerProfiles, which quickshell
@@ -185,7 +180,6 @@ tlp = [
     put(f"power/tlp-{chassis}.conf", "/etc/tlp.d/50-dots-profiles.conf"),
 ]
 
-# --- boot --------------------------------------------------------------------
 # A stack other than the checked one skips the section instead of failing,
 # so a wrong guess costs a splash, not a boot.
 #
@@ -249,7 +243,6 @@ else:
         _if=lambda: stale or any_changed(*boot)(),
     )
 
-# --- services ----------------------------------------------------------------
 # Before any restart below, so tlp starts with its new drop-in.
 systemd.daemon_reload(name="daemon-reload", _if=any_changed(*oom_units, tlp_unit))
 
@@ -282,7 +275,6 @@ systemd.service(name="Reload udev", service="systemd-udevd.service", reloaded=Tr
 server.shell(name="Trigger hidraw", commands=["udevadm trigger --subsystem-match=hidraw --action=change"],
              _if=keychron.did_change)
 
-# --- helper packages ---------------------------------------------------------
 # Last, so a helper build that fails (an AUR package, say) leaves the /etc
 # state above applied. None of it needs these.
 helper = family["helper"]

@@ -48,8 +48,6 @@ PanelWindow {
         onTriggered: root.visible = false
     }
 
-    // ---- volume ------------------------------------------------------------
-
     readonly property var sink: Pipewire.defaultAudioSink
 
     PwObjectTracker {
@@ -83,8 +81,6 @@ PanelWindow {
         root.flash(a.muted ? "󰖁" : pct > 66 ? "󰕾" : pct > 33 ? "󰖀" : "󰕿", a.muted ? 0 : a.volume, "");
     }
 
-    // ---- mic mute ----------------------------------------------------------
-    //
     // Mute only, not level: XF86AudioMicMute is the one bind that changes this
     // with nothing on screen, and AudioMenu's slider already shows the level
     // while you drag it.
@@ -119,8 +115,6 @@ PanelWindow {
         }
     }
 
-    // ---- brightness --------------------------------------------------------
-
     // Backlight owns the sysfs watch, since Power's slider needs the same
     // reading; this end only decides when a change is worth flashing.
     Connections {
@@ -133,8 +127,6 @@ PanelWindow {
                 root.flash("󰃠", Backlight.value, "");
         }
     }
-
-    // ---- caps lock ---------------------------------------------------------
 
     readonly property string capsDir: caps.count > 0 ? caps.get(0, "filePath") : ""
 
@@ -162,8 +154,6 @@ PanelWindow {
                 root.flash("⇪", 0, on ? "Caps Lock On" : "Caps Lock Off");
         }
     }
-
-    // ---- chrome ------------------------------------------------------------
 
     Rectangle {
         anchors.fill: parent

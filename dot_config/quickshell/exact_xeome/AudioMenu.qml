@@ -54,8 +54,6 @@ Menu {
         objects: [root.sink, root.source].concat(root.recorders)
     }
 
-    // One output or input: the glyph mutes, the bar sets volume, the picker
-    // switches device.
     component Device: ColumnLayout {
         id: dev
 

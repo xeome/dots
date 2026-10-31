@@ -124,8 +124,6 @@ Scope {
         id: editor
     }
 
-    // ---- the overlay --------------------------------------------------------
-
     PanelWindow {
         id: aim
 
@@ -212,7 +210,6 @@ Scope {
                 }
             }
 
-            // Crosshair.
             Rectangle {
                 y: Math.round(root.my)
                 width: parent.width
@@ -421,12 +418,10 @@ Scope {
                     from = Qt.point(root.mx, root.my);
                     root.drag = Qt.rect(from.x, from.y, 0, 0);
                 }
-                // Region captures on release.
                 onReleased: if (root.mode === 0 && root.drag.width > 2 && root.drag.height > 2)
                     root.fire()
             }
 
-            // Modes and timer, with the keys under them.
             ColumnLayout {
                 anchors {
                     horizontalCenter: parent.horizontalCenter
@@ -492,8 +487,6 @@ Scope {
             }
         }
     }
-
-    // ---- after the shot: a flash on what was taken, then the card ------------
 
     PanelWindow {
         id: fired

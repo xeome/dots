@@ -3,8 +3,6 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Networking
 
-// The network module's menu: radio toggle, the networks in range, and the IP.
-//
 // Deliberately not a network manager. Connecting to something you've joined
 // before, joining something new with a password, and getting off a bad AP is
 // the whole job — static addresses, 802.1X, VPNs and per-connection routing

@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 
-// swaync's notification popups: top-right, 400px, newest first.
+// swaync's notification popups: newest first.
 PanelWindow {
     id: root
 

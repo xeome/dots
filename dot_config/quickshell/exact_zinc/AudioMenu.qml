@@ -90,9 +90,6 @@ PopupWindow {
         objects: [root.sink, root.source].concat(root.recorders)
     }
 
-    // Output and input are the same widgets, so they're one component: click
-    // the glyph to mute, drag or scroll the bar to set volume, press the device
-    // button to switch to another one.
     component Device: ColumnLayout {
         id: dev
 

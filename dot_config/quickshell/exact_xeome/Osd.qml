@@ -54,8 +54,6 @@ PanelWindow {
         onTriggered: root.visible = false
     }
 
-    // ---- volume ------------------------------------------------------------
-
     readonly property var sink: Pipewire.defaultAudioSink
 
     PwObjectTracker {
@@ -89,8 +87,6 @@ PanelWindow {
         root.flash(a.muted ? "󰖁" : pct > 66 ? "󰕾" : pct > 33 ? "󰖀" : "󰕿", a.muted ? 0 : a.volume, "");
     }
 
-    // ---- mic mute ----------------------------------------------------------
-    //
     // Mute only: XF86AudioMicMute changes it with nothing on screen, and
     // AudioMenu already shows the level.
     //
@@ -121,8 +117,6 @@ PanelWindow {
         }
     }
 
-    // ---- brightness --------------------------------------------------------
-
     // Backlight owns the sysfs watch; this only decides when to flash.
     Connections {
         target: Backlight
@@ -134,8 +128,6 @@ PanelWindow {
                 root.flash("󰃠", Backlight.value, "");
         }
     }
-
-    // ---- caps lock ---------------------------------------------------------
 
     readonly property string capsDir: caps.count > 0 ? caps.get(0, "filePath") : ""
 
@@ -162,8 +154,6 @@ PanelWindow {
                 root.flash("⇪", 0, on ? "Caps Lock On" : "Caps Lock Off");
         }
     }
-
-    // ---- chrome ------------------------------------------------------------
 
     Surface {
         width: parent.width

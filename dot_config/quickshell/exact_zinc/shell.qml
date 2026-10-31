@@ -1,5 +1,5 @@
 //@ pragma UseQApplication
-//! Replaces waybar + swayosd + swaync. Launch with: qs -c xeome
+//! Replaces waybar + swayosd + swaync. Launch with: qs -c zinc
 //
 // QApplication (rather than the default QGuiApplication) is what pulls in
 // QtWidgets, and QsMenuAnchor refuses to open a tray icon's menu without it.

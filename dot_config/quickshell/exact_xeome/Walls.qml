@@ -339,7 +339,6 @@ Scope {
             }
         }
 
-        // The name and the Dots switch, with the keys under them.
         ColumnLayout {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: list.bottom

@@ -1,9 +1,9 @@
-# Options and outputs. Managed by chezmoi.
+# Managed by chezmoi.
 {{- $m := index .machines .chezmoi.hostname }}
 
 font pango:Inter SemiBold 8
 
-# ~~~ gaps and borders, matched to hyprland's lua_modules/settings.lua
+# Matched to hyprland's lua_modules/settings.lua.
 # 12 px between windows and to the screen edge: outer is added to inner at the
 # edge, so it stays 0.
 gaps inner 12
@@ -20,7 +20,6 @@ seat seat0 xcursor_theme Bibata-Modern-Classic 24
 # No `bar {}` block: quickshell draws the bar, and one here would stack a
 # second bar over it.
 
-# ~~~ outputs and their workspaces
 # From `monitors` in .chezmoidata.toml. Directives for an unplugged output are
 # stored, so undocking is safe. Sway spells the same data with a `Hz` suffix
 # and a space-separated position.

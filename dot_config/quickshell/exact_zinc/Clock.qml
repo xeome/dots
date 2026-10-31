@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 
-// waybar `clock`: permanently inverted focal anchor. Click opens the calendar.
+// waybar `clock`: permanently inverted focal anchor.
 BarModule {
     id: root
 

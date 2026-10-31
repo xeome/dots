@@ -1,7 +1,5 @@
-# --- Environment ---
 shell-integration-features = ssh-env
 
-# --- Fonts ---
 font-size = 10
 
 # Fixed at 10pt rather than scaled by text_scale, which read too large here.
@@ -11,7 +9,6 @@ font-style-bold = Bold
 font-style-italic = Medium Italic
 font-style-bold-italic = Bold Italic
 
-# --- Window ---
 # Opaque (background-opacity defaults to 1), so contrast does not depend on
 # the wallpaper.
 window-padding-x = 15
@@ -22,7 +19,6 @@ window-padding-y = 15
 # flips through gsettings.
 theme = light:caffeine-light,dark:caffeine
 
-# --- Chrome ---
 # The compositor tiles, so the headerbar's window buttons do nothing. Without
 # it the tab bar shows only from two tabs; new tab and the menu move to the
 # right-click menu and keybinds.

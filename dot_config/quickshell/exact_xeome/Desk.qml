@@ -71,8 +71,6 @@ PanelWindow {
         precision: SystemClock.Minutes
     }
 
-    // ---- system stats, every 2 s while shown ---------------------------------
-
     // The card with the most VRAM: the discrete GPU on the desktop, the only
     // one on a laptop. Its busy percent is all the ring shows.
     Process {
@@ -139,8 +137,6 @@ PanelWindow {
         onTriggered: root.player.positionChanged()
     }
 
-    // ---- left: clock, date, greeting --------------------------------------------
-
     ColumnLayout {
         x: Math.round(root.width * 0.08)
         y: grid.y
@@ -177,8 +173,6 @@ PanelWindow {
         }
     }
 
-    // ---- right: the grid ---------------------------------------------------------
-
     Item {
         id: grid
 
@@ -187,7 +181,6 @@ PanelWindow {
         width: 3 * root.m + 2 * root.gap
         height: width
 
-        // Row 1: calendar · CPU · GPU.
         Tile {
             col: 0
             row: 0
@@ -263,7 +256,6 @@ PanelWindow {
             label: "GPU %"
         }
 
-        // Row 2: now playing · RAM.
         Tile {
             col: 0
             row: 1

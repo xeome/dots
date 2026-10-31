@@ -6,7 +6,6 @@
 # config. Mirrors ~/.config/alacritty/caffeine.toml, ~/.config/foot/foot.ini
 # and quickshell's Theme.qml, so a change here wants the same change there.
 
-# --- ANSI 16 -------------------------------------------------------------
 # Caffeine's `terminal.ansi` hues on graphite's neutrals: slots 0/8 and 7/15
 # are Theme.qml's rule/dim and text/bright. Slot 0 is `rule`, not a true
 # black, because the background is already near-black.
@@ -27,7 +26,6 @@ palette = 13=#ddc0db
 palette = 14=#a4d4da
 palette = 15=#f7f8f8
 
-# --- Surfaces ------------------------------------------------------------
 # Theme.qml's panel and text.
 background = #0e0e10
 foreground = #e6e7ea

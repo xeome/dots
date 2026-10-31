@@ -7,10 +7,6 @@
 include /etc/sway/config.d/*
 include conf.d/*.conf
 
-# =============================================================================
-# APPEARANCE (swayfx)
-# =============================================================================
-
 blur enable
 blur_radius 10
 blur_passes 3
@@ -26,10 +22,6 @@ layer_effects "quickshell-zinc-bar" blur enable
 # Blur behind the cards but not the transparent gaps between them.
 layer_effects "quickshell-zinc-notifications" blur enable; blur_ignore_transparent enable
 layer_effects "quickshell-zinc-osd" blur enable
-
-# =============================================================================
-# INPUT
-# =============================================================================
 
 input "type:keyboard" {
 	xkb_layout  tr

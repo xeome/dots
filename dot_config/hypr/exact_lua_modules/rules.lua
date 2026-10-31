@@ -1,7 +1,3 @@
--- =============================================================================
--- SHARED LAYER RULES
--- =============================================================================
-
 -- The xeome shell draws every surface opaque (its hairlines rely on a known
 -- surface lightness), so it needs no blur. Only the translucent zinc theme is
 -- blurred, through namespaces of its own, so blur never runs behind the
@@ -34,10 +30,6 @@ hl.layer_rule({
   blur = true,
   ignore_alpha = 0,
 })
-
--- =============================================================================
--- SHARED WINDOW RULES
--- =============================================================================
 
 hl.window_rule({
   name = "telegram-no-screen-share",

@@ -212,23 +212,15 @@ hovered = { fg = "#f7f8f8", bg = "#232427", bold = true }
 
 [filetype]
 rules = [
-	# Image
 	{ mime = "**/image/*", fg = "#88c0c8" },
-	# Media
 	{ mime = "**/{audio,video}/*", fg = "#cba6c9" },
-	# Archive
 	{ mime = "**/application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#ffd9a0" },
-	# Document
 	{ mime = "**/application/{pdf,doc,rtf}", fg = "#e06c75" },
-	# Virtual file system
 	{ mime = "vfs/{absent,stale}", fg = "#8a8f98" },
-	# Special file
 	{ url = "*", is = "orphan", bg = "#e2715a" },
 	{ url = "*", is = "exec"  , fg = "#b5c98f" },
-	# Dummy file
 	{ url = "*", is = "dummy", bg = "#e2715a" },
 	{ url = "*/", is = "dummy", bg = "#e2715a" },
-	# Fallback
 	{ url = "*/", fg = "#8fb0d9" },
 ]
 

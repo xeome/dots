@@ -4,8 +4,7 @@ import QtQuick
 import Quickshell
 
 // Ported from waybar/zinc.css. There are no hues in this theme by design —
-// inversion (white fill, black text) is the only accent, and it now covers
-// the OSD and notifications too, which used to be a separate blue/shadcn set.
+// inversion (white fill, black text) is the only accent.
 //
 // This whole folder is the shell as it stood at a3bb985, kept so the warm
 // caffeine theme in ../xeome has something to be switched back from. Run it

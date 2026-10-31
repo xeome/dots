@@ -17,8 +17,7 @@ BarModule {
     // otherwise they stack on top of each other.
     tooltipText: menu.visible ? "" : `${network?.name ?? "?"}\nStrength: ${Math.round((network?.signalStrength ?? 0) * 100)}%\n${device?.name ?? ""}`
 
-    // Copy-IP used to be the left click, back when there was no menu to open —
-    // it's a row in the menu now. Right-click follows the Audio/pavucontrol
+    // Right-click follows the Audio/pavucontrol
     // convention and lands in the full connection editor.
     onClicked: button => {
         if (button === Qt.RightButton)

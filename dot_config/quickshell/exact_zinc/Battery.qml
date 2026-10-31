@@ -5,7 +5,7 @@ import Quickshell.Services.UPower
 // Also the power-profile button — clicking it opens Power. On a machine
 // without a laptop battery (xeome-desktop) there is no charge to report, so
 // the module drops the ramp and shows the profile glyph on its own rather than
-// hiding itself the way it used to.
+// hiding itself.
 BarModule {
     id: root
 

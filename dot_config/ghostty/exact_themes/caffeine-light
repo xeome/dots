@@ -2,7 +2,6 @@
 #
 # Managed by chezmoi: edit dot_config/ghostty/exact_themes/caffeine-light
 
-# --- ANSI 16 -------------------------------------------------------------
 palette = 0=#3a322a
 palette = 1=#c0392b
 palette = 2=#5a7d3c
@@ -20,7 +19,6 @@ palette = 13=#aa5f9a
 palette = 14=#3a989c
 palette = 15=#202020
 
-# --- Surfaces ------------------------------------------------------------
 background = #f9f9f9
 foreground = #202020
 

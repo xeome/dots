@@ -1,0 +1,109 @@
+/* Theme.qml's palette; check-palette.py holds these values to it.
+ * light-dark() follows theme-toggle only because the link script sets
+ * zen.view.window.scheme to Auto. No animation: an idle hometab must never
+ * repaint, and hometab.test.mjs fails if one appears. */
+
+:root {
+  color-scheme: light dark;
+  --ground: light-dark(#ededef, #0a0a0c);
+  --panel: light-dark(#f8f8f9, #0e0e10);
+  --text: light-dark(#26272b, #e6e7ea);
+  --bright: light-dark(#0f1011, #f7f8f8);
+  --dim: light-dark(#62666d, #8a8f98);
+  --warm: light-dark(#885b0c, #e5ae52);
+  --line: light-dark(rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.08));
+  --ring: light-dark(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.3));
+  --glow: light-dark(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.05));
+  --hover: light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.05));
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='.33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+  --ease: cubic-bezier(0.33, 1, 0.68, 1);   /* OutCubic, Theme.qml's anim curve */
+
+  /* Desk.qml's sizes. */
+  --m: 19vh;
+  --gap: 16px;
+  --clock: 22vh;
+}
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  background: var(--grain), radial-gradient(600px 300px at 0 0, var(--glow), transparent 75%), var(--ground);
+  background-blend-mode: overlay, normal;
+  color: var(--text);
+  font: 550 14px/1.4 "Inter Variable", sans-serif;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+main {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12vh 6vw 0 8vw;
+}
+
+/* Doto's default ROND 0 is square pixels; hyprlock and the wallpaper use round dots. */
+.time {
+  font: 900 var(--clock)/1 "Doto";
+  font-variation-settings: "ROND" 100, "wght" 900;
+  color: var(--bright);
+}
+
+.date {
+  margin-left: 4px;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: var(--dim);
+}
+#date { margin-top: calc(var(--m) * 0.12); }
+
+.hello {
+  margin-top: calc(var(--m) * 0.45);
+  font-size: 5vh;
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--bright);
+}
+.dim { color: var(--dim); }
+
+/* Flat like Desk.qml's tiles: no glow or grain. */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, var(--m));
+  grid-auto-rows: var(--m);
+  gap: var(--gap);
+}
+
+.tiles a {
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--m) * 0.1);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px var(--ring);
+  background: var(--panel);
+  color: var(--dim);
+  text-decoration: none;
+  transition: color 200ms var(--ease);
+}
+.tiles a:hover { color: var(--bright); background-image: linear-gradient(var(--hover), var(--hover)); }
+
+.tiles i {
+  margin: auto;
+  font: normal calc(var(--m) * 0.3)/1 "JetBrainsMono Nerd Font";
+  color: var(--text);
+  transition: color 200ms var(--ease);
+}
+.tiles a:hover i { color: var(--bright); }
+
+:focus-visible { outline: 2px solid var(--warm); outline-offset: -2px; }
+
+/* Side by side needs 123vh + 32px + 14vw (five Doto glyphs are 3em wide), so
+ * below 3:2 the grid would clip. */
+@media (max-aspect-ratio: 3/2) {
+  :root { --m: min(11vh, 24vw); --clock: min(15vh, 28vw); }
+  main { flex-direction: column; gap: 5vh; padding-top: 8vh; }
+}

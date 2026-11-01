@@ -194,6 +194,10 @@ if complete:
             f"--arrowpanel-background: light-dark({L['raised']}, {D['raised']})",
             f"--zen-urlbar-background: light-dark({L['raised']}, {D['raised']})",
         ),
+        "dot_config/zen/hometab/hometab.css": (
+            *(f"--{t}: light-dark({L[t]}, {D[t]})" for t in ("ground", "panel", "text", "bright", "dim", "warm")),
+            *(f"--{t}: light-dark({rgba(light[t])}, {rgba(dark[t])})" for t in ("line", "ring", "glow", "hover")),
+        ),
         "dot_config/private_vesktop/exact_themes/graphite.theme.css.tmpl": (
             f"--background-base-lowest: {D['ground']};",
             f"--background-base-lower: {D['panel']};",

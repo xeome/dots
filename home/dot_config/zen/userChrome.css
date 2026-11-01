@@ -3,7 +3,8 @@
  *
  * Only theme variables, no layout selectors: Zen updates break layout
  * selectors, while a renamed variable only stops one colour applying.
- * light-dark() follows theme-toggle. check-palette.py holds the values to
+ * light-dark() follows theme-toggle, because the same script sets
+ * zen.view.window.scheme to Auto. check-palette.py holds the values to
  * quickshell's Theme.qml. A user sheet ranks below Zen's own styles, so every
  * value is !important. */
 

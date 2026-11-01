@@ -28,6 +28,11 @@ The graphite palette is defined once, in
 compositor, Discord, browser and launcher themes repeat its values, and
 `tools/check-palette.py` fails when one drifts.
 
+Zen's new tab and homepage are `home/dot_config/zen/hometab`, an unsigned
+extension that `chezmoi apply` points every Zen profile at. Zen installs it
+disabled: enable it once in the add-ons prompt, and disable any other new-tab
+extension.
+
 To add a machine, give it a `[machines.<hostname>]` entry in
 `home/.chezmoidata.toml`, then run `python3 -I tools/plymouth.py` and commit
 its splash.

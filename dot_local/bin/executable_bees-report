@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+# What bees is doing, and how much space it freed per day. Reads the journal,
+# so no root: wheel can read the system journal.
+#
+# bees keeps no savings counter. Its dedup_bytes counts every reference it
+# rewrote, so one extent shared by N snapshots counts N times (2.5x here).
+# This counts each deduplicated extent once per day, at its on-disk size: an
+# upper bound on what the dedup freed when it ran. It stays freed only while the
+# data that replaced it lives on, and a partly deduped extent frees nothing.
+# Once a day, not once ever: btrfs hands a freed extent's address to new data.
+#
+# Needs bees at -v 7 or above, where it logs its dedup and PROGRESS lines.
+import collections
+import re
+import subprocess
+import sys
+
+UNITS = {"": 1, "K": 2**10, "M": 2**20, "G": 2**30}
+# ref_<bytenr>_<on-disk size>[_<n>][<tid>]: dedup: src ...
+DEDUP = re.compile(r"^(\d{4}-\d\d-\d\d)\S* .*?\bref_([0-9a-f]+)_([0-9.]+)([KMG]?)\S*: dedup: src ")
+
+
+def freed_per_day(lines):
+    """Per-day bytes, and the dedup lines DEDUP could not read."""
+    seen = set()
+    days = collections.Counter()
+    unread = 0
+    for line in lines:
+        m = DEDUP.match(line)
+        if not m:
+            unread += ": dedup: src " in line
+        elif (m[1], m[2]) not in seen:
+            seen.add((m[1], m[2]))
+            days[m[1]] += float(m[3]) * UNITS[m[4]]
+    return days, unread
+
+
+def journal(*args):
+    # No check: journalctl exits 1 when --grep matches nothing. Its errors reach
+    # the terminal through stderr.
+    return subprocess.run(["journalctl", "-u", "beesd@*", "--no-pager", *args],
+                          stdout=subprocess.PIPE, text=True).stdout.splitlines()
+
+
+def main():
+    # Not -n: with --grep, journalctl returns a table's lines newest first.
+    progress = journal("-o", "cat", "--grep", "PROGRESS: ", "--since", "-1d")
+    header = max((i for i, l in enumerate(progress) if "extsz" in l), default=None)
+    if header is None:
+        sys.exit("bees-report: no PROGRESS lines in the journal; is bees running at -v 7 or above?")
+    print("\n".join(l.split("PROGRESS: ", 1)[1] for l in progress[header:]))
+
+    days, unread = freed_per_day(journal("-o", "short-iso", "--grep", ": dedup: src "))
+    if unread:
+        print(f"bees-report: {unread} dedup lines in a format it cannot read, left out", file=sys.stderr)
+    print("\nFreed per day, upper bound:")
+    for day, n in sorted(days.items()):
+        print(f"{day}  {n / 2**30:7.2f} GiB")
+    if days:
+        print(f"total       {sum(days.values()) / 2**30:7.2f} GiB since {min(days)}, as far back as the journal goes")
+
+
+if __name__ == "__main__":
+    main()

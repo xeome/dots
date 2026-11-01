@@ -5,6 +5,8 @@ infra
 .config/quickshell/xeome/calc.test.mjs
 # python3 -I dot_config/quickshell/dots.test.py
 .config/quickshell/dots.test.py
+# python3 -I dot_local/bin/bees-report.test.py
+.local/bin/bees-report.test.py
 
 # Baked for the Discord theme, which embeds it from the source; Quickshell never loads it.
 .config/quickshell/xeome/grain-panel.png

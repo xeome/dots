@@ -81,6 +81,10 @@ assert chassis in ("laptop", "desktop"), f"hostnamectl chassis: {chassis!r}"
 # Not `host`: pyinfra's host.data already holds the Host object under that name.
 hostname = host.data.get("hostname")
 assert isinstance(hostname, str) and hostname, hostname
+# bees deduplicates the root filesystem in the background, on btrfs desktops:
+# on a laptop its hashing costs battery for a few GiB.
+root_fs, _, root_uuid = host.get_fact(Command, "findmnt -rno FSTYPE,UUID /").partition(" ")
+bees = chassis == "desktop" and root_fs == "btrfs"
 
 os_release = host.get_fact(OsRelease)
 families = [os_release["id"], *os_release.get("id_like", "").split()]
@@ -279,7 +283,25 @@ server.shell(name="Trigger hidraw", commands=["udevadm trigger --subsystem-match
 # state above applied. None of it needs these.
 helper = family["helper"]
 installed = host.get_fact(helper["installed"])
-missing = [p for p in helper["common"] + helper[wm] if p not in installed]
+# bees-git, not extra/bees: 0.11 (2025-03) still scans NODATASUM files and can
+# loop on the 256M prealloc extents kernels write. yay -Syu skips -git
+# packages without --devel.
+wanted = helper["common"] + helper[wm] + (["bees-git"] if bees else [])
+missing = [p for p in wanted if p not in installed]
 if missing:  # an unconditional shell op would report a change on every run
     # As the invoking user: makepkg refuses root.
     server.shell(name="Helper packages", commands=[f"{helper['command']} {' '.join(missing)}"], _sudo=False)
+
+# After the helper packages, which install it. One instance per filesystem,
+# named by its UUID. Only the root filesystem: a second one needs its own conf.
+if bees:
+    bees_conf = files.put(
+        name="bees config", src=io.StringIO(f"UUID={root_uuid}\n" + pathlib.Path("files/bees/beesd.conf").read_text()),
+        dest=f"/etc/bees/{root_uuid}.conf", user="root", group="root", mode="644",
+    )
+    # Before the start op: on a first deploy this restart is the start, so bees is
+    # not started and then killed at once. Clears bees' in-memory counters; the
+    # hash table and scan position persist.
+    systemd.service(name="Restart bees", service=f"beesd@{root_uuid}.service", restarted=True,
+                    _if=bees_conf.did_change)
+    systemd.service(name="bees", service=f"beesd@{root_uuid}.service", running=True, enabled=True)

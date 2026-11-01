@@ -196,7 +196,7 @@ stack = {
     "/etc/kernel/cmdline exists": bool(host.get_fact(File, "/etc/kernel/cmdline")),
     # || true: a fact command that exits non-zero aborts the whole deploy.
     "systemd-boot is installed": host.get_fact(Command, "bootctl is-installed 2>/dev/null || true") == "yes",
-    # A machine new to .chezmoidata.toml until infra/plymouth.py has drawn it.
+    # A machine new to .chezmoidata.toml until tools/plymouth.py has drawn it.
     f"files/plymouth/watermark-{hostname}.png exists": pathlib.Path(f"files/plymouth/watermark-{hostname}.png").exists(),
 }
 if not all(stack.values()):

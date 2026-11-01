@@ -1,0 +1,15 @@
+# Baked for the Discord theme, which embeds it from the source; Quickshell never loads it.
+.config/quickshell/xeome/grain-panel.png
+
+{{- $m := index .machines .chezmoi.hostname }}
+{{- if eq $m.wm "sway" }}
+# hyprlock is the lock screen on every machine, so .config/hypr/hyprlock.conf
+# and the bin/ scripts its labels call stay here. Only Hyprland-the-compositor
+# is excluded.
+.config/hypr/hyprland.lua
+.config/hypr/user.local.lua
+.config/hypr/lua_modules
+{{- end }}
+{{- if eq $m.wm "hyprland" }}
+.config/sway
+{{- end }}

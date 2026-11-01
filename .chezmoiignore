@@ -1,25 +1,5 @@
-README.md
-LICENSE
-infra
-# Run from the source tree: node dot_config/quickshell/exact_xeome/calc.test.mjs
-.config/quickshell/xeome/calc.test.mjs
-# python3 -I dot_config/quickshell/dots.test.py
-.config/quickshell/dots.test.py
-# python3 -I dot_local/bin/bees-report.test.py
-.local/bin/bees-report.test.py
-
-# Baked for the Discord theme, which embeds it from the source; Quickshell never loads it.
-.config/quickshell/xeome/grain-panel.png
-
-{{- $m := index .machines .chezmoi.hostname }}
-{{- if eq $m.wm "sway" }}
-# hyprlock is the lock screen on every machine, so .config/hypr/hyprlock.conf
-# and the bin/ scripts its labels call stay here. Only Hyprland-the-compositor
-# is excluded.
-.config/hypr/hyprland.lua
-.config/hypr/user.local.lua
-.config/hypr/lua_modules
-{{- end }}
-{{- if eq $m.wm "hyprland" }}
-.config/sway
-{{- end }}
+# chezmoi reads source state from home/ (.chezmoiroot), so it never reads this file.
+# Only a `chezmoi update` that started before pulling the move to home/ reads the
+# repo root, and this keeps that one run from copying the repo into ~. Run
+# `chezmoi apply` after it. Delete this file once every machine has applied the move.
+*

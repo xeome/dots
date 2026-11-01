@@ -1,5 +1,5 @@
 # From infra/deploy.py — edit: ~/.local/share/chezmoi/infra/files/plymouth/
-# Images come from infra/plymouth.py.
+# Images come from tools/plymouth.py.
 [Plymouth Theme]
 Name=dots
 Description=Hostname in Doto over a 24-dot progress row

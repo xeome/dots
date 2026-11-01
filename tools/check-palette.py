@@ -1,0 +1,305 @@
+#!/usr/bin/env python3
+"""Checks what the graphite palette promises that a human can't eyeball.
+
+1. The contrast floors below, in both modes. Translucent tokens (line, sel,
+   hover, card) are measured composited over the surface they sit on.
+2. That the configs which repeat a palette value still match Theme.qml.
+3. That kvantum.py can still build the Qt theme: it stops on any upstream
+   colour it has no Theme.qml token for.
+4. That the console palette (infra/files/boot/cmdline) keeps graphite's
+   neutrals and the terminals' brights, and that nmtui stays readable on it.
+
+Run it after touching any palette:  ~/.local/share/chezmoi/tools/check-palette.py
+"""
+import pathlib
+import re
+import subprocess
+import sys
+import tempfile
+
+# The chezmoi source, not the deployed targets: .chezmoiignore leaves out the
+# sway files on a Hyprland machine and vice versa.
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+SRC = ROOT / "home"
+THEME = SRC / "dot_config/exact_quickshell/exact_xeome/Theme.qml"
+
+
+def tokens(mode):
+    """{name: (r, g, b, a)} for one mode, read out of Theme.qml's ternaries.
+
+    Qt colour strings are #AARRGGBB, alpha first, unlike CSS's #RRGGBBAA.
+    """
+    pat = re.compile(r'property color (\w+): light \? "#(\w{8})" : "#(\w{8})"')
+    out = {}
+    for m in pat.finditer(THEME.read_text()):
+        h = m[2] if mode == "light" else m[3]
+        a, r, g, b = (int(h[i : i + 2], 16) / 255 for i in (0, 2, 4, 6))
+        out[m[1]] = (r, g, b, a)
+    return out
+
+
+def over(top, base):
+    """`top` alpha-composited onto an opaque `base`, the way Qt draws it."""
+    a = top[3]
+    return tuple(t * a + b * (1 - a) for t, b in zip(top[:3], base[:3])) + (1.0,)
+
+
+def luminance(c):
+    def chan(v):
+        return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+
+    r, g, b = c[:3]
+    return 0.2126 * chan(r) + 0.7152 * chan(g) + 0.0722 * chan(b)
+
+
+def contrast(a, b):
+    la, lb = sorted((luminance(a), luminance(b)))
+    return (lb + 0.05) / (la + 0.05)
+
+
+def hexrgb(c):
+    return "#" + "".join(f"{round(v * 255):02x}" for v in c[:3])
+
+
+# (foreground, surface, floor). A surface written "sel/raised" is sel
+# composited over raised: a selected menu row.
+PAIRS = [
+    ("text", "ground", 7.0),
+    ("text", "raised", 7.0),
+    ("dim", "ground", 4.5),
+    ("dim", "raised", 4.5),
+    ("dim", "sel/raised", 4.5),     # a selected row's suffix
+    ("dim", "hover/raised", 4.5),   # ...and the row under the pointer
+    ("dim", "card/ground", 4.5),    # a muted bar module
+    ("bright", "sel/raised", 7.0),  # a selected row's label
+    ("ground", "hot", 4.5),         # low battery chip
+    ("ground", "text", 4.5),        # calendar's today
+    ("warm", "card/ground", 4.5),   # the live-mic glyph
+]
+
+# A visible edge is the only thing separating one dark surface from another,
+# so a line has to actually differ from what it is drawn on.
+SEPARATORS = [
+    ("line/ground", "ground"),
+    ("line/raised", "raised"),
+    ("rule", "raised"),
+]
+
+
+def resolve(t, spec):
+    """'sel/raised' -> sel composited over raised; 'raised' -> raised."""
+    *tops, base = spec.split("/")
+    c = t[base]
+    for top in reversed(tops):
+        c = over(t[top], c)
+    return c
+
+
+fails = []
+complete = True
+
+for mode in ("light", "dark"):
+    t = tokens(mode)
+    missing = ({n for p in PAIRS + SEPARATORS for s in p[:2] for n in s.split("/")}
+               | {"ground", "panel", "raised", "text", "warm", "line"}) - set(t)
+    if missing:
+        fails.append(f"{mode}: Theme.qml lacks {sorted(missing)}")
+        complete = False
+        continue
+    for fg, ground, floor in PAIRS:
+        ratio = contrast(resolve(t, fg), resolve(t, ground))
+        if ratio < floor:
+            fails.append(f"{mode}: {fg} on {ground} is {ratio:.2f}:1, floor {floor}")
+    for edge, ground in SEPARATORS:
+        ratio = contrast(resolve(t, edge), resolve(t, ground))
+        if ratio < 1.12:
+            fails.append(f"{mode}: {edge} is invisible on {ground} ({ratio:.3f}:1)")
+
+# Every source file that hardcodes a palette value, and what it must say.
+# Matched as plain text with runs of whitespace collapsed rather than parsed:
+# the files are in six syntaxes. Collapsed so alignment padding is not drift.
+if complete:
+    dark, light = tokens("dark"), tokens("light")
+    D = {k: hexrgb(v) for k, v in dark.items()}
+    L = {k: hexrgb(v) for k, v in light.items()}
+    rgb = lambda h: ", ".join(str(int(h[i : i + 2], 16)) for i in (1, 3, 5))
+    # A translucent token as GTK CSS writes it: rgba(255, 255, 255, 0.05).
+    rgba = lambda t: f"rgba({rgb(hexrgb(t))}, {round(t[3], 2):g})"
+    # The terminals keep Caffeine's hues; their neutrals are graphite's. A
+    # needle starting "\n" matches at a line start only, so `foreground` can't
+    # pass inside `selection-foreground`. Alacritty repeats keys across
+    # sections, so its needles carry the section header. Selected text is
+    # inverted, text on ground, as vicinae selects it.
+    T = {k: D[k] for k in ("ground", "panel", "rule", "text", "dim", "bright")}
+    SHARED = {
+        "dot_config/ghostty/exact_themes/caffeine": (
+            f"\nbackground = {T['panel']}",
+            f"\nforeground = {T['text']}",
+            f"\npalette = 0={T['rule']}",
+            f"\npalette = 7={T['text']}",
+            f"\npalette = 8={T['dim']}",
+            f"\npalette = 15={T['bright']}",
+            f"\ncursor-color = {T['bright']}",
+            f"\ncursor-text = {T['panel']}",
+            f"\nselection-background = {T['text']}",
+            f"\nselection-foreground = {T['ground']}",
+        ),
+        "dot_config/alacritty/caffeine.toml": tuple(
+            f"[colors.{sec}]\n" + "\n".join(f'{k} = "{v}"' for k, v in kv)
+            for sec, kv in (
+                ("primary", (("foreground", T["text"]), ("background", T["panel"]))),
+                ("cursor", (("text", T["panel"]), ("cursor", T["bright"]))),
+                ("selection", (("text", T["ground"]), ("background", T["text"]))),
+                ("normal", (("black", T["rule"]), ("white", T["text"]))),
+                ("bright", (("black", T["dim"]), ("white", T["bright"]))),
+            )
+        ),
+        "dot_config/foot/foot.ini": tuple(
+            f"\n{k}={v.lstrip('#')}"
+            for k, v in (
+                ("background", T["panel"]),
+                ("foreground", T["text"]),
+                ("cursor", f"{T['panel'][1:]} {T['bright'][1:]}"),
+                ("selection-foreground", T["ground"]),
+                ("selection-background", T["text"]),
+                ("regular0", T["rule"]),
+                ("regular7", T["text"]),
+                ("bright0", T["dim"]),
+                ("bright7", T["bright"]),
+            )
+        ),
+        "dot_config/hypr/exact_lua_modules/settings.lua": (
+            f'local line = "rgba(ffffff{round(dark["line"][3] * 255):02x})"',
+        ),
+        "dot_config/sway/exact_conf.d/colors.conf": (
+            f"set $background {D['ground']}",
+            f"set $line #ffffff{round(dark['line'][3] * 255):02x}",
+        ),
+        "dot_config/hypr/hyprlock.conf.tmpl": (f"inner_color = rgba({rgb(D['raised'])}, 1)",),
+        # vicinae draws alpha as solid, so its file holds line and sel
+        # pre-flattened over the ground.
+        "dot_local/private_share/vicinae/exact_themes/graphite.toml": (
+            f'background = "{D["ground"]}"',
+            f'accent = "{D["text"]}"',
+            f'border = "{hexrgb(over(dark["line"], dark["ground"]))}"',
+            f'background = "{hexrgb(over(dark["sel"], dark["ground"]))}"',
+        ),
+        "dot_config/zen/userChrome.css": (
+            f"--zen-main-browser-background: light-dark({L['ground']}, {D['ground']})",
+            f"--zen-dialog-background: light-dark({L['raised']}, {D['raised']})",
+            f"--zen-primary-color: light-dark({L['text']}, {D['text']})",
+            f"--zen-branding-dark: {D['ground']}",
+            f"--zen-branding-paper: {L['ground']}",
+            f"--zen-colors-tertiary: light-dark({L['ground']}, {D['ground']})",
+            f"--arrowpanel-background: light-dark({L['raised']}, {D['raised']})",
+            f"--zen-urlbar-background: light-dark({L['raised']}, {D['raised']})",
+        ),
+        "dot_config/private_vesktop/exact_themes/graphite.theme.css.tmpl": (
+            f"--background-base-lowest: {D['ground']};",
+            f"--background-base-lower: {D['panel']};",
+            f"--modal-background: {D['raised']};",
+            f"--text-default: {D['text']};",
+            f"--text-muted: {D['dim']};",
+        ),
+        # The twin check below holds gtk-4.0/gtk.css to these, define by define,
+        # so pinning the GTK3 files pins both. Light mode is flat: no glow.
+        "dot_local/private_share/exact_themes/exact_graphite-dark/gtk-3.0/gtk.css": (
+            f"@define-color window_bg_color {D['ground']};",
+            f"@define-color view_bg_color {D['panel']};",
+            f"@define-color accent_bg_color {D['text']};",
+            f"@define-color graphite_glow {rgba(dark['glow'])};",
+            f"@define-color graphite_lift {rgba(dark['lift'])};",
+            f"@define-color graphite_glow_panel_far {rgba(dark['glowPanelFar'])};",
+            'url("grain-ground.png")',
+            'url("grain-panel.png")',
+        ),
+        "dot_local/private_share/exact_themes/exact_graphite-light/gtk-3.0/gtk.css": (
+            f"@define-color window_bg_color {L['ground']};",
+            f"@define-color view_bg_color {L['panel']};",
+            f"@define-color accent_bg_color {L['text']};",
+            f"@define-color graphite_lift {rgba(light['lift'])};",
+        ),
+        "dot_config/exact_gtk-4.0/gtk.css": (
+            f"@define-color window_bg_color {D['ground']};",
+            f"@define-color window_bg_color {L['ground']};",
+            f"@define-color accent_bg_color {D['text']};",
+            f"@define-color accent_bg_color {L['text']};",
+            'url("grain-ground.png")',
+            'url("grain-panel.png")',
+        ),
+    }
+
+    def flat(text):
+        return re.sub(r"[ \t]+", " ", text)
+
+    for rel, needles in SHARED.items():
+        body = flat((SRC / rel).read_text())
+        for needle in needles:
+            if flat(needle) not in body:
+                fails.append(f"{rel} has drifted: expected {needle!r}")
+
+    # The focused-window border has no Theme.qml token: hyprland and sway each
+    # spell its alpha, and only need to agree with each other.
+    hypr = re.search(r'local focus = "rgba\(ffffff(\w\w)\)"', (SRC / "dot_config/hypr/exact_lua_modules/settings.lua").read_text())
+    sway = re.search(r"set \$focus\s+#ffffff(\w\w)", (SRC / "dot_config/sway/exact_conf.d/colors.conf").read_text())
+    if not (hypr and sway and hypr[1] == sway[1]):
+        fails.append(f"focus border alpha differs: hypr {hypr and hypr[1]}, sway {sway and sway[1]}")
+
+    # The GTK palette is written out three times (GTK3 has no media queries,
+    # and its theme folders can't import from ~). This holds each GTK3 file's
+    # defines equal to its mode's block in gtk-4.0/gtk.css.
+    def defines(text):
+        # theme_* are GTK3-only aliases, so libadwaita has none.
+        return [l.strip() for l in text.splitlines()
+                if l.strip().startswith("@define-color") and not l.strip().startswith("@define-color theme_")]
+
+    g4 = (SRC / "dot_config/exact_gtk-4.0/gtk.css").read_text()
+    g4_dark, _, g4_light = g4.partition("@media (prefers-color-scheme: light)")
+    for mode, block in (("dark", g4_dark), ("light", g4_light)):
+        rel = f"dot_local/private_share/exact_themes/exact_graphite-{mode}/gtk-3.0/gtk.css"
+        if defines((SRC / rel).read_text()) != defines(block):
+            fails.append(f"{rel} and gtk-4.0/gtk.css ({mode}) define different colours")
+
+    # Slot 0 is true black, the splash's ground, not a Theme.qml token. Slots
+    # 1-6 are Caffeine's hues darkened by hand, so they get floors, not
+    # equality.
+    boot = (ROOT / "infra/files/boot/cmdline").read_text()
+    chans = [re.search(rf"vt\.default_{c}=([\d,]+)", boot)[1].split(",") for c in ("red", "grn", "blu")]
+    vt = ["#%02x%02x%02x" % tuple(map(int, s)) for s in zip(*chans)]
+    if [h for _, h in re.findall(r"(\d+) (#\w{6})", boot)] != vt:
+        fails.append("infra/files/boot/cmdline: the hex comment and the vt.default_* lists differ")
+    ghostty = dict(re.findall(r"\npalette = (\d+)=(#\w{6})", (SRC / "dot_config/ghostty/exact_themes/caffeine").read_text()))
+    want = {0: "#000000", 7: D["text"], 8: D["dim"], 15: D["bright"]} | {i: ghostty[str(i)] for i in range(9, 15)}
+    for i, h in want.items():
+        if vt[i] != h:
+            fails.append(f"console slot {i} is {vt[i]}, expected {h}")
+    hexrgba = lambda h: tuple(int(h[i : i + 2], 16) / 255 for i in (1, 3, 5)) + (1.0,)
+    for i in range(1, 7):
+        if (r := contrast(hexrgba(vt[i]), hexrgba(vt[0]))) < 4.5:
+            fails.append(f"console slot {i} on black is {r:.2f}:1, floor 4.5")
+    # newt's default pairs (newt.c:51-73) and nmtui's own (NetworkManager
+    # nmt-newt-utils.c:220-224). ter-v24n has 512 glyphs, which costs the
+    # console its bright backgrounds, hence bg & 7. 3.5:1, not 4.5: a hue under
+    # lightgray text and over black at once tops out near 4:1 each way.
+    slot = {n: i for i, n in enumerate(("black red green brown blue magenta cyan lightgray gray brightred "
+                                        "brightgreen yellow brightblue brightmagenta brightcyan white").split())}
+    NEWT = [("white", "blue"), ("black", "lightgray"), ("white", "black"), ("red", "lightgray"),
+            ("lightgray", "red"), ("lightgray", "blue"), ("blue", "lightgray"), ("black", "brown"),
+            ("black", "white")]
+    for fg, bg in NEWT:
+        r = contrast(hexrgba(vt[slot[fg]]), hexrgba(vt[slot[bg] & 7]))
+        if r < 3.5:
+            fails.append(f"console: nmtui's {fg} on {bg} is {r:.2f}:1, floor 3.5")
+
+# Built into a scratch folder, so an unmapped upstream colour shows up here
+# before an apply does.
+with tempfile.TemporaryDirectory() as tmp:
+    kv = subprocess.run([sys.executable, "-I", str(ROOT / "tools/kvantum.py"), tmp],
+                        capture_output=True, text=True)
+    if kv.returncode:
+        fails.append(f"kvantum.py failed:\n{kv.stderr.strip()}")
+
+if fails:
+    print("\n".join(fails), file=sys.stderr)
+    sys.exit(1)
+print("palette OK")

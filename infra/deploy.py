@@ -184,6 +184,40 @@ tlp = [
     put(f"power/tlp-{chassis}.conf", "/etc/tlp.d/50-dots-profiles.conf"),
 ]
 
+# Tailscale exit node whose clients leave through Windscribe. ws-exit is
+# imported by hand, because it holds the private key. The plan has no config
+# generator, so it is the app's own config: connect the app over WireGuard,
+# save `wg showconf utun420` as ws-exit.conf without FwMark and ListenPort, add
+# utun420's IPv4 address as Address, disconnect the app, then
+#   nmcli connection import type wireguard file ws-exit.conf
+# Then run this deploy by hand right away, because until it runs the profile
+# tunnels every packet.
+#
+# Values as nmcli -g prints them ("0", not "no"), so they compare with its output.
+EXIT_PROFILE = {
+    # Off, or NM adds wg-quick's rules, which send every packet into the tunnel.
+    "wireguard.ip4-auto-default-route": "0",
+    "wireguard.ip6-auto-default-route": "0",
+    "wireguard.peer-routes": "yes",
+    "ipv4.route-table": "100",
+    "ipv6.method": "disabled",
+    "connection.autoconnect": "yes",
+}
+exit_host = hostname == "xeome-desktop"
+exit_now = exit_host and host.get_fact(Command, f"nmcli -g {','.join(EXIT_PROFILE)} connection show ws-exit 2>/dev/null || true")
+exit_units = []
+if exit_host and not exit_now:
+    print("exit section skipped, because nmcli shows no ws-exit profile with these settings")
+elif exit_now:
+    exit_units.append(put("exit/dots-exit-route.service", "/etc/systemd/system/dots-exit-route.service"))
+    if exit_now.splitlines() != list(EXIT_PROFILE.values()):
+        server.shell(name="ws-exit profile", commands=[
+            # NM refuses ipv6.method disabled while the profile has an IPv6 address.
+            "nmcli connection modify ws-exit ipv6.addresses '' "
+            + " ".join(f"{k} {v}" for k, v in EXIT_PROFILE.items()),
+            "nmcli connection up ws-exit",
+        ])
+
 # A stack other than the checked one skips the section instead of failing,
 # so a wrong guess costs a splash, not a boot.
 #
@@ -248,7 +282,7 @@ else:
     )
 
 # Before any restart below, so tlp starts with its new drop-in.
-systemd.daemon_reload(name="daemon-reload", _if=any_changed(*oom_units, tlp_unit))
+systemd.daemon_reload(name="daemon-reload", _if=any_changed(*oom_units, tlp_unit, *exit_units))
 
 systemd.service(name="resolved", service="systemd-resolved.service", running=True, enabled=True)
 # Restarting NetworkManager drops the link for a second. The dispatcher run
@@ -273,6 +307,10 @@ systemd.service(name="tlp-pd", service="tlp-pd.service", running=True, enabled=T
 # would otherwise leave at root 0644. Only on a change, because a restart drops
 # a manually picked profile.
 systemd.service(name="Restart tlp", service="tlp.service", restarted=True, _if=any_changed(*tlp))
+
+# Never restarted: see the unit's ExecStop note.
+if exit_now:
+    systemd.service(name="exit route", service="dots-exit-route.service", running=True, enabled=True)
 
 # Rules in /usr/lib/udev get this from systemd's alpm hook. /etc ones do not.
 systemd.service(name="Reload udev", service="systemd-udevd.service", reloaded=True, _if=keychron.did_change)

@@ -1,0 +1,36 @@
+# From infra/deploy.py — edit: ~/.local/share/chezmoi/infra/files/exit/
+#
+# Table 100 holds only the ws-exit tunnel's default route, because deploy.py
+# configures ws-exit that way. Exit clients' DNS doesn't go through it:
+# tailscaled answers it here, through this machine's resolver.
+#
+# Not the Windscribe app: it adds its rules without a priority, so the kernel
+# puts them above Tailscale's and they take tailnet replies into its tunnel.
+#
+# The unreachable rules are the kill switch for when the tunnel is down. They
+# live here, because NetworkManager drops a profile's own rules with the
+# connection.
+#
+# 5300 keeps a forwarded packet for a local bridge or the LAN on main's routes.
+# Only what would take main's default route falls through to the tunnel.
+#
+# No ExecStop, because removing the rules even for a restart lets exit clients
+# out the uplink. So a changed unit takes effect at the next boot.
+#
+# 5300 and up: after Tailscale's 5210-5270, so tailnet destinations still find
+# table 52 first.
+[Unit]
+Description=Route Tailscale exit traffic into the Windscribe tunnel only
+Before=tailscaled.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/ip -4 rule add pref 5300 iif tailscale0 lookup main suppress_prefixlength 0
+ExecStart=/usr/bin/ip -4 rule add pref 5301 iif tailscale0 lookup 100
+ExecStart=/usr/bin/ip -4 rule add pref 5302 iif tailscale0 unreachable
+ExecStart=/usr/bin/ip -6 rule add pref 5300 iif tailscale0 lookup main suppress_prefixlength 0
+ExecStart=/usr/bin/ip -6 rule add pref 5302 iif tailscale0 unreachable
+
+[Install]
+WantedBy=multi-user.target
